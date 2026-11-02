@@ -35,7 +35,7 @@ Goal: a second client relationship signed by 2027-02-01, so no single agency can
 
 **Who buys:**
 
-- Agencies on the SCAYLE, commercetools and Salesforce Commerce partner lists in the UK, Nordics and Benelux. They have the clients; they lack senior people who can run a storefront without supervision.
+- Agencies on the commercetools and Salesforce Commerce partner lists in the US first, then SCAYLE, commercetools and Salesforce Commerce partners in the UK, Nordics and Benelux. They have the clients; they lack senior people who can run a storefront without supervision. DACH is a weak fit: freelance and B2B contracting there carries heavy bureaucracy.
 - Mid-size retailers with headless storefronts and an in-house team of 3–10, hiring contract to fill a gap.
 - Your current agency, kept but as one of two.
 
@@ -91,7 +91,7 @@ By 2026-12-02: 3 agency calls for Phase 1, the playbook published for Phase 2, a
 
 **Week 2**
 
-- [ ] Phase 1 list: 40 agencies from SCAYLE, commercetools and Salesforce Commerce partner directories (UK, Nordics, Benelux), plus 15 in-house retail teams with headless stacks.
+- [ ] Phase 1 list: 40 agencies from commercetools, Salesforce Commerce and SCAYLE partner directories (US first, then UK, Nordics, Benelux), plus 15 in-house retail teams with headless stacks.
 - [ ] Phase 2 playbook, first draft: your setup as it exists, with what failed. Publish on the site by end of week 3.
 
 **Weeks 3–4**
@@ -107,7 +107,7 @@ These exist so that future-you can't argue a bet is "almost working."
 | Date | Check | If not met |
 | --- | --- | --- |
 | 2026-12-02 | 3 Phase 1 calls booked from 40 contacts; playbook published | Fewer than 2 calls: the list or pitch is wrong, fix before sending more. No playbook: Phase 2 hasn't started; that's the first problem to solve |
-| 2027-02-01 | Second client signed at ≥ €500/day, or employment offer accepted | Widen Phase 1: DACH despite the friction, generic senior full-stack roles, lower floor to €450. Phase 2 drops to zero hours until this is met |
+| 2027-02-01 | Second client signed at ≥ €500/day, or employment offer accepted | Widen Phase 1: generic senior full-stack roles, lower floor to €450; DACH only as a last resort given its freelance/B2B bureaucracy. Phase 2 drops to zero hours until this is met |
 | 2027-05-01 | At least one paid Phase 2 audit | Kill Phase 2 as a service line. Un-park e-invoicing or pick a new upside bet with the same test |
 | 2027-09-01 | Phase 2 revenue ≥ 30% of total, or one retainer | Phase 2 is a side income, not a business; stop investing beyond retainer maintenance |
 

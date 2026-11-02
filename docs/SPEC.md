@@ -174,6 +174,7 @@ The pipeline is only as good as `companies.yaml`. Seed \~300 in the first week f
 
 | Source | Yields | Phase | How |
 | --- | --- | --- | --- |
+| commercetools and Salesforce Commerce partner directories, Clutch, Shopify Plus / BigCommerce agency lists | \~80 US agencies | P1, P2 | Scrape once; prefer boards on Greenhouse or Lever |
 | SCAYLE, commercetools, Salesforce Commerce partner directories | \~100 agencies in UK, Nordics, Benelux, DACH | P1, P2 | Scrape once; store name, domain, listed region and tier |
 | Clutch / Sortlist, e-commerce development, 10–50 staff, target countries | \~50 agencies not in partner lists | P1, P2 | Scrape once |
 | Top retailers by country (Internet Retailing UK Top500, Twinkl/Emerce NL lists, Ehandel Nordics, Croatian: Trgovina lists) | \~200 retailers | P1 | Scrape once, keep domains |
@@ -255,7 +256,7 @@ If you'd rather it run when the box is down, the same script runs as a cloud sch
 | Stack overlap | 25 | Nuxt/Vue 10, commerce platform you know 10, TypeScript 5 |
 | Seniority | 15 | senior/lead/architect 15; mid 5; junior 0 |
 | Domain | 15 | ecommerce/retail 10, loyalty or payments +5 |
-| Geography | 10 | UK/Nordics/Benelux/HR 10; DACH 3; US 0 (timezone) |
+| Geography | 10 | US 10; UK/Nordics/Benelux/HR 7; DACH 3 (freelance/B2B bureaucracy); other 0 |
 | Urgency | 10 | reposted ≥2 times or open >45 days 10; open >21 days 5 |
 
 **Phase 2 rubric** (`rubrics/phase2.md`):
