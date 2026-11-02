@@ -44,7 +44,7 @@ pipeline/
   bot/
     notify.ts            # builds and sends the Telegram digest
     server.ts            # HTTP endpoint for button callbacks → updates signals.status
-    actions.ts           # compose (mailto / Instantly), skip, rewrite, snooze
+    actions.ts           # compose (mailto), skip, rewrite, snooze
   rubrics/
     phase1.md            # ICP rubric, human-readable, the LLM reads it
     phase2.md
@@ -298,7 +298,7 @@ loyalty programme integrated end to end (tiers, points, vouchers),
 Nuxt/TypeScript, delivered solo. Case study: {link}.
 Available from {date}, €{rate}/day, UK hours. Worth a 20-minute call?
 
-[Compose ✉️] [Instantly ➜] [Rewrite ✍️] [Snooze 7d] [Skip]
+[Compose ✉️] [Rewrite ✍️] [Snooze 7d] [Skip]
 [Posting] [Company] [Find contact]
 ```
 
@@ -307,7 +307,6 @@ Available from {date}, €{rate}/day, UK hours. Worth a 20-minute call?
 | Button | What happens | Status |
 | --- | --- | --- |
 | Compose | Opens a `mailto:` with subject and body pre-filled in your mail client; you press send there | `sent` after you confirm in a follow-up tap |
-| Instantly | Creates the lead and attaches the draft as the first step of the matching campaign via Instantly's API; nothing is sent until you launch the campaign | `sent` when you confirm |
 | Rewrite | You reply with an instruction ("shorter, mention Penn"); the model returns a new draft in the thread with the same buttons | unchanged |
 | Snooze 7d | Hides it, resurfaces in the digest a week later | `snoozed` |
 | Skip | Reason picker: bad fit / wrong timing / already contacted / other; stored for rubric tuning | `skipped` |
@@ -334,7 +333,7 @@ Two weekends plus the Phase 2 weekdays. A working diff by the first Sunday, a di
 | Week of 11-24 | Tender-award adapter (TED, Contracts Finder) | First award signal drafted |
 | Week of 12-01 | FINA export → 40 Croatian P2 seeds; day-30 review | Review done against the plan's criteria |
 
-If 11-15 slips, cut Phase 2 rubric and the Instantly and Rewrite buttons to the following week, not the digest. The digest with Compose is the product; a pipeline that never sends one has shipped nothing.
+If 11-15 slips, cut Phase 2 rubric and the Rewrite button to the following week, not the digest. The digest with Compose is the product; a pipeline that never sends one has shipped nothing.
 
 ## Guardrails
 

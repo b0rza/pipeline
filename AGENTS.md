@@ -10,7 +10,7 @@ This repo is a nightly signal pipeline: it finds companies worth contacting, dra
 
 ## Hard rules
 
-1. **No sending.** No code path may send email, launch an Instantly campaign, or post to a third party on the owner's behalf. The Compose and Instantly actions prepare; the owner presses send.
+1. **No sending.** No code path may send email or post to a third party on the owner's behalf. The Compose action prepares a `mailto:` link; the owner presses send.
 2. **No network in the model stage.** Stages 4–6 (extract, score, draft) run via headless Claude Code with `--allowedTools "Read,Write,Bash(sqlite3:*)"`. All fetching happens in deterministic code in stages 1–2. Don't add fetch, curl, or HTTP clients to anything under `core/extract`, `core/score`, `core/draft`, or `prompts/`.
 3. **No LinkedIn, Indeed, Glassdoor.** Not as sources, not as enrichment, not via third-party wrappers.
 4. **Rate limits are not optional.** 1 req/s per host, backoff on 429/5xx, 24h skip after 3 failures. Real User-Agent naming the company and a contact URL. Respect robots.txt on the Playwright path.
