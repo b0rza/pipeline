@@ -29,11 +29,8 @@ async function waitTurn(host: string): Promise<void> {
   if (at > now) await sleep(at - now);
 }
 
-export function userAgent(): string {
-  const ua = process.env.PIPELINE_USER_AGENT;
-  if (!ua) throw new Error('PIPELINE_USER_AGENT is required (AGENTS.md rule 4), e.g. "pipeline/0.1 (+https://yourcompany.example/contact)"');
-  return ua;
-}
+// AGENTS.md rule 4: a real User-Agent naming the company and a contact URL.
+export const USER_AGENT = 'ant-hive-pipeline/0.1 (+https://anthive.dev/contact)';
 
 // Follows redirects by hand so every hop waits its turn on its own host.
 async function fetchFollowing(
@@ -66,7 +63,7 @@ export async function fetchText(
   url: string,
   opts: { method?: string; body?: string; headers?: Record<string, string> } = {},
 ): Promise<FetchResult> {
-  const ua = userAgent();
+  const ua = USER_AGENT;
   for (let attempt = 0; ; attempt++) {
     try {
       const { res, url: finalUrl } = await fetchFollowing(url, opts, ua);

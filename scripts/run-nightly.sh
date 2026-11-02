@@ -3,7 +3,6 @@
 # Stages not built yet are skipped so the script exits 0 while the build order is in progress.
 # PIPELINE_NO_COMMIT=1 skips the git commit (for testing).
 set -euo pipefail
-: "${PIPELINE_USER_AGENT:?set PIPELINE_USER_AGENT (AGENTS.md rule 4)}"
 cd "$(dirname "$0")/.."
 export RUN_DATE="${RUN_DATE:-$(date +%F)}"
 mkdir -p logs "out/$RUN_DATE"

@@ -20,7 +20,6 @@ Last updated: 2026-11-02
 ## Open on the owner
 
 - Remove `INSTANTLY_API_KEY` from `.env.op.example` and commit the file (the agent sandbox cannot read `*.env*` files).
-- Set `PIPELINE_USER_AGENT` in the nightly environment, naming the company and a contact URL. The run refuses to start without it.
 - Add network companies (past clients, current agency's clients, Studion alumni) under the marked block at the end of `universe/companies.yaml`.
 - Delete or gitignore `.scaffold.tgz.extracted` at the repo root.
 

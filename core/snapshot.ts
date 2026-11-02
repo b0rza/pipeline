@@ -4,7 +4,6 @@ import { pathToFileURL } from 'node:url';
 import { adapters, fetchPostings } from '../adapters/ats/index.ts';
 import { loadCompanies, upsertCompanies } from './companies.ts';
 import { openDb, sha256 } from './db.ts';
-import { userAgent } from './http.ts';
 import type { Company, NormalizedPosting } from './types.ts';
 
 const FAILURES_BEFORE_SKIP = 3;
@@ -76,7 +75,6 @@ export function recordFailure(db: DatabaseSync, companyId: string, runDate: stri
 }
 
 async function main() {
-  userAgent(); // fail fast: per-company catches below would otherwise log it as a feed failure for every company
   const runDate = process.env.RUN_DATE ?? new Date().toISOString().slice(0, 10);
   const companies = loadCompanies();
   const db = openDb();

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { afterEach, beforeEach, test } from 'node:test';
-import { BACKOFF_MS, fetchText, HttpError } from '../core/http.ts';
+import { BACKOFF_MS, fetchText, HttpError, USER_AGENT } from '../core/http.ts';
 
 // Each test uses its own hosts: the 1 req/s slots are module state.
 const realFetch = globalThis.fetch;
@@ -17,7 +17,6 @@ function stub(respond: (url: string, n: number) => Response) {
 
 beforeEach(() => {
   calls = [];
-  process.env.PIPELINE_USER_AGENT = 'pipeline-test/0.1 (+https://example.test/contact)';
   BACKOFF_MS.splice(0, BACKOFF_MS.length, 20, 20);
 });
 
@@ -38,7 +37,7 @@ test('one host is spaced 1s apart, different hosts are not serialized', async ()
   assert.equal(slow.length, 3);
   assert.ok(slow[1] - slow[0] >= 990 && slow[2] - slow[1] >= 990, `gaps ${slow[1] - slow[0]}, ${slow[2] - slow[1]}`);
   assert.ok(other.at - start < 500, `other host waited ${other.at - start}ms`);
-  assert.equal(other.ua, process.env.PIPELINE_USER_AGENT);
+  assert.equal(other.ua, USER_AGENT);
 });
 
 test('a 503 is retried and the 200 returned', async () => {
@@ -68,13 +67,4 @@ test('more than 5 redirects throws HttpError with status 0', async () => {
   stub((_, n) => new Response(null, { status: 302, headers: { location: `https://hop${n}.test/` } }));
   await assert.rejects(fetchText('https://hop0.test/'), (err) => err instanceof HttpError && err.status === 0 && /redirects/.test(err.message));
   assert.equal(calls.length, 6);
-});
-
-test('fetchText rejects without PIPELINE_USER_AGENT and never fetches', async () => {
-  stub(() => new Response('ok'));
-  delete process.env.PIPELINE_USER_AGENT;
-  await assert.rejects(fetchText('https://noua.test/'), {
-    message: 'PIPELINE_USER_AGENT is required (AGENTS.md rule 4), e.g. "pipeline/0.1 (+https://yourcompany.example/contact)"',
-  });
-  assert.equal(calls.length, 0);
 });
