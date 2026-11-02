@@ -1,4 +1,6 @@
 -- Signal pipeline v1. See docs/SPEC.md "Data model".
+-- Edited in place until the first real run. After that, schema changes go to
+-- numbered files in state/migrations/; `create table if not exists` won't add columns.
 pragma journal_mode = wal;
 
 create table if not exists companies (
@@ -13,7 +15,10 @@ create table if not exists companies (
   source text,
   status text not null default 'active',   -- active | paused | watch
   last_contacted text,
-  added_at text not null default (datetime('now'))
+  added_at text not null default (datetime('now')),
+  consecutive_failures integer not null default 0,
+  last_failure_at text,
+  skip_until text                          -- set after 3 consecutive feed failures
 );
 
 create table if not exists postings (
@@ -25,6 +30,8 @@ create table if not exists postings (
   location text,
   body text,
   body_hash text not null,
+  body_hash_prev text,
+  body_changed_at text,                    -- run_date of the last body edit
   posted_at text,
   first_seen text not null,
   last_seen text not null,
@@ -34,6 +41,18 @@ create table if not exists postings (
 );
 create index if not exists postings_company on postings(company_id);
 create index if not exists postings_gone on postings(gone_at);
+
+-- Stage 2 writes, stages 3 and 5 read.
+create table if not exists events (
+  id text primary key,                     -- sha256(posting_id || run_date || kind)
+  run_date text not null,
+  company_id text not null references companies(id),
+  posting_id text references postings(id),
+  kind text not null,                      -- posting_new | posting_edited | posting_reposted | posting_gone
+  created_at text not null default (datetime('now'))
+);
+create index if not exists events_run on events(run_date);
+create index if not exists events_company on events(company_id, run_date);
 
 create table if not exists posting_extracts (
   posting_id text primary key references postings(id),

@@ -4,25 +4,26 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "snapshot": "tsx core/snapshot.ts",
-    "diff": "tsx core/diff.ts",
-    "filter": "tsx core/filter.ts",
-    "notify": "tsx bot/notify.ts",
-    "bot": "tsx bot/server.ts",
-    "evals": "tsx evals/run.ts",
+    "snapshot": "node --import tsx core/snapshot.ts",
+    "diff": "node --import tsx core/diff.ts",
+    "filter": "node --import tsx core/filter.ts",
+    "notify": "node --import tsx bot/notify.ts",
+    "bot": "node --import tsx bot/server.ts",
+    "evals": "node --import tsx evals/run.ts",
+    "resolve": "node --import tsx scripts/resolve.ts",
+    "test": "node --import tsx --test tests/*.test.ts",
     "db:init": "sqlite3 state/pipeline.sqlite < state/schema.sql"
   },
   "dependencies": {
-    "better-sqlite3": "^11",
+    "fast-xml-parser": "^5",
     "yaml": "^2",
-    "zod": "^3",
+    "zod": "^4",
     "grammy": "^1",
     "undici": "^6"
   },
   "devDependencies": {
     "tsx": "^4",
     "typescript": "^5",
-    "@types/better-sqlite3": "^7",
     "@types/node": "^22"
   }
 }

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<workzag-jobs>
+
+<position>
+    <id>1845935</id>
+    <office>Bochum</office>
+    <additionalOffices>
+        <office>Berlin</office>
+    </additionalOffices>
+    <department>Nicht festgelegt</department>
+    <recruitingCategory>Festangestellte</recruitingCategory>
+    <name>INITIATIVBEWERBUNG</name>
+    <jobDescriptions>
+        <jobDescription>
+            <name>Deine Mission</name>
+            <value>
+                <![CDATA[Du möchtest Teil eines dynamischen, coolen Teams werden, das sich leidenschaftlich mit E-Commerce und innovativen Lösungen beschäftigt, aber findest keine passende Stelle in unseren Ausschreibungen? Kein Problem – wir suchen immer nach talentierten, motivierten Persönlichkeiten, die unsere Vision mi]]>
+            </value>
+        </jobDescription>
+        <jobDescription>
+            <name>Das bringst du mit:</name>
+            <value>
+                <![CDATA[<ul><li>Bring deine einzigartigen Stärken und Ideen ein, um unsere Projekte und Prozesse auf das nächste Level zu heben</li><li>Arbeite mit einem engagierten Team zusammen, das dich bei der Verwirklichung deiner beruflichen Ziele unterstützt</li><li>]]>
+            </value>
+        </jobDescription>
+        <jobDescription>
+            <name>Was bieten wir dir?</name>
+            <value>
+                <![CDATA[<ul><li><strong>Hard facts first</strong><strong>:</strong>]]>
+            </value>
+        </jobDescription>
+    </jobDescriptions>
+    <employmentType>permanent</employmentType>
+    <seniority>experienced</seniority>
+    <schedule>full-or-part-time</schedule>
+    <keywords>Initiativbewerbung</keywords>
+    <occupation>other</occupation>
+    <occupationCategory>other</occupationCategory>
+    <createdAt>2024-11-22T12:04:28+00:00</createdAt>
+</position>
+
+<position>
+    <id>2604291</id>
+    <office>Remote</office>
+    <additionalOffices>
+        <office>Bochum</office>
+    </additionalOffices>
+    <department>Marketing (Apps)</department>
+    <recruitingCategory>Head of Specialists</recruitingCategory>
+    <name>Performance Marketing Lead für Shopify Apps (m/w/d)</name>
+    <jobDescriptions>
+        <jobDescription>
+            <name>Hey du :)</name>
+            <value>
+                <![CDATA[<span style="font-size:11pt;font-family:Arial, sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;text-decoration:none;">]]>
+            </value>
+        </jobDescription>
+        <jobDescription>
+            <name>Deine Mission</name>
+            <value>
+                <![CDATA[<ul style="margin-top:0;margin-bottom:0;"><li style="list-style-type:disc;font-size:11pt;font-family:Arial, sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;text-decoration:none;"><p style="line-height:1.38;margin-top:12pt;margin-bottom:0pt;">]]>
+            </value>
+        </jobDescription>
+        <jobDescription>
+            <name>Das bringst du mit:</name>
+            <value>
+                <![CDATA[<p style="line-height:1.38;margin-top:12pt;margin-bottom:12pt;"><span style="font-size:11pt;font-family:Arial, sans-serif;color:#000000;background-color:transparent;font-weight:700;font-style:normal;text-decoration:none;">Unsere Must-haves</span></p><ul style="margin-top:0;margin-bottom:0;">]]>
+            </value>
+        </jobDescription>
+        <jobDescription>
+            <name>Was bieten wir dir?</name>
+            <value>
+                <![CDATA[<ul style="margin-top:0;margin-bottom:0;"><li style="list-style-type:disc;font-size:11pt;font-family:Arial, sans-serif;color:#000000;background-color:transparent;font-weight:400;font-style:normal;text-decoration:none;"><p style="line-height:1.38;margin-top:12pt;margin-bottom:0pt;">]]>
+            </value>
+        </jobDescription>
+    </jobDescriptions>
+    <employmentType>permanent</employmentType>
+    <seniority>experienced</seniority>
+    <schedule>full-time</schedule>
+    <yearsOfExperience>5-7</yearsOfExperience>
+    <keywords>Performance Marketing,Marketing,Shopify,Apps,Lead,Teamleitung</keywords>
+    <occupation>brand_and_product_marketing</occupation>
+    <occupationCategory>marketing_and_product</occupationCategory>
+    <createdAt>2026-04-16T16:33:56+00:00</createdAt>
+</position>
+
+</workzag-jobs>

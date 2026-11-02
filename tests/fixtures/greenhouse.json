@@ -1,0 +1,139 @@
+{
+  "jobs": [
+    {
+      "absolute_url": "https://job-boards.greenhouse.io/getyourguide/jobs/8173479",
+      "data_compliance": [
+        {
+          "type": "gdpr",
+          "requires_consent": true,
+          "requires_processing_consent": false,
+          "requires_retention_consent": true,
+          "retention_period": 1095,
+          "demographic_data_consent_applies": false
+        }
+      ],
+      "internal_job_id": 3537426,
+      "location": {
+        "name": "Berlin"
+      },
+      "metadata": [
+        {
+          "id": 286879,
+          "name": "Career Site Search Tag",
+          "value": null,
+          "value_type": "multi_select"
+        },
+        {
+          "id": 15471797,
+          "name": "Management Level",
+          "value": "L4",
+          "value_type": "single_select"
+        },
+        {
+          "id": 30927681,
+          "name": "Job Eligible for Equity",
+          "value": false,
+          "value_type": "yes_no"
+        }
+      ],
+      "id": 8173479,
+      "updated_at": "2026-10-30T08:32:27-04:00",
+      "requisition_id": "JR101884",
+      "title": "Account Executive Greece (Greek Speaking)",
+      "company_name": "GetYourGuide",
+      "first_published": "2026-09-02T10:30:55-04:00",
+      "language": "en",
+      "application_deadline": null,
+      "content": "&lt;h3&gt;&lt;strong&gt;Change the way the world travels&lt;/strong&gt;&lt;/h3&gt;\n&lt;p&gt;Join the GetYourGuide journey to connect people with unforgettable travel experiences around the world. Millions look to us for unique activities they can trust, and it’s all powered by our commitment to make every single journey extraordinary - including yours.&lt;/p&gt;\n&lt;p&gt;",
+      "departments": [
+        {
+          "id": 1924,
+          "name": "Sales",
+          "child_ids": [],
+          "parent_id": null
+        }
+      ],
+      "offices": [
+        {
+          "id": 1153,
+          "name": "Berlin",
+          "location": "DEU",
+          "child_ids": [],
+          "parent_id": null
+        }
+      ],
+      "ai_disclaimer": null,
+      "include_ai_disclaimer": null,
+      "ai_opt_out_request_url": null
+    },
+    {
+      "absolute_url": "https://job-boards.greenhouse.io/getyourguide/jobs/8225770",
+      "data_compliance": [
+        {
+          "type": "gdpr",
+          "requires_consent": true,
+          "requires_processing_consent": false,
+          "requires_retention_consent": true,
+          "retention_period": 1095,
+          "demographic_data_consent_applies": false
+        }
+      ],
+      "internal_job_id": 3559918,
+      "location": {
+        "name": "Mexico City"
+      },
+      "metadata": [
+        {
+          "id": 286879,
+          "name": "Career Site Search Tag",
+          "value": null,
+          "value_type": "multi_select"
+        },
+        {
+          "id": 15471797,
+          "name": "Management Level",
+          "value": "L4",
+          "value_type": "single_select"
+        },
+        {
+          "id": 30927681,
+          "name": "Job Eligible for Equity",
+          "value": false,
+          "value_type": "yes_no"
+        }
+      ],
+      "id": 8225770,
+      "updated_at": "2026-10-30T08:32:39-04:00",
+      "requisition_id": "JR101880",
+      "title": "Account Executive LATAM",
+      "company_name": "GetYourGuide",
+      "first_published": "2026-09-25T10:40:42-04:00",
+      "language": "en",
+      "application_deadline": null,
+      "content": "&lt;h3&gt;&lt;strong&gt;Change the way the world travels&lt;/strong&gt;&lt;/h3&gt;\n&lt;p&gt;Be part of the GetYourGuide journey and connect people with unforgettable travel experiences worldwide. Since 2009, millions of travelers have booked unique activities with us in over 12,000 cities. Our headquarters in Berlin is supported by local offices across the globe, from New York to Bangkok.&amp;nbsp;&lt;/p&gt;\n&lt;p&gt;",
+      "departments": [
+        {
+          "id": 1924,
+          "name": "Sales",
+          "child_ids": [],
+          "parent_id": null
+        }
+      ],
+      "offices": [
+        {
+          "id": 112044,
+          "name": "Mexico City",
+          "location": "MEX",
+          "child_ids": [],
+          "parent_id": null
+        }
+      ],
+      "ai_disclaimer": null,
+      "include_ai_disclaimer": null,
+      "ai_opt_out_request_url": null
+    }
+  ],
+  "meta": {
+    "total": 70
+  }
+}
