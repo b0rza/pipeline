@@ -7,6 +7,7 @@ This repo is a nightly signal pipeline: it finds companies worth contacting, dra
 - `docs/SPEC.md`: what v1 is, stage by stage, with data model and build order.
 - `docs/DECISIONS.md`: choices already made and why. Don't propose reversing one without a new fact.
 - `docs/PLAN.md`: the business plan this serves. Explains why Phase 1 and Phase 2 rubrics differ.
+- `docs/STATUS.md`: which build-order rows are done, what is open on the owner, known gaps. Update it at the end of a session that changes any of that.
 
 ## Hard rules
 
