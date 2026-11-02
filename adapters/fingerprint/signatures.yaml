@@ -1,0 +1,65 @@
+# Platform signatures. Any two matches = confident, one = probable.
+# Scopes: html (page source), header (response header name or name:value), cookie (set-cookie name), host (request or asset host), path (URL path fragment).
+# VERIFY against sites you know before trusting. SCAYLE hosts in particular: confirm from a current client's network tab.
+
+platforms:
+  sfcc:
+    label: Salesforce Commerce Cloud (SiteGenesis/SFRA)
+    signatures:
+      - { scope: path,   match: "/on/demandware.store/" }
+      - { scope: path,   match: "/on/demandware.static/" }
+      - { scope: cookie, match: "dwsid" }
+      - { scope: cookie, match: "dwanalytics" }
+      - { scope: cookie, match: "^dwac_" , regex: true }
+      - { scope: host,   match: "demandware.net" }
+  sfcc_headless:
+    label: Salesforce Commerce Cloud (PWA Kit / Composable Storefront)
+    signatures:
+      - { scope: path,   match: "/mobify/bundle/" }
+      - { scope: host,   match: ".commercecloud.salesforce.com" }
+      - { scope: host,   match: "^kv.*\\.demandware\\.net", regex: true }
+  commercetools:
+    label: commercetools
+    signatures:
+      - { scope: host, match: "^api\\.[a-z0-9-]+\\.commercetools\\.com", regex: true }
+      - { scope: host, match: "^auth\\.[a-z0-9-]+\\.commercetools\\.com", regex: true }
+  scayle:
+    label: SCAYLE
+    signatures:
+      - { scope: host, match: ".scayle.cloud" }
+      - { scope: host, match: "aboutyou.cloud" }
+      - { scope: host, match: "aboutstatic.com" }
+  shopify:
+    label: Shopify
+    signatures:
+      - { scope: host,   match: "cdn.shopify.com" }
+      - { scope: path,   match: "/cart.js" }
+      - { scope: header, match: "x-shopid" }
+      - { scope: header, match: "x-shopify-stage" }
+      - { scope: html,   match: "Shopify.theme" }
+  magento:
+    label: Adobe Commerce / Magento
+    signatures:
+      - { scope: path,   match: "/static/version", regex: false }
+      - { scope: html,   match: "Magento_" }
+      - { scope: cookie, match: "mage-cache-sessid" }
+      - { scope: path,   match: "/rest/V1/" }
+  shopware:
+    label: Shopware
+    signatures:
+      - { scope: path,   match: "/widgets/" }
+      - { scope: header, match: "sw-context-token" }
+      - { scope: html,   match: "shopware", in_meta_generator: true }
+  bigcommerce:
+    label: BigCommerce
+    signatures:
+      - { scope: host, match: "cdn11.bigcommerce.com" }
+
+frontends:
+  nuxt:    { signatures: [ { scope: path, match: "/_nuxt/" } ] }
+  nextjs:  { signatures: [ { scope: path, match: "/_next/" } ] }
+  pwa_kit: { signatures: [ { scope: path, match: "/mobify/" } ] }
+
+# Hosts that cause false positives when they appear alone (reviews, chat, marketing widgets).
+ignore_hosts:
+  - "cdn.shopify.com/s/files/applications"   # third-party Shopify apps embedded on non-Shopify sites

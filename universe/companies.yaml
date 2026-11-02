@@ -1,0 +1,25 @@
+# Seed list. One entry per company. See docs/SPEC.md "Universe seeding".
+# phases: p1 = contracting target, p2 = agent-enablement target.
+# ats.vendor: greenhouse | lever | ashby | workable | smartrecruiters | personio | recruitee | teamtailor | custom | unknown
+# storefront: URL to fingerprint, or null for agencies.
+# status: active | paused | watch   (watch = fingerprint daily instead of weekly)
+
+- id: example-agency
+  name: Example Digital
+  domain: example-digital.co.uk
+  country: GB
+  phases: [p1, p2]
+  source: commercetools-partners
+  ats: { vendor: greenhouse, slug: exampledigital }
+  storefront: null
+  status: active
+
+- id: example-retailer
+  name: Example Retail
+  domain: example-retail.nl
+  country: NL
+  phases: [p1]
+  source: emerce-top100
+  ats: { vendor: recruitee, slug: example-retail }
+  storefront: https://www.example-retail.nl
+  status: active

@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PostingExtract",
+  "type": "object",
+  "required": ["role_family", "seniority", "engagement", "remote", "stack", "domain", "ai_tooling_mentions", "days_open"],
+  "properties": {
+    "role_family": { "enum": ["frontend", "fullstack", "backend", "platform", "lead", "architect", "other"] },
+    "seniority": { "enum": ["junior", "mid", "senior", "lead", "principal", "unclear"] },
+    "engagement": { "enum": ["perm", "contract", "freelance", "unclear"] },
+    "remote": { "enum": ["remote", "hybrid", "onsite", "unclear"] },
+    "stack": { "type": "array", "items": { "type": "string" } },
+    "domain": { "type": "array", "items": { "type": "string" } },
+    "ai_tooling_mentions": { "type": "array", "items": { "type": "string" } },
+    "rate_or_salary": {
+      "type": "object",
+      "properties": {
+        "min": { "type": ["number", "null"] },
+        "max": { "type": ["number", "null"] },
+        "currency": { "type": ["string", "null"] },
+        "period": { "enum": ["hour", "day", "year", null] }
+      }
+    },
+    "end_client_hints": { "type": ["string", "null"] },
+    "pain_quotes": { "type": "array", "items": { "type": "string" }, "maxItems": 5 },
+    "days_open": { "type": "integer" }
+  }
+}
