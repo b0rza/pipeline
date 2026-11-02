@@ -1,0 +1,116 @@
+[
+  {
+    "id": "1cb893fe33d9",
+    "friendly_id": "1cb893fe33d9-project-manager",
+    "name": "Project Manager",
+    "url": "https://thirdandgrove.breezy.hr/p/1cb893fe33d9-project-manager",
+    "published_date": "2026-09-26T22:35:28.771Z",
+    "type": {
+      "id": "fullTime",
+      "name": "Full-Time"
+    },
+    "location": {
+      "is_remote": true,
+      "country": {
+        "name": "United States",
+        "id": "US"
+      },
+      "name": "United States",
+      "primary": true,
+      "id": "bfec97007b2c",
+      "remote_details": {
+        "value": "remote",
+        "label": "Fully remote, no location restrictions"
+      }
+    },
+    "department": "Delivery",
+    "salary": "",
+    "company": {
+      "name": "Third and Grove",
+      "logo_url": null,
+      "friendly_id": "thirdandgrove",
+      "isMultipleLocationsEnabled": true
+    },
+    "locations": [
+      {
+        "is_remote": true,
+        "country": {
+          "name": "United States",
+          "id": "US"
+        },
+        "name": "United States",
+        "primary": true,
+        "id": "bfec97007b2c",
+        "remote_details": {
+          "value": "remote",
+          "label": "Fully remote, no location restrictions"
+        }
+      }
+    ],
+    "description": "<h2>Project Manager</h2>\n<p><em><strong></strong>This position is fully remote.&nbsp;<strong>All applicants must live and work in the United States.</strong></em></p>\n<p><strong>About Third and Grove</strong><br></p>\n<p>Third and Grove is a fully remote full-service digital agency. Our vision is to use technology and design to make the web worth browsing. We want to leave the web better than we found it. TAG team members strive to embody our core values, leading with empathy and practicing accountability, excellence, integrity and curiosity -in everything we do.</p>\n<p>We are seeking a passionate and talented Project Manager to help us deliver outstanding digital experiences for our clients. In this role, you will be responsible for the day-to-day management and delivery of redesign, migration and ongoing support projects. You will work collaboratively with internal strategy, design, development and QA teams, while also managing the client relationship. We’re looking for someone who is passionate about Project Management, who can excel in a fast-paced environment, and has a passion for leading project teams. Becoming a TAG team member is an opportunity to succeed and grow as a Proj"
+  },
+  {
+    "id": "830aa35bfa66",
+    "friendly_id": "830aa35bfa66-senior-digital-analytics-strategist",
+    "name": "Senior Digital Analytics Strategist",
+    "url": "https://thirdandgrove.breezy.hr/p/830aa35bfa66-senior-digital-analytics-strategist",
+    "published_date": "2026-10-14T15:06:19.494Z",
+    "type": {
+      "id": "fullTime",
+      "name": "Full-Time"
+    },
+    "location": {
+      "country": {
+        "name": "United States",
+        "id": "US"
+      },
+      "primary": true,
+      "is_remote": true,
+      "remote_details": {
+        "value": "remote",
+        "label": "Fully remote, no location restrictions"
+      },
+      "name": "United States",
+      "id": "8c7cfb0287c3"
+    },
+    "department": "Strategy",
+    "salary": "",
+    "company": {
+      "name": "Third and Grove",
+      "logo_url": null,
+      "friendly_id": "thirdandgrove",
+      "isMultipleLocationsEnabled": true
+    },
+    "locations": [
+      {
+        "country": {
+          "name": "United States",
+          "id": "US"
+        },
+        "primary": true,
+        "is_remote": true,
+        "remote_details": {
+          "value": "remote",
+          "label": "Fully remote, no location restrictions"
+        },
+        "name": "United States",
+        "id": "8c7cfb0287c3"
+      },
+      {
+        "country": {
+          "name": "Canada",
+          "id": "CA"
+        },
+        "primary": false,
+        "is_remote": true,
+        "remote_details": {
+          "value": "remote",
+          "label": "Fully remote, no location restrictions"
+        },
+        "name": "Canada",
+        "id": "57fe82ae90b3"
+      }
+    ],
+    "description": "<p><em>This position is fully remote.&nbsp;</em><strong><em>All applicants must live and work in the United States.</em></strong></p>\n<p>We are TAG, a digital agency that helps top-tier brands create beautiful digital experiences that drive performance. We're looking for a <strong>Senior Digital Analyst</strong> to help lead our growing analytics practice. This role is for someone who is equal parts technical expert and trusted advisor: comfortable in GA4, GTM, BigQuery, and Shopify, and just as comfortable telling a CMO what the data means and what to do next.</p>\n<p>You are curious, decisive, and data-driven. You define what clients should measure and why, diagnose implementation issues, and turn findings into clear, prioritized recommendations. You keep up with where measurement is heading, from server-side tagging and attribution to privacy legislation and AI, and you want to help shape how our analytics offering grows.</p>\n<p></p>\n<h3><strong>What You’ll Do</strong></h3>\n<ul><li>Lead measurement strategy for clients: define KPIs, measurement plans, and how data should inform business decisions.</li><li>Lead analytics audits of tracking implementations (GA4, GTM, server-side ta"
+  }
+]

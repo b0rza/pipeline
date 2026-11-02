@@ -1,0 +1,41 @@
+{
+  "uuid": "d240587d-9b8d-48df-af24-d744a3e48eef",
+  "name": "Adobe Analytics (CJA) Consultant",
+  "description": {
+    "company": "<div><body><p style='font-family:\"Basel Grotesk\",Arial,sans-serif;font-size:11pt;font-weight:400;line-height:1.6;letter-spacing:0.25px;margin:4px 0px;padding:0px;'><span style=\"color:rgb(0,0,0);background-color:rgb(255,255,255);font-size:11pt;white-space:pre-wrap;\">Verndale is a digital experience agency dedicated to driving growth by helping businesses create meaningful human connections in an increasingly digital world. With offices in Boston, Montreal, Los Angeles, Quito, and hubs across the Americas, we partner with marketing and technology leaders to deliver personalized web, mobile, and ecommerce solutions that elevate customer experiences. </span></p>",
+    "role": "<div><body><h3 style='font-family:\"Basel Grotesk\",Arial,sans-serif;line-height:1.6;font-size:14pt;font-weight:600;letter-spacing:0.25px;margin-top:14px;margin-bottom:4px;padding-left:0px;'><span style=\"white-space:pre-wrap;\">About the role</span></h3><p style='font-family:\"Basel Grotesk\",Arial,sans-serif;font-size:11pt;font-weight:400;line-height:1.6;letter-spacing:0.25px;margin:4px 0px;padding:0px;'><span style=\"font-size:11pt;white-space:pre-wrap;\">Verndale is seeking an experienced Adobe Customer Journey Analytics (CJA) consultant for a focused assessment supporting a higher-education client’s digital experience modernization initiative. Working with Verndale’s Analytics Practice, you will review the client’s existing analytics setup, evaluate how digital data is collected and structured, and provide clear recommendations to support future measurement and personalization decisions.</span></p><p style='font-family:\"Basel Grotesk\",Arial,sans-serif;font-size:11pt;font-weight:400;line-height:1.6;letter-spacing:0.25px;margin:4px 0px;padding:0px;'><span style=\"font-size:11pt;white-space:pre-wrap;\">This is a short-term, assessment-focused contract. The engagement is about understanding the current state and recommending next steps</span></p><p style='font-family:\"Basel Grotesk\",Arial,sans-serif;font-size:11pt;font-weight:400;line-height:1.6;letter-spacing:0.25px;margin:4px 0px;padding:0px;'><br></p>"
+  },
+  "workLocations": [
+    "Remote (US)"
+  ],
+  "department": {
+    "name": "Digital Marketing",
+    "base_department": "Strategy & Marketing Services",
+    "department_tree": [
+      "Strategy & Marketing Services",
+      "Digital Marketing"
+    ]
+  },
+  "employmentType": {
+    "label": null,
+    "id": "Independent Contractor"
+  },
+  "createdOn": "2026-10-27T09:11:24.570000-07:00",
+  "eeocQuestionnaireEnabled": false,
+  "eeocQuestionnaireEnabledForJobPost": false,
+  "url": "https://ats.rippling.com/verndale-llc/jobs/d240587d-9b8d-48df-af24-d744a3e48eef",
+  "payRangeDetails": [
+    {
+      "location": "Remote (US)",
+      "currency": "USD",
+      "frequency": "HOUR",
+      "rangeStart": 80,
+      "rangeEnd": 92,
+      "isRemote": true
+    }
+  ],
+  "hasAIEvaluationsEnabled": true,
+  "companyName": "Verndale LLC",
+  "unlistedFromSearch": false,
+  "jsonLd": null
+}

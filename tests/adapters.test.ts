@@ -1,12 +1,17 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
+import { bamboohr } from '../adapters/ats/bamboohr.ts';
+import { breezy } from '../adapters/ats/breezy.ts';
 import { greenhouse } from '../adapters/ats/greenhouse.ts';
+import { fetchPostings } from '../adapters/ats/index.ts';
+import { jazzhr } from '../adapters/ats/jazzhr.ts';
 import { lever } from '../adapters/ats/lever.ts';
 import { personio } from '../adapters/ats/personio.ts';
+import { rippling } from '../adapters/ats/rippling.ts';
 import { teamtailor } from '../adapters/ats/teamtailor.ts';
 import { htmlToText } from '../core/html.ts';
-import type { NormalizedPosting } from '../core/types.ts';
+import type { Company, NormalizedPosting } from '../core/types.ts';
 
 const fixture = (name: string) => readFileSync(new URL(`./fixtures/${name}`, import.meta.url), 'utf8');
 
@@ -77,12 +82,137 @@ test('teamtailor rejects an HTML careers page', () => {
   assert.throws(() => teamtailor.parse('<!doctype html><html><body>Jobs</body></html>', 'text/html', 'dead'));
 });
 
+test('jazzhr list page and job page', () => {
+  const list = jazzhr.parse(fixture('jazzhr-list.html'), 'text/html; charset=UTF-8', 'ConcordUSA');
+  assert.deepEqual(list.map((p) => [p.external_id, p.title, p.location, p.body, p.posted_at]), [
+    ['9i8L5P5TVU', 'Business Intelligence Engineer', 'Kansas City or Minneapolis, MO', '', null],
+    ['pecO9wzTZE', 'Salesforce Commerce Cloud (SFCC) Architect/Lead', 'Multiple Cities/States, CA', '', null],
+  ]);
+  assert.equal(list[0].url, 'https://concordusa.applytojob.com/apply/9i8L5P5TVU/Business-Intelligence-Engineer');
+  assert.deepEqual(list[0].raw, { department: 'Data and Analytics' });
+  assert.equal(jazzhr.detail!.url(list[1], 'ConcordUSA'), list[1].url);
+  const job = jazzhr.detail!.parse(fixture('jazzhr-job.html'), 'text/html; charset=UTF-8', list[1]);
+  assertWellFormed([job], 1);
+  assert.equal(job.posted_at, '2026-10-28T00:00:00.000Z');
+  assert.ok(job.body.startsWith('Location: Prefer candidates in the LA area'));
+  assert.deepEqual(job.raw, {
+    department: null, employment_type: 'CONTRACTOR', remote: false, applicant_countries: [], experience: 'Experienced',
+    valid_through: '2027-01-26', job_code: 'job_20261028151156_NXGUHZTL1OHT79CI',
+  });
+});
+
+test('jazzhr feedUrl lowercases the slug', () => {
+  assert.equal(jazzhr.feedUrl('ConcordUSA'), 'https://concordusa.applytojob.com/apply');
+});
+
+test('jazzhr rejects an inactive board and a job page without JobPosting', () => {
+  const inactive = '<html><head><title>JazzHR - Inactive Career Page</title></head><body></body></html>';
+  assert.throws(() => jazzhr.parse(inactive, 'text/html', 'avatria'), /no job list/);
+  const [p] = jazzhr.parse(fixture('jazzhr-list.html'), 'text/html', 'concordusa');
+  assert.throws(() => jazzhr.detail!.parse(inactive, 'text/html', p), /no JobPosting/);
+});
+
+test('jazzhr open-application page without JobPosting takes the page description', () => {
+  const pool = {
+    external_id: 'swMdqwV0MY', title: 'Candidate Pool', location: null, body: '', posted_at: null,
+    url: 'https://classyllama.applytojob.com/apply/swMdqwV0MY/Candidate-Pool', raw: { department: null },
+  };
+  const job = jazzhr.detail!.parse(fixture('jazzhr-pool.html'), 'text/html; charset=UTF-8', pool);
+  assert.ok(job.body.startsWith('🌟 Join our Candidate Pool at Classy Llama! 🌟\n\nWelcome to our Candidate Pool!'), job.body);
+  assert.ok(!job.body.includes('<') && !job.body.includes('Share'));
+  assert.equal(job.posted_at, null);
+  assert.deepEqual(job.raw, { department: null });
+});
+
+test('bamboohr list and detail', () => {
+  const list = bamboohr.parse(fixture('bamboohr-list.json'), 'application/json', 'sherocommerce');
+  assert.equal(list.length, 1);
+  assert.equal(list[0].external_id, '60');
+  assert.equal(list[0].title, 'Marketing Technology Engineer');
+  assert.equal(list[0].location, 'Tirana');
+  assert.equal(bamboohr.detail!.url(list[0], 'sherocommerce'), 'https://sherocommerce.bamboohr.com/careers/60/detail');
+  const job = bamboohr.detail!.parse(fixture('bamboohr-detail.json'), 'application/json', list[0]);
+  assertWellFormed([job], 1);
+  assert.equal(job.url, 'https://sherocommerce.bamboohr.com/careers/60');
+  assert.equal(job.posted_at, '2026-09-04T00:00:00.000Z');
+  assert.ok(job.body.startsWith('About the role\n'));
+  assert.deepEqual(job.raw, {
+    department: 'Design & Creative', employment_status: 'Full-Time - UK', location_type: '2', remote: null,
+    minimum_experience: 'Mid-level', compensation: null, country: 'Albania',
+  });
+});
+
+test('bamboohr list prefers atsLocation', () => {
+  const text = JSON.stringify({ result: [{ id: '27', jobOpeningName: 'x', location: { city: null, state: null },
+    atsLocation: { country: 'United States', state: 'Illinois', province: null, city: 'Chicago' } }] });
+  assert.equal(bamboohr.parse(text, 'application/json', 'cql')[0].location, 'Chicago, Illinois, United States');
+});
+
+test('bamboohr rejects an HTML page', () => {
+  assert.throws(() => bamboohr.parse('<!doctype html><html></html>', 'text/html', 'dead'));
+});
+
+test('breezy fixture', () => {
+  const postings = breezy.parse(fixture('breezy.json'), 'application/json; charset=utf-8', 'thirdandgrove');
+  assertWellFormed(postings, 2);
+  assert.equal(postings[0].external_id, '1cb893fe33d9');
+  assert.equal(postings[0].url, 'https://thirdandgrove.breezy.hr/p/1cb893fe33d9-project-manager');
+  assert.equal(postings[0].posted_at, '2026-09-26T22:35:28.771Z');
+  assert.equal(postings[1].location, 'United States, Canada');
+  assert.deepEqual(postings[1].raw, {
+    friendly_id: '830aa35bfa66-senior-digital-analytics-strategist', type: 'Full-Time', department: 'Strategy',
+    salary: null, remote: true, countries: ['US', 'CA'],
+  });
+  assert.equal(breezy.feedUrl('thirdandgrove'), 'https://thirdandgrove.breezy.hr/json?verbose=true');
+  assert.deepEqual(breezy.parse('[]', 'application/json', 'object-edge-inc'), []);
+});
+
+test('rippling list collapses per-location rows, detail completes the posting', () => {
+  const list = rippling.parse(fixture('rippling-list.json'), 'application/json', 'verndale-llc');
+  assert.deepEqual(list.map((p) => [p.external_id, p.location]), [
+    ['d240587d-9b8d-48df-af24-d744a3e48eef', 'Remote (US)'],
+    ['398f8a9c-cd37-4fb8-a4d4-a0abce04d0a6', 'Hybrid (Quito), Remote (LATAM)'],
+  ]);
+  assert.equal(rippling.detail!.url(list[0], 'verndale-llc'),
+    'https://api.rippling.com/platform/api/ats/v1/board/verndale-llc/jobs/d240587d-9b8d-48df-af24-d744a3e48eef');
+  const job = rippling.detail!.parse(fixture('rippling-job.json'), 'application/json', list[0]);
+  assertWellFormed([job], 1);
+  assert.equal(job.url, 'https://ats.rippling.com/verndale-llc/jobs/d240587d-9b8d-48df-af24-d744a3e48eef');
+  assert.equal(job.posted_at, '2026-10-27T16:11:24.570Z');
+  assert.ok(job.body.startsWith('About the role\n'));
+  assert.equal((job.raw as { employment_type: string }).employment_type, 'Independent Contractor');
+  assert.equal((job.raw as { department: string }).department, 'Digital Marketing');
+  assert.throws(() => rippling.detail!.parse(fixture('rippling-job.json'), 'application/json', list[1]), /has uuid/);
+});
+
+test('fetchPostings fetches a detail per listed posting', async () => {
+  const realFetch = globalThis.fetch;
+  const urls: string[] = [];
+  globalThis.fetch = (async (input: string | URL) => {
+    const url = String(input);
+    urls.push(url);
+    const body = url.endsWith('/careers/list') ? fixture('bamboohr-list.json') : fixture('bamboohr-detail.json');
+    return new Response(body, { headers: { 'content-type': 'application/json' } });
+  }) as typeof fetch;
+  try {
+    const company = { id: 'shero-commerce', ats: { vendor: 'bamboohr', slug: 'sherocommerce' } } as Company;
+    const postings = await fetchPostings(company);
+    assert.deepEqual(urls, [
+      'https://sherocommerce.bamboohr.com/careers/list', 'https://sherocommerce.bamboohr.com/careers/60/detail',
+    ]);
+    assertWellFormed(postings, 1);
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+});
+
 test('normalized postings carry no body_html', () => {
   const all = [
     ...greenhouse.parse(fixture('greenhouse.json'), 'application/json', 'getyourguide'),
     ...lever.parse(fixture('lever.json'), 'application/json', 'emma-sleep'),
     ...personio.parse(fixture('personio.xml'), 'text/xml; charset=UTF-8', 'eshop-guide'),
     ...teamtailor.parse(fixture('teamtailor.json'), 'application/feed+json', 'careers.columbusglobal.com'),
+    ...breezy.parse(fixture('breezy.json'), 'application/json', 'thirdandgrove'),
   ];
   for (const p of all) assert.ok(!('body_html' in p));
 });

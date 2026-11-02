@@ -1,0 +1,34 @@
+{
+  "meta": {},
+  "result": {
+    "jobOpening": {
+      "jobOpeningShareUrl": "https://sherocommerce.bamboohr.com/careers/60",
+      "jobOpeningName": "Marketing Technology Engineer ",
+      "jobOpeningStatus": "Open",
+      "jobCategoryId": null,
+      "departmentId": "18510",
+      "departmentLabel": "Design & Creative",
+      "employmentStatusLabel": "Full-Time - UK",
+      "employmentType": null,
+      "location": {
+        "city": "Tirana",
+        "state": null,
+        "postalCode": "Albania",
+        "addressCountry": "Albania"
+      },
+      "atsLocation": {
+        "country": null,
+        "countryId": null,
+        "state": null,
+        "city": null
+      },
+      "description": "<p><span style=\"font-size: 24pt\">About the role</span></p>\n<p>Shero is looking for a <span style=\"font-weight: bold\">Marketing Technology Engineer</span> to own the setup, implementation, QA, troubleshooting, and ongoing health of tracking and conversion data across our clients’ websites and advertising platforms.</p>\n<p>This role is responsible for ensuring that our advertising platforms, analytics tools, ecommerce systems, and CRM platforms receive accurate, high-quality site-wide events and conversion tracking data. The ideal candidate can independently audit an account, identify what is missing or incorrect, implement the right solution, and clearly document how tracking is configured.</p>\n<p>This is a hands-on technical marketing role that sits at the intersection of analytics, advertising platforms, ecommerce, privacy, and web development.</p>\n<p><span style=\"font-size: 24pt\">Key responsibilities</span></p>\n<p><span style=\"font-size: 18pt\">Tracking and tag management</span></p>\n<ul>\n<li>Set up, audit, troubleshoot, and maintain tag management, site-wide event tracking, ecommerce tracking, advertising pixels, and conversion tracking across GTM, GA4, Shopify, and major ad platforms.</li>\n<li>Build and QA tags, triggers, variables, data layers, custom events, event parameters, and conversion signals using GTM Preview, Tag Assistant, browser developer tools, and platform debugging tools.</li>\n<li>Define tracking requirements for developers when custom data layers, events, o",
+      "compensation": null,
+      "datePosted": "2026-09-04",
+      "minimumExperience": "Mid-level",
+      "locationType": "2",
+      "seekPromoted": false,
+      "aiProcessingDisclosureEnabled": false
+    }
+  }
+}

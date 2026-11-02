@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "totalCount": 1
+  },
+  "result": [
+    {
+      "id": "60",
+      "jobOpeningName": "Marketing Technology Engineer ",
+      "departmentId": "18510",
+      "departmentLabel": "Design & Creative",
+      "employmentStatusLabel": "Full-Time - UK",
+      "employmentType": null,
+      "location": {
+        "city": "Tirana",
+        "state": null
+      },
+      "atsLocation": {
+        "country": null,
+        "state": null,
+        "province": null,
+        "city": null
+      },
+      "isRemote": null,
+      "locationType": "2"
+    }
+  ]
+}

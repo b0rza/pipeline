@@ -1,0 +1,41 @@
+[
+  {
+    "uuid": "d240587d-9b8d-48df-af24-d744a3e48eef",
+    "name": "Adobe Analytics (CJA) Consultant",
+    "department": {
+      "id": "Strategy & Marketing Services",
+      "label": "Strategy & Marketing Services"
+    },
+    "url": "https://ats.rippling.com/verndale-llc/jobs/d240587d-9b8d-48df-af24-d744a3e48eef",
+    "workLocation": {
+      "label": "Remote (US)",
+      "id": "Remote (US)"
+    }
+  },
+  {
+    "uuid": "398f8a9c-cd37-4fb8-a4d4-a0abce04d0a6",
+    "name": "CMS Producer",
+    "department": {
+      "id": "Integrations",
+      "label": "Integrations"
+    },
+    "url": "https://ats.rippling.com/verndale-llc/jobs/398f8a9c-cd37-4fb8-a4d4-a0abce04d0a6",
+    "workLocation": {
+      "label": "Hybrid (Quito)",
+      "id": "Hybrid (Quito)"
+    }
+  },
+  {
+    "uuid": "398f8a9c-cd37-4fb8-a4d4-a0abce04d0a6",
+    "name": "CMS Producer",
+    "department": {
+      "id": "Integrations",
+      "label": "Integrations"
+    },
+    "url": "https://ats.rippling.com/verndale-llc/jobs/398f8a9c-cd37-4fb8-a4d4-a0abce04d0a6",
+    "workLocation": {
+      "label": "Remote (LATAM)",
+      "id": "Remote (LATAM)"
+    }
+  }
+]

@@ -25,8 +25,10 @@ Last updated: 2026-11-02
 
 ## Known gaps
 
-- Seed coverage: 22 of 119 seeds are polled (11 Teamtailor, 7 Personio, 4 Greenhouse). 79 have `unknown` ATS, mostly in-house job pages or plain forms; 4 are on vendors due 2026-11-16. No seed uses Lever.
-- US coverage: 59 US agencies seeded on 2026-11-02, but only 3 are pollable. The US 10–300-staff band hires through JazzHR (5), Rippling (3), Breezy (2), BambooHR (2), GoHire and Zoho Recruit, none of which have adapters. The rubric now ranks the US first, so these adapters matter more than the 11-16 row's Workable/Recruitee/SmartRecruiters/Ashby set (4 seeds between them).
+- Seed coverage: 34 of 119 seeds are polled (11 Teamtailor, 7 Personio, 5 JazzHR, 4 Greenhouse, 3 Rippling, 2 BambooHR, 2 Breezy). 79 have `unknown` ATS, mostly in-house job pages or plain forms; 4 are on vendors due 2026-11-16, and 2 on GoHire and Zoho Recruit, which have no adapters. No seed uses Lever.
+- US coverage: 15 of the 59 US agencies are polled (3 Greenhouse, 5 JazzHR, 3 Rippling, 2 BambooHR, 2 Breezy). JazzHR, BambooHR, Breezy and Rippling adapters were added on 2026-11-02. Two same-day runs gave 45 new postings from 9 US companies, and the second run added no rows. Not covered: First Pier (GoHire) and Ziffity (Zoho Recruit).
+- Two JazzHR seeds point at dead boards and fail every run: `avatria` serves "Inactive Career Page", and `redvanworkshop` redirects to jazzhr.com. Re-research where they hire now, or set them to `unknown`. Object Edge's Breezy board is live but has no openings.
+- The JazzHR adapter throws when a board page has no `jobs-list` block. That is right for dead boards, but nobody has yet seen a live JazzHR board with zero openings. If such a board also drops the block, the company fails every run instead of marking its postings gone. Check this the first time a JazzHR seed empties. JazzHR, BambooHR and Rippling also fetch one page per posting, and one failed page fails that company's whole run.
 - Seed geography: 20 of the 60 EU seeds are German, while the rubric (changed 2026-11-02) ranks DACH last. Rebalance the EU share when the list goes to 200.
 - The geography rows of both rubrics changed on 2026-11-02 with no eval set to check against (rule 5). The 2026-11-12 eval set must be labeled against the new weights.
 - Jung von Matt's Personio board is group-wide (copywriters, interns, open applications). Stage 3 filtering must drop non-engineering titles before tokens are spent.

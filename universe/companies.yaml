@@ -1,6 +1,7 @@
 # Seed list. One entry per company. See docs/SPEC.md "Universe seeding".
 # phases: p1 = contracting target, p2 = agent-enablement target.
 # ats.vendor: greenhouse | lever | ashby | workable | smartrecruiters | personio | recruitee | teamtailor | bamboohr | jazzhr | rippling | breezy | gohire | zoho | custom | unknown
+#   polled (adapters/ats/): greenhouse, lever, personio, teamtailor, jazzhr, bamboohr, breezy, rippling. The rest are recorded for later.
 # storefront: URL to fingerprint, or null for agencies.
 # status: active | paused | watch   (watch = fingerprint daily instead of weekly)
 # Research leftovers for the 200-seed expansion live in universe/_research/.
