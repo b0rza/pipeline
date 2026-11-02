@@ -1,0 +1,104 @@
+{
+  "version": "https://jsonfeed.org/version/1.1",
+  "title": "Columbus",
+  "home_page_url": "https://careers.columbusglobal.com/jobs",
+  "feed_url": "https://careers.columbusglobal.com/jobs.json",
+  "items": [
+    {
+      "id": "437caf58-5987-404f-890c-48504bdf297a",
+      "title": "M3 Cloudsuite Integration Architect",
+      "url": "https://careers.columbusglobal.com/jobs/8564433-m3-cloudsuite-integration-architect",
+      "date_published": "2026-10-16T18:07:10+02:00",
+      "content_html": "<p>We are seeking a seasoned integration architect with deep expertise in Infor M3 Cloudsuite. As an integration architect, you will be responsible for designing, developing, implementing, and supporting integration solutions within the Infor M3 CloudSuite ecosystem. This role requires deep technical expertise in Infor's integration technologies and proven hands-on experience delivering integrations as part of complex ERP implementation, migration, and enhancement projects.</p><p>The Integration Consultant works closely with Technology Solution Architects, Business Consultants, and client technical teams to translate business requirements into scalable, secure, and maintainable integration solutions.</p><p>The ideal candidate has successfully delivered integrations on enterprise-scale Infor M3 CloudSuite projects and understands the complexities of connecting M3 with internal applications, external systems, third-party platforms, and legacy technologies.</p>",
+      "_jobposting": {
+        "@context": "http://schema.org/",
+        "@type": "JobPosting",
+        "title": "M3 Cloudsuite Integration Architect",
+        "description": "<p>We are seeking a seasoned integration architect with deep expertise in Infor M3 Cloudsuite. As an integration architect, you will be responsible for designing, developing, implementing, and supporting integration solutions within the Infor M3 CloudSuite ecosystem. This role requires deep technical expertise in Infor's integration technologies and proven hands-on experience delivering integrations as part of complex ERP implementation, migration, and enhancement projects.</p><p>The Integration Consultant works closely with Technology Solution Architects, Business Consultants, and client technical teams to translate business requirements into scalable, secure, and maintainable integration solutions.</p><p>The ideal candidate has successfully delivered integrations on enterprise-scale Infor M3 CloudSuite projects and understands the complexities of connecting M3 with internal applications, external systems, third-party platforms, and legacy technologies.</p>",
+        "identifier": {
+          "@type": "PropertyValue",
+          "name": "Columbus",
+          "value": "8564433"
+        },
+        "datePosted": "2026-10-16T18:07:10+02:00",
+        "employmentType": "FULL_TIME",
+        "directApply": false,
+        "hiringOrganization": {
+          "@type": "Organization",
+          "name": "Columbus",
+          "sameAs": "https://careers.columbusglobal.com",
+          "logo": "https://images.teamtailor-cdn.com/images/s3/teamtailor-production/logotype-v3/image_uploads/1a52645d-cb8b-4faa-8406-6cdb55e06544/original.png"
+        },
+        "jobLocationType": "TELECOMMUTE",
+        "applicantLocationRequirements": {
+          "@type": "Country",
+          "name": "Denmark"
+        },
+        "jobLocation": [
+          {
+            "@type": "Place",
+            "address": {
+              "streetAddress": null,
+              "addressLocality": "Minneapolis",
+              "postalCode": "55415",
+              "addressCountry": "US",
+              "addressRegion": null,
+              "@type": "PostalAddress"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "63cae3a8-5913-460a-b587-8ef65460b680",
+      "title": "Senior Business Consultant D365",
+      "url": "https://careers.columbusglobal.com/jobs/8383484-senior-business-consultant-d365",
+      "date_published": "2026-09-15T16:08:01+02:00",
+      "content_html": "<p><span><strong>Senior Dynamics 365-konsulent – klar for neste steg på din måte?</strong></span></p><p><span>I Columbus tror vi ikke på én riktig karrierevei. Kanskje vil du gå i dybden, kanskje vil du jobbe bredere – eller kanskje ser du for deg en fremtid som løsningsarkitekt. Uansett retning er vi i vekst og ser etter erfarne konsulenter som vil bruke kompetansen sin til å skape verdi for både kunder og kollegaer i et sterkt og inkluderende Dynamics 365-miljø.</span></p><div><p><span><strong>Din rolle – mer enn bare konsulent</strong></span></p></div><div><p><span>I Columbus får du ansvar og tillit fra dag én. Du vil:</span></p></div><div><ul><li><p><span>Være faglig lead innen dine ekspertområder og jobbe tett med erfarne arkitekter</span></p></li></ul></div><div><ul><li><p><span>Følge kunden gjennom hele reisen – fra første møte til ferdig løsning</span></p></li></ul></div><div><ul><li><p><span>Bli involvert i presales, bidra til å vinne nye prosjekter og utfordre kundens behov</span></p>",
+      "_jobposting": {
+        "@context": "http://schema.org/",
+        "@type": "JobPosting",
+        "title": "Senior Business Consultant D365",
+        "description": "<p><span><strong>Senior Dynamics 365-konsulent – klar for neste steg på din måte?</strong></span></p><p><span>I Columbus tror vi ikke på én riktig karrierevei. Kanskje vil du gå i dybden, kanskje vil du jobbe bredere – eller kanskje ser du for deg en fremtid som løsningsarkitekt. Uansett retning er vi i vekst og ser etter erfarne konsulenter som vil bruke kompetansen sin til å skape verdi for både kunder og kollegaer i et sterkt og inkluderende Dynamics 365-miljø.</span></p><div><p><span><strong>Din rolle – mer enn bare konsulent</strong></span></p></div><div><p><span>I Columbus får du ansvar og tillit fra dag én. Du vil:</span></p></div><div><ul><li><p><span>Være faglig lead innen dine ekspertområder og jobbe tett med erfarne arkitekter</span></p></li></ul></div><div><ul><li><p><span>Følge kunden gjennom hele reisen – fra første møte til ferdig løsning</span></p></li></ul></div><div><ul><li><p><span>Bli involvert i presales, bidra til å vinne nye prosjekter og utfordre kundens behov</span></p>",
+        "identifier": {
+          "@type": "PropertyValue",
+          "name": "Columbus Norway",
+          "value": "8383484"
+        },
+        "datePosted": "2026-09-15T16:08:01+02:00",
+        "employmentType": "FULL_TIME",
+        "directApply": false,
+        "hiringOrganization": {
+          "@type": "Organization",
+          "name": "Columbus Norway",
+          "sameAs": "https://careers-no.columbusglobal.com",
+          "logo": "https://images.teamtailor-cdn.com/images/s3/teamtailor-production/logotype-v3/image_uploads/9996dc34-b9ef-4c13-8602-a32c5febbdd6/original.png"
+        },
+        "jobLocation": [
+          {
+            "@type": "Place",
+            "address": {
+              "streetAddress": "Tollbodgaten 22",
+              "addressLocality": "Tønsberg",
+              "postalCode": "3111",
+              "addressCountry": "NO",
+              "addressRegion": null,
+              "@type": "PostalAddress"
+            }
+          },
+          {
+            "@type": "Place",
+            "address": {
+              "streetAddress": null,
+              "addressLocality": "Norway",
+              "postalCode": null,
+              "addressCountry": "NO",
+              "addressRegion": null,
+              "@type": "PostalAddress"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

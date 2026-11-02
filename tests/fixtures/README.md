@@ -3,3 +3,4 @@ Real feed responses, trimmed to 2 entries with long text fields truncated (meta.
 - greenhouse.json: Greenhouse, slug `getyourguide`, fetched 2026-11-02 from https://boards-api.greenhouse.io/v1/boards/getyourguide/jobs?content=true
 - lever.json: Lever, slug `emma-sleep`, fetched 2026-11-02 from https://api.lever.co/v0/postings/emma-sleep?mode=json
 - personio.xml: Personio, slug `eshop-guide`, fetched 2026-11-02 from https://eshop-guide.jobs.personio.de/xml
+- teamtailor.json: Teamtailor, custom-domain board `careers.columbusglobal.com`, fetched 2026-11-02 from https://careers.columbusglobal.com/jobs.json

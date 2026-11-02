@@ -170,7 +170,7 @@
   phases: [p1, p2]
   source: commercetools-partners
   careers_url: https://career.avensia.com/
-  ats: { vendor: teamtailor }
+  ats: { vendor: teamtailor, slug: career.avensia.com }
   storefront: null
   status: active
   notes: "Lund, ~300 staff, Gold partner"
@@ -182,7 +182,7 @@
   phases: [p1, p2]
   source: commercetools-partners
   careers_url: https://careers.ionacommerce.com/
-  ats: { vendor: teamtailor }
+  ats: { vendor: teamtailor, slug: careers.ionacommerce.com }
   storefront: null
   status: active
   notes: "Helsinki, ~50-100 staff, Platinum partner"
@@ -194,7 +194,7 @@
   phases: [p1, p2]
   source: scayle-partners
   careers_url: https://careers.glassatlas.com/
-  ats: { vendor: teamtailor }
+  ats: { vendor: teamtailor, slug: careers.glassatlas.com }
   storefront: null
   status: active
   notes: "UK & Ireland commerce + performance marketing group"
@@ -206,7 +206,7 @@
   phases: [p1, p2]
   source: commercetools-partners
   careers_url: https://career.impactcommerce.com/
-  ats: { vendor: teamtailor }
+  ats: { vendor: teamtailor, slug: career.impactcommerce.com }
   storefront: null
   status: active
   notes: "~350-400 staff (above band), Platinum; also SFCC partner"
@@ -218,7 +218,7 @@
   phases: [p1, p2]
   source: sfcc-partners
   careers_url: https://career.novicell.co.uk/
-  ats: { vendor: teamtailor }
+  ats: { vendor: teamtailor, slug: career.novicell.co.uk }
   storefront: null
   status: active
   notes: "~400 staff (above band); also commercetools partner; careers URL is the UK site"
@@ -230,7 +230,7 @@
   phases: [p1, p2]
   source: commercetools-partners
   careers_url: https://careers.incentro.com/
-  ats: { vendor: teamtailor }
+  ats: { vendor: teamtailor, slug: careers.incentro.com }
   storefront: null
   status: active
   notes: "~1000 staff (above band), Gold partner"
@@ -242,7 +242,7 @@
   phases: [p1, p2]
   source: commercetools-partners
   careers_url: https://careers.columbusglobal.com/
-  ats: { vendor: teamtailor }
+  ats: { vendor: teamtailor, slug: careers.columbusglobal.com }
   storefront: null
   status: active
   notes: "~1,700 staff (above band), Gold partner"
@@ -253,8 +253,8 @@
   country: FI
   phases: [p1, p2]
   source: commercetools-partners
-  careers_url: https://www.solteq.com/en/careers
-  ats: { vendor: teamtailor }
+  careers_url: https://career.solteq.com/
+  ats: { vendor: teamtailor, slug: career.solteq.com }
   storefront: null
   status: active
   notes: "~500 staff (above band); Teamtailor on career.solteq.com"
@@ -266,7 +266,7 @@
   phases: [p1, p2]
   source: commercetools-partners
   careers_url: https://career.kps.com/en/jobs
-  ats: { vendor: teamtailor }
+  ats: { vendor: teamtailor, slug: career.kps.com }
   storefront: null
   status: active
   notes: "~900 staff (above band), SAP-heavy"
@@ -278,7 +278,7 @@
   phases: [p1, p2]
   source: scayle-partners
   careers_url: https://careers.idhlagency.com/
-  ats: { vendor: teamtailor }
+  ats: { vendor: teamtailor, slug: careers.idhlagency.com }
   storefront: null
   status: active
   notes: "400+ staff UK/US (above band)"

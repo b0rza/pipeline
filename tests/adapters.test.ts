@@ -4,6 +4,7 @@ import { test } from 'node:test';
 import { greenhouse } from '../adapters/ats/greenhouse.ts';
 import { lever } from '../adapters/ats/lever.ts';
 import { personio } from '../adapters/ats/personio.ts';
+import { teamtailor } from '../adapters/ats/teamtailor.ts';
 import { htmlToText } from '../core/html.ts';
 import type { NormalizedPosting } from '../core/types.ts';
 
@@ -53,11 +54,35 @@ test('personio rejects an HTML 404 page', () => {
   assert.throws(() => personio.parse('<!doctype html><html><body>Not found</body></html>', 'text/html', 'dead'));
 });
 
+test('teamtailor fixture', () => {
+  const postings = teamtailor.parse(fixture('teamtailor.json'), 'application/feed+json; charset=utf-8', 'careers.columbusglobal.com');
+  assertWellFormed(postings, 2);
+  assert.equal(postings[0].external_id, '437caf58-5987-404f-890c-48504bdf297a');
+  assert.equal(postings[0].url, 'https://careers.columbusglobal.com/jobs/8564433-m3-cloudsuite-integration-architect');
+  assert.equal(postings[0].posted_at, '2026-10-16T16:07:10.000Z');
+  assert.deepEqual(postings[0].raw, {
+    job_id: '8564433', employment_type: 'FULL_TIME', remote: true, applicant_countries: ['Denmark'],
+    countries: ['US'], hiring_organization: 'Columbus',
+  });
+  assert.equal(postings[1].location, 'Tønsberg, Norway');
+  assert.ok(postings[1].body.startsWith('Senior Dynamics 365-konsulent'));
+});
+
+test('teamtailor feedUrl takes a subdomain slug or a custom-domain host', () => {
+  assert.equal(teamtailor.feedUrl('vincitoyj'), 'https://vincitoyj.teamtailor.com/jobs.json');
+  assert.equal(teamtailor.feedUrl('career.novicell.co.uk'), 'https://career.novicell.co.uk/jobs.json');
+});
+
+test('teamtailor rejects an HTML careers page', () => {
+  assert.throws(() => teamtailor.parse('<!doctype html><html><body>Jobs</body></html>', 'text/html', 'dead'));
+});
+
 test('normalized postings carry no body_html', () => {
   const all = [
     ...greenhouse.parse(fixture('greenhouse.json'), 'application/json', 'getyourguide'),
     ...lever.parse(fixture('lever.json'), 'application/json', 'emma-sleep'),
     ...personio.parse(fixture('personio.xml'), 'text/xml; charset=UTF-8', 'eshop-guide'),
+    ...teamtailor.parse(fixture('teamtailor.json'), 'application/feed+json', 'careers.columbusglobal.com'),
   ];
   for (const p of all) assert.ok(!('body_html' in p));
 });

@@ -3,9 +3,10 @@ import type { Company, NormalizedPosting } from '../../core/types.ts';
 import { greenhouse } from './greenhouse.ts';
 import { lever } from './lever.ts';
 import { personio } from './personio.ts';
+import { teamtailor } from './teamtailor.ts';
 import type { AtsAdapter } from './types.ts';
 
-export const adapters: Record<string, AtsAdapter> = { greenhouse, lever, personio };
+export const adapters: Record<string, AtsAdapter> = { greenhouse, lever, personio, teamtailor };
 
 export async function fetchPostings(company: Company): Promise<NormalizedPosting[]> {
   const adapter = company.ats && adapters[company.ats.vendor];

@@ -1,4 +1,4 @@
-// Careers-URL resolver: fills ats {vendor, slug} for seed entries whose vendor is unknown or missing.
+// Careers-URL resolver: fills ats {vendor, slug} for seed entries whose vendor or slug is unknown or missing.
 // Usage: npm run resolve -- <file.yaml> [--verify]
 import { readFileSync, writeFileSync } from 'node:fs';
 import { isMap, isScalar, isSeq, parseDocument, type YAMLMap } from 'yaml';
@@ -22,6 +22,9 @@ const hostRules: [RegExp, string, 'path' | 'sub'][] = [
   [/^[\w-]+\.teamtailor\.com$/, 'teamtailor', 'sub'],
 ];
 
+// A Teamtailor board on a custom domain shows no slug; its own host is the slug (see adapters/ats/teamtailor.ts).
+const teamtailorCareersite = /teamtailor-cdn\.com\/assets\/careersite-/;
+
 const htmlRules: [RegExp, string][] = [
   [/boards\.greenhouse\.io\/embed\/job_board(?:\/js)?\?for=([\w-]+)/, 'greenhouse'],
   [/(?:job-)?boards\.greenhouse\.io\/([\w-]+)/, 'greenhouse'],
@@ -40,6 +43,7 @@ function detect(finalUrl: string, html: string): Omit<Found, 'evidence'> | null 
     const slug = from === 'sub' ? u.hostname.split('.')[0] : u.pathname.split('/')[1];
     if (slug && !NOT_SLUGS.has(slug)) return { vendor, slug };
   }
+  if (teamtailorCareersite.test(html)) return { vendor: 'teamtailor', slug: u.hostname };
   for (const [re, vendor] of htmlRules) {
     for (const m of html.matchAll(new RegExp(re, 'gi'))) {
       if (!NOT_SLUGS.has(m[1].toLowerCase())) return { vendor, slug: m[1] };
@@ -83,7 +87,7 @@ for (const e of entries) {
   const ats = e.get('ats');
   const vendor = isMap(ats) ? String(ats.get('vendor') ?? '') : '';
   const slug = isMap(ats) ? String(ats.get('slug') ?? '') : '';
-  if (vendor && vendor !== 'unknown') {
+  if (vendor && vendor !== 'unknown' && slug) {
     console.log(`${id.padEnd(28)}  ${vendor.padEnd(15)}  ${slug}  (from file)`);
     continue;
   }
@@ -117,7 +121,7 @@ console.log(`wrote ${out}`);
 if (args.includes('--verify')) {
   for (const e of entries) {
     const ats = e.get('ats');
-    if (!isMap(ats)) continue;
+    if (!isMap(ats) || !ats.get('slug')) continue;
     const vendor = String(ats.get('vendor'));
     const slug = String(ats.get('slug'));
     const adapter = adapters[vendor];
