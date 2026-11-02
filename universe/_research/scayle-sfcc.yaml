@@ -1,0 +1,252 @@
+# Agencies from the SCAYLE partner directory (scayle.com/partner/) and Salesforce Commerce Cloud partners.
+# Researched 2026-11-02. SFCC entries come from web search plus the agency's own site, because the AppExchange consultant directory is JS-rendered and unreadable.
+# ATS rule: vendor set only from an observed host pattern or embed. Teamtailor on a custom domain is recorded as teamtailor with slug null.
+
+# --- scayle-partners ---
+- name: Best IT
+  domain: bestit.de
+  country: DE
+  source: scayle-partners
+  careers_url: https://www.bestit.de/de/karriere
+  ats: { vendor: unknown, slug: null }
+  notes: "Shopware/SCAYLE agency; openings on a HubSpot page, no ATS host seen"
+- name: brandung
+  domain: brandung.de
+  country: DE
+  source: scayle-partners
+  careers_url: https://www.brandung.de/karriere
+  ats: { vendor: personio, slug: brandung }
+  notes: "Independent full-service digital agency, Cologne"
+- name: C10
+  domain: c10.de
+  country: DE
+  source: scayle-partners
+  careers_url: null
+  ats: { vendor: unknown, slug: null }
+  notes: "Compe10ce GmbH & Co. KG, Berlin (also Jena, Dresden); Karriere link on homepage returned 404"
+- name: digital dna
+  domain: digital-dna.de
+  country: DE
+  source: scayle-partners
+  careers_url: https://www.digital-dna.de/karriere
+  ats: { vendor: recruitee, slug: digitaldna }
+  notes: "Commerce consultancy"
+- name: diva-e
+  domain: diva-e.com
+  country: DE
+  source: scayle-partners
+  careers_url: https://karriere.diva-e.com/
+  ats: { vendor: unknown, slug: null }
+  notes: "Large (likely 500+); one of Germany's biggest e-commerce service providers; own job portal"
+- name: dotSource
+  domain: dotsource.de
+  country: DE
+  source: scayle-partners
+  careers_url: https://www.dotsource.de/karriere/jobs/
+  ats: { vendor: unknown, slug: null }
+  notes: "Jena; large (likely 500+); also an official Salesforce Commerce Cloud partner; jobs are on-site pages"
+- name: Etribes
+  domain: etribes.de
+  country: DE
+  source: scayle-partners
+  careers_url: https://www.etribes.de/jobs
+  ats: { vendor: personio, slug: etribes-connect }
+  notes: "Digital consultancy, Hamburg"
+- name: Glass Atlas
+  domain: glassatlas.com
+  country: GB
+  source: scayle-partners
+  careers_url: https://careers.glassatlas.com/
+  ats: { vendor: teamtailor, slug: null }
+  notes: "UK & Ireland commerce + performance marketing group; Teamtailor on a custom domain, slug not exposed"
+- name: growsome
+  domain: growsome.agency
+  country: DE
+  source: scayle-partners
+  careers_url: null
+  ats: { vendor: unknown, slug: null }
+  notes: "Hamburg boutique headless agency, SCAYLE specialist; no careers page found"
+- name: IDHL
+  domain: idhlagency.com
+  country: GB
+  source: scayle-partners
+  careers_url: https://careers.idhlagency.com/
+  ats: { vendor: teamtailor, slug: null }
+  notes: "400+ staff UK/US (above size band); Teamtailor custom domain"
+- name: Jung von Matt TECH
+  domain: jvm.tech
+  country: DE
+  source: scayle-partners
+  careers_url: "https://www.jvm.com/jobs/?location=All&agency=Jung%20von%20Matt%20TECH"
+  ats: { vendor: personio, slug: jungvonmatt }
+  notes: "Boutique tech unit of Jung von Matt; Personio board is group-wide, needs filtering to TECH"
+- name: Mobizcorp
+  domain: mobizcorp.de
+  country: DE
+  source: scayle-partners
+  careers_url: null
+  ats: { vendor: unknown, slug: null }
+  notes: "51-200 staff; Berlin/Potsdam/Viernheim; also does SFCC; site has a broken TLS chain, careers not checked"
+- name: nexum
+  domain: nexum.com
+  country: DE
+  source: scayle-partners
+  careers_url: https://www.nexum.com/de/karriere
+  ats: { vendor: personio, slug: nexum-ag }
+  notes: "Cologne; site also mentions Commerce Cloud"
+- name: pixolith
+  domain: pixolith.de
+  country: DE
+  source: scayle-partners
+  careers_url: https://www.pixolith.de/jobs-und-stellen
+  ats: { vendor: personio, slug: pixolith }
+  notes: "Commerce agency, heavy SCAYLE focus"
+- name: rb2
+  domain: rb2.nl
+  country: NL
+  source: scayle-partners
+  careers_url: https://www.rb2.nl/en/careers
+  ats: { vendor: unknown, slug: null }
+  notes: "E-commerce/subscription/loyalty builds; jobs on own site"
+- name: Red Badger
+  domain: red-badger.com
+  country: GB
+  source: scayle-partners
+  careers_url: https://content.red-badger.com/all-jobs
+  ats: { vendor: greenhouse, slug: redbadger }
+  notes: "London digital consultancy; Greenhouse embed"
+- name: XSARUS
+  domain: xsarus.nl
+  country: NL
+  source: scayle-partners
+  careers_url: https://www.xsarus.nl/werken-bij/vacatures/
+  ats: { vendor: unknown, slug: null }
+  notes: "Rotterdam, 51-200 staff; Benelux digital commerce agency"
+- name: Y1 Digital
+  domain: y1.de
+  country: DE
+  source: scayle-partners
+  careers_url: https://www.y1.de/karriere
+  ats: { vendor: unknown, slug: null }
+  notes: "PIM/AI boutique (AG); jobs on own site"
+- name: The Commerce Team Global
+  domain: thecommerceteam.com
+  country: GB
+  source: scayle-partners
+  careers_url: https://www.thecommerceteam.com/careers
+  ats: { vendor: unknown, slug: null }
+  notes: "London; also a SFCC implementation partner (SFCC, Shopify Plus, SCAYLE)"
+
+# --- sfcc-partners ---
+- name: Tryzens
+  domain: tryzens.com
+  country: GB
+  source: sfcc-partners
+  careers_url: https://tryzens.com/careers/
+  ats: { vendor: workable, slug: tryzensglobal }
+  notes: "London, 201-500 staff; past SFCC Delivery Partner of the Year"
+- name: Systep
+  domain: systep.co.uk
+  country: GB
+  source: sfcc-partners
+  careers_url: https://www.systep.co.uk/careers
+  ats: { vendor: unknown, slug: null }
+  notes: "Bristol; SFCC consulting, implementation, managed services"
+- name: Found
+  domain: found.co.uk
+  country: GB
+  source: sfcc-partners
+  careers_url: https://www.found.co.uk/about-us/careers/
+  ats: { vendor: unknown, slug: null }
+  notes: "London; SFCC marketing/SEO practice, not an implementation SI"
+- name: TOWA
+  domain: towa-digital.com
+  country: AT
+  source: sfcc-partners
+  careers_url: https://www.towa-digital.com/en/career/
+  ats: { vendor: personio, slug: towa }
+  notes: "Austria + Munich/Hamburg; Salesforce partner, mostly B2B Commerce"
+- name: factory42
+  domain: factory42.com
+  country: DE
+  source: sfcc-partners
+  careers_url: null
+  ats: { vendor: unknown, slug: null }
+  notes: "Munich; Salesforce consultancy with B2C Commerce Cloud practice; Karriere link 404s"
+- name: digital commerce experts
+  domain: digital-commerce-experts.de
+  country: DE
+  source: sfcc-partners
+  careers_url: https://www.digital-commerce-experts.de/karriere/
+  ats: { vendor: unknown, slug: null }
+  notes: "Certified Salesforce Commerce agency; clients include Mister Spex, SportScheck"
+- name: SUNZINET
+  domain: sunzinet.com
+  country: DE
+  source: sfcc-partners
+  careers_url: https://www.sunzinet.com/offene-stellen
+  ats: { vendor: unknown, slug: null }
+  notes: "Cologne; Salesforce B2B Commerce focus"
+- name: Salesfive
+  domain: salesfive.com
+  country: DE
+  source: sfcc-partners
+  careers_url: https://jobs.salesfive.com/karriere/jobs/
+  ats: { vendor: unknown, slug: null }
+  notes: "Salesforce consultancy, DACH offices incl. Zurich/Vienna; probably 300+ staff; Commerce Cloud not explicit on homepage"
+- name: Wolfpack Agency
+  domain: wolfpack-agency.com
+  country: NL
+  source: sfcc-partners
+  careers_url: https://wolfpack-agency.com/careers
+  ats: { vendor: unknown, slug: null }
+  notes: "Amsterdam, 11-50 staff; Shopify + Salesforce Commerce Cloud"
+- name: FORWARD
+  domain: forward.eu
+  country: BE
+  source: sfcc-partners
+  careers_url: "https://www.forward.eu/about-us#join-team"
+  ats: { vendor: unknown, slug: null }
+  notes: "Hasselt, 90+ certified experts; Salesforce Summit partner; SFRA/Composable Storefront"
+- name: Pletra Technologies
+  domain: pletratech.com
+  country: BE
+  source: sfcc-partners
+  careers_url: https://pletratech.com/careers-pletra-technologies/
+  ats: { vendor: unknown, slug: null }
+  notes: "Brussels, 51-200; Salesforce consultancy listing Commerce Cloud implementation; mainly CRM"
+- name: Empathy Lab (formerly Emakina)
+  domain: empathylab.com
+  country: BE
+  source: sfcc-partners
+  careers_url: null
+  ats: { vendor: unknown, slug: null }
+  notes: "Brussels; emakina.com now redirects here; ~1000 staff (above band); SFCC partner-award winner; site returned 403"
+- name: Alpha Solutions
+  domain: alpha-solutions.com
+  country: DK
+  source: sfcc-partners
+  careers_url: null
+  ats: { vendor: unknown, slug: null }
+  notes: "Copenhagen (+ Oslo, Hoboken); SFCC builds for Illums Bolighus, Warm Nordic; no careers page found"
+- name: IMPACT Commerce
+  domain: impactcommerce.com
+  country: DK
+  source: sfcc-partners
+  careers_url: https://career.impactcommerce.com/
+  ats: { vendor: teamtailor, slug: null }
+  notes: "Copenhagen/Stockholm/Oslo; improove.se now redirects here; Teamtailor custom domain"
+- name: Novicell
+  domain: novicell.com
+  country: DK
+  source: sfcc-partners
+  careers_url: https://career.novicell.co.uk/
+  ats: { vendor: teamtailor, slug: null }
+  notes: "Danish group, probably 300+ staff; Salesforce partner page lists Commerce Cloud; careers URL is the UK Teamtailor site"
+- name: Sirocco
+  domain: siroccogroup.com
+  country: SE
+  source: sfcc-partners
+  careers_url: https://www.siroccogroup.com/about-us/career/
+  ats: { vendor: unknown, slug: null }
+  notes: "Stockholm Salesforce consultancy with Commerce Cloud expertise; jobs via LinkedIn only"

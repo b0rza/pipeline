@@ -3,23 +3,724 @@
 # ats.vendor: greenhouse | lever | ashby | workable | smartrecruiters | personio | recruitee | teamtailor | custom | unknown
 # storefront: URL to fingerprint, or null for agencies.
 # status: active | paused | watch   (watch = fingerprint daily instead of weekly)
+# Research leftovers for the 200-seed expansion live in universe/_research/.
 
-- id: example-agency
-  name: Example Digital
-  domain: example-digital.co.uk
+# --- Partner directories (commercetools, SCAYLE, SFCC), 2026-11-02 ---
+
+- id: kernpunkt
+  name: kernpunkt
+  domain: kernpunkt.de
+  country: DE
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://www.kernpunkt.de/jobs
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Cologne, ~250 staff, Platinum partner; personio board live but /xml 404 on 2026-11-02, slug kernpunkt"
+
+- id: shopmacher
+  name: Shopmacher
+  domain: shopmacher.de
+  country: DE
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://www.shopmacher.de/de/karriere
+  ats: { vendor: personio, slug: shopmacher }
+  storefront: null
+  status: active
+  notes: "Gescher, ~100 staff"
+
+- id: brandung
+  name: brandung
+  domain: brandung.de
+  country: DE
+  phases: [p1, p2]
+  source: scayle-partners
+  careers_url: https://www.brandung.de/karriere
+  ats: { vendor: personio, slug: brandung }
+  storefront: null
+  status: active
+  notes: "Cologne, independent full-service digital agency"
+
+- id: etribes
+  name: Etribes
+  domain: etribes.de
+  country: DE
+  phases: [p1, p2]
+  source: scayle-partners
+  careers_url: https://www.etribes.de/jobs
+  ats: { vendor: personio, slug: etribes-connect }
+  storefront: null
+  status: active
+  notes: "Hamburg digital consultancy"
+
+- id: jung-von-matt-tech
+  name: Jung von Matt TECH
+  domain: jvm.tech
+  country: DE
+  phases: [p1, p2]
+  source: scayle-partners
+  careers_url: "https://www.jvm.com/jobs/?location=All&agency=Jung%20von%20Matt%20TECH"
+  ats: { vendor: personio, slug: jungvonmatt }
+  storefront: null
+  status: active
+  notes: "Personio board is group-wide; filter to TECH"
+
+- id: nexum
+  name: nexum
+  domain: nexum.com
+  country: DE
+  phases: [p1, p2]
+  source: scayle-partners
+  careers_url: https://www.nexum.com/de/karriere
+  ats: { vendor: personio, slug: nexum-ag }
+  storefront: null
+  status: active
+  notes: "Cologne, also does Commerce Cloud"
+
+- id: pixolith
+  name: pixolith
+  domain: pixolith.de
+  country: DE
+  phases: [p1, p2]
+  source: scayle-partners
+  careers_url: https://www.pixolith.de/jobs-und-stellen
+  ats: { vendor: personio, slug: pixolith }
+  storefront: null
+  status: active
+  notes: "Commerce agency, heavy SCAYLE focus"
+
+- id: red-badger
+  name: Red Badger
+  domain: red-badger.com
+  country: GB
+  phases: [p1, p2]
+  source: scayle-partners
+  careers_url: https://content.red-badger.com/all-jobs
+  ats: { vendor: greenhouse, slug: redbadger }
+  storefront: null
+  status: active
+  notes: "London digital consultancy"
+
+- id: towa
+  name: TOWA
+  domain: towa-digital.com
+  country: AT
+  phases: [p1, p2]
+  source: sfcc-partners
+  careers_url: https://www.towa-digital.com/en/career/
+  ats: { vendor: personio, slug: towa }
+  storefront: null
+  status: active
+  notes: "Austria + Munich/Hamburg, mostly Salesforce B2B Commerce"
+
+- id: tryzens
+  name: Tryzens
+  domain: tryzens.com
   country: GB
   phases: [p1, p2]
   source: commercetools-partners
-  ats: { vendor: greenhouse, slug: exampledigital }
+  careers_url: https://tryzens.com/careers/
+  ats: { vendor: workable, slug: tryzensglobal }
   storefront: null
   status: active
+  notes: "London, ~300 staff; also SFCC partner"
 
-- id: example-retailer
-  name: Example Retail
-  domain: example-retail.nl
+- id: youwe
+  name: Youwe
+  domain: youweagency.com
   country: NL
-  phases: [p1]
-  source: emerce-top100
-  ats: { vendor: recruitee, slug: example-retail }
-  storefront: https://www.example-retail.nl
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://careers.youweagency.com/
+  ats: { vendor: recruitee, slug: youweconnectit }
+  storefront: null
   status: active
+  notes: "~300 staff, Recruitee on custom domain"
+
+- id: digital-dna
+  name: digital dna
+  domain: digital-dna.de
+  country: DE
+  phases: [p1, p2]
+  source: scayle-partners
+  careers_url: https://www.digital-dna.de/karriere
+  ats: { vendor: recruitee, slug: digitaldna }
+  storefront: null
+  status: active
+  notes: "Commerce consultancy"
+
+- id: vincit
+  name: Vincit
+  domain: vincit.com
+  country: FI
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://www.vincit.com/careers
+  ats: { vendor: teamtailor, slug: vincitoyj }
+  storefront: null
+  status: active
+  notes: "Tampere, ~600 staff (above band)"
+
+- id: avensia
+  name: Avensia
+  domain: avensia.com
+  country: SE
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://career.avensia.com/
+  ats: { vendor: teamtailor }
+  storefront: null
+  status: active
+  notes: "Lund, ~300 staff, Gold partner"
+
+- id: iona
+  name: IONA
+  domain: ionacommerce.com
+  country: FI
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://careers.ionacommerce.com/
+  ats: { vendor: teamtailor }
+  storefront: null
+  status: active
+  notes: "Helsinki, ~50-100 staff, Platinum partner"
+
+- id: glass-atlas
+  name: Glass Atlas
+  domain: glassatlas.com
+  country: GB
+  phases: [p1, p2]
+  source: scayle-partners
+  careers_url: https://careers.glassatlas.com/
+  ats: { vendor: teamtailor }
+  storefront: null
+  status: active
+  notes: "UK & Ireland commerce + performance marketing group"
+
+- id: impact-commerce
+  name: IMPACT Commerce
+  domain: impactcommerce.com
+  country: DK
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://career.impactcommerce.com/
+  ats: { vendor: teamtailor }
+  storefront: null
+  status: active
+  notes: "~350-400 staff (above band), Platinum; also SFCC partner"
+
+- id: novicell
+  name: Novicell
+  domain: novicell.com
+  country: DK
+  phases: [p1, p2]
+  source: sfcc-partners
+  careers_url: https://career.novicell.co.uk/
+  ats: { vendor: teamtailor }
+  storefront: null
+  status: active
+  notes: "~400 staff (above band); also commercetools partner; careers URL is the UK site"
+
+- id: incentro
+  name: Incentro
+  domain: incentro.com
+  country: NL
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://careers.incentro.com/
+  ats: { vendor: teamtailor }
+  storefront: null
+  status: active
+  notes: "~1000 staff (above band), Gold partner"
+
+- id: columbus-global
+  name: Columbus Global
+  domain: columbusglobal.com
+  country: DK
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://careers.columbusglobal.com/
+  ats: { vendor: teamtailor }
+  storefront: null
+  status: active
+  notes: "~1,700 staff (above band), Gold partner"
+
+- id: solteq
+  name: Solteq
+  domain: solteq.com
+  country: FI
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://www.solteq.com/en/careers
+  ats: { vendor: teamtailor }
+  storefront: null
+  status: active
+  notes: "~500 staff (above band); Teamtailor on career.solteq.com"
+
+- id: kps
+  name: KPS
+  domain: kps.com
+  country: DE
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://career.kps.com/en/jobs
+  ats: { vendor: teamtailor }
+  storefront: null
+  status: active
+  notes: "~900 staff (above band), SAP-heavy"
+
+- id: idhl
+  name: IDHL
+  domain: idhlagency.com
+  country: GB
+  phases: [p1, p2]
+  source: scayle-partners
+  careers_url: https://careers.idhlagency.com/
+  ats: { vendor: teamtailor }
+  storefront: null
+  status: active
+  notes: "400+ staff UK/US (above band)"
+
+- id: candyspace
+  name: Candyspace
+  domain: candyspace.com
+  country: GB
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://www.candyspace.com/careers/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "London, ~100 staff; jobs on own HubSpot pages"
+
+- id: deliberate-software
+  name: Deliberate Software
+  domain: deliberate.uk
+  country: GB
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://deliberate.uk/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "London, small consultancy"
+
+- id: gradient-edge
+  name: Gradient Edge
+  domain: gradientedge.com
+  country: GB
+  phases: [p1, p2]
+  source: commercetools-partners
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Gold partner; no careers page found"
+
+- id: cabiri
+  name: Cabiri
+  domain: cabiri.io
+  country: GB
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://www.cabiri.io/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "London; jobs on own Squarespace pages"
+
+- id: the-commerce-team-global
+  name: The Commerce Team Global
+  domain: thecommerceteam.com
+  country: GB
+  phases: [p1, p2]
+  source: scayle-partners
+  careers_url: https://www.thecommerceteam.com/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "London; also SFCC partner"
+
+- id: systep
+  name: Systep
+  domain: systep.co.uk
+  country: GB
+  phases: [p1, p2]
+  source: sfcc-partners
+  careers_url: https://www.systep.co.uk/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Bristol, SFCC consulting and managed services"
+
+- id: found
+  name: Found
+  domain: found.co.uk
+  country: GB
+  phases: [p1, p2]
+  source: sfcc-partners
+  careers_url: https://www.found.co.uk/about-us/careers/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "London; SFCC marketing/SEO practice, not an implementation SI"
+
+- id: lab-digital
+  name: Lab Digital
+  domain: labdigital.nl
+  country: NL
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://careers.labdigital.nl/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "~60 staff, Silver partner; careers on Homerun"
+
+- id: xsarus-digital-commerce
+  name: XSARUS Digital Commerce
+  domain: xsarus.com
+  country: NL
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://www.xsarus.nl/werken-bij/vacatures/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Rotterdam, ~100 staff, Platinum; also SCAYLE partner (as xsarus.nl)"
+
+- id: dotcontrol
+  name: DotControl
+  domain: dotcontrol.com
+  country: NL
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://jobs.dotcontrol.com/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Rotterdam, ~60 staff; careers on Homerun"
+
+- id: rb2
+  name: rb2
+  domain: rb2.nl
+  country: NL
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://www.rb2.nl/en/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "B2B commerce for wholesalers; also SCAYLE partner"
+
+- id: product-league
+  name: Product League
+  domain: product-league.com
+  country: NL
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://product-league.com/en/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Also OutSystems Elite partner"
+
+- id: neortus
+  name: Neortus
+  domain: neortus.com
+  country: NL
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://neortus.com/nl/banen/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Amsterdam, small; no open vacancies at research time"
+
+- id: wolfpack-agency
+  name: Wolfpack Agency
+  domain: wolfpack-agency.com
+  country: NL
+  phases: [p1, p2]
+  source: sfcc-partners
+  careers_url: https://wolfpack-agency.com/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Amsterdam, 11-50 staff; Shopify + SFCC"
+
+- id: supersonic
+  name: Supersonic
+  domain: supersonic.online
+  country: BE
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://supersonic.online/en/careers/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Hasselt/Antwerp, small; MACH Alliance member"
+
+- id: forward
+  name: FORWARD
+  domain: forward.eu
+  country: BE
+  phases: [p1, p2]
+  source: sfcc-partners
+  careers_url: "https://www.forward.eu/about-us#join-team"
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Hasselt, 90+ certified experts, Salesforce Summit partner"
+
+- id: pletra-technologies
+  name: Pletra Technologies
+  domain: pletratech.com
+  country: BE
+  phases: [p1, p2]
+  source: sfcc-partners
+  careers_url: https://pletratech.com/careers-pletra-technologies/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Brussels, 51-200 staff; mainly CRM, lists Commerce Cloud"
+
+- id: kruso
+  name: Kruso
+  domain: kruso.group
+  country: DK
+  phases: [p1, p2]
+  source: commercetools-partners
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Copenhagen/Aarhus, ~150 staff; no careers link on site"
+
+- id: adapt
+  name: Adapt
+  domain: adaptagency.com
+  country: DK
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://adaptagency.com/en/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Copenhagen, ~300 staff; jobs on Breezy HR"
+
+- id: alpha-solutions
+  name: Alpha Solutions
+  domain: alpha-solutions.com
+  country: DK
+  phases: [p1, p2]
+  source: sfcc-partners
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Copenhagen (+ Oslo, Hoboken); no careers page found"
+
+- id: pearlconvert
+  name: PearlConvert
+  domain: pearlconvert.no
+  country: "NO"
+  phases: [p1, p2]
+  source: commercetools-partners
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Oslo, ~50 staff, Pearl Group; no careers page found"
+
+- id: try-dig
+  name: TRY Dig
+  domain: try.house
+  country: "NO"
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://try.house/no/karriere
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Oslo, TRY group; applications via Homerun"
+
+- id: sirocco
+  name: Sirocco
+  domain: siroccogroup.com
+  country: SE
+  phases: [p1, p2]
+  source: sfcc-partners
+  careers_url: https://www.siroccogroup.com/about-us/career/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Stockholm Salesforce consultancy; jobs via LinkedIn only"
+
+- id: pixelart
+  name: pixelart
+  domain: pixelart-agency.com
+  country: AT
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://www.pixelart-agency.com/de/karriere/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Salzburg and Vienna, ~60 staff"
+
+- id: snce
+  name: S'nce
+  domain: sncegroup.ch
+  country: CH
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://www.sncegroup.ch/en/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Stabio (Ticino)"
+
+- id: foryouandyourcustomers
+  name: foryouandyourcustomers
+  domain: foryouandyourcustomers.com
+  country: CH
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://foryouandyourcustomers.com/careers/jobs/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Baar, many DACH offices, ~250 staff"
+
+- id: basecom
+  name: basecom
+  domain: basecom.de
+  country: DE
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://jobs.basecom.de/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "~200 staff, Platinum partner; applications via onlyfy"
+
+- id: best-it
+  name: best it
+  domain: bestit.de
+  country: DE
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://www.bestit.de/de/karriere
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "~100 staff, Shopware partner; also SCAYLE partner"
+
+- id: kosmonaut
+  name: KOSMONAUT
+  domain: kosmonaut.io
+  country: DE
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://kosmonaut.io/karriere/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Rheda-Wiedenbrück, 10+ staff; site blocks curl"
+
+- id: mediawave
+  name: mediawave
+  domain: mediawave.de
+  country: DE
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://jobs.mediawave.de/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Munich, ~50 staff; applications via jobbase.io"
+
+- id: piazza-blu
+  name: piazza blu
+  domain: piazzablu.com
+  country: DE
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://www.piazzablu.com/karriere
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Cologne, ~70 staff"
+
+- id: webmatch
+  name: Webmatch
+  domain: webmatch.de
+  country: DE
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://webmatch.de/de-de/karriere/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Cologne, ~50 staff; jobs on JOIN"
+
+- id: zyres
+  name: ZYRES
+  domain: zyres.com
+  country: DE
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://www.zyres.com/karriere
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Frankfurt am Main"
+
+- id: mobizcorp
+  name: Mobizcorp
+  domain: mobizcorp.de
+  country: DE
+  phases: [p1, p2]
+  source: scayle-partners
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "51-200 staff, Berlin/Potsdam/Viernheim; also SFCC; careers not checked (broken TLS)"
+
+- id: y1-digital
+  name: Y1 Digital
+  domain: y1.de
+  country: DE
+  phases: [p1, p2]
+  source: scayle-partners
+  careers_url: https://www.y1.de/karriere
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "PIM/AI boutique; jobs on own site"
+
+- id: digital-commerce-experts
+  name: digital commerce experts
+  domain: digital-commerce-experts.de
+  country: DE
+  phases: [p1, p2]
+  source: sfcc-partners
+  careers_url: https://www.digital-commerce-experts.de/karriere/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Certified Salesforce Commerce agency"
+
+- id: sunzinet
+  name: SUNZINET
+  domain: sunzinet.com
+  country: DE
+  phases: [p1, p2]
+  source: sfcc-partners
+  careers_url: https://www.sunzinet.com/offene-stellen
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Cologne, Salesforce B2B Commerce focus"
+
+# --- Your network: past clients, current agency's clients, Studion alumni companies ---
+# Add entries here by hand. Highest reply rate of any source (SPEC "Universe seeding").

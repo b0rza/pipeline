@@ -1,0 +1,335 @@
+# Source: commercetools.com/partners, "Solution Integrators" listing (Webflow, paginated
+# via ?d83e4490_page=N, 109 entries), plus each /service-partners/{slug} detail page.
+# Retrieved 2026-11-02. Staff counts are rough estimates (third-party or general
+# knowledge) unless stated; verify before relying on them.
+# Teamtailor custom-domain career sites expose no {slug}.teamtailor.com, so slug is null.
+
+# --- GB ---
+- name: Candyspace
+  domain: candyspace.com
+  country: GB
+  source: commercetools-partners
+  careers_url: https://www.candyspace.com/careers/
+  ats: { vendor: unknown, slug: null }
+  notes: "London. Registered partner. Jobs on own HubSpot pages. Est. ~100 staff"
+
+- name: Deliberate Software
+  domain: deliberate.uk
+  country: GB
+  source: commercetools-partners
+  careers_url: https://deliberate.uk/careers
+  ats: { vendor: unknown, slug: null }
+  notes: "London (Hatton Garden). Registered partner. Small consultancy, size unverified"
+
+- name: Gradient Edge
+  domain: gradientedge.com
+  country: GB
+  source: commercetools-partners
+  careers_url: null
+  ats: { vendor: unknown, slug: null }
+  notes: "Gold partner. Company registered in Northern Ireland. No careers page found (/careers, /join-us 404)"
+
+- name: Tryzens
+  domain: tryzens.com
+  country: GB
+  source: commercetools-partners
+  careers_url: https://tryzens.com/careers/
+  ats: { vendor: workable, slug: tryzensglobal }
+  notes: "London. Registered partner. Est. ~300 staff"
+
+- name: Cabiri
+  domain: cabiri.io
+  country: GB
+  source: commercetools-partners
+  careers_url: https://www.cabiri.io/careers
+  ats: { vendor: unknown, slug: null }
+  notes: "London (Gray's Inn Road). Registered partner. Jobs on own Squarespace pages. Size unverified"
+
+# --- NL ---
+- name: Lab Digital
+  domain: labdigital.nl
+  country: NL
+  source: commercetools-partners
+  careers_url: https://careers.labdigital.nl/
+  ats: { vendor: unknown, slug: null }
+  notes: "Silver partner. Careers site runs on Homerun (not in vendor list). Est. ~60 staff"
+
+- name: XSARUS Digital Commerce
+  domain: xsarus.com
+  country: NL
+  source: commercetools-partners
+  careers_url: https://www.xsarus.nl/werken-bij/vacatures/
+  ats: { vendor: unknown, slug: null }
+  notes: "Platinum partner. Middelharnis/Rotterdam. Also uses xsarus.nl (email, careers). Est. ~100 staff"
+
+- name: Incentro
+  domain: incentro.com
+  country: NL
+  source: commercetools-partners
+  careers_url: https://careers.incentro.com/
+  ats: { vendor: teamtailor, slug: null }
+  notes: "Gold partner. Larger than target range (est. ~1000 staff). Teamtailor on custom domain"
+
+- name: DotControl
+  domain: dotcontrol.com
+  country: NL
+  source: commercetools-partners
+  careers_url: https://jobs.dotcontrol.com/
+  ats: { vendor: unknown, slug: null }
+  notes: "Rotterdam. Registered partner. Careers site runs on Homerun. Est. ~60 staff"
+
+- name: rb2
+  domain: rb2.nl
+  country: NL
+  source: commercetools-partners
+  careers_url: https://www.rb2.nl/en/careers
+  ats: { vendor: unknown, slug: null }
+  notes: "Silver partner. B2B commerce for wholesalers; offices NL, Portugal, China. Size unverified"
+
+- name: Youwe
+  domain: youweagency.com
+  country: NL
+  source: commercetools-partners
+  careers_url: https://careers.youweagency.com/
+  ats: { vendor: recruitee, slug: youweconnectit }
+  notes: "Registered partner. Recruitee on custom domain (youweconnectit.recruitee.com). Est. ~300 staff"
+
+- name: Product League
+  domain: product-league.com
+  country: NL
+  source: commercetools-partners
+  careers_url: https://product-league.com/en/careers
+  ats: { vendor: unknown, slug: null }
+  notes: "Registered partner. Dutch site, OutSystems Elite partner. Size unverified"
+
+- name: Neortus
+  domain: neortus.com
+  country: NL
+  source: commercetools-partners
+  careers_url: https://neortus.com/nl/banen/
+  ats: { vendor: unknown, slug: null }
+  notes: "Amsterdam (also Mexico City). Registered partner. Careers page said no open vacancies. Small, size unverified"
+
+# --- BE ---
+- name: Supersonic
+  domain: supersonic.online
+  country: BE
+  source: commercetools-partners
+  careers_url: https://supersonic.online/en/careers/
+  ats: { vendor: unknown, slug: null }
+  notes: "Hasselt/Antwerp. Registered partner, MACH Alliance member. Small, size unverified"
+
+# --- SE ---
+- name: Avensia
+  domain: avensia.com
+  country: SE
+  source: commercetools-partners
+  careers_url: https://career.avensia.com/
+  ats: { vendor: teamtailor, slug: null }
+  notes: "Lund. Gold partner. Teamtailor on custom domain. Est. ~300 staff"
+
+# --- DK ---
+- name: Kruso
+  domain: kruso.group
+  country: DK
+  source: commercetools-partners
+  careers_url: null
+  ats: { vendor: unknown, slug: null }
+  notes: "Copenhagen/Aarhus. Silver partner. kruso.dk redirects to kruso.group. No careers link on site. Est. ~150 staff"
+
+- name: Novicell
+  domain: novicell.com
+  country: DK
+  source: commercetools-partners
+  careers_url: https://www.novicell.com/about/careers/
+  ats: { vendor: unknown, slug: null }
+  notes: "Silver partner. novicell.dk redirects to novicell.com. Above target range (est. ~400 staff)"
+
+- name: Adapt
+  domain: adaptagency.com
+  country: DK
+  source: commercetools-partners
+  careers_url: https://adaptagency.com/en/careers
+  ats: { vendor: unknown, slug: null }
+  notes: "Copenhagen. Registered partner. Careers page links Breezy HR (adapt.breezy.hr, not in vendor list). Est. ~300 staff"
+
+- name: IMPACT Commerce
+  domain: impactcommerce.com
+  country: DK
+  source: commercetools-partners
+  careers_url: https://career.impactcommerce.com/
+  ats: { vendor: teamtailor, slug: null }
+  notes: "Platinum partner. Teamtailor on custom domain. Est. ~350-400 staff"
+
+- name: Columbus Global
+  domain: columbusglobal.com
+  country: DK
+  source: commercetools-partners
+  careers_url: https://careers.columbusglobal.com/
+  ats: { vendor: teamtailor, slug: null }
+  notes: "Gold partner (listed as Columbus Sweden AB). Well above target range (est. ~1,700 staff); included to reach 40"
+
+# --- NO ---
+- name: PearlConvert
+  domain: pearlconvert.no
+  country: "NO"
+  source: commercetools-partners
+  careers_url: null
+  ats: { vendor: unknown, slug: null }
+  notes: "Oslo. Registered partner, part of Pearl Group. No careers page found. Est. ~50 staff"
+
+- name: TRY Dig
+  domain: try.house
+  country: "NO"
+  source: commercetools-partners
+  careers_url: https://try.house/no/karriere
+  ats: { vendor: unknown, slug: null }
+  notes: "Oslo. Registered partner. try.no redirects to try.house (TRY group). Applications via Homerun (try.homerun.co). Size unverified"
+
+# --- FI ---
+- name: Vincit
+  domain: vincit.com
+  country: FI
+  source: commercetools-partners
+  careers_url: https://www.vincit.com/careers
+  ats: { vendor: teamtailor, slug: vincitoyj }
+  notes: "Tampere. Silver partner. Above target range (est. ~600 staff)"
+
+- name: Solteq
+  domain: solteq.com
+  country: FI
+  source: commercetools-partners
+  careers_url: https://www.solteq.com/en/careers
+  ats: { vendor: teamtailor, slug: null }
+  notes: "Listed company (Solteq Plc). Registered partner. Teamtailor on career.solteq.com. Above target range (est. ~500 staff)"
+
+- name: IONA
+  domain: ionacommerce.com
+  country: FI
+  source: commercetools-partners
+  careers_url: https://careers.ionacommerce.com/
+  ats: { vendor: teamtailor, slug: null }
+  notes: "Helsinki (studios London, Davao). Platinum partner. Est. ~50-100 staff"
+
+# --- DE ---
+- name: basecom
+  domain: basecom.de
+  country: DE
+  source: commercetools-partners
+  careers_url: https://jobs.basecom.de/
+  ats: { vendor: unknown, slug: null }
+  notes: "Platinum partner. Applications via onlyfy (not in vendor list). Est. ~200 staff"
+
+- name: best it
+  domain: bestit.de
+  country: DE
+  source: commercetools-partners
+  careers_url: https://www.bestit.de/de/karriere
+  ats: { vendor: unknown, slug: null }
+  notes: "Registered partner. Also Shopware partner. Est. ~100 staff"
+
+- name: diva-e
+  domain: diva-e.com
+  country: DE
+  source: commercetools-partners
+  careers_url: https://career.diva-e.com/
+  ats: { vendor: unknown, slug: null }
+  notes: "Registered partner. Job board runs on job-shop/talentsconnect. Above target range (est. ~800 staff)"
+
+- name: dotSource
+  domain: dotsource.de
+  country: DE
+  source: commercetools-partners
+  careers_url: https://www.dotsource.de/karriere/jobs/
+  ats: { vendor: unknown, slug: null }
+  notes: "Jena. Silver partner. Above target range (est. ~600 staff)"
+
+- name: kernpunkt
+  domain: kernpunkt.de
+  country: DE
+  source: commercetools-partners
+  careers_url: https://www.kernpunkt.de/jobs
+  ats: { vendor: personio, slug: kernpunkt }
+  notes: "Cologne. Platinum partner. Personio API form on own site; kernpunkt.jobs.personio.de confirmed live. Est. ~250 staff"
+
+- name: KOSMONAUT
+  domain: kosmonaut.io
+  country: DE
+  source: commercetools-partners
+  careers_url: https://kosmonaut.io/karriere/
+  ats: { vendor: unknown, slug: null }
+  notes: "Rheda-Wiedenbrück. Registered partner. Site blocks curl (403), careers URL taken from site link. 10+ staff"
+
+- name: KPS
+  domain: kps.com
+  country: DE
+  source: commercetools-partners
+  careers_url: https://career.kps.com/en/jobs
+  ats: { vendor: teamtailor, slug: null }
+  notes: "Unterföhring/Munich. Silver partner, SAP-heavy. Above target range (est. ~900 staff)"
+
+- name: mediawave
+  domain: mediawave.de
+  country: DE
+  source: commercetools-partners
+  careers_url: https://jobs.mediawave.de/
+  ats: { vendor: unknown, slug: null }
+  notes: "Munich HQ. Registered partner. Applications via jobbase.io. Est. ~50 staff"
+
+- name: piazza blu
+  domain: piazzablu.com
+  country: DE
+  source: commercetools-partners
+  careers_url: https://www.piazzablu.com/karriere
+  ats: { vendor: unknown, slug: null }
+  notes: "Cologne. Registered partner. Est. ~70 staff"
+
+- name: Shopmacher
+  domain: shopmacher.de
+  country: DE
+  source: commercetools-partners
+  careers_url: https://www.shopmacher.de/de/karriere
+  ats: { vendor: personio, slug: shopmacher }
+  notes: "Gescher. Registered partner. Est. ~100 staff"
+
+- name: Webmatch
+  domain: webmatch.de
+  country: DE
+  source: commercetools-partners
+  careers_url: https://webmatch.de/de-de/karriere/
+  ats: { vendor: unknown, slug: null }
+  notes: "Cologne. Registered partner. Jobs on JOIN (join.com/companies/webmatch, not in vendor list). Est. ~50 staff"
+
+- name: ZYRES
+  domain: zyres.com
+  country: DE
+  source: commercetools-partners
+  careers_url: https://www.zyres.com/karriere
+  ats: { vendor: unknown, slug: null }
+  notes: "Frankfurt am Main. Registered partner. Size unverified"
+
+# --- AT ---
+- name: pixelart
+  domain: pixelart-agency.com
+  country: AT
+  source: commercetools-partners
+  careers_url: https://www.pixelart-agency.com/de/karriere/
+  ats: { vendor: unknown, slug: null }
+  notes: "Salzburg (Bergheim) and Vienna. Registered partner. pixelart.at redirects here. Est. ~60 staff"
+
+# --- CH ---
+- name: S'nce
+  domain: sncegroup.ch
+  country: CH
+  source: commercetools-partners
+  careers_url: https://www.sncegroup.ch/en/careers
+  ats: { vendor: unknown, slug: null }
+  notes: "Stabio (Ticino). Registered partner. Size unverified"
+
+- name: foryouandyourcustomers
+  domain: foryouandyourcustomers.com
+  country: CH
+  source: commercetools-partners
+  careers_url: https://foryouandyourcustomers.com/careers/jobs/
+  ats: { vendor: unknown, slug: null }
+  notes: "Parent entity foryouandyourcustomers Baar AG, Baar CH; many DACH offices. Registered partner. Est. ~250 staff"
