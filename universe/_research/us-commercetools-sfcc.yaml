@@ -1,0 +1,200 @@
+# US-headquartered agencies / SIs from two partner sources. Retrieved 2026-11-02.
+# - commercetools-partners: commercetools.com/partners "Solution Integrators" (109 entries,
+#   ?d83e4490_page=N) plus each /service-partners/{slug} page; filtered to US HQ.
+# - sfcc-partners: AppExchange is JS-rendered, so partnership comes from web search plus the
+#   agency's own site. Partner tier is rarely confirmed; treat "SFCC partner" as self-described
+#   or third-party-listed unless notes say otherwise.
+# Staff counts are third-party estimates (Built In, LeadIQ, Clutch, etc.) and often conflict.
+# ATS: slug only when seen in the careers page, its redirect, or an embed. Vendors outside the
+# requested list (breezy, zohorecruit) are recorded as unknown with the observed host in notes.
+
+# --- commercetools-partners ---
+- name: Aries Solutions
+  domain: ariessolutions.io
+  country: US
+  state: OH
+  source: commercetools-partners
+  careers_url: https://ariessolutions.io/join-our-team/
+  ats: { vendor: rippling, slug: aries-solutions }
+  notes: "Columbus OH (4100 Regent St, from site footer). commercetools Gold partner. Links to ats.rippling.com/aries-solutions/jobs"
+
+- name: Avatria
+  domain: avatria.com
+  country: US
+  state: IL
+  source: commercetools-partners
+  careers_url: https://www.avatria.com/careers
+  ats: { vendor: jazzhr, slug: avatria }
+  notes: "Chicago IL. Registered partner. /careers redirects to avatria.applytojob.com. Part of TransPerfect; ~15-50 staff in Avatria itself"
+
+- name: Concord
+  domain: concordusa.com
+  country: US
+  state: MN
+  source: commercetools-partners
+  careers_url: https://www.concordusa.com/careers/job-openings
+  ats: { vendor: jazzhr, slug: ConcordUSA }
+  notes: "Hopkins MN (Minneapolis area). Registered partner. JazzHR iframe ConcordUSA.applytojob.com. Headcount estimates conflict (~170 to ~640), may exceed 300"
+
+- name: Fearless Technology Group
+  domain: fearlesstg.com
+  country: US
+  state: CO
+  source: commercetools-partners
+  careers_url: null
+  ats: { vendor: unknown, slug: null }
+  notes: "Colorado per LeadIQ only, 11-50 staff; site has no address and a 2020 footer, may be dormant. /careers 404"
+
+- name: Icreon
+  domain: icreon.com
+  country: US
+  state: NY
+  source: commercetools-partners
+  careers_url: null
+  ats: { vendor: unknown, slug: null }
+  notes: "New York NY (434 W 33rd St). Registered partner. Site returns 403 to curl. ~340-420 staff, above the size band"
+
+- name: Logixal
+  domain: logixal.com
+  country: US
+  state: NJ
+  source: commercetools-partners
+  careers_url: https://logixal.com/careers
+  ats: { vendor: unknown, slug: null }
+  notes: "Cranford NJ (20 Commerce Dr, on careers page). Registered partner. Jobs posted as PDFs plus resume form. ~125-175 staff, delivery in India"
+
+- name: McFadyen Digital
+  domain: mcfadyen.com
+  country: US
+  state: VA
+  source: commercetools-partners
+  careers_url: https://careers.mcfadyen.com/
+  ats: { vendor: unknown, slug: null }
+  notes: "Vienna VA (8245 Boone Blvd, site footer). Registered partner. Self-hosted job pages on careers.mcfadyen.com, vendor not identifiable"
+
+- name: NULogic
+  domain: nulogic.io
+  country: US
+  state: TX
+  source: commercetools-partners
+  careers_url: https://www.nulogic.io/careers
+  ats: { vendor: unknown, slug: null }
+  notes: "McKinney TX per most directories (some list Fremont/SF CA). Registered partner. Applications by email. 201-500 listed, delivery in Calgary/Chennai/Mexico/Santiago"
+
+- name: Nvizion Solutions
+  domain: nvizionsolutions.com
+  country: US
+  state: IL
+  source: commercetools-partners
+  careers_url: https://www.nvizionsolutions.com/careers
+  ats: { vendor: unknown, slug: null }
+  notes: "St. Charles IL (100 Illinois St, directories). Registered partner. ~50-200 staff, offices in UK and India"
+
+- name: Object Edge
+  domain: objectedge.com
+  country: US
+  state: CA
+  source: commercetools-partners
+  careers_url: https://www.objectedge.com/careers
+  ats: { vendor: unknown, slug: null }
+  notes: "Walnut Creek CA. Registered partner, also has a Salesforce Commerce practice. ~170 staff. Jobs on object-edge-inc.breezy.hr (Breezy HR)"
+
+- name: Zaelab
+  domain: zaelab.com
+  country: US
+  state: CT
+  source: commercetools-partners
+  careers_url: https://www.zaelab.com/careers
+  ats: { vendor: workable, slug: zaelab }
+  notes: "Westport CT. Silver partner; also listed as an SFCC agency by a third-party list. Careers page loads Workable widget for account 'zaelab'. ~120-320 staff"
+
+# --- sfcc-partners ---
+- name: DemandPDX
+  domain: demandpdx.com
+  country: US
+  state: OR
+  source: sfcc-partners
+  careers_url: https://www.demandpdx.com/pages/careers
+  ats: { vendor: unknown, slug: null }
+  notes: "Happy Valley OR (Portland area). Salesforce Crest partner, SFCC-focused, also Shopify Plus. ~50-180 staff. Site returned 429, careers page not read"
+
+- name: CloudMasonry
+  domain: cloudmasonry.com
+  country: US
+  state: IN
+  source: sfcc-partners
+  careers_url: https://cloudmasonry.com/join-our-team/
+  ats: { vendor: greenhouse, slug: cloudmasonry }
+  notes: "HQ Indianapolis IN (site footer), offices Chicago/NY/London. Salesforce consultancy with Commerce Cloud practice. Greenhouse embed for=cloudmasonry is on the page, but boards-api returned 404 on 2026-11-02 (board may be inactive)"
+
+- name: Red Van Workshop
+  domain: redvanworkshop.com
+  country: US
+  state: CO
+  source: sfcc-partners
+  careers_url: https://www.redvanworkshop.com/-careers-redvan
+  ats: { vendor: jazzhr, slug: redvanworkshop }
+  notes: "Boulder CO, fully remote US team. Salesforce Commerce SI (B2C, B2B, Order Management); 2022 Salesforce commerce partner award. JazzHR slug from a redvanworkshop.applytojob.com posting found via search"
+
+- name: 64labs
+  domain: 64labs.com
+  country: US
+  state: FL
+  source: sfcc-partners
+  careers_url: https://www.64labs.com/join-us
+  ats: { vendor: unknown, slug: null }
+  notes: "Tampa FL (directories). SFCC specialist, helped Salesforce build PWA Kit. ~12-30 staff"
+
+- name: ForteNext
+  domain: fortenext.com
+  country: US
+  state: FL
+  source: sfcc-partners
+  careers_url: https://fortegroup.my.site.com/jobs/s/
+  ats: { vendor: unknown, slug: null }
+  notes: "Boca Raton FL. Salesforce partner focused on B2B Commerce. 51-249 staff. Jobs on a Salesforce Experience site; don't confuse with Forte DGTL"
+
+- name: Ad Victoriam Solutions
+  domain: advictoriam.com
+  country: US
+  state: GA
+  source: sfcc-partners
+  careers_url: null
+  ats: { vendor: unknown, slug: null }
+  notes: "Alpharetta GA. Salesforce Platinum (2019), B2B Commerce case studies; Commerce Cloud designation unconfirmed. ~100-200 staff. Site TLS error, careers not checked"
+
+- name: Ember Agency
+  domain: discoverember.com
+  country: US
+  state: CO
+  source: sfcc-partners
+  careers_url: null
+  ats: { vendor: unknown, slug: null }
+  notes: "Boulder CO (2737 Mapleton Ave, site footer). Boutique Salesforce consultancy, B2C Commerce/headless; partner tier unconfirmed. /careers 404. Size unknown"
+
+- name: Ziffity
+  domain: ziffity.com
+  country: US
+  state: TX
+  source: sfcc-partners
+  careers_url: https://ziffity.zohorecruit.com/jobs/Ziffity-Job-Opening
+  ats: { vendor: unknown, slug: null }
+  notes: "Plano TX, delivery in Chennai. Adobe Commerce-led, also offers SFCC implementation. ~130 staff. ATS is Zoho Recruit"
+
+- name: CQL
+  domain: cqlcorp.com
+  country: US
+  state: MI
+  source: sfcc-partners
+  careers_url: https://www.cqlcorp.com/careers/
+  ats: { vendor: bamboohr, slug: cql }
+  notes: "Grand Rapids MI. Commerce agency, SFCC dev/support (e.l.f., SHOE SHOW), also Shopify Plus and BigCommerce. ~90 staff"
+
+- name: Grinteq
+  domain: grinteq.com
+  country: US
+  state: NY
+  source: sfcc-partners
+  careers_url: https://grinteq.com/careers
+  ats: { vendor: unknown, slug: null }
+  notes: "Site lists 1412 Broadway NY; legal entity Sens Soft Inc (Delaware); Clutch lists Lisbon only. HQ ambiguous, verify. SFCC cartridge/implementation work. 20-249 staff"

@@ -1,0 +1,324 @@
+# US-HQ e-commerce development agencies (10-250 staff target), excluding the
+# commercetools/SFCC partner list. Researched 2026-11-02.
+# ATS detected only from the careers page, its redirect target, or an embedded
+# widget/link. Slugs are never guessed. Size is "unverified" unless a source gave it.
+
+- name: Barrel
+  domain: barrelny.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://www.barrelny.com/careers
+  ats: { vendor: unknown, slug: null }
+  notes: "New York NY, Shopify Plus, CPG/DTC focus; size unverified"
+
+- name: Electric Eye
+  domain: electriceye.io
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://electriceye.io/pages/careers
+  ats: { vendor: unknown, slug: null }
+  notes: "Columbus OH (site address), Shopify Premier partner; applications via Cognito form; size unverified"
+
+- name: Avex
+  domain: avexdesigns.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://www.avexdesigns.com/careers/
+  ats: { vendor: unknown, slug: null }
+  notes: "New York NY (368 9th Ave), Shopify Plus Platinum; size unverified"
+
+- name: Anatta
+  domain: anatta.io
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://anatta.io/careers/
+  ats: { vendor: jazzhr, slug: anattadesigninc }
+  notes: "Austin TX, Shopify Platinum, enterprise Shopify; size unverified"
+
+- name: Domaine
+  domain: domaineworldwide.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://domaineworldwide.com/careers/
+  ats: { vendor: rippling, slug: domaine-careers }
+  notes: "New York NY, ~227 staff per Built In (plus ~60 from 2025 Code acquisition, NL/DE), Shopify Platinum; formed from Tomorrow + Half Helix; near top of size band"
+
+- name: Shero Commerce
+  domain: sherocommerce.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://sherocommerce.com/pages/careers
+  ats: { vendor: bamboohr, slug: sherocommerce }
+  notes: "Red Hook NY, Shopify Plus, complex/B2B commerce; size unverified"
+
+- name: Ample
+  domain: ample.co
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://ample.co/careers/
+  ats: { vendor: unknown, slug: null }
+  notes: "Cincinnati OH, UX/web design and dev incl. Shopify; size unverified"
+
+- name: Netalico Commerce
+  domain: netalico.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown, slug: null }
+  notes: "New York NY (1450 Broadway; also Miami/SF/LA addresses), Shopify Plus dev + UX; no careers page found"
+
+- name: Blackbelt Commerce
+  domain: blackbeltcommerce.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown, slug: null }
+  notes: "New York NY, family-run Shopify Plus agency; no careers page found; size unverified, may be small"
+
+- name: Metacake
+  domain: metacake.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://metacake.com/jobs/
+  ats: { vendor: unknown, slug: null }
+  notes: "Franklin TN (site address), Shopify ecommerce growth agency; size unverified"
+
+- name: Sunrise Integration
+  domain: sunriseintegration.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown, slug: null }
+  notes: "Los Angeles CA, Shopify design/dev + integrations; no careers page found"
+
+- name: Solid Digital
+  domain: soliddigital.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown, slug: null }
+  notes: "Chicago IL (and Portland), digital agency doing Shopify builds; no careers page found"
+
+- name: Ecommerce Partners (ECP)
+  domain: ecommercepartners.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown, slug: null }
+  notes: "Tenafly NJ, Shopify Plus + BigCommerce, B2B/ERP integrations; no careers page found"
+
+- name: Uncap
+  domain: uncap.com
+  country: US
+  source: clutch-us
+  careers_url: null
+  ats: { vendor: unknown, slug: null }
+  notes: "Chicago IL, 10-49 staff per Clutch, Shopify Platinum; site blocks automated fetches (403)"
+
+- name: Staylime
+  domain: staylime.com
+  country: US
+  source: clutch-us
+  careers_url: null
+  ats: { vendor: unknown, slug: null }
+  notes: "Redwood City CA, 10-49 per Clutch, Magento/Shopify; engineering likely offshore; no careers page found"
+
+- name: First Pier
+  domain: firstpier.com
+  country: US
+  source: clutch-us
+  careers_url: https://www.firstpier.com/careers
+  ats: { vendor: gohire, slug: helm-digital-pd37nmt8 }
+  notes: "Portland ME, 10-49 per Clutch, Shopify growth agency; GoHire board is under 'Helm Digital' name (possible parent)"
+
+- name: DYODE
+  domain: dyode.com
+  country: US
+  source: clutch-us
+  careers_url: null
+  ats: { vendor: unknown, slug: null }
+  notes: "Fullerton CA (Orange County), Shopify Plus; no careers page found; size unverified"
+
+- name: Fyresite
+  domain: fyresite.com
+  country: US
+  source: clutch-us
+  careers_url: null
+  ats: { vendor: unknown, slug: null }
+  notes: "Tempe AZ, 10-49 per Clutch, Shopify Premier/Plus; no careers page found"
+
+- name: Ambaum
+  domain: ambaum.com
+  country: US
+  source: clutch-us
+  careers_url: https://ambaum.com/careers
+  ats: { vendor: unknown, slug: null }
+  notes: "Burien WA, 10-49 per Clutch, Shopify (formerly BigCommerce-heavy); applications by email"
+
+- name: DigitlHaus
+  domain: digitlhaus.com
+  country: US
+  source: clutch-us
+  careers_url: https://careers.digitlhaus.com/
+  ats: { vendor: unknown, slug: null }
+  notes: "Miramar Beach FL, 10-49 per Clutch, Shopify + BigCommerce; custom-hosted job portal, vendor not identified"
+
+- name: 1Digital Agency
+  domain: 1digitalagency.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://www.1digitalagency.com/jobs/
+  ats: { vendor: unknown, slug: null }
+  notes: "Miami FL (HQ per site; founded Philadelphia), BigCommerce/Shopify dev + headless Next.js; also sells SEO/PPC"
+
+- name: The B2B eCommerce Agency (formerly Groove Commerce)
+  domain: b2becommerceagency.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown, slug: null }
+  notes: "Baltimore MD; groovecommerce.com now redirects here; BigCommerce Elite, B2B; no careers page found"
+
+- name: Third and Grove
+  domain: thirdandgrove.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://thirdandgrove.breezy.hr/
+  ats: { vendor: breezy, slug: thirdandgrove }
+  notes: "Boston MA, Shopify Platinum + Contentful/Drupal; breezy link found on homepage"
+
+- name: Zaelab
+  domain: zaelab.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://www.zaelab.com/careers
+  ats: { vendor: workable, slug: zaelab }
+  notes: "Westport CT; acquired Trellis (Malden MA) 2024 and later merged with TMG, so may now exceed 250; B2B commerce"
+
+- name: IronPlane
+  domain: ironplane.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://www.ironplane.com/career
+  ats: { vendor: unknown, slug: null }
+  notes: "Portland ME, 40+ staff (US + Poznan subsidiary Snowdog + LatAm), Magento/Adobe Commerce + BigCommerce"
+
+- name: Absolute Web
+  domain: absoluteweb.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://www.absoluteweb.com/careers/
+  ats: { vendor: unknown, slug: null }
+  notes: "Miami FL, digital commerce agency (BigCommerce, Magento, Shopify); site blocks automated fetches (403); careers path from indexed job pages"
+
+- name: Human Element
+  domain: human-element.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown, slug: null }
+  notes: "Ann Arbor MI, BigCommerce/Magento/Shopify, 11-50 per a jobs board; site blocks automated fetches (403)"
+
+- name: Codal
+  domain: codal.com
+  country: US
+  source: vercel-partners
+  careers_url: https://codal.jobs/
+  ats: { vendor: greenhouse, slug: codalinc }
+  notes: "Chicago IL, product + eCommerce engineering (Adobe Commerce, Shopify, headless); large Ahmedabad team, may be near or above 250"
+
+- name: Verndale
+  domain: verndale.com
+  country: US
+  source: vercel-partners
+  careers_url: https://www.verndale.com/careers
+  ats: { vendor: rippling, slug: verndale-llc }
+  notes: "Boston MA, digital experience agency (Sitecore, Optimizely, commerce), Vercel Platinum; size unverified"
+
+- name: Velir
+  domain: velir.com
+  country: US
+  source: vercel-partners
+  careers_url: https://www.velir.com/who-we-are/careers
+  ats: { vendor: greenhouse, slug: velir }
+  notes: "Somerville MA, data/digital agency with heavy engineering (Sitecore, Drupal, headless); commerce is a secondary line"
+
+- name: Mira Commerce
+  domain: miracommerce.com
+  country: US
+  source: vercel-partners
+  careers_url: https://www.miracommerce.com/careers/
+  ats: { vendor: unknown, slug: null }
+  notes: "Walnut Creek CA (offices in Argentina, Poland), BigCommerce/Shopify/headless, MACH Alliance member"
+
+- name: Classy Llama
+  domain: classyllama.com
+  country: US
+  source: web-search
+  careers_url: https://classyllama.com/careers/
+  ats: { vendor: jazzhr, slug: classyllama }
+  notes: "Springfield MO, mid-market replatform agency (Adobe Commerce, Shopify, BigCommerce)"
+
+- name: Briteskies
+  domain: briteskies.com
+  country: US
+  source: web-search
+  careers_url: https://www.briteskies.com/briteskies-careers-join-the-team
+  ats: { vendor: unknown, slug: null }
+  notes: "Cleveland OH, B2B commerce (Adobe Commerce, BigCommerce) + ERP integration; size unverified"
+
+- name: Rocket Web
+  domain: rocketweb.com
+  country: US
+  source: web-search
+  careers_url: null
+  ats: { vendor: unknown, slug: null }
+  notes: "Noblesville IN, Magento / Mage-OS agency; no careers page found"
+
+- name: Object Edge
+  domain: objectedge.com
+  country: US
+  source: web-search
+  careers_url: https://objectedge.com/careers
+  ats: { vendor: breezy, slug: object-edge-inc }
+  notes: "Walnut Creek CA, enterprise commerce (Oracle/Adobe/BigCommerce) now pitching AI; may be near 250"
+
+- name: Xumulus
+  domain: xumulus.com
+  country: US
+  source: web-search
+  careers_url: null
+  ats: { vendor: unknown, slug: null }
+  notes: "Chicago IL, Next.js commerce + search (Adobe Commerce, Shopify); no careers page found; size unverified"
+
+- name: Clarity Ventures
+  domain: clarity-ventures.com
+  country: US
+  source: web-search
+  careers_url: https://www.clarity-ventures.com/careers
+  ats: { vendor: unknown, slug: null }
+  notes: "Austin TX, B2B eCommerce + ERP/CRM integration; size unverified"
+
+- name: Mindgrub
+  domain: mindgrub.com
+  country: US
+  source: web-search
+  careers_url: https://mindgrub.com/about/careers/
+  ats: { vendor: greenhouse, slug: mindgrub }
+  notes: "Baltimore MD, digital agency (web/mobile/commerce, now also cyber); slug from grnh.se apply-link redirect; site 403s to curl"
+
+- name: Whereoware
+  domain: whereoware.com
+  country: US
+  source: web-search
+  careers_url: null
+  ats: { vendor: unknown, slug: null }
+  notes: "McLean VA, B2B commerce + digital experience consultancy; no careers page found"
+
+- name: Endertech
+  domain: endertech.com
+  country: US
+  source: web-search
+  careers_url: https://endertech.com/careers-internships
+  ats: { vendor: unknown, slug: null }
+  notes: "Los Angeles CA, ecommerce + custom software; likely small"

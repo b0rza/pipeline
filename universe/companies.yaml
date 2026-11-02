@@ -1,6 +1,6 @@
 # Seed list. One entry per company. See docs/SPEC.md "Universe seeding".
 # phases: p1 = contracting target, p2 = agent-enablement target.
-# ats.vendor: greenhouse | lever | ashby | workable | smartrecruiters | personio | recruitee | teamtailor | custom | unknown
+# ats.vendor: greenhouse | lever | ashby | workable | smartrecruiters | personio | recruitee | teamtailor | bamboohr | jazzhr | rippling | breezy | gohire | zoho | custom | unknown
 # storefront: URL to fingerprint, or null for agencies.
 # status: active | paused | watch   (watch = fingerprint daily instead of weekly)
 # Research leftovers for the 200-seed expansion live in universe/_research/.
@@ -721,6 +721,698 @@
   storefront: null
   status: active
   notes: "Cologne, Salesforce B2B Commerce focus"
+
+# --- US agencies (commercetools, SFCC, Clutch, Shopify/BigCommerce lists), 2026-11-02 ---
+
+- id: aries-solutions
+  name: Aries Solutions
+  domain: ariessolutions.io
+  country: US
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://ariessolutions.io/join-our-team/
+  ats: { vendor: rippling, slug: aries-solutions }
+  storefront: null
+  status: active
+  notes: "Columbus OH, Gold partner"
+
+- id: avatria
+  name: Avatria
+  domain: avatria.com
+  country: US
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://www.avatria.com/careers
+  ats: { vendor: jazzhr, slug: avatria }
+  storefront: null
+  status: active
+  notes: "Chicago IL, Registered partner; part of TransPerfect, ~15-50 staff itself"
+
+- id: concord
+  name: Concord
+  domain: concordusa.com
+  country: US
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://www.concordusa.com/careers/job-openings
+  ats: { vendor: jazzhr, slug: ConcordUSA }
+  storefront: null
+  status: active
+  notes: "Hopkins MN, Registered partner; headcount estimates ~170-640, may exceed 300"
+
+- id: fearless-technology-group
+  name: Fearless Technology Group
+  domain: fearlesstg.com
+  country: US
+  phases: [p1, p2]
+  source: commercetools-partners
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Colorado (LeadIQ only), 11-50 staff; may be dormant, /careers 404"
+
+- id: icreon
+  name: Icreon
+  domain: icreon.com
+  country: US
+  phases: [p1, p2]
+  source: commercetools-partners
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "New York NY, Registered partner, ~340-420 staff (above band); site 403s to curl"
+
+- id: logixal
+  name: Logixal
+  domain: logixal.com
+  country: US
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://logixal.com/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Cranford NJ, Registered partner, ~125-175 staff, delivery in India; jobs posted as PDFs"
+
+- id: mcfadyen-digital
+  name: McFadyen Digital
+  domain: mcfadyen.com
+  country: US
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://careers.mcfadyen.com/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Vienna VA, Registered partner; self-hosted job pages"
+
+- id: nulogic
+  name: NULogic
+  domain: nulogic.io
+  country: US
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://www.nulogic.io/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "McKinney TX, Registered partner, 201-500 staff (may exceed 300); applications by email"
+
+- id: nvizion-solutions
+  name: Nvizion Solutions
+  domain: nvizionsolutions.com
+  country: US
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://www.nvizionsolutions.com/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "St. Charles IL, Registered partner, ~50-200 staff, UK/India offices"
+
+- id: object-edge
+  name: Object Edge
+  domain: objectedge.com
+  country: US
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://www.objectedge.com/careers
+  ats: { vendor: breezy, slug: object-edge-inc }
+  storefront: null
+  status: active
+  notes: "Walnut Creek CA, ~170 staff (may be near 250), Registered partner + SFCC practice; also on web-search list"
+
+- id: zaelab
+  name: Zaelab
+  domain: zaelab.com
+  country: US
+  phases: [p1, p2]
+  source: commercetools-partners
+  careers_url: https://www.zaelab.com/careers
+  ats: { vendor: workable, slug: zaelab }
+  storefront: null
+  status: active
+  notes: "Westport CT, ~120-320 staff (may exceed 300), Silver partner; also SFCC and BigCommerce lists; acquired Trellis 2024, merged with TMG"
+
+- id: demandpdx
+  name: DemandPDX
+  domain: demandpdx.com
+  country: US
+  phases: [p1, p2]
+  source: sfcc-partners
+  careers_url: https://www.demandpdx.com/pages/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Happy Valley OR, Salesforce Crest partner, SFCC + Shopify Plus, ~50-180 staff; careers not read (429)"
+
+- id: cloudmasonry
+  name: CloudMasonry
+  domain: cloudmasonry.com
+  country: US
+  phases: [p1, p2]
+  source: sfcc-partners
+  careers_url: https://cloudmasonry.com/join-our-team/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Indianapolis IN, Salesforce consultancy with Commerce Cloud practice; greenhouse board cloudmasonry returned 404 on 2026-11-02"
+
+- id: red-van-workshop
+  name: Red Van Workshop
+  domain: redvanworkshop.com
+  country: US
+  phases: [p1, p2]
+  source: sfcc-partners
+  careers_url: https://www.redvanworkshop.com/-careers-redvan
+  ats: { vendor: jazzhr, slug: redvanworkshop }
+  storefront: null
+  status: active
+  notes: "Boulder CO, remote US team, Salesforce Commerce SI"
+
+- id: 64labs
+  name: 64labs
+  domain: 64labs.com
+  country: US
+  phases: [p1, p2]
+  source: sfcc-partners
+  careers_url: https://www.64labs.com/join-us
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Tampa FL, SFCC specialist (PWA Kit), ~12-30 staff"
+
+- id: fortenext
+  name: ForteNext
+  domain: fortenext.com
+  country: US
+  phases: [p1, p2]
+  source: sfcc-partners
+  careers_url: https://fortegroup.my.site.com/jobs/s/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Boca Raton FL, Salesforce B2B Commerce, 51-249 staff; jobs on a Salesforce Experience site; not Forte DGTL"
+
+- id: ad-victoriam-solutions
+  name: Ad Victoriam Solutions
+  domain: advictoriam.com
+  country: US
+  phases: [p1, p2]
+  source: sfcc-partners
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Alpharetta GA, Salesforce Platinum, B2B Commerce, ~100-200 staff; careers not checked (TLS error)"
+
+- id: ember-agency
+  name: Ember Agency
+  domain: discoverember.com
+  country: US
+  phases: [p1, p2]
+  source: sfcc-partners
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Boulder CO, boutique Salesforce B2C Commerce/headless; /careers 404, size unknown"
+
+- id: ziffity
+  name: Ziffity
+  domain: ziffity.com
+  country: US
+  phases: [p1, p2]
+  source: sfcc-partners
+  careers_url: https://ziffity.zohorecruit.com/jobs/Ziffity-Job-Opening
+  ats: { vendor: zoho, slug: ziffity }
+  storefront: null
+  status: active
+  notes: "Plano TX, ~130 staff, Adobe Commerce-led, also SFCC; delivery in Chennai"
+
+- id: cql
+  name: CQL
+  domain: cqlcorp.com
+  country: US
+  phases: [p1, p2]
+  source: sfcc-partners
+  careers_url: https://www.cqlcorp.com/careers/
+  ats: { vendor: bamboohr, slug: cql }
+  storefront: null
+  status: active
+  notes: "Grand Rapids MI, ~90 staff, SFCC + Shopify Plus + BigCommerce"
+
+- id: grinteq
+  name: Grinteq
+  domain: grinteq.com
+  country: US
+  phases: [p1, p2]
+  source: sfcc-partners
+  careers_url: https://grinteq.com/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "HQ ambiguous (NY site address, Lisbon on Clutch), verify; SFCC, 20-249 staff"
+
+- id: barrel
+  name: Barrel
+  domain: barrelny.com
+  country: US
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://www.barrelny.com/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "New York NY, Shopify Plus, CPG/DTC"
+
+- id: electric-eye
+  name: Electric Eye
+  domain: electriceye.io
+  country: US
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://electriceye.io/pages/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Columbus OH, Shopify Premier; applications via Cognito form"
+
+- id: avex
+  name: Avex
+  domain: avexdesigns.com
+  country: US
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://www.avexdesigns.com/careers/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "New York NY, Shopify Plus Platinum"
+
+- id: anatta
+  name: Anatta
+  domain: anatta.io
+  country: US
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://anatta.io/careers/
+  ats: { vendor: jazzhr, slug: anattadesigninc }
+  storefront: null
+  status: active
+  notes: "Austin TX, Shopify Platinum, enterprise Shopify"
+
+- id: domaine
+  name: Domaine
+  domain: domaineworldwide.com
+  country: US
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://domaineworldwide.com/careers/
+  ats: { vendor: rippling, slug: domaine-careers }
+  storefront: null
+  status: active
+  notes: "New York NY, ~227 staff + ~60 from 2025 Code acquisition (near top of band), Shopify Platinum"
+
+- id: shero-commerce
+  name: Shero Commerce
+  domain: sherocommerce.com
+  country: US
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://sherocommerce.com/pages/careers
+  ats: { vendor: bamboohr, slug: sherocommerce }
+  storefront: null
+  status: active
+  notes: "Red Hook NY, Shopify Plus, B2B commerce"
+
+- id: ample
+  name: Ample
+  domain: ample.co
+  country: US
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://ample.co/careers/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Cincinnati OH, UX/web dev incl. Shopify"
+
+- id: netalico-commerce
+  name: Netalico Commerce
+  domain: netalico.com
+  country: US
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "New York NY, Shopify Plus dev + UX; no careers page found"
+
+- id: blackbelt-commerce
+  name: Blackbelt Commerce
+  domain: blackbeltcommerce.com
+  country: US
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "New York NY, family-run Shopify Plus, may be small; no careers page found"
+
+- id: metacake
+  name: Metacake
+  domain: metacake.com
+  country: US
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://metacake.com/jobs/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Franklin TN, Shopify growth agency"
+
+- id: sunrise-integration
+  name: Sunrise Integration
+  domain: sunriseintegration.com
+  country: US
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Los Angeles CA, Shopify dev + integrations; no careers page found"
+
+- id: solid-digital
+  name: Solid Digital
+  domain: soliddigital.com
+  country: US
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Chicago IL (and Portland), Shopify builds; no careers page found"
+
+- id: ecommerce-partners
+  name: Ecommerce Partners
+  domain: ecommercepartners.com
+  country: US
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Tenafly NJ, ECP, Shopify Plus + BigCommerce, B2B/ERP; no careers page found"
+
+- id: uncap
+  name: Uncap
+  domain: uncap.com
+  country: US
+  phases: [p1, p2]
+  source: clutch-us
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Chicago IL, 10-49 staff, Shopify Platinum; site 403s"
+
+- id: staylime
+  name: Staylime
+  domain: staylime.com
+  country: US
+  phases: [p1, p2]
+  source: clutch-us
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Redwood City CA, 10-49 staff, Magento/Shopify, likely offshore engineering; no careers page found"
+
+- id: first-pier
+  name: First Pier
+  domain: firstpier.com
+  country: US
+  phases: [p1, p2]
+  source: clutch-us
+  careers_url: https://www.firstpier.com/careers
+  ats: { vendor: gohire, slug: helm-digital-pd37nmt8 }
+  storefront: null
+  status: active
+  notes: "Portland ME, 10-49 staff, Shopify; GoHire board under Helm Digital (possible parent)"
+
+- id: dyode
+  name: DYODE
+  domain: dyode.com
+  country: US
+  phases: [p1, p2]
+  source: clutch-us
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Fullerton CA, Shopify Plus; no careers page found"
+
+- id: fyresite
+  name: Fyresite
+  domain: fyresite.com
+  country: US
+  phases: [p1, p2]
+  source: clutch-us
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Tempe AZ, 10-49 staff, Shopify Premier/Plus; no careers page found"
+
+- id: ambaum
+  name: Ambaum
+  domain: ambaum.com
+  country: US
+  phases: [p1, p2]
+  source: clutch-us
+  careers_url: https://ambaum.com/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Burien WA, 10-49 staff, Shopify/BigCommerce; applications by email"
+
+- id: digitlhaus
+  name: DigitlHaus
+  domain: digitlhaus.com
+  country: US
+  phases: [p1, p2]
+  source: clutch-us
+  careers_url: https://careers.digitlhaus.com/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Miramar Beach FL, 10-49 staff, Shopify + BigCommerce; custom job portal"
+
+- id: 1digital-agency
+  name: 1Digital Agency
+  domain: 1digitalagency.com
+  country: US
+  phases: [p1, p2]
+  source: bigcommerce-agency-lists
+  careers_url: https://www.1digitalagency.com/jobs/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Miami FL, BigCommerce/Shopify + headless Next.js; also SEO/PPC"
+
+- id: the-b2b-ecommerce-agency
+  name: The B2B eCommerce Agency
+  domain: b2becommerceagency.com
+  country: US
+  phases: [p1, p2]
+  source: bigcommerce-agency-lists
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Baltimore MD, formerly Groove Commerce, BigCommerce Elite, B2B; no careers page found"
+
+- id: third-and-grove
+  name: Third and Grove
+  domain: thirdandgrove.com
+  country: US
+  phases: [p1, p2]
+  source: bigcommerce-agency-lists
+  careers_url: https://thirdandgrove.breezy.hr/
+  ats: { vendor: breezy, slug: thirdandgrove }
+  storefront: null
+  status: active
+  notes: "Boston MA, Shopify Platinum + Contentful/Drupal"
+
+- id: ironplane
+  name: IronPlane
+  domain: ironplane.com
+  country: US
+  phases: [p1, p2]
+  source: bigcommerce-agency-lists
+  careers_url: https://www.ironplane.com/career
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Portland ME, 40+ staff (US + Poznan + LatAm), Adobe Commerce + BigCommerce"
+
+- id: absolute-web
+  name: Absolute Web
+  domain: absoluteweb.com
+  country: US
+  phases: [p1, p2]
+  source: bigcommerce-agency-lists
+  careers_url: https://www.absoluteweb.com/careers/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Miami FL, BigCommerce/Magento/Shopify; site 403s"
+
+- id: human-element
+  name: Human Element
+  domain: human-element.com
+  country: US
+  phases: [p1, p2]
+  source: bigcommerce-agency-lists
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Ann Arbor MI, 11-50 staff, BigCommerce/Magento/Shopify; site 403s"
+
+- id: codal
+  name: Codal
+  domain: codal.com
+  country: US
+  phases: [p1, p2]
+  source: vercel-partners
+  careers_url: https://codal.jobs/
+  ats: { vendor: greenhouse, slug: codalinc }
+  storefront: null
+  status: active
+  notes: "Chicago IL, Adobe Commerce/Shopify/headless; large Ahmedabad team, may be near or above 250"
+
+- id: verndale
+  name: Verndale
+  domain: verndale.com
+  country: US
+  phases: [p1, p2]
+  source: vercel-partners
+  careers_url: https://www.verndale.com/careers
+  ats: { vendor: rippling, slug: verndale-llc }
+  storefront: null
+  status: active
+  notes: "Boston MA, Sitecore/Optimizely/commerce, Vercel Platinum"
+
+- id: velir
+  name: Velir
+  domain: velir.com
+  country: US
+  phases: [p1, p2]
+  source: vercel-partners
+  careers_url: https://www.velir.com/who-we-are/careers
+  ats: { vendor: greenhouse, slug: velir }
+  storefront: null
+  status: active
+  notes: "Somerville MA, Sitecore/Drupal/headless; commerce is secondary"
+
+- id: mira-commerce
+  name: Mira Commerce
+  domain: miracommerce.com
+  country: US
+  phases: [p1, p2]
+  source: vercel-partners
+  careers_url: https://www.miracommerce.com/careers/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Walnut Creek CA (+ Argentina, Poland), BigCommerce/Shopify/headless, MACH Alliance"
+
+- id: classy-llama
+  name: Classy Llama
+  domain: classyllama.com
+  country: US
+  phases: [p1, p2]
+  source: web-search
+  careers_url: https://classyllama.com/careers/
+  ats: { vendor: jazzhr, slug: classyllama }
+  storefront: null
+  status: active
+  notes: "Springfield MO, Adobe Commerce/Shopify/BigCommerce replatforms"
+
+- id: briteskies
+  name: Briteskies
+  domain: briteskies.com
+  country: US
+  phases: [p1, p2]
+  source: web-search
+  careers_url: https://www.briteskies.com/briteskies-careers-join-the-team
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Cleveland OH, B2B commerce + ERP integration"
+
+- id: rocket-web
+  name: Rocket Web
+  domain: rocketweb.com
+  country: US
+  phases: [p1, p2]
+  source: web-search
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Noblesville IN, Magento/Mage-OS; no careers page found"
+
+- id: xumulus
+  name: Xumulus
+  domain: xumulus.com
+  country: US
+  phases: [p1, p2]
+  source: web-search
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Chicago IL, Next.js commerce + search; no careers page found"
+
+- id: clarity-ventures
+  name: Clarity Ventures
+  domain: clarity-ventures.com
+  country: US
+  phases: [p1, p2]
+  source: web-search
+  careers_url: https://www.clarity-ventures.com/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Austin TX, B2B eCommerce + ERP/CRM integration"
+
+- id: mindgrub
+  name: Mindgrub
+  domain: mindgrub.com
+  country: US
+  phases: [p1, p2]
+  source: web-search
+  careers_url: https://mindgrub.com/about/careers/
+  ats: { vendor: greenhouse, slug: mindgrub }
+  storefront: null
+  status: active
+  notes: "Baltimore MD, web/mobile/commerce; slug from grnh.se redirect"
+
+- id: whereoware
+  name: Whereoware
+  domain: whereoware.com
+  country: US
+  phases: [p1, p2]
+  source: web-search
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "McLean VA, B2B commerce + digital experience; no careers page found"
+
+- id: endertech
+  name: Endertech
+  domain: endertech.com
+  country: US
+  phases: [p1, p2]
+  source: web-search
+  careers_url: https://endertech.com/careers-internships
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Los Angeles CA, ecommerce + custom software, likely small"
 
 # --- Your network: past clients, current agency's clients, Studion alumni companies ---
 # Add entries here by hand. Highest reply rate of any source (SPEC "Universe seeding").

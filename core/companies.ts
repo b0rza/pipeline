@@ -5,7 +5,8 @@ import { z } from 'zod';
 import type { Company } from './types.ts';
 
 export const vendors = [
-  'greenhouse', 'lever', 'ashby', 'workable', 'smartrecruiters', 'personio', 'recruitee', 'teamtailor', 'custom', 'unknown',
+  'greenhouse', 'lever', 'ashby', 'workable', 'smartrecruiters', 'personio', 'recruitee', 'teamtailor',
+  'bamboohr', 'jazzhr', 'rippling', 'breezy', 'gohire', 'zoho', 'custom', 'unknown',
 ] as const;
 
 const entry = z.object({

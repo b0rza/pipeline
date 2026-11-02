@@ -25,8 +25,9 @@ Last updated: 2026-11-02
 
 ## Known gaps
 
-- Seed coverage: 19 of 60 seeds are polled (11 Teamtailor, 7 Personio, 1 Greenhouse). 36 have `unknown` ATS, mostly in-house job pages; 4 are on vendors due 2026-11-16. No seed uses Lever.
-- Seed geography is inverted against the rubric: 20 of the first 60 seeds are German, while the rubric (changed 2026-11-02) ranks the US first and DACH last. US seeds were added the same day; rebalance the EU share when the list goes to 200.
+- Seed coverage: 22 of 119 seeds are polled (11 Teamtailor, 7 Personio, 4 Greenhouse). 79 have `unknown` ATS, mostly in-house job pages or plain forms; 4 are on vendors due 2026-11-16. No seed uses Lever.
+- US coverage: 59 US agencies seeded on 2026-11-02, but only 3 are pollable. The US 10–300-staff band hires through JazzHR (5), Rippling (3), Breezy (2), BambooHR (2), GoHire and Zoho Recruit, none of which have adapters. The rubric now ranks the US first, so these adapters matter more than the 11-16 row's Workable/Recruitee/SmartRecruiters/Ashby set (4 seeds between them).
+- Seed geography: 20 of the 60 EU seeds are German, while the rubric (changed 2026-11-02) ranks DACH last. Rebalance the EU share when the list goes to 200.
 - The geography rows of both rubrics changed on 2026-11-02 with no eval set to check against (rule 5). The 2026-11-12 eval set must be labeled against the new weights.
 - Jung von Matt's Personio board is group-wide (copywriters, interns, open applications). Stage 3 filtering must drop non-engineering titles before tokens are spent.
 - `core/diff.ts` deletes all of a run date's `events` rows before recomputing them from `postings`. When fingerprint events arrive (Sun 11-09 row), either write them in the same pass or scope the delete to posting kinds.
