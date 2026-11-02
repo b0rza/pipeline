@@ -1,11 +1,15 @@
 import { XMLParser } from 'fast-xml-parser';
-import { htmlToText } from '../../core/html.ts';
+import { htmlToText, unescapeHtml } from '../../core/html.ts';
 import { toIso, type AtsAdapter } from './types.ts';
 
 const xml = new XMLParser({ ignoreAttributes: true, parseTagValue: false });
 
 const list = <T>(v: T | T[] | undefined | null | ''): T[] => (v === undefined || v === null || v === '' ? [] : Array.isArray(v) ? v : [v]);
-const str = (v: unknown): string | null => (typeof v === 'string' && v.trim() !== '' ? v.trim() : null);
+// Plain-text fields arrive with HTML entities still encoded (e.g. Let&#039;s), so decode them.
+const str = (v: unknown): string | null => {
+  const s = typeof v === 'string' ? unescapeHtml(v).trim() : '';
+  return s === '' ? null : s;
+};
 
 interface Position {
   id: string;
@@ -41,11 +45,10 @@ export const personio: AtsAdapter = {
       const html = descriptions.map((d) => `<h3>${str(d.name) ?? ''}</h3>${str(d.value) ?? ''}`).join('\n');
       return {
         external_id: String(p.id),
-        title: String(p.name).trim(),
+        title: str(p.name) ?? String(p.id),
         location: offices.length ? [...new Set(offices)].join(', ') : null,
         url: `https://${slug}.jobs.personio.de/job/${p.id}`,
         body: htmlToText(html),
-        body_html: html || null,
         posted_at: toIso(p.createdAt),
         raw: {
           department: str(p.department),

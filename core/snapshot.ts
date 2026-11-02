@@ -4,6 +4,7 @@ import { pathToFileURL } from 'node:url';
 import { adapters, fetchPostings } from '../adapters/ats/index.ts';
 import { loadCompanies, upsertCompanies } from './companies.ts';
 import { openDb, sha256 } from './db.ts';
+import { userAgent } from './http.ts';
 import type { Company, NormalizedPosting } from './types.ts';
 
 const FAILURES_BEFORE_SKIP = 3;
@@ -11,11 +12,14 @@ const SKIP_MS = 24 * 60 * 60 * 1000;
 
 export function snapshotCompany(db: DatabaseSync, company: Company, postings: NormalizedPosting[], runDate: string) {
   const counts = { seen: 0, new: 0, edited: 0, gone: 0 };
-  const find = db.prepare('select body_hash from postings where id = ?');
+  const find = db.prepare('select body_hash, gone_at from postings where id = ?');
   const insert = db.prepare(`
     insert into postings (id, company_id, external_id, url, title, location, body, body_hash, posted_at, first_seen, last_seen, raw)
     values (:id, :company_id, :external_id, :url, :title, :location, :body, :body_hash, :posted_at, :run_date, :run_date, :raw)`);
-  const touch = db.prepare('update postings set last_seen = :run_date, gone_at = null where id = :id');
+  const touch = db.prepare(`
+    update postings set last_seen = :run_date, title = :title, location = :location, url = :url, gone_at = null
+    where id = :id`);
+  const reopen = db.prepare('update postings set repost_count = repost_count + 1, reposted_at = :run_date where id = :id');
   const edit = db.prepare(`
     update postings set body_hash_prev = body_hash, body_hash = :body_hash, body = :body, body_changed_at = :run_date, raw = :raw
     where id = :id`);
@@ -24,9 +28,10 @@ export function snapshotCompany(db: DatabaseSync, company: Company, postings: No
   try {
     for (const p of postings) {
       const id = sha256(`${company.id}:${p.external_id}`);
-      const body_hash = sha256(p.body);
+      // Title is hashed with the body so a retitled posting surfaces as an edit.
+      const body_hash = sha256(`${p.title}\n${p.body}`);
       const raw = JSON.stringify(p.raw);
-      const existing = find.get(id) as { body_hash: string } | undefined;
+      const existing = find.get(id) as { body_hash: string; gone_at: string | null } | undefined;
       counts.seen++;
       if (!existing) {
         insert.run({
@@ -36,7 +41,9 @@ export function snapshotCompany(db: DatabaseSync, company: Company, postings: No
         counts.new++;
         continue;
       }
-      touch.run({ id, run_date: runDate });
+      // A gone id coming back is a repost. Gone earlier today means a same-day re-run, so just undo it.
+      if (existing.gone_at && existing.gone_at < runDate) reopen.run({ id, run_date: runDate });
+      touch.run({ id, run_date: runDate, title: p.title, location: p.location, url: p.url });
       if (existing.body_hash !== body_hash) {
         edit.run({ id, body_hash, body: p.body, run_date: runDate, raw });
         counts.edited++;
@@ -55,10 +62,13 @@ export function snapshotCompany(db: DatabaseSync, company: Company, postings: No
   return counts;
 }
 
-export function recordFailure(db: DatabaseSync, companyId: string, now = new Date()): number {
+// Counts at most one failure per run date, so same-day re-runs can't trip the 24h skip.
+export function recordFailure(db: DatabaseSync, companyId: string, runDate: string, now = new Date()): number {
   const row = db.prepare(`
-    update companies set consecutive_failures = consecutive_failures + 1, last_failure_at = ?
-    where id = ? returning consecutive_failures`).get(now.toISOString(), companyId) as { consecutive_failures: number };
+    update companies set
+      consecutive_failures = consecutive_failures + (case when last_failed_run = :run_date then 0 else 1 end),
+      last_failed_run = :run_date
+    where id = :id returning consecutive_failures`).get({ run_date: runDate, id: companyId }) as { consecutive_failures: number };
   if (row.consecutive_failures >= FAILURES_BEFORE_SKIP) {
     db.prepare('update companies set skip_until = ? where id = ?').run(new Date(now.getTime() + SKIP_MS).toISOString(), companyId);
   }
@@ -66,6 +76,7 @@ export function recordFailure(db: DatabaseSync, companyId: string, now = new Dat
 }
 
 async function main() {
+  userAgent(); // fail fast: per-company catches below would otherwise log it as a feed failure for every company
   const runDate = process.env.RUN_DATE ?? new Date().toISOString().slice(0, 10);
   const companies = loadCompanies();
   const db = openDb();
@@ -97,7 +108,7 @@ async function main() {
       try {
         postings = await fetchPostings(c);
       } catch (err) {
-        const n = recordFailure(db, c.id);
+        const n = recordFailure(db, c.id, runDate);
         console.log(`fail ${c.id} (${c.ats.vendor}/${c.ats.slug}): ${(err as Error).message} [${n} in a row]`);
         totals.failed++;
         continue;

@@ -30,7 +30,6 @@ export const greenhouse: AtsAdapter = {
         location: j.location?.name?.trim() || null,
         url: j.absolute_url,
         body: html ? htmlToText(html) : '',
-        body_html: html,
         posted_at: toIso(j.first_published) ?? toIso(j.updated_at),
         raw: {
           requisition_id: j.requisition_id ?? null,

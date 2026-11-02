@@ -1,5 +1,5 @@
 const named: Record<string, string> = {
-  amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ',
+  amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', ensp: ' ', emsp: ' ', thinsp: ' ', times: '×', deg: '°',
   ndash: '–', mdash: '—', lsquo: '‘', rsquo: '’', ldquo: '“', rdquo: '”', laquo: '«', raquo: '»',
   hellip: '…', bull: '•', middot: '·', euro: '€', pound: '£', copy: '©', reg: '®', trade: '™', shy: '',
   auml: 'ä', ouml: 'ö', uuml: 'ü', Auml: 'Ä', Ouml: 'Ö', Uuml: 'Ü', szlig: 'ß',
@@ -14,18 +14,18 @@ export function unescapeHtml(s: string): string {
       const code = e[1] === 'x' || e[1] === 'X' ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10);
       return Number.isFinite(code) && code <= 0x10ffff ? String.fromCodePoint(code) : m;
     }
-    return named[e] ?? m;
+    return named[e] ?? ''; // unknown named entity: drop it rather than leak it into the body
   });
 }
 
-const block = 'p|div|h[1-6]|li|ul|ol|tr|table|section|article|header|footer|blockquote|pre';
+const block = 'p|div|h[1-6]|li|ul|ol|tr|td|th|dt|dd|hr|table|section|article|header|footer|blockquote|pre';
 
 export function htmlToText(html: string): string {
   const text = html
     .replace(/<(script|style)[^>]*>[\s\S]*?<\/\1>/gi, '')
     .replace(/<!--[\s\S]*?-->/g, '')
     .replace(/<br\s*\/?>/gi, '\n')
-    .replace(new RegExp(`</?(${block})(\\s[^>]*)?>`, 'gi'), '\n')
+    .replace(new RegExp(`</?(${block})(\\s[^>]*)?\\/?>`, 'gi'), '\n')
     .replace(/<[^>]*>/g, '');
   return unescapeHtml(text)
     .replace(/ /g, ' ')

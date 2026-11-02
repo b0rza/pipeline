@@ -17,7 +17,7 @@ create table if not exists companies (
   last_contacted text,
   added_at text not null default (datetime('now')),
   consecutive_failures integer not null default 0,
-  last_failure_at text,
+  last_failed_run text,                    -- run_date of the last counted failure
   skip_until text                          -- set after 3 consecutive feed failures
 );
 
@@ -37,6 +37,7 @@ create table if not exists postings (
   last_seen text not null,
   gone_at text,
   repost_count integer not null default 0,
+  reposted_at text,                        -- run_date a gone id last came back
   raw text                                 -- json
 );
 create index if not exists postings_company on postings(company_id);

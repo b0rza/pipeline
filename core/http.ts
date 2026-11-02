@@ -1,8 +1,8 @@
 // Guardrails from SPEC: 1 req/s per host, backoff on 429/5xx, real User-Agent.
 
-const DEFAULT_UA = 'pipeline/0.1 (+https://example.invalid/contact; set PIPELINE_USER_AGENT)';
-const BACKOFF_MS = [2000, 8000];
+export const BACKOFF_MS = [2000, 8000];  // exported so tests can shorten it
 const TIMEOUT_MS = 20_000;
+const MAX_REDIRECTS = 5;
 
 export class HttpError extends Error {
   constructor(readonly status: number, readonly url: string, message?: string) {
@@ -29,37 +29,52 @@ async function waitTurn(host: string): Promise<void> {
   if (at > now) await sleep(at - now);
 }
 
-let warned = false;
-function userAgent(): string {
+export function userAgent(): string {
   const ua = process.env.PIPELINE_USER_AGENT;
-  if (ua) return ua;
-  if (!warned) {
-    warned = true;
-    console.error('warning: PIPELINE_USER_AGENT not set, using a placeholder User-Agent');
+  if (!ua) throw new Error('PIPELINE_USER_AGENT is required (AGENTS.md rule 4), e.g. "pipeline/0.1 (+https://yourcompany.example/contact)"');
+  return ua;
+}
+
+// Follows redirects by hand so every hop waits its turn on its own host.
+async function fetchFollowing(
+  url: string,
+  opts: { method?: string; body?: string; headers?: Record<string, string> },
+  ua: string,
+): Promise<{ res: Response; url: string }> {
+  let current = url;
+  let method = opts.method ?? 'GET';
+  let body = opts.body;
+  for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
+    await waitTurn(new URL(current).host);
+    const res = await fetch(current, {
+      method,
+      body,
+      headers: { 'user-agent': ua, ...opts.headers },
+      redirect: 'manual',
+      signal: AbortSignal.timeout(TIMEOUT_MS),
+    });
+    const location = res.headers.get('location');
+    if (res.status < 300 || res.status >= 400 || !location) return { res, url: current };
+    await res.body?.cancel();
+    current = new URL(location, current).href;
+    if (res.status === 303) { method = 'GET'; body = undefined; }
   }
-  return DEFAULT_UA;
+  throw new HttpError(0, url, `more than ${MAX_REDIRECTS} redirects ${url}`);
 }
 
 export async function fetchText(
   url: string,
   opts: { method?: string; body?: string; headers?: Record<string, string> } = {},
 ): Promise<FetchResult> {
-  const host = new URL(url).host;
+  const ua = userAgent();
   for (let attempt = 0; ; attempt++) {
-    await waitTurn(host);
     try {
-      const res = await fetch(url, {
-        method: opts.method ?? 'GET',
-        body: opts.body,
-        headers: { 'user-agent': userAgent(), ...opts.headers },
-        redirect: 'follow',
-        signal: AbortSignal.timeout(TIMEOUT_MS),
-      });
+      const { res, url: finalUrl } = await fetchFollowing(url, opts, ua);
       const text = await res.text();
       if (res.ok) {
         return {
           status: res.status,
-          url: res.url || url,
+          url: finalUrl,
           contentType: res.headers.get('content-type') ?? '',
           text,
           headers: Object.fromEntries(res.headers),

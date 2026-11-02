@@ -33,7 +33,6 @@ export const lever: AtsAdapter = {
         location: c.location?.trim() || null,
         url: p.hostedUrl,
         body: htmlToText(html),
-        body_html: html,
         posted_at: toIso(p.createdAt),
         raw: {
           commitment: c.commitment ?? null,

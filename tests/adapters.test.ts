@@ -4,6 +4,7 @@ import { test } from 'node:test';
 import { greenhouse } from '../adapters/ats/greenhouse.ts';
 import { lever } from '../adapters/ats/lever.ts';
 import { personio } from '../adapters/ats/personio.ts';
+import { htmlToText } from '../core/html.ts';
 import type { NormalizedPosting } from '../core/types.ts';
 
 const fixture = (name: string) => readFileSync(new URL(`./fixtures/${name}`, import.meta.url), 'utf8');
@@ -50,4 +51,18 @@ test('personio fixture', () => {
 
 test('personio rejects an HTML 404 page', () => {
   assert.throws(() => personio.parse('<!doctype html><html><body>Not found</body></html>', 'text/html', 'dead'));
+});
+
+test('normalized postings carry no body_html', () => {
+  const all = [
+    ...greenhouse.parse(fixture('greenhouse.json'), 'application/json', 'getyourguide'),
+    ...lever.parse(fixture('lever.json'), 'application/json', 'emma-sleep'),
+    ...personio.parse(fixture('personio.xml'), 'text/xml; charset=UTF-8', 'eshop-guide'),
+  ];
+  for (const p of all) assert.ok(!('body_html' in p));
+});
+
+test('htmlToText separates table cells and drops unknown entities', () => {
+  assert.ok(!htmlToText('<table><tr><td>a</td><td>b</td></tr></table>').includes('ab'));
+  assert.equal(htmlToText('5&times;3&deg; &hellip;&zwnj; &#123;&#x41;'), '5×3° … {A');
 });

@@ -3,7 +3,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { isMap, isScalar, isSeq, parseDocument, type YAMLMap } from 'yaml';
 import { adapters } from '../adapters/ats/index.ts';
-import { fetchText, HttpError } from '../core/http.ts';
+import { fetchText, HttpError, userAgent } from '../core/http.ts';
 
 const PATHS = ['/careers', '/jobs', '/join', '/karriere', '/karijere', '/vacatures', '/lediga-jobb', '/career', '/jobs/'];
 // Path segments and subdomains that are vendor infrastructure, not a company slug.
@@ -70,6 +70,7 @@ if (!file) {
   process.exit(2);
 }
 
+userAgent(); // fail fast; resolve() below swallows per-URL errors
 const source = readFileSync(file, 'utf8');
 const doc = parseDocument(source);
 if (!isSeq(doc.contents)) throw new Error(`${file}: expected a list of companies`);
@@ -78,7 +79,7 @@ const entries = doc.contents.items.filter(isMap) as YAMLMap[];
 const edits: { start: number; end: number; text: string }[] = [];
 
 for (const e of entries) {
-  const id = String(e.get('id'));
+  const id = String(e.get('id') ?? e.get('domain'));
   const ats = e.get('ats');
   const vendor = isMap(ats) ? String(ats.get('vendor') ?? '') : '';
   const slug = isMap(ats) ? String(ats.get('slug') ?? '') : '';

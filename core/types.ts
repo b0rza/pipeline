@@ -16,7 +16,6 @@ export interface NormalizedPosting {
   location: string | null;
   url: string;
   body: string;              // plain text
-  body_html: string | null;
   posted_at: string | null;  // ISO 8601
   raw: unknown;              // vendor-specific extras (employmentType, seniority, commitment, ...)
 }

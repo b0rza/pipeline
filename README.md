@@ -10,3 +10,5 @@ npm run db:init
 cp .env.op.example .env.op   # fill with op:// refs
 RUN_DATE=$(date +%F) ./scripts/run-nightly.sh
 ```
+
+Export `PIPELINE_USER_AGENT` naming your company and a contact URL, e.g. `pipeline/0.1 (+https://yourcompany.example/contact)`; `run-nightly.sh` reads it from the environment (it is not a secret, so it does not go in `.env.op`).

@@ -3,6 +3,7 @@
 # Stages not built yet are skipped so the script exits 0 while the build order is in progress.
 # PIPELINE_NO_COMMIT=1 skips the git commit (for testing).
 set -euo pipefail
+: "${PIPELINE_USER_AGENT:?set PIPELINE_USER_AGENT (AGENTS.md rule 4)}"
 cd "$(dirname "$0")/.."
 export RUN_DATE="${RUN_DATE:-$(date +%F)}"
 mkdir -p logs "out/$RUN_DATE"
@@ -35,7 +36,7 @@ if [ "${PIPELINE_NO_COMMIT:-}" = 1 ]; then
   echo "stage 7: commit skipped (PIPELINE_NO_COMMIT=1)"
 else
   git add out state/pipeline.sqlite
-  git diff --cached --quiet || git commit -qm "data: nightly $RUN_DATE" || true
+  git diff --cached --quiet || git commit -qm "data: nightly $RUN_DATE"
 fi
 if [ -f bot/notify.ts ]; then
   op run --env-file=.env.op -- npm run -s notify

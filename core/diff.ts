@@ -23,6 +23,8 @@ export function diffRun(db: DatabaseSync, runDate: string): Record<Kind, number>
 
   for (const row of rows('body_changed_at = :run_date and first_seen < :run_date')) events.push({ row, kind: 'posting_edited' });
   for (const row of rows('gone_at = :run_date')) events.push({ row, kind: 'posting_gone' });
+  // A known id that came back after going gone (snapshot bumped repost_count).
+  for (const row of rows('reposted_at = :run_date and first_seen < :run_date')) events.push({ row, kind: 'posting_reposted' });
 
   // Repost: the same title at the same company went gone within the window before this run.
   const candidates = db.prepare(`
@@ -34,6 +36,8 @@ export function diffRun(db: DatabaseSync, runDate: string): Record<Kind, number>
 
   db.exec('begin');
   try {
+    // Recompute the day from scratch so a same-day re-run drops events that no longer hold.
+    db.prepare('delete from events where run_date = ?').run(runDate);
     for (const row of rows('first_seen = :run_date')) {
       const title = normTitle(row.title);
       const prev = (candidates.all({ company_id: row.company_id, id: row.id, since, run_date: runDate }) as unknown as (Row & { repost_count: number })[])
