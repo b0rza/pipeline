@@ -4,9 +4,10 @@ This repo is a nightly signal pipeline: it finds companies worth contacting, dra
 
 ## Read first
 
-- `docs/SPEC.md`: what v1 is, stage by stage, with data model and build order.
+- `docs/SPEC-v2.md`: the current build list and what is deferred. `docs/SPEC.md` is v1, kept as history; its data model, ATS table and guardrails still apply.
 - `docs/DECISIONS.md`: choices already made and why. Don't propose reversing one without a new fact.
-- `docs/PLAN.md`: the business plan this serves. Explains why Phase 1 and Phase 2 rubrics differ.
+- `docs/PLAN.md`: the business plan this serves. Its first section, "The additive frame", is the rule every other doc follows: streams are added beside the current contract, never instead of it; review dates are beacons, not kill switches; either-or framings are wrong by default.
+- `docs/CHALLENGE.md`: the findings against v1 and what each became. Read before proposing fingerprinting, tender awards or LLM scoring.
 - `docs/STATUS.md`: which build-order rows are done, what is open on the owner, known gaps. Update it at the end of a session that changes any of that.
 
 ## Hard rules
@@ -18,6 +19,7 @@ This repo is a nightly signal pipeline: it finds companies worth contacting, dra
 5. **Rubric edits must pass evals.** Change `rubrics/*.md` only together with a passing `evals/run.ts`. If evals move more than 10% of labeled postings across bands, stop and report; don't tune the eval set to pass.
 6. **Idempotent runs.** Everything keyed by content hash. Re-running the same day must produce no new rows.
 7. **One signal per company per run.** `core/group.ts` collapses postings. Never emit per-posting drafts.
+9. **Two lists, not one.** Contract/freelance engineering postings go to `apply`; everything else to `outreach`. Don't draft a pitch for a posting the owner should apply to.
 8. **Secrets via `op run`.** Never write a token into a file in this repo, including `.env.example` with real values.
 
 ## Conventions

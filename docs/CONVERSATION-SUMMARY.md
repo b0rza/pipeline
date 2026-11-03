@@ -14,7 +14,11 @@ How PLAN.md, SPEC.md and DECISIONS.md came to be. Context for the human, not req
 
 5. **Pipeline design.** User asked how to build a daily automated loop. First proposal: sensing + drafting pipeline with git PR as approval queue. User challenged GitHub as a source (most repos private) and the PR mechanics (merge triggers nothing, so what's the point). Both conceded. Sources moved to ATS feeds and storefront fingerprinting; output moved to a Telegram digest with action buttons. Signals grouped per company per run after a terminology confusion (run vs posting vs signal).
 
-6. **Handoff.** Two docs exported; this repo scaffolded with the decisions written down so a fresh Claude Code session doesn't relitigate them.
+6. **Challenge pass (2026-11-02 evening).** Owner asked the author to break the three docs from the buyer's side. 14 findings in CHALLENGE.md; the top three questioned whether agencies hire contractors from postings, whether the 12-02 target was calibrated, and whether ATS feeds cover the market.
+
+7. **Reframe (2026-11-03).** Owner's answers: first contract by referral; €55/h hourly, wants fixed-price added not swapped; agency fills overflow by referral; US first for rates and bureaucracy; contract stable, no runway pressure; LinkedIn lookups by hand are fine. Owner corrected three errors in the author's reasoning: generalizing from two data points to the market; treating cold email as the hinge when public contract postings are a mechanism too; and an either-or habit across the whole plan. New frame: additive income streams, nothing replaced, review dates as beacons. PLAN.md rewritten around it; SPEC-v2.md supersedes SPEC.md with a build list ordered by option-widening; CHALLENGE.md carries a disposition per finding.
+
+8. **Handoff.** Two docs exported; this repo scaffolded with the decisions written down so a fresh Claude Code session doesn't relitigate them.
 
 ## What the user pushed back on, and was right about
 
@@ -23,6 +27,9 @@ How PLAN.md, SPEC.md and DECISIONS.md came to be. Context for the human, not req
 - Presenting niche vs generalist as a forced choice.
 - GitHub org activity as a signal.
 - PR-as-approval when nothing is automated on merge.
+- Generalizing from the owner's one hire to the whole market.
+- Cold email as the only mechanism; apply-to-posting and referral are mechanisms too.
+- Either-or framing everywhere: niche vs generalist, cash vs upside, hourly vs fixed.
 
 ## What held up
 

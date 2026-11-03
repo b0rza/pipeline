@@ -1,5 +1,7 @@
 # Signal Pipeline v1 Spec
 
+> **Superseded 2026-11-03 by [SPEC-v2.md](SPEC-v2.md).** Kept as history. The data model, ATS adapter table, daily-run stages 1–3 and guardrails still apply; the build order, fingerprinting, LLM stages and the cold-outreach framing do not.
+
 Nov 2, 2026 · @yossarian
 
 v1 is a nightly job that polls ATS feeds and fingerprints storefronts for a seeded list of companies, diffs against yesterday, extracts and scores what's new, and sends you a Telegram digest with one drafted message per company. You review and press send. Target: first diff running by 2026-11-09, first digest by 2026-11-16.

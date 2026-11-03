@@ -1,18 +1,31 @@
 # 2027 Income Plan
 
-Nov 2, 2026 · @yossarian
+Nov 2, 2026 · @yossarian · revised Nov 3, 2026
 
-With under 3 months of runway, the plan is cash first: secure a second contracting client by February 2027 at a senior rate, then spend one day a week building toward the one upside bet the data supports, which is helping engineering teams adopt AI coding agents. Everything else you've been circling (Salesforce Loyalty niche, EU e-invoicing, the customs-broker lead-gen engine) is dropped or parked, with reasons below.
+One income stream today; the goal is several. Each stream below is additive: it is added alongside the current agency contract, not instead of it, and nothing is dropped unless something clearly better replaces it. The streams are the current hourly contract, fixed-price contracting (monthly fee or fixed scope), and AI coding-agent enablement for engineering teams. The signal pipeline feeds all of them with options. The Salesforce Loyalty niche, EU e-invoicing and the customs-broker lead-gen engine stay parked, with reasons below.
+
+## The additive frame
+
+This section exists so that the frame is not lost between sessions. Read it before changing anything else in this plan.
+
+- **Base:** a stable hourly contract with the current agency, at a good rate, with no sign of ending. Keep it. A month's notice would be given on good faith if something clearly better came along; nothing in this plan requires that.
+- **Goal:** expand options, experience and network so that several income streams exist, in case any one shuts down for whatever reason. Not to replace the base, not to pick a winner.
+- **Rule:** every stream is additive. A new stream does not need to beat an existing one to earn a place; it needs to exist and pay something. Hourly billing is kept where the hour is good. Fixed-price work is added, not swapped in. Stream 2 is added, not prioritized over Stream 1.
+- **Consequence for dates:** review dates are beacons for checking whether a stream is alive, not deadlines after which something is killed. What counts as alive is the owner's call per stream; the "one paid engagement in six months" used elsewhere in this doc is a placeholder, not a decision.
+- **Consequence for the pipeline:** its job is to keep every stream supplied with options. Build rows that widen options are justified on their own. Rows that only serve one stream's thesis come later.
+- **Consequence for advice:** assume options are additive unless a real resource conflict is shown (one hour can be billed once; attention is finite). Niche vs generalist, cash vs upside, cold vs referral, hourly vs fixed: run both, measure each.
 
 ## Constraints this is built on
 
 | Constraint | Stated | Consequence |
 | --- | --- | --- |
-| Runway | Under 3 months if agency work ended | Nothing that pays in 6+ months comes first |
-| Employment offer | Nothing concrete | Don't plan around it; take it if it arrives and the contract allows your company |
-| Work mode | Open to engineering, selling + delivery, product, automation | No constraint, so the market decides |
-| Salesforce | In, no strong objection | Keep as a rate booster inside contracting, not as the niche |
+| Current contract | Hourly at a good rate, stable, no notice period either way; a month would be given in good faith | The base stream. Everything else is added beside it |
+| Employment offer | Nothing concrete | If it arrives, it is one more option; take it only if it allows the company and the other streams |
+| Work mode | Open to engineering, selling + delivery, product, automation | No constraint; several can run at once |
+| Salesforce | In, no strong objection | A line on the CV; opens doors at commerce agencies |
 | Track record | 13 years full-stack, team lead, commerce + payments, and a deep working AI coding-agent setup | The last one is the only asset where supply is short right now |
+| Geography | US first: better rates, less bureaucracy for a one-person B2B company, more open to a flat monthly fee. UK probably similar (unverified). DACH last: heavy self-employment bureaucracy | Rubric geography weights follow this |
+| Hiring season | US and UK agencies slow new contractor signings from late November to mid-January | A quiet December is not a failed pitch |
 
 ## What the market data says
 
@@ -25,38 +38,46 @@ The 2026 market has split: senior engineers who can direct AI output are paid mo
 | Teams struggle with review and governance, not installation | [When AI produces more code than a developer can review, teams either merge under-reviewed work or queue PRs indefinitely](https://www.saasrise.com/blog/the-agentic-engineering-trends-report-2026); [inconsistent CLAUDE.md files produce inconsistent agent behavior](https://blog.buildbetter.ai/claude-code-for-teams-setup-guide-5-best-alternatives-in-2026/) | Exactly the problems your current setup already solves |
 | Enablement is already being sold | [A London freelancer sells "Agentic coding adoption" at $8,000 for 2 weeks](https://contra.com/s/ccoLQkvB-agentic-coding-adoption-claude-code-for-your-dev-team); [advisory engagements run 4–8 weeks](https://articles.firstaimovers.com/articles/fractional-cto-claude-code-advisory-2026/) | Price exists; the market is early, not empty |
 | Salesforce Commerce is a weak premium | UK SFCC contract medians run [£334](https://www.itjobswatch.co.uk/contracts/central%20london/salesforce%20commerce%20cloud%20developer.do) to [£550/day](https://www.itjobswatch.co.uk/contracts/uk/salesforce%20commerce%20cloud%20developer.do); US contracts list [$25–85/h](https://signify.sites.sourceflow.co.uk/jobs/Salesforce-Commerce-Cloud-Developer-21083/) | Not a niche; at best a line on the CV |
-| Nuxt/commerce lead roles pay decently | UK Nuxt contracts: [median £545/day, e-commerce frontend architect £600–660](https://www.itjobswatch.co.uk/search?j=1&q=Nuxt) | Your cash-floor rate band |
+| Nuxt/commerce lead roles pay decently | UK Nuxt contracts: [median £545/day, e-commerce frontend architect £600–660](https://www.itjobswatch.co.uk/search?j=1&q=Nuxt) | Reference band for pricing fixed-fee products; a UK-based contractor rate, not a measured rate for remote B2B from Croatia |
 
-## Phase 1: Cash security (now to February 2027)
+## Stream 1: Contracting, fixed price added to hourly
 
-Goal: a second client relationship signed by 2027-02-01, so no single agency can end your income. This phase gets 80% of your time and all of your selling energy until it's done.
+Goal: one more client relationship alongside the current one, so that no single agency is the only stream. No deadline; a review beacon on 2027-02-01.
 
-**What you sell:** senior or lead engineer who owns a commerce storefront end to end, including the integrations most frontend contractors won't touch: checkout, payments, loyalty, CRM/Salesforce sync. Shipped-not-ticketed, with 11 years at one company and a team-lead exit as proof of reliability.
+**What you sell, three products, all available at once:**
 
-**Who buys:**
+1. **Hourly contracting.** The current model. Kept wherever the hour is good. €55/h is the current rate; it is a stream, not a problem.
+2. **Full-time contractor for a fixed monthly fee.** The agency gets a lead engineer on their storefront for the month, at a price fixed in advance. Removes the client-budget swings that hourly billing passes on to you. Owner's belief, unverified: US and UK agencies are more open to this than DACH.
+3. **Fixed scope for a fixed price.** A named deliverable: checkout and payments integration, loyalty programme integration, headless storefront build. Priced per scope; the hourly rate is internal arithmetic, never shown.
 
-- Agencies on the commercetools and Salesforce Commerce partner lists in the US first, then SCAYLE, commercetools and Salesforce Commerce partners in the UK, Nordics and Benelux. They have the clients; they lack senior people who can run a storefront without supervision. DACH is a weak fit: freelance and B2B contracting there carries heavy bureaucracy.
+**What backs it:** senior or lead engineer who owns a commerce storefront end to end, including the integrations most frontend contractors won't touch: checkout, payments, loyalty, CRM/Salesforce sync. Shipped-not-ticketed, 11 years at one company and a team-lead exit as proof of reliability.
+
+**Who buys, and how they are reached:**
+
+- Agencies that post contract or freelance roles publicly. Reached by applying through the posting. The pipeline flags these; no cold outreach needed. How common this is in the target agencies is unknown; one seed (Red Badger) accounts for 16 of 19 contract-flagged postings so far.
+- Agencies on the commercetools, Salesforce Commerce and SCAYLE partner lists, US first, then UK, Nordics, Benelux. Reached by referral where one exists, otherwise by direct outreach to a named engineering lead. DACH last.
 - Mid-size retailers with headless storefronts and an in-house team of 3–10, hiring contract to fill a gap.
-- Your current agency, kept but as one of two.
+- Referrals from the current agency's network and from Studion alumni. The first contract came this way. Whether it is the highest-reply path is unmeasured; the reply tracking in SPEC-v2 row 6 measures it.
 
-**Rate:** €550–650/day. UK Nuxt contract medians support this; the lead/architect framing is what gets the top of the band. Don't go below €500 for anyone except the current agency during transition.
+**Pricing reference:** UK Nuxt contract medians run £545/day with architects at £600–660; that is a UK-based rate, not a measured rate for remote B2B from Croatia. Use it to price the fixed products, and let the first three quotes correct it.
 
-**Salesforce:** mention Loyalty Management, Apex and payment integrations on the CV; they open doors at commerce agencies serving Salesforce clients. Don't pursue the certification unless a specific client asks. The rate premium for Salesforce developers has shrunk and the time is better spent on Phase 2.
+**Salesforce:** mention Loyalty Management, Apex and payment integrations on the CV; they open doors at commerce agencies serving Salesforce clients. Don't pursue the certification unless a specific client asks.
 
-**Employment offer:** if it becomes concrete, treat it as Phase 1 solved, provided the contract lets you keep the company and bill Phase 2 work. If it forbids that, the offer costs you the upside bet; price that in.
+**Employment offer:** if it becomes concrete, it is one more option, taken only if the contract allows the company and the other streams to continue.
 
-## Phase 2: AI coding-agent enablement for engineering teams
+## Stream 2: AI coding-agent enablement for engineering teams
 
-This is the one bet where you hold something scarce today: a working, hardened agent setup (sandboxed containers, secrets via `op run`, cross-tool AGENTS.md/CLAUDE.md, controlled sub-phases instead of opaque subagents), plus 13 years of knowing what breaks in real teams. Most people selling this have one of the two.
+Added alongside Stream 1, not after it. This is the one stream where you hold something scarce today: a working, hardened agent setup (sandboxed containers, secrets via `op run`, cross-tool AGENTS.md/CLAUDE.md, controlled sub-phases instead of opaque subagents), plus 13 years of knowing what breaks in real teams. Most people selling this have one of the two.
 
 **Why it clears the bar the other niches didn't:**
 
 - Large and growing: 90% of developers use agents weekly, and most teams are at the "installed, now what" stage.
 - Barrier is real but held by you: credibility comes from production experience with agents in a team, not from a cert. You can't buy it in a weekend, and you already have it.
-- Pays above contracting: comparable offers run $8,000 for two weeks, roughly double your Phase 1 day rate.
+- Pays above contracting: comparable offers run $8,000 for two weeks, roughly double the hourly-equivalent of Stream 1.
 - Fits all four work modes you said yes to: engineering, selling + delivery, product (the playbook and tooling become reusable), automation.
+- Runs in parallel with Stream 1 and the current contract; it does not wait for either.
 
-**Who buys:** engineering teams of 5–40 that already pay for Claude Code or Cursor and aren't getting the lift. Three sources you can reach fast: the agencies from Phase 1 (same contacts, different offer), their retail clients' in-house teams, and Croatian and regional software companies where you sell in your own language with no Western competitor.
+**Who buys:** engineering teams of 5–40 that already pay for Claude Code or Cursor and aren't getting the lift. Three sources you can reach fast: the agencies from Stream 1 (same contacts, different offer), their retail clients' in-house teams, and Croatian and regional software companies where you sell in your own language with no Western competitor.
 
 **Offer, three steps:**
 
@@ -70,46 +91,47 @@ This is the one bet where you hold something scarce today: a working, hardened a
 
 ## Dropped or parked
 
-Four options were on the table. Three go, for reasons that hold regardless of runway.
+Four options were on the table. Three go; the reasons do not depend on cash pressure.
 
 | Option | Decision | Why |
 | --- | --- | --- |
 | Salesforce Loyalty Management niche | Dropped | A handful of job posts; learnable by a generalist in weeks; one implementation isn't a track record |
-| Customs-broker outbound engine | Dropped as a business; tooling kept | Needs trade-compliance domain knowledge you don't have, no client after 6+ weeks, and every n8n builder pitches the same thing. The sending and enrichment setup gets pointed at Phase 1 and 2 lists instead |
-| EU e-invoicing integration | Parked, revisit at the May review | Real mandates, real barrier, but the gap is only on custom B2B stacks after Shopify/Salesforce apps take the easy cases, and you have no proof asset. Becomes attractive only if Phase 2 stalls and Fiskalizacija work lands in your lap locally |
+| Customs-broker outbound engine | Dropped as a business; tooling kept | Needs trade-compliance domain knowledge you don't have, no client after 6+ weeks, and every n8n builder pitches the same thing. The sending and enrichment setup gets pointed at Stream 1 and 2 lists instead |
+| EU e-invoicing integration | Parked, revisit at the May review | Real mandates, real barrier, but the gap is only on custom B2B stacks after Shopify/Salesforce apps take the easy cases, and you have no proof asset. Revisit if Stream 2 produces nothing by May, or if Fiskalizacija work arrives locally; could become a third stream |
 | Salesforce certification | Dropped unless a client requires it | Developer premium has shrunk; architect demand is up but that's a different job and years away |
 
 ## First 30 days
 
-By 2026-12-02: 3 agency calls for Phase 1, the playbook published for Phase 2, and the customs engine formally parked.
+By 2026-12-02: first messages out on both streams, case studies and playbook published, first replies measured per path (apply vs referral vs cold).
 
 **Week 1**
 
-- [ ] Write two one-page case studies: the retail storefront + loyalty build, and the Penn payments platform. One number each (members, transactions, team size, timeline).
-- [ ] Company website: one page, two sections, Phase 1 offer and Phase 2 offer. No more than a day.
-- [ ] Park the customs-broker engine: stop any spend, keep domains and mailboxes for your own outreach.
+- [ ] Two one-page case studies: the retail storefront + loyalty build, and the Penn payments platform. One number each (members, transactions, team size, timeline). Only you have the numbers; the agent drafts the rest.
+- [ ] Company site: one page, the three Stream 1 products and the Stream 2 audit. No more than a day.
+- [ ] Customs-broker engine parked: no spend, domains and mailboxes kept.
 
 **Week 2**
 
-- [ ] Phase 1 list: 40 agencies from commercetools, Salesforce Commerce and SCAYLE partner directories (US first, then UK, Nordics, Benelux), plus 15 in-house retail teams with headless stacks.
-- [ ] Phase 2 playbook, first draft: your setup as it exists, with what failed. Publish on the site by end of week 3.
+- [ ] Pipeline: route contract-flagged engineering postings to an "apply" list, the rest to an "outreach" list. Apply to every contract posting that fits.
+- [ ] Warm list: everyone who could refer you. Current agency's network, Studion alumni, past clients. Add them to `universe/companies.yaml` under the network block.
+- [ ] Stream 2 playbook, first draft: your setup as it exists, with what failed. Publish by end of week 3.
 
 **Weeks 3–4**
 
-- [ ] Phase 1: 40 direct messages. Target: 3 calls.
-- [ ] Phase 2: 15 messages to CTOs/leads at agencies and Croatian software companies, playbook attached, offering the audit. Target: 3 conversations.
-- [ ] Day 30 review against the criteria below.
+- [ ] Stream 1: apply to every flagged contract posting; 20 referral asks; 20 direct messages to named leads at partner-list agencies. Track replies per path.
+- [ ] Stream 2: 15 messages to CTOs/leads at agencies and Croatian software companies, playbook attached, offering the audit.
+- [ ] Day 30 review: replies by path, not a pass/fail.
 
-## Review dates and kill criteria
+## Review dates
 
-These exist so that future-you can't argue a bet is "almost working."
+Beacons, not deadlines. Each check asks whether a stream is alive and what the reply data says, not whether to kill anything. "Alive" is defined per stream by the owner before each review.
 
-| Date | Check | If not met |
+| Date | Check | What to look at |
 | --- | --- | --- |
-| 2026-12-02 | 3 Phase 1 calls booked from 40 contacts; playbook published | Fewer than 2 calls: the list or pitch is wrong, fix before sending more. No playbook: Phase 2 hasn't started; that's the first problem to solve |
-| 2027-02-01 | Second client signed at ≥ €500/day, or employment offer accepted | Widen Phase 1: generic senior full-stack roles, lower floor to €450; DACH only as a last resort given its freelance/B2B bureaucracy. Phase 2 drops to zero hours until this is met |
-| 2027-05-01 | At least one paid Phase 2 audit | Kill Phase 2 as a service line. Un-park e-invoicing or pick a new upside bet with the same test |
-| 2027-09-01 | Phase 2 revenue ≥ 30% of total, or one retainer | Phase 2 is a side income, not a business; stop investing beyond retainer maintenance |
+| 2026-12-02 | Messages out on both streams; replies per path | Which path (apply, referral, cold) replies at all. Rebalance the next 40 toward it. December is slow in US/UK; don't read silence as rejection |
+| 2027-02-01 | One Stream 1 conversation that reached pricing, on any product | If none: find out which failed, the offer, the list, or the path, from the per-path reply data. Try the fixed-month product on the current agency as a test |
+| 2027-05-01 | One paid Stream 2 audit, or a clear no from five CTOs | If five said no, the playbook or the price is wrong; revise, don't kill |
+| 2027-09-01 | Number of streams that paid something in the last 6 months | One: find out why the others produced nothing before adding a fourth. The threshold for "alive" per stream is the owner's, set before the review, not after |
 
 ## Truism audit
 
@@ -117,11 +139,13 @@ Two claims carry the plan: that your agent setup is a scarce, sellable asset, an
 
 | Claim | Verdict | Why |
 | --- | --- | --- |
-| Cash first with under 3 months runway | Obvious, but it reordered everything | Previous versions put the niche first; that was wrong for your situation |
 | Senior rates up, junior rates down | Supported by several 2026 sources | All are vendor or marketplace blogs with an interest in the story; direction is consistent across them, magnitude unknown |
 | Your agent setup is scarce | Plausible, untested | Competitors with a public playbook and team experience exist (the $8k Contra offer). Yours is better only if the playbook shows depth they don't |
 | Enablement pays double contracting | One data point | $8,000 / 2 weeks is one listing by one person; it proves the price is sayable, not that it's paid often |
 | 12–24 month window | Guess | Could be shorter if vendors productize governance; could be longer if tools keep changing monthly |
 | Agencies as buyers for both phases | Useful | Same contacts, two offers, halves the outreach cost |
-| Croatian market for Phase 2 | Untested | Lower rates, but zero Western competition in the local language; worth 5 of the 15 messages |
-| Kill criteria | The only part that constrains you | Specific, dated, cheap to check |
+| Croatian market for Stream 2 | Untested | Lower rates, but zero Western competition in the local language; worth 5 of the 15 messages |
+| Review dates | Beacons, not kill switches | Revised 2026-11-03; a date that kills a stream contradicts the additive frame |
+| "Cash first" | Dropped | Rested on a runway assumption that was wrong; the base contract is stable |
+| Cold outreach as the mechanism | Narrowed | Public contract postings and referrals are mechanisms too; reply rate per path decides, not an assumption |
+| Either-or framings | Wrong by default | Niche vs generalist, hourly vs fixed, cold vs referral: all "both" under the additive frame |
