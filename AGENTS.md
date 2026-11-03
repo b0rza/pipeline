@@ -18,9 +18,9 @@ This repo is a nightly signal pipeline: it finds companies worth contacting, dra
 4. **Rate limits are not optional.** 1 req/s per host, backoff on 429/5xx, 24h skip after 3 failures. Real User-Agent naming the company and a contact URL. Respect robots.txt on the Playwright path.
 5. **Rubric edits must pass evals.** Change `rubrics/*.md` only together with a passing `evals/run.ts`. If evals move more than 10% of labeled postings across bands, stop and report; don't tune the eval set to pass.
 6. **Idempotent runs.** Everything keyed by content hash. Re-running the same day must produce no new rows.
-7. **One signal per company per run.** `core/group.ts` collapses postings. Never emit per-posting drafts.
-9. **Two lists, not one.** Contract/freelance engineering postings go to `apply`; everything else to `outreach`. Don't draft a pitch for a posting the owner should apply to.
+7. **One signal per company per run.** `core/filter.ts` collapses postings. Never emit per-posting drafts.
 8. **Secrets via `op run`.** Never write a token into a file in this repo, including `.env.example` with real values.
+9. **Two lists, not one.** Contract/freelance engineering postings go to `apply`; everything else to `outreach`. Don't draft a pitch for a posting the owner should apply to.
 
 ## Conventions
 
