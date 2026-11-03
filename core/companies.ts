@@ -20,6 +20,7 @@ const entry = z.object({
   storefront: z.string().nullish(),
   careers_url: z.string().nullish(),
   status: z.enum(['active', 'paused', 'watch']).default('active'),
+  warm: z.boolean().default(false),
 });
 
 export function loadCompanies(path = process.env.COMPANIES_FILE ?? 'universe/companies.yaml'): Company[] {
@@ -34,17 +35,18 @@ export function loadCompanies(path = process.env.COMPANIES_FILE ?? 'universe/com
     ats: e.ats?.slug ? { vendor: e.ats.vendor, slug: e.ats.slug } : null,
     storefront: e.storefront ?? null,
     status: e.status,
+    warm: e.warm,
   }));
 }
 
 export function upsertCompanies(db: DatabaseSync, companies: Company[]): void {
   const stmt = db.prepare(`
-    insert into companies (id, name, domain, country, phases, ats_vendor, ats_slug, storefront_url, source, status)
-    values (:id, :name, :domain, :country, :phases, :ats_vendor, :ats_slug, :storefront_url, :source, :status)
+    insert into companies (id, name, domain, country, phases, ats_vendor, ats_slug, storefront_url, source, status, warm)
+    values (:id, :name, :domain, :country, :phases, :ats_vendor, :ats_slug, :storefront_url, :source, :status, :warm)
     on conflict(id) do update set
       name = excluded.name, domain = excluded.domain, country = excluded.country, phases = excluded.phases,
       ats_vendor = excluded.ats_vendor, ats_slug = excluded.ats_slug, storefront_url = excluded.storefront_url,
-      source = excluded.source, status = excluded.status`);
+      source = excluded.source, status = excluded.status, warm = excluded.warm`);
   for (const c of companies) {
     stmt.run({
       id: c.id,
@@ -57,6 +59,7 @@ export function upsertCompanies(db: DatabaseSync, companies: Company[]): void {
       storefront_url: c.storefront,
       source: c.source,
       status: c.status,
+      warm: c.warm ? 1 : 0,
     });
   }
 }

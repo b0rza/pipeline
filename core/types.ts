@@ -8,6 +8,7 @@ export interface Company {
   ats: { vendor: string; slug: string } | null;
   storefront: string | null;
   status: 'active' | 'paused' | 'watch';
+  warm: boolean;
 }
 
 export interface NormalizedPosting {

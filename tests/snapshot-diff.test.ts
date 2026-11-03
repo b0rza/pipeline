@@ -8,7 +8,7 @@ import type { Company, NormalizedPosting } from '../core/types.ts';
 
 const company: Company = {
   id: 'acme', name: 'Acme Digital', domain: 'acme.test', country: 'GB', phases: ['p1'],
-  source: 'test', ats: { vendor: 'greenhouse', slug: 'acme' }, storefront: null, status: 'active',
+  source: 'test', ats: { vendor: 'greenhouse', slug: 'acme' }, storefront: null, status: 'active', warm: false,
 };
 
 const posting = (external_id: string, title: string, body: string): NormalizedPosting => ({

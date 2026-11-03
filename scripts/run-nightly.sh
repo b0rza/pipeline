@@ -18,7 +18,7 @@ else
   echo "stage 3: not built yet"
 fi
 
-if [ -f core/filter.ts ] && [ -f .env.op ]; then
+if [ -f core/extract.ts ] && [ -f .env.op ]; then
   echo "[$RUN_DATE] stage 4-6: extract, score, draft (headless, no network)"
   op run --env-file=.env.op -- \
     claude -p "$(cat prompts/extract-and-score.md)" \
@@ -27,7 +27,7 @@ if [ -f core/filter.ts ] && [ -f .env.op ]; then
       --max-turns 40 \
       > "logs/agent-$RUN_DATE.json"
 else
-  echo "stage 4-6: not built yet"
+  echo "stage 4-6: deferred (SPEC-v2 Later)"
 fi
 
 echo "[$RUN_DATE] stage 7: publish"

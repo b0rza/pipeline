@@ -1,7 +1,13 @@
--- Signal pipeline v1. See docs/SPEC.md "Data model".
--- Edited in place until the first real run. After that, schema changes go to
--- numbered files in state/migrations/; `create table if not exists` won't add columns.
+-- Signal pipeline. See docs/SPEC.md "Data model" and docs/SPEC-v2.md.
+-- This file is the shape of a fresh DB. Changes to an existing DB go through numbered
+-- files in state/migrations/ (applied by core/db.ts); `create table if not exists` won't add columns.
+-- Change both together: a fresh DB records every migration as applied without running it.
 pragma journal_mode = wal;
+
+create table if not exists schema_migrations (
+  name text primary key,                   -- filename in state/migrations/
+  applied_at text not null default (datetime('now'))
+);
 
 create table if not exists companies (
   id text primary key,
@@ -18,7 +24,8 @@ create table if not exists companies (
   added_at text not null default (datetime('now')),
   consecutive_failures integer not null default 0,
   last_failed_run text,                    -- run_date of the last counted failure
-  skip_until text                          -- set after 3 consecutive feed failures
+  skip_until text,                         -- set after 3 consecutive feed failures
+  warm integer not null default 0          -- 1 = referral path in the network block
 );
 
 create table if not exists postings (
@@ -38,7 +45,9 @@ create table if not exists postings (
   gone_at text,
   repost_count integer not null default 0,
   reposted_at text,                        -- run_date a gone id last came back
-  raw text                                 -- json
+  raw text,                                -- json
+  route text,                              -- stage 3: apply | outreach | drop
+  route_reason text                        -- keyword that decided it: evergreen, non-engineering, title:contract, body:day rate, perm
 );
 create index if not exists postings_company on postings(company_id);
 create index if not exists postings_gone on postings(gone_at);
@@ -77,14 +86,10 @@ create table if not exists signals (
   id text primary key,                     -- sha256(company_id || run_date)
   company_id text not null references companies(id),
   run_date text not null,
-  phase text not null,                     -- p1 | p2
+  list text not null,                      -- apply | outreach
   kinds text not null,                     -- json array of event kinds
-  ref_ids text not null,                   -- json array of posting/fingerprint ids
-  score integer not null,
-  reasons text not null,                   -- json array of strings
-  draft_subject text,
-  draft_body text,
-  status text not null default 'new',      -- new | notified | sent | skipped | snoozed | replied
+  ref_ids text not null,                   -- json array of posting ids that passed the filter
+  status text not null default 'new',      -- new | notified | applied | sent | skipped | snoozed | replied
   skip_reason text,
   snooze_until text,
   sent_body text,
