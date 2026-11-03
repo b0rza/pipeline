@@ -10,3 +10,5 @@ npm run db:init
 cp .env.op.example .env.op   # fill with op:// refs
 RUN_DATE=$(date +%F) ./scripts/run-nightly.sh
 ```
+
+The digest needs `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` in the environment. `op run --env-file=.env.op` supplies them; `.env.op.example` lists the names, and values never go in the repo. `npm run bot` runs the button handler as a long-running process. `TELEGRAM_DRY_RUN=1 npm run notify` prints the digest instead of sending it.

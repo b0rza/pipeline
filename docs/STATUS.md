@@ -2,7 +2,7 @@
 
 Where the build stands against the build order in SPEC.md. Updated at the end of each working session; the date in the heading is the last update. `git log` is the detailed record, this is the summary.
 
-Last updated: 2026-11-03 (row 1 done)
+Last updated: 2026-11-03 (row 2 built)
 
 ## Build list (SPEC-v2.md, 2026-11-03)
 
@@ -12,9 +12,9 @@ The v1 build order is retired; rows below are SPEC-v2's, ordered by how much the
 | --- | --- | --- | --- |
 | built | Repo, schema, 8 ATS adapters, snapshot + diff, 119 seeds | Done 2026-11-02 | 34 pollable; 301 postings from 29 companies; same-day re-run adds no rows |
 | 1 | Stage 3 filter + apply/outreach route | Done 2026-11-03 | `core/filter.ts`, keyword-only. Run on 2026-11-02 data: 4 apply (Red Badger, Codal, Concord, KPS), 11 outreach, 198 of 301 dropped (33 evergreen, 165 non-engineering). All four Red Badger engineering contract roles on apply; its UX/design contract roles dropped as non-engineering. Second run left the DB byte-identical. Schema now migrates via `state/migrations/` |
-| 2 | Telegram digest with Compose / Applied / Skip / Snooze | Not started | Instantly removed 2026-11-02 |
+| 2 | Telegram digest with Compose / Applied / Skip / Snooze | Built 2026-11-03; live run pending (owner) | `bot/notify.ts`, `bot/server.ts`, `bot/templates.ts`. `npm run notify` sends a header and one message per `new` or due-snoozed signal, warm companies first, contract postings first with their `route_reason`, and marks each `notified` with its message id, so a re-run sends nothing twice. A company with more than one pending signal (a snoozed one now due, a new one today, or one from a night notify did not run) gets only its newest; the older ones are marked `skipped` / `superseded`. `npm run bot` long-polls the button callbacks and edits the original message to show the outcome. Compose replies with the draft and a `mailto:` link in a code block, because Telegram URL buttons reject `mailto:`. Dry run on 2026-11-02 data: header 4 apply, 11 outreach, 198 dropped, then 15 messages with the right buttons; DB byte-identical. `npm test` passes; new tests in `tests/bot.test.ts` cover ordering, mailto encoding, idempotency, snoozed revert and each callback transition. Not yet run against Telegram |
 | 3 | ATS coverage: Workable, Recruitee, SmartRecruiters, Ashby, GoHire, Zoho; re-resolve 79 unknowns | Not started | |
-| 4 | Warm list in companies.yaml (owner) | Not started | Block exists, empty. `warm: true` is accepted by the loader and stored on `companies.warm` since 2026-11-03; the digest does not read it yet |
+| 4 | Warm list in companies.yaml (owner) | Not started | Block exists, empty. `warm: true` is accepted by the loader and stored on `companies.warm` since 2026-11-03; the digest puts `warm` companies first |
 | 5 | Seeds to 200 | Not started | Research leftovers in `universe/_research/` |
 | 6 | Reply tracking CLI + Sunday summary by path | Not started | |
 | later | Extraction/rubrics/evals, drafting, fingerprinting, enrichment API, agency-page diffs, FINA | Deferred | Unlock conditions in SPEC-v2 "Later" |
@@ -22,7 +22,8 @@ The v1 build order is retired; rows below are SPEC-v2's, ordered by how much the
 
 ## Open on the owner
 
-- Remove `INSTANTLY_API_KEY` from `.env.op.example` and commit the file (the agent sandbox cannot read `*.env*` files).
+- Create the bot with BotFather and put the token at `op://Pipeline/telegram-bot/credential`. Get the chat id (message the bot once, then read `getUpdates`, or use `@userinfobot`) and put it at `op://Pipeline/telegram-bot/chat_id`.
+- Run `op run --env-file=.env.op -- npm run bot` as a long-running service on the Coolify box. Then send one real digest and press each button once to confirm the edits land.
 - Write the two case-study numbers (members, transactions, team size, timeline) somewhere the agent can read; it drafts the rest.
 - Read PLAN.md "The additive frame" once; it is the rule every other doc now follows.
 - Add network companies (past clients, current agency's clients, Studion alumni) under the marked block at the end of `universe/companies.yaml`.
@@ -30,7 +31,9 @@ The v1 build order is retired; rows below are SPEC-v2's, ordered by how much the
 
 ## Known gaps
 
-- Filter routing, for row 2 and for Skip-reason tuning: an `apply` signal carries the company's permanent postings too (Red Badger: 4 contract of 14), so the digest should list contract postings first or alone. Concord "Principal Software Engineer" ($75–85/hr W-2) stays `outreach` because no contract phrase matches; "Project Manager – AI-enabled Software Delivery" and "Business Process Architect" pass the engineering check on "software"/"architect"; "QA Lead Cypress", "Data Modeler", "Technical Consultant" and Domaine "Mirakl Dropship Configuration Lead (Contract)" drop as non-engineering. Personio's `raw.employment_type` is not used yet.
+- Compose is a callback button that replies with the draft, not a one-tap URL button. Telegram inline URL buttons accept only HTTP(S) and `tg://`, so a `mailto:` button is rejected. One-tap Compose on the phone would need a small HTTPS redirect page, which the `BOT_PUBLIC_URL` placeholder in `.env.op.example` would serve. Not built.
+- The bot has not been run against Telegram; the sandbox has no token. `parse_mode` HTML, 429 handling and message edits are untested live.
+- Filter routing, for row 2 and for Skip-reason tuning: an `apply` signal carries the company's permanent postings too (Red Badger: 4 contract of 14); the digest lists contract postings first, tagged with their `route_reason`. Concord "Principal Software Engineer" ($75–85/hr W-2) stays `outreach` because no contract phrase matches; "Project Manager – AI-enabled Software Delivery" and "Business Process Architect" pass the engineering check on "software"/"architect"; "QA Lead Cypress", "Data Modeler", "Technical Consultant" and Domaine "Mirakl Dropship Configuration Lead (Contract)" drop as non-engineering. Personio's `raw.employment_type` is not used yet.
 - Naming: `companies.phases` and the YAML `phases: [p1, p2]` predate the additive frame. They are tags for which stream a seed serves, not gates; PLAN.md now says Stream 1 / Stream 2. Rename when something else touches the loader.
 - Seed coverage: 34 of 119 seeds are polled (11 Teamtailor, 7 Personio, 5 JazzHR, 4 Greenhouse, 3 Rippling, 2 BambooHR, 2 Breezy). 79 have `unknown` ATS, mostly in-house job pages or plain forms; 4 are on vendors in SPEC-v2 row 3, and 2 on GoHire and Zoho Recruit, which have no adapters. No seed uses Lever.
 - US coverage: 15 of the 59 US agencies are polled (3 Greenhouse, 5 JazzHR, 3 Rippling, 2 BambooHR, 2 Breezy). JazzHR, BambooHR, Breezy and Rippling adapters were added on 2026-11-02. Two same-day runs gave 45 new postings from 9 US companies, and the second run added no rows. Not covered: First Pier (GoHire) and Ziffity (Zoho Recruit).

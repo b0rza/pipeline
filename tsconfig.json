@@ -6,7 +6,8 @@
     "strict": true,
     "noEmit": true,
     "allowImportingTsExtensions": true,
+    "skipLibCheck": true,
     "types": ["node"]
   },
-  "include": ["core/**/*.ts", "adapters/**/*.ts", "scripts/**/*.ts", "tests/**/*.ts"]
+  "include": ["core/**/*.ts", "adapters/**/*.ts", "scripts/**/*.ts", "bot/**/*.ts", "tests/**/*.ts"]
 }
