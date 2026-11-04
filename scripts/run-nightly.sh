@@ -40,8 +40,9 @@ else
   git add out state/pipeline.sqlite
   git diff --cached --quiet || git commit -qm "data: nightly $RUN_DATE"
 fi
-if [ -f bot/notify.ts ]; then
+if [ -f .env.op ]; then
   op run --env-file=.env.op -- npm run -s notify
 else
-  echo "stage 7: notify not built yet"
+  echo "stage 7: no .env.op, printing the digest instead of sending it"
+  TELEGRAM_DRY_RUN=1 npm run -s notify
 fi
