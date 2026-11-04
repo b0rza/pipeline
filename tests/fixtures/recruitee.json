@@ -1,0 +1,314 @@
+{
+  "offers": [
+    {
+      "position": 28,
+      "mailbox_email": "job.g24vs@youwe.recruitee.com",
+      "postal_code": "01021",
+      "locations_question_type": "multiple_choice",
+      "max_hours": null,
+      "cover_image": null,
+      "options_cover_letter": "optional",
+      "careers_url": "https://careers.youweagency.com/o/senior-financial-controller",
+      "department": "Finance",
+      "on_site": false,
+      "max_hours_per_week": null,
+      "city": "Kyiv",
+      "close_at": null,
+      "created_at": "2026-10-19 11:33:54 UTC",
+      "locations_question_required": true,
+      "min_hours": null,
+      "options_title": "off",
+      "location_question_visible": false,
+      "tags": [
+        "Senior"
+      ],
+      "translations": {
+        "en": {
+          "description": "<p class=\"MsoNormal\"><span style=\"color:#FFFFFF\">At Youwe, finance is where accuracy meets impact. As a Financial Controller for Youwe Ukraine, you take full ownership of our Ukrainian finance function, from accounting, payroll and tax to reporting, internal controls and audits. Working closely with our international Finance team in Rotterdam and Leeds, you make sure our numbers are right, our processes are compliant, and our finance setup keeps getting smarter.</span></p><p style=\"min-height: 1.7em;\"></p><h4><strong><em>Key Responsibilities</em></strong></h4><ul><li><p class=\"my-2 [&+p]:mt-4 [&_strong:has(+br)]:inline-block [&_strong:has(+br)]:align-top\">Take end-to-end ownership of accounting for Youwe Ukraine, including bookkeeping, invoicing, supplier administration and fixed assets</p>",
+          "title": "Senior Financial Controller",
+          "highlight": null,
+          "sharing_image": null,
+          "requirements": null,
+          "sharing_title": "Senior Financial Controller",
+          "sharing_description": "At Youwe, finance is where accuracy meets impact. As a Financial Controller for Youwe Ukraine, you take full ownership of our Ukrainian finance function, from accounting, payroll and tax to reporting,",
+          "locations_question": "What is your preferred work location?"
+        }
+      },
+      "guid": "g24vs",
+      "dynamic_fields": [],
+      "locations": [
+        {
+          "id": 273366,
+          "name": "Kyiv",
+          "state": "Kyiv",
+          "country": "Ukraine",
+          "city": "Kyiv",
+          "translations": {
+            "en": {
+              "name": "Kyiv",
+              "city": "Kyiv",
+              "postal_code": "01021",
+              "street": "Klovs'kyi descent 7a",
+              "note": "Kyiv location is fully remote"
+            }
+          },
+          "country_code": "UA",
+          "postal_code": "01021",
+          "state_code": "30",
+          "street": "Klovs'kyi descent 7a",
+          "note": "Kyiv location is fully remote"
+        }
+      ],
+      "locations_question": "What is your preferred work location?",
+      "country": "Ukraine",
+      "options_cv": "required",
+      "min_hours_per_week": null,
+      "description": "<p class=\"MsoNormal\"><span style=\"color:#FFFFFF\">At Youwe, finance is where accuracy meets impact. As a Financial Controller for Youwe Ukraine, you take full ownership of our Ukrainian finance function, from accounting, payroll and tax to reporting, internal controls and audits. Working closely with our international Finance team in Rotterdam and Leeds, you make sure our numbers are right, our processes are compliant, and our finance setup keeps getting smarter.</span></p><p style=\"min-height: 1.7em;\"></p><h4><strong><em>Key Responsibilities</em></strong></h4><ul><li><p class=\"my-2 [&+p]:mt-4 [&_strong:has(+br)]:inline-block [&_strong:has(+br)]:align-top\">Take end-to-end ownership of accounting for Youwe Ukraine, including bookkeeping, invoicing, supplier administration and fixed assets</p>",
+      "experience_code": "experienced",
+      "slug": "senior-financial-controller",
+      "published_at": "2026-10-19 12:06:39 UTC",
+      "category_code": "finance",
+      "sharing_description": "At Youwe, finance is where accuracy meets impact. As a Financial Controller for Youwe Ukraine, you take full ownership of our Ukrainian finance function, from accounting, payroll and tax to reporting,",
+      "remote": true,
+      "options_phone": "required",
+      "sharing_image": null,
+      "options_photo": "off",
+      "open_questions": [
+        {
+          "id": 4445973,
+          "position": 1,
+          "options": {},
+          "required": true,
+          "body": "Are you currently based in Ukraine?",
+          "kind": "boolean",
+          "translations": {
+            "en": {
+              "body": "Are you currently based in Ukraine?"
+            }
+          },
+          "open_question_options": []
+        },
+        {
+          "id": 4445991,
+          "position": 2,
+          "options": {},
+          "required": true,
+          "body": "Do you have experience working in international companies?",
+          "kind": "boolean",
+          "translations": {
+            "en": {
+              "body": "Do you have experience working in international companies?"
+            }
+          },
+          "open_question_options": []
+        },
+        {
+          "id": 4445994,
+          "position": 3,
+          "options": {},
+          "required": true,
+          "body": "Do you have experience working in English-speaking environment?",
+          "kind": "boolean",
+          "translations": {
+            "en": {
+              "body": "Do you have experience working in English-speaking environment?"
+            }
+          },
+          "open_question_options": []
+        },
+        {
+          "id": 4446002,
+          "position": 4,
+          "options": {
+            "currency": "USD"
+          },
+          "required": false,
+          "body": "What are your salary expectations?",
+          "kind": "salary",
+          "translations": {
+            "en": {
+              "body": "What are your salary expectations?"
+            }
+          },
+          "open_question_options": []
+        }
+      ],
+      "company_name": "Youwe",
+      "updated_at": "2026-10-26 09:23:36 UTC",
+      "title": "Senior Financial Controller",
+      "country_code": "UA",
+      "id": 2788939,
+      "employment_type_code": "fulltime_permanent",
+      "highlight": null,
+      "state_name": "Kyiv",
+      "careers_apply_url": "https://careers.youweagency.com/o/senior-financial-controller/c/new",
+      "education_code": "bachelor_degree",
+      "options_salutation": "off",
+      "state_code": "30",
+      "hybrid": false,
+      "status": "published",
+      "location": "Remote job",
+      "requirements": null,
+      "sharing_title": "Senior Financial Controller",
+      "salary": {
+        "max": null,
+        "min": null,
+        "period": null,
+        "currency": null
+      }
+    },
+    {
+      "position": 25,
+      "mailbox_email": "job.y5rnv@youwe.recruitee.com",
+      "postal_code": "LS18 4JR",
+      "locations_question_type": "multiple_choice",
+      "max_hours": null,
+      "cover_image": null,
+      "options_cover_letter": "optional",
+      "careers_url": "https://careers.youweagency.com/o/project-manager",
+      "department": "Operations",
+      "on_site": false,
+      "max_hours_per_week": null,
+      "city": "Leeds",
+      "close_at": null,
+      "created_at": "2026-09-29 12:54:12 UTC",
+      "locations_question_required": true,
+      "min_hours": null,
+      "options_title": "off",
+      "location_question_visible": false,
+      "tags": [],
+      "translations": {
+        "en": {
+          "description": "<p style=\"text-align:start;\">At Youwe, we deliver digital platforms that connect technology, data, and business processes for organizations around the world. As a Project Manager, you lead complex projects from kick-off to go-live, ensuring clients, stakeholders, and delivery teams stay aligned throughout every stage. You also keep your projects on track and tied to real business results, and use AI tools to make your own day-to-day and the project delivery<span style=\"color:#000000\"> </span>more efficient.<span style=\"color:#FFFFFF\"> </span>Working closely with consultants, designers, developers, and clients, you coordinate planning, communication, and execution to deliver high-quality digital solutions on time and within scope.</p>",
+          "title": "Project Manager",
+          "highlight": null,
+          "sharing_image": null,
+          "requirements": "<ul><li><p>4-6 years of experience as a Project Manager, Delivery Manager, or Product Owner;</p></li><li><p>Experience within a digital agency or complex digital environments is a plus;</p></li><li><p>Strong in stakeholder management and decision-making;</p></li><li><p>Experienced in project and workflow software such as Jira and Confluence;</p></li><li><p>Agile/Scrum experience (pragmatically applied);</p></li><li><p>Comfortable using AI-enabled project and knowledge tools in day-to-day delivery.</p></li></ul><h4 style=\"text-align:start;\"><strong>Nice-to-haves</strong></h4><ul><li><p>Experience with international clients;</p></li><li><p>Knowledge of digital platforms and enterprise solutions;</p>",
+          "sharing_title": "Project Manager",
+          "sharing_description": "At Youwe, we deliver digital platforms that connect technology, data, and business processes for organizations around the world. As a Project Manager, you lead complex projects from kick-off to go-liv",
+          "locations_question": "What is your preferred work location?"
+        }
+      },
+      "guid": "y5rnv",
+      "dynamic_fields": [],
+      "locations": [
+        {
+          "id": 269565,
+          "name": "Leeds",
+          "state": "Leeds",
+          "country": "United Kingdom",
+          "city": "Leeds",
+          "translations": {
+            "en": {
+              "name": "Leeds",
+              "city": "Leeds",
+              "postal_code": "LS18 4JR",
+              "street": "Suite 5, Jason House, Kerry Hill, Horsforth",
+              "note": null
+            }
+          },
+          "country_code": "GB",
+          "postal_code": "LS18 4JR",
+          "state_code": "LDS",
+          "street": "Suite 5, Jason House, Kerry Hill, Horsforth",
+          "note": null
+        }
+      ],
+      "locations_question": "What is your preferred work location?",
+      "country": "United Kingdom",
+      "options_cv": "required",
+      "min_hours_per_week": null,
+      "description": "<p style=\"text-align:start;\">At Youwe, we deliver digital platforms that connect technology, data, and business processes for organizations around the world. As a Project Manager, you lead complex projects from kick-off to go-live, ensuring clients, stakeholders, and delivery teams stay aligned throughout every stage. You also keep your projects on track and tied to real business results, and use AI tools to make your own day-to-day and the project delivery<span style=\"color:#000000\"> </span>more efficient.<span style=\"color:#FFFFFF\"> </span>Working closely with consultants, designers, developers, and clients, you coordinate planning, communication, and execution to deliver high-quality digital solutions on time and within scope.</p>",
+      "experience_code": "mid_level",
+      "slug": "project-manager",
+      "published_at": "2026-09-29 12:58:16 UTC",
+      "category_code": "information_technology",
+      "sharing_description": "At Youwe, we deliver digital platforms that connect technology, data, and business processes for organizations around the world. As a Project Manager, you lead complex projects from kick-off to go-liv",
+      "remote": false,
+      "options_phone": "required",
+      "sharing_image": null,
+      "options_photo": "off",
+      "open_questions": [
+        {
+          "id": 4401746,
+          "position": 1,
+          "options": {},
+          "required": true,
+          "body": "Are you currently residing in the UK",
+          "kind": "boolean",
+          "translations": {
+            "en": {
+              "body": "Are you currently residing in the UK"
+            }
+          },
+          "open_question_options": []
+        },
+        {
+          "id": 4401747,
+          "position": 2,
+          "options": {},
+          "required": true,
+          "body": "Do you have the right to work in the UK without a work visa?",
+          "kind": "boolean",
+          "translations": {
+            "en": {
+              "body": "Do you have the right to work in the UK without a work visa?"
+            }
+          },
+          "open_question_options": []
+        },
+        {
+          "id": 4401748,
+          "position": 3,
+          "options": {},
+          "required": false,
+          "body": "Do you hold a Bachelor’s or Master’s degree (or equivalent)?",
+          "kind": "boolean",
+          "translations": {
+            "en": {
+              "body": "Do you hold a Bachelor’s or Master’s degree (or equivalent)?"
+            }
+          },
+          "open_question_options": []
+        },
+        {
+          "id": 4401749,
+          "position": 4,
+          "options": {},
+          "required": false,
+          "body": "What are your Salary Expectations",
+          "kind": "string",
+          "translations": {
+            "en": {
+              "body": "What are your Salary Expectations"
+            }
+          },
+          "open_question_options": []
+        }
+      ],
+      "company_name": "Youwe",
+      "updated_at": "2026-10-09 06:34:17 UTC",
+      "title": "Project Manager",
+      "country_code": "GB",
+      "id": 2763353,
+      "employment_type_code": "fulltime_permanent",
+      "highlight": null,
+      "state_name": "Leeds",
+      "careers_apply_url": "https://careers.youweagency.com/o/project-manager/c/new",
+      "education_code": "bachelor_degree",
+      "options_salutation": "off",
+      "state_code": "LDS",
+      "hybrid": true,
+      "status": "published",
+      "location": "Leeds, Leeds, United Kingdom",
+      "requirements": "<ul><li><p>4-6 years of experience as a Project Manager, Delivery Manager, or Product Owner;</p></li><li><p>Experience within a digital agency or complex digital environments is a plus;</p></li><li><p>Strong in stakeholder management and decision-making;</p></li><li><p>Experienced in project and workflow software such as Jira and Confluence;</p></li><li><p>Agile/Scrum experience (pragmatically applied);</p></li><li><p>Comfortable using AI-enabled project and knowledge tools in day-to-day delivery.</p></li></ul><h4 style=\"text-align:start;\"><strong>Nice-to-haves</strong></h4><ul><li><p>Experience with international clients;</p></li><li><p>Knowledge of digital platforms and enterprise solutions;</p>",
+      "sharing_title": "Project Manager",
+      "salary": {
+        "max": null,
+        "min": null,
+        "period": null,
+        "currency": null
+      }
+    }
+  ]
+}

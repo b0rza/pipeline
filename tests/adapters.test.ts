@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
+import { ashby } from '../adapters/ats/ashby.ts';
 import { bamboohr } from '../adapters/ats/bamboohr.ts';
 import { breezy } from '../adapters/ats/breezy.ts';
 import { greenhouse } from '../adapters/ats/greenhouse.ts';
@@ -8,8 +9,12 @@ import { fetchPostings } from '../adapters/ats/index.ts';
 import { jazzhr } from '../adapters/ats/jazzhr.ts';
 import { lever } from '../adapters/ats/lever.ts';
 import { personio } from '../adapters/ats/personio.ts';
+import { recruitee } from '../adapters/ats/recruitee.ts';
 import { rippling } from '../adapters/ats/rippling.ts';
+import { smartrecruiters } from '../adapters/ats/smartrecruiters.ts';
 import { teamtailor } from '../adapters/ats/teamtailor.ts';
+import { workable } from '../adapters/ats/workable.ts';
+import { zoho } from '../adapters/ats/zoho.ts';
 import { htmlToText } from '../core/html.ts';
 import type { Company, NormalizedPosting } from '../core/types.ts';
 
@@ -204,6 +209,118 @@ test('fetchPostings fetches a detail per listed posting', async () => {
   } finally {
     globalThis.fetch = realFetch;
   }
+});
+
+test('workable collapses per-location rows by shortcode', () => {
+  const postings = workable.parse(fixture('workable.json'), 'application/json', 'tryzensglobal');
+  assertWellFormed(postings, 2);
+  assert.deepEqual(postings.map((p) => [p.external_id, p.location]), [
+    ['082DFE38B2', 'Melbourne, Sydney'], ['C3939D0217', 'Thiruvananthapuram'],
+  ]);
+  assert.equal(postings[0].url, 'https://apply.workable.com/tryzensglobal/j/082DFE38B2/');
+  assert.equal(postings[0].posted_at, '2026-08-20T00:00:00.000Z');
+  assert.deepEqual(postings[1].raw, {
+    employment_type: 'Contract', telecommuting: false, department: 'Project Management', created_at: '2026-08-03',
+  });
+  assert.throws(() => workable.parse('Not Found', 'text/plain', 'dead'), /not a JSON feed/);
+});
+
+test('recruitee converts its UTC date format and appends requirements', () => {
+  const postings = recruitee.parse(fixture('recruitee.json'), 'application/json; charset=utf-8', 'youwe');
+  assertWellFormed(postings, 2);
+  assert.equal(postings[0].external_id, '2788939');
+  assert.equal(postings[0].posted_at, '2026-10-19T12:06:39.000Z');
+  assert.equal(postings[0].url, 'https://careers.youweagency.com/o/senior-financial-controller');
+  assert.ok(postings[1].body.includes('and within scope.\n\n4-6 years of experience as a Project Manager'), 'requirements after a blank line');
+  assert.deepEqual(postings[1].raw, {
+    employment_type_code: 'fulltime_permanent', remote: false, hybrid: true, on_site: false, department: 'Operations', tags: [],
+  });
+  assert.deepEqual(recruitee.parse('{"offers":[]}', 'application/json', 'youweconnectit'), []);
+  assert.equal(recruitee.feedUrl('youwe'), 'https://youwe.recruitee.com/api/offers/');
+  assert.equal(recruitee.feedUrl('careers.youweagency.com'), 'https://careers.youweagency.com/api/offers/');
+});
+
+test('smartrecruiters list, detail and next page', () => {
+  const list = smartrecruiters.parse(fixture('smartrecruiters-list.json'), 'application/json', 'smartrecruiters');
+  assert.deepEqual(list.map((p) => [p.external_id, p.url, p.body]), [
+    ['744000158320111', 'https://jobs.smartrecruiters.com/smartrecruiters/744000158320111', ''],
+    ['744000158015889', 'https://jobs.smartrecruiters.com/smartrecruiters/744000158015889', ''],
+  ]);
+  assert.equal(smartrecruiters.detail!.url(list[0], 'smartrecruiters'),
+    'https://api.smartrecruiters.com/v1/companies/smartrecruiters/postings/744000158320111');
+  const job = smartrecruiters.detail!.parse(fixture('smartrecruiters-detail.json'), 'application/json', list[0]);
+  assertWellFormed([job], 1);
+  assert.equal(job.url, 'https://jobs.smartrecruiters.com/smartrecruiters/744000158320111-senior-lead-engineering-operations-manager');
+  assert.ok(job.body.startsWith('SmartRecruiters is the Recruiting AI Company'), 'company description first');
+  assert.ok(!JSON.stringify(job.raw).includes('creator'));
+  assert.throws(() => smartrecruiters.detail!.parse(fixture('smartrecruiters-detail.json'), 'application/json', list[1]), /has id/);
+
+  const feed = smartrecruiters.feedUrl('BoschGroup');
+  const page = (offset: number) => JSON.stringify({ offset, limit: 100, totalFound: 250, content: [] });
+  assert.equal(smartrecruiters.next!(page(0), 'application/json', feed),
+    'https://api.smartrecruiters.com/v1/companies/BoschGroup/postings?limit=100&offset=100');
+  assert.equal(smartrecruiters.next!(page(200), 'application/json', feed), null);
+  assert.equal(smartrecruiters.next!(fixture('smartrecruiters-list.json'), 'application/json', feed), null);
+  assert.deepEqual(smartrecruiters.parse('{"offset":0,"limit":100,"totalFound":0,"content":[]}', 'application/json', 'nobody'), []);
+});
+
+test('fetchPostings follows next pages before fetching details', async () => {
+  const realFetch = globalThis.fetch;
+  const listed = JSON.parse(fixture('smartrecruiters-list.json')) as { content: { id: string }[] };
+  const detail = JSON.parse(fixture('smartrecruiters-detail.json')) as { id: string };
+  const urls: string[] = [];
+  globalThis.fetch = (async (input: string | URL) => {
+    const url = new URL(String(input));
+    urls.push(url.href);
+    const offset = url.searchParams.get('offset');
+    const body = offset === null
+      ? { ...detail, id: url.pathname.split('/').pop() }
+      : { offset: Number(offset), limit: 1, totalFound: 2, content: [listed.content[Number(offset)]] };
+    return new Response(JSON.stringify(body), { headers: { 'content-type': 'application/json' } });
+  }) as typeof fetch;
+  try {
+    const company = { id: 'smartrecruiters', ats: { vendor: 'smartrecruiters', slug: 'smartrecruiters' } } as Company;
+    const postings = await fetchPostings(company);
+    const api = 'https://api.smartrecruiters.com/v1/companies/smartrecruiters/postings';
+    assert.deepEqual(urls, [
+      `${api}?limit=100&offset=0`, `${api}?limit=100&offset=1`, `${api}/744000158320111`, `${api}/744000158015889`,
+    ]);
+    assertWellFormed(postings, 2);
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+});
+
+test('ashby drops unlisted jobs', () => {
+  const postings = ashby.parse(fixture('ashby.json'), 'application/json; charset=utf-8', 'ashby');
+  assertWellFormed(postings, 2);
+  assert.ok(!postings.some((p) => p.external_id === JSON.parse(fixture('ashby.json')).jobs[2].id));
+  assert.equal(postings[0].url, 'https://jobs.ashbyhq.com/ashby/7458d4e9-da2e-47bd-98cb-adfda43d42b2');
+  assert.equal(postings[0].posted_at, '2024-03-04T14:29:08.532Z');
+  assert.deepEqual(postings[0].raw, {
+    department: 'Engineering', team: 'EMEA Engineering', employment_type: 'FullTime', remote: true, workplace_type: 'Remote',
+    secondary_locations: ['Spain', 'Italy', 'Germany'], compensation: '€150K – €250K • Offers Equity • Offers Bonus',
+  });
+  assert.throws(() => ashby.parse('Not Found', 'text/plain', 'dead'), /not a JSON feed/);
+});
+
+test('zoho RSS: clean url, US-zone date, location from the prefix', () => {
+  const postings = zoho.parse(fixture('zoho.xml'), 'application/rss+xml;charset=UTF-8', 'ziffity/Ziffity-Job-Opening');
+  assertWellFormed(postings, 2);
+  assert.equal(postings[0].external_id, '301885000010864001');
+  assert.equal(postings[0].url, 'https://ziffity.zohorecruit.com/jobs/Careers/301885000010864001/Account-Executive-of-Sales-Ecommerce-for-US');
+  assert.equal(postings[0].posted_at, '2026-07-02T19:00:00.000Z');
+  assert.equal(postings[0].location, null);
+  assert.equal(postings[1].location, 'Chennai City Corporation, Tamil Nadu, India');
+  assert.equal(postings[1].posted_at, '2026-01-13T17:00:00.000Z');
+  assert.equal(zoho.feedUrl('ziffity/Ziffity-Job-Opening'), 'https://ziffity.zohorecruit.com/jobs/Ziffity-Job-Opening/rss');
+  assert.equal(zoho.feedUrl('acme.zohorecruit.eu/Careers-Portal'), 'https://acme.zohorecruit.eu/jobs/Careers-Portal/rss');
+  assert.throws(() => zoho.feedUrl('ziffity'), /slug must be/);
+});
+
+test('zoho rejects a removed portal and a dead account', () => {
+  assert.throws(() => zoho.parse('Oops! It seems that the joblist has been removed.', 'application/rss+xml', 'ziffity/Careers'), /not an RSS feed/);
+  assert.throws(() => zoho.parse('<html><head></head><body>Page does not exist</body></html>', 'text/html', 'dead/Jobs'), /not an RSS feed/);
 });
 
 test('normalized postings carry no body_html', () => {

@@ -11,6 +11,8 @@ export interface AtsAdapter {
     url(posting: NormalizedPosting, slug: string): string;
     parse(text: string, contentType: string, posting: NormalizedPosting): NormalizedPosting;
   };
+  // For paged feeds: the URL of the page after the one fetched from `url`, or null on the last page. Also pure.
+  next?(text: string, contentType: string, url: string): string | null;
 }
 
 export function toIso(v: string | number | null | undefined): string | null {

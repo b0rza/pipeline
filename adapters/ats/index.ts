@@ -1,24 +1,35 @@
 import { fetchText } from '../../core/http.ts';
 import type { Company, NormalizedPosting } from '../../core/types.ts';
+import { ashby } from './ashby.ts';
 import { bamboohr } from './bamboohr.ts';
 import { breezy } from './breezy.ts';
 import { greenhouse } from './greenhouse.ts';
 import { jazzhr } from './jazzhr.ts';
 import { lever } from './lever.ts';
 import { personio } from './personio.ts';
+import { recruitee } from './recruitee.ts';
 import { rippling } from './rippling.ts';
+import { smartrecruiters } from './smartrecruiters.ts';
 import { teamtailor } from './teamtailor.ts';
 import type { AtsAdapter } from './types.ts';
+import { workable } from './workable.ts';
+import { zoho } from './zoho.ts';
 
 export const adapters: Record<string, AtsAdapter> = {
   greenhouse, lever, personio, teamtailor, jazzhr, bamboohr, breezy, rippling,
+  workable, recruitee, smartrecruiters, ashby, zoho,
 };
 
 export async function fetchPostings(company: Company): Promise<NormalizedPosting[]> {
   const adapter = company.ats && adapters[company.ats.vendor];
   if (!company.ats || !adapter) throw new Error(`${company.id}: no adapter for ${company.ats?.vendor ?? 'missing ats'}`);
-  const res = await fetchText(adapter.feedUrl(company.ats.slug));
-  const postings = adapter.parse(res.text, res.contentType, company.ats.slug);
+  // Paged feeds (adapter.next) are fetched page by page and concatenated; a failed page fails the company.
+  const postings: NormalizedPosting[] = [];
+  for (let url: string | null = adapter.feedUrl(company.ats.slug); url;) {
+    const res = await fetchText(url);
+    postings.push(...adapter.parse(res.text, res.contentType, company.ats.slug));
+    url = adapter.next?.(res.text, res.contentType, url) ?? null;
+  }
   const detail = adapter.detail;
   if (!detail) return postings;
   // One at a time: fetchText queues per host anyway, and a failed detail fails the company like a failed feed,

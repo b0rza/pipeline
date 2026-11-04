@@ -11,7 +11,7 @@ const NOT_SLUGS = new Set(['embed', 'api', 'www', 'app', 'assets', 'cdn', 'stati
 
 interface Found { vendor: string; slug: string; evidence: string }
 
-const hostRules: [RegExp, string, 'path' | 'sub'][] = [
+const hostRules: [RegExp, string, 'path' | 'sub' | 'zoho'][] = [
   [/^(job-)?boards\.greenhouse\.io$/, 'greenhouse', 'path'],
   [/^jobs\.lever\.co$/, 'lever', 'path'],
   [/^jobs\.ashbyhq\.com$/, 'ashby', 'path'],
@@ -20,33 +20,60 @@ const hostRules: [RegExp, string, 'path' | 'sub'][] = [
   [/^[\w-]+\.jobs\.personio\.(de|com)$/, 'personio', 'sub'],
   [/^[\w-]+\.recruitee\.com$/, 'recruitee', 'sub'],
   [/^[\w-]+\.teamtailor\.com$/, 'teamtailor', 'sub'],
+  [/^[\w-]+\.applytojob\.com$/, 'jazzhr', 'sub'],
+  [/^[\w-]+\.bamboohr\.com$/, 'bamboohr', 'sub'],
+  [/^[\w-]+\.breezy\.hr$/, 'breezy', 'sub'],
+  [/^ats\.rippling\.com$/, 'rippling', 'path'],
+  [/^jobs\.gohire\.io$/, 'gohire', 'path'],
+  [/^[\w-]+\.zohorecruit\.(com|eu|in)$/, 'zoho', 'zoho'],
 ];
+
+// A Zoho slug is {account}/{Portal} from /jobs/{Portal}, or {host}/{Portal} off .com (see adapters/ats/zoho.ts).
+// /jobs/Careers/{id}/... is a job page, not a portal.
+function zohoSlug(u: URL): string {
+  const [, jobs, portal, next] = u.pathname.split('/');
+  if (jobs !== 'jobs' || !portal || /^\d+$/.test(next ?? '')) return '';
+  return `${u.hostname.endsWith('.com') ? u.hostname.split('.')[0] : u.hostname}/${portal}`;
+}
 
 // A Teamtailor board on a custom domain shows no slug; its own host is the slug (see adapters/ats/teamtailor.ts).
 const teamtailorCareersite = /teamtailor-cdn\.com\/assets\/careersite-/;
+// Same for a Recruitee board on a custom domain (careers.youweagency.com): its links to {slug}.recruitee.com
+// can name an older, empty board, so the host is the slug.
+const recruiteeCareersite = /window\.recruitee\b|careers\.recruiteecdn\.com\//;
 
+// Rules with two groups join them with '/' (Zoho's account and portal).
 const htmlRules: [RegExp, string][] = [
   [/boards\.greenhouse\.io\/embed\/job_board(?:\/js)?\?for=([\w-]+)/, 'greenhouse'],
   [/(?:job-)?boards\.greenhouse\.io\/([\w-]+)/, 'greenhouse'],
   [/jobs\.lever\.co\/([\w-]+)/, 'lever'],
   [/([\w-]+)\.jobs\.personio\.(?:de|com)/, 'personio'],
   [/([\w-]+)\.recruitee\.com/, 'recruitee'],
+  [/workable\.com\/[^"'\s]*?accounts\/([\w-]+)/, 'workable'],
   [/apply\.workable\.com\/([\w-]+)/, 'workable'],
   [/jobs\.ashbyhq\.com\/([\w-]+)/, 'ashby'],
   [/([\w-]+)\.teamtailor\.com/, 'teamtailor'],
+  [/([\w-]+)\.applytojob\.com/, 'jazzhr'],
+  [/([\w-]+)\.bamboohr\.com/, 'bamboohr'],
+  [/([\w-]+)\.breezy\.hr/, 'breezy'],
+  [/ats\.rippling\.com\/([\w-]+)/, 'rippling'],
+  [/jobs\.gohire\.io\/([\w-]+)/, 'gohire'],
+  [/([\w-]+)\.zohorecruit\.com\/jobs\/(?!Careers\/\d)([\w-]+)/, 'zoho'],
+  [/([\w-]+\.zohorecruit\.(?:eu|in))\/jobs\/(?!Careers\/\d)([\w-]+)/, 'zoho'],
 ];
 
 function detect(finalUrl: string, html: string): Omit<Found, 'evidence'> | null {
   const u = new URL(finalUrl);
   for (const [re, vendor, from] of hostRules) {
     if (!re.test(u.hostname)) continue;
-    const slug = from === 'sub' ? u.hostname.split('.')[0] : u.pathname.split('/')[1];
+    const slug = from === 'sub' ? u.hostname.split('.')[0] : from === 'path' ? u.pathname.split('/')[1] : zohoSlug(u);
     if (slug && !NOT_SLUGS.has(slug)) return { vendor, slug };
   }
   if (teamtailorCareersite.test(html)) return { vendor: 'teamtailor', slug: u.hostname };
+  if (recruiteeCareersite.test(html)) return { vendor: 'recruitee', slug: u.hostname };
   for (const [re, vendor] of htmlRules) {
     for (const m of html.matchAll(new RegExp(re, 'gi'))) {
-      if (!NOT_SLUGS.has(m[1].toLowerCase())) return { vendor, slug: m[1] };
+      if (!NOT_SLUGS.has(m[1].toLowerCase())) return { vendor, slug: m.slice(1).filter(Boolean).join('/') };
     }
   }
   return null;
