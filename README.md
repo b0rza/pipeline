@@ -25,4 +25,4 @@ chmod 600 ~/.config/pipeline/env
 
 ## Overview page
 
-`npm run ui` serves http://127.0.0.1:8787/ (set `PIPELINE_UI_PORT` for another port). The top section is what tonight's digest would send, apply first; below it is every other signal by run date, with its status. Cards carry the same buttons as Telegram (Applied, Skip with a reason, Snooze 7d, Compose as a `mailto:` link) plus Reopen, and write the same statuses. It listens on loopback only and has no login: it is a desk view, not something to expose.
+`npm run ui` serves http://127.0.0.1:8787/ (set `PIPELINE_UI_PORT` for another port). The top section is what tonight's digest would send, apply first; below it is every other signal by run date, with its status. Cards carry the same buttons as Telegram (Applied, Skip with a reason, Snooze 7d, Compose as a `mailto:` link) plus Reopen, and write the same statuses. It listens on loopback only and has no login: it is a desk view, not something to expose. Styling is Pico CSS v2.0.6 (classless, MIT), vendored in `ui/` and served by the page itself, so nothing loads from the network.

@@ -48,7 +48,7 @@ const post = (db: DatabaseSync, id: string, action: string, body?: string) =>
 // Company names of the cards in one section, in page order.
 const section = (html: string, which: 'pending' | 'history') => {
   const [, pending, history] = html.split(/<h2>(?:Pending|History)<\/h2>/);
-  return [...(which === 'pending' ? pending : history).matchAll(/<article class="card" id="s-[0-9a-f]{16}"><div>(?:🔥 warm · )?<b>(.*?)<\/b>/g)]
+  return [...(which === 'pending' ? pending : history).matchAll(/<article id="s-[0-9a-f]{16}"><header>(?:🔥 warm · )?<b>(.*?)<\/b>/g)]
     .map((m) => m[1]);
 };
 
@@ -66,13 +66,13 @@ test('GET / shows the pending header and each company once, apply first', () => 
   const res = get(db);
   assert.equal(res.status, 200);
   assert.equal(res.headers['content-type'], 'text/html; charset=utf-8');
-  assert.match(res.body, /<h2>Pending<\/h2><p>1 apply · 3 outreach · 1 dropped postings<\/p>/);
+  assert.match(res.body, /<\/h1><p>1 apply · 3 outreach · 1 dropped postings<\/p><\/header>/);
   assert.deepEqual(section(res.body, 'pending'), ['zeta', 'warmco', 'alpha', 'beta']);
   assert.deepEqual(section(res.body, 'history'), []);
   assert.match(cardOf(res.body, db, 'zeta'), /<b>APPLY<\/b> · run 2026-11-02/);
   // Contract posting first, with its route tag.
   assert.match(cardOf(res.body, db, 'zeta'),
-    /<li><a href="https:\/\/example.test\/z2">Senior Software Engineer, Contract<\/a> — London <span class="tag">\[title:contract · unknown:GB\]<\/span><\/li><li><a href="https:\/\/example.test\/z1">/);
+    /<li><a href="https:\/\/example.test\/z2">Senior Software Engineer, Contract<\/a> — London <small>\[title:contract · unknown:GB\]<\/small><\/li><li><a href="https:\/\/example.test\/z1">/);
   db.close();
 });
 
@@ -86,15 +86,15 @@ test('apply cards get Applied, outreach cards a mailto Compose link built from t
 
   const outreach = cardOf(html, db, 'alpha');
   assert.doesNotMatch(outreach, /Applied/);
-  const href = outreach.match(/<a href="(mailto:[^"]+)">Compose<\/a>/)?.[1];
+  const href = outreach.match(/<a role="button" href="(mailto:[^"]+)">Compose<\/a>/)?.[1];
   assert.ok(href);
   const [subject, body] = href.replaceAll('&amp;', '&').slice('mailto:?subject='.length).split('&body=');
   assert.equal(decodeURIComponent(subject), composeSubject('alpha'));
   assert.equal(decodeURIComponent(body), composeBody('alpha', ['Frontend Developer']));
 
   for (const c of [apply, outreach]) {
-    assert.match(c, /<select name="reason"><option value="fit">bad fit<\/option>.*<option value="other">other<\/option><\/select><button>Skip<\/button>/);
-    assert.match(c, /<button>Snooze 7d<\/button>/);
+    assert.match(c, /<fieldset role="group"><select name="reason"><option value="fit">bad fit<\/option>.*<option value="other">other<\/option><\/select><button class="secondary outline">Skip<\/button><\/fieldset>/);
+    assert.match(c, /<button class="secondary outline">Snooze 7d<\/button>/);
     assert.doesNotMatch(c, /Reopen/);
   }
   db.close();
@@ -118,11 +118,11 @@ test('POST applied, skip and snooze change the rows as handleCallback does, and 
   assert.deepEqual(status(web, 'beta'), { status: 'snoozed', skip_reason: null, snooze_until: '2026-11-09' });
 
   const html = get(web).body;
-  assert.match(html, /<h2>Pending<\/h2><p>0 apply · 1 outreach · 1 dropped postings<\/p>/);
+  assert.match(html, /<\/h1><p>0 apply · 1 outreach · 1 dropped postings<\/p><\/header>/);
   assert.deepEqual(section(html, 'pending'), ['warmco']);
   assert.deepEqual(section(html, 'history'), ['zeta', 'alpha', 'beta']);
   assert.match(cardOf(html, web, 'alpha'), /<span class="badge b-skipped">skipped<\/span>.*<p class="meta">skipped: bad fit<\/p>/);
-  assert.match(cardOf(html, web, 'alpha'), /<button>Reopen<\/button>/);
+  assert.match(cardOf(html, web, 'alpha'), /<button class="secondary outline">Reopen<\/button>/);
   assert.doesNotMatch(cardOf(html, web, 'alpha'), /Snooze 7d/);
   // Snoozed keeps its buttons and can be reopened.
   assert.match(cardOf(html, web, 'beta'), /<p class="meta">snoozed until 2026-11-09<\/p>/);
@@ -184,6 +184,19 @@ test('bad id, bad reason and unknown routes are rejected', () => {
   assert.equal(handle(db, { method: 'GET', url: '/nothing' }, today).status, 404);
   assert.equal(handle(db, { method: 'POST', url: '/' }, today).status, 404);
   assert.deepEqual(allSignals(db), rows);
+  db.close();
+});
+
+test('GET /pico.css serves the vendored stylesheet the page links, and the page loads nothing else', () => {
+  const db = openDb(':memory:');
+  standard(db);
+  const css = handle(db, { method: 'GET', url: '/pico.css' }, today);
+  assert.equal(css.status, 200);
+  assert.deepEqual(css.headers, { 'content-type': 'text/css', 'cache-control': 'max-age=86400' });
+  assert.match(css.body, /Pico CSS .* v2\.\d+\.\d+/);
+  const html = get(db).body;
+  assert.match(html, /<link rel="stylesheet" href="\/pico.css">/);
+  assert.doesNotMatch(html, /<script|<link[^>]+href="https?:|@import|url\(/);
   db.close();
 });
 

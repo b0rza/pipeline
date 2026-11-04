@@ -1,5 +1,6 @@
 // Local web overview: the pending digest on top, every past signal below, with the same buttons as Telegram.
 // Loopback-only and unauthenticated by design: it is the owner's desk view, not a deployment.
+import { readFileSync } from 'node:fs';
 import { createServer } from 'node:http';
 import type { DatabaseSync } from 'node:sqlite';
 import { pathToFileURL } from 'node:url';
@@ -15,36 +16,41 @@ const SIGNAL_ACTION = /^\/signal\/([0-9a-f]{64})\/([a-z]+)$/;
 
 const text = (status: number, body: string): Res => ({ status, headers: { 'content-type': 'text/plain; charset=utf-8' }, body });
 
+// Vendored Pico CSS (classless, MIT, ui/LICENSE-pico.txt); the page loads nothing from the network.
+const PICO = readFileSync(new URL('./pico.classless.min.css', import.meta.url), 'utf8');
+
+// What classless Pico lacks: a width cap, the inline button row, secondary outline buttons and status badges.
 const STYLE = `
-  body { font: 15px/1.45 system-ui, -apple-system, sans-serif; margin: 0 auto; padding: 12px; max-width: 760px; color: #1a1a1a; background: #fafafa; }
-  h1 { font-size: 20px; margin: 4px 0 12px; } h2 { font-size: 17px; margin: 24px 0 8px; } h3 { font-size: 14px; margin: 16px 0 6px; color: #555; }
-  .card { background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 10px 12px; margin: 8px 0; }
-  .card ul { margin: 6px 0; padding-left: 18px; } .card li { margin: 2px 0; overflow-wrap: anywhere; }
-  .tag { color: #666; font-size: 13px; } .meta { color: #555; font-size: 13px; margin: 4px 0; }
-  .badge { display: inline-block; font-size: 12px; padding: 0 6px; border-radius: 9px; color: #fff; background: #777; }
+  body > header, body > main { max-width: 860px; }
+  article ul { margin-bottom: 0; } article li { overflow-wrap: anywhere; }
+  article li small, .meta { color: var(--pico-muted-color); } .meta { font-size: .875em; }
+  article > footer { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+  article > footer :is(form, fieldset, select, button, [role=button]) { width: auto; margin: 0; }
+  .secondary.outline { --pico-background-color: transparent; --pico-color: var(--pico-secondary); --pico-border-color: var(--pico-secondary); }
+  .secondary.outline:is(:hover, :active, :focus) { --pico-background-color: transparent; --pico-color: var(--pico-secondary-hover); --pico-border-color: var(--pico-secondary-hover); }
+  .badge { display: inline-block; font-size: .75em; padding: 0 .5em; border-radius: 1em; color: #fff; background: #777; vertical-align: middle; }
   .b-new { background: #2563eb; } .b-notified { background: #7c3aed; } .b-applied, .b-sent, .b-replied { background: #15803d; }
-  .b-skipped { background: #6b7280; } .b-snoozed { background: #b45309; }
-  .actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; } .actions form { display: flex; gap: 4px; margin: 0; }
-  .actions a, .actions button, .actions select { font: inherit; font-size: 14px; padding: 4px 10px; border: 1px solid #bbb; border-radius: 4px; background: #f3f3f3; color: inherit; text-decoration: none; }`;
+  .b-skipped { background: #6b7280; } .b-snoozed { background: #b45309; }`;
 
 // A history card that is still new is an older signal the next notify supersedes, so it gets no buttons.
 function actions(rows: SignalRow[], history: boolean): string {
   const { id, list, status, name } = rows[0];
-  const post = (action: string, label: string, inner = '') =>
-    `<form method="post" action="/signal/${id}/${action}">${inner}<button>${label}</button></form>`;
+  const form = (action: string, inner: string) => `<form method="post" action="/signal/${id}/${action}">${inner}</form>`;
+  const secondary = (label: string) => `<button class="secondary outline">${label}</button>`;
   const out: string[] = [];
   if (!history || ['notified', 'snoozed'].includes(status)) {
-    if (list === 'apply') out.push(post('applied', 'Applied'));
+    if (list === 'apply') out.push(form('applied', '<button>Applied</button>'));
     else {
       // Same cap as the Telegram Compose reply: more than ten roles reads as a dump.
       const titles = [...new Set(rows.map((r) => r.title))].slice(0, 10);
-      out.push(`<a href="${escapeHtml(composeMailto(name, titles))}">Compose</a>`);
+      out.push(`<a role="button" href="${escapeHtml(composeMailto(name, titles))}">Compose</a>`);
     }
     const options = SKIP_REASONS.map(([code, label]) => `<option value="${code}">${escapeHtml(label)}</option>`).join('');
-    out.push(post('skip', 'Skip', `<select name="reason">${options}</select>`), post('snooze', 'Snooze 7d'));
+    out.push(form('skip', `<fieldset role="group"><select name="reason">${options}</select>${secondary('Skip')}</fieldset>`),
+      form('snooze', secondary('Snooze 7d')));
   }
-  if (['skipped', 'applied', 'snoozed'].includes(status)) out.push(post('reopen', 'Reopen'));
-  return out.length ? `<div class="actions">${out.join('')}</div>` : '';
+  if (['skipped', 'applied', 'snoozed'].includes(status)) out.push(form('reopen', secondary('Reopen')));
+  return out.length ? `<footer>${out.join('')}</footer>` : '';
 }
 
 interface Past { id: string; run_date: string; skip_reason: string | null; snooze_until: string | null }
@@ -60,8 +66,8 @@ function card(rows: SignalRow[], past?: Past): string {
   const meta = [skip_reason && `skipped: ${escapeHtml(skip_reason)}`, snooze_until && `snoozed until ${escapeHtml(snooze_until)}`]
     .filter(Boolean);
   const postings = rows.map((p) => `<li><a href="${escapeHtml(p.url)}">${escapeHtml(p.title)}</a> — ` +
-    `${escapeHtml(p.location ?? 'no location')} <span class="tag">[${escapeHtml(p.route_reason)}]</span></li>`);
-  return `<article class="card" id="s-${id.slice(0, 16)}"><div>${head}</div>` +
+    `${escapeHtml(p.location ?? 'no location')} <small>[${escapeHtml(p.route_reason)}]</small></li>`);
+  return `<article id="s-${id.slice(0, 16)}"><header>${head}</header>` +
     (meta.length ? `<p class="meta">${meta.join(' · ')}</p>` : '') + `<ul>${postings.join('')}</ul>${actions(rows, history)}</article>`;
 }
 
@@ -83,16 +89,19 @@ function page(db: DatabaseSync, today: string): string {
 
   const history = [...byDate].map(([date, cards]) => `<h3>${escapeHtml(date)}</h3>${cards.join('')}`).join('');
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">` +
-    `<title>Pipeline ${escapeHtml(today)}</title><style>${STYLE}</style></head><body>` +
-    `<h1>Pipeline overview ${escapeHtml(today)}</h1>` +
-    `<h2>Pending</h2><p>${header}</p>${[...apply, ...outreach].map((rows) => card(rows)).join('') || '<p>Nothing pending.</p>'}` +
-    `<h2>History</h2>${history || '<p>No past signals.</p>'}</body></html>`;
+    `<title>Pipeline ${escapeHtml(today)}</title><link rel="stylesheet" href="/pico.css"><style>${STYLE}</style></head><body>` +
+    `<header><h1>Pipeline overview ${escapeHtml(today)}</h1><p>${header}</p></header><main>` +
+    `<section><h2>Pending</h2>${[...apply, ...outreach].map((rows) => card(rows)).join('') || '<p>Nothing pending.</p>'}</section>` +
+    `<section><h2>History</h2>${history || '<p>No past signals.</p>'}</section></main></body></html>`;
 }
 
 export function handle(db: DatabaseSync, req: Req, today = new Date().toISOString().slice(0, 10)): Res {
   const path = new URL(req.url, 'http://127.0.0.1').pathname;
   if (req.method === 'GET' && path === '/') {
     return { status: 200, headers: { 'content-type': 'text/html; charset=utf-8' }, body: page(db, today) };
+  }
+  if (req.method === 'GET' && path === '/pico.css') {
+    return { status: 200, headers: { 'content-type': 'text/css', 'cache-control': 'max-age=86400' }, body: PICO };
   }
 
   const [, id, action] = (req.method === 'POST' && path.match(SIGNAL_ACTION)) || [];
