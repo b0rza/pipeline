@@ -1,7 +1,8 @@
 # Seed list. One entry per company. See docs/SPEC.md "Universe seeding".
 # phases: p1 = contracting target, p2 = agent-enablement target.
 # ats.vendor: greenhouse | lever | ashby | workable | smartrecruiters | personio | recruitee | teamtailor | bamboohr | jazzhr | rippling | breezy | gohire | zoho | custom | unknown
-#   polled (adapters/ats/): greenhouse, lever, personio, teamtailor, jazzhr, bamboohr, breezy, rippling. The rest are recorded for later.
+#   polled (adapters/ats/): greenhouse, lever, personio, teamtailor, jazzhr, bamboohr, breezy, rippling, workable, recruitee,
+#   smartrecruiters, ashby, zoho. gohire has no adapter yet. zoho slugs are {account}/{Portal}.
 # storefront: URL to fingerprint, or null for agencies.
 # status: active | paused | watch   (watch = fingerprint daily instead of weekly)
 # Research leftovers for the 200-seed expansion live in universe/_research/.
@@ -135,7 +136,7 @@
   phases: [p1, p2]
   source: commercetools-partners
   careers_url: https://careers.youweagency.com/
-  ats: { vendor: recruitee, slug: youweconnectit }
+  ats: { vendor: recruitee, slug: youwe }
   storefront: null
   status: active
   notes: "~300 staff, Recruitee on custom domain"
@@ -505,7 +506,7 @@
   phases: [p1, p2]
   source: commercetools-partners
   careers_url: https://adaptagency.com/en/careers
-  ats: { vendor: unknown }
+  ats: { vendor: breezy, slug: adapt }
   storefront: null
   status: active
   notes: "Copenhagen, ~300 staff; jobs on Breezy HR"
@@ -744,10 +745,10 @@
   phases: [p1, p2]
   source: commercetools-partners
   careers_url: https://www.avatria.com/careers
-  ats: { vendor: jazzhr, slug: avatria }
+  ats: { vendor: unknown }
   storefront: null
   status: active
-  notes: "Chicago IL, Registered partner; part of TransPerfect, ~15-50 staff itself"
+  notes: "Chicago IL, Registered partner; part of TransPerfect, ~15-50 staff itself; JazzHR board dead on 2026-11-02 (Inactive Career Page / redirects to jazzhr.com)"
 
 - id: concord
   name: Concord
@@ -862,7 +863,7 @@
   phases: [p1, p2]
   source: sfcc-partners
   careers_url: https://www.demandpdx.com/pages/careers
-  ats: { vendor: unknown }
+  ats: { vendor: rippling, slug: demandpdx }
   storefront: null
   status: active
   notes: "Happy Valley OR, Salesforce Crest partner, SFCC + Shopify Plus, ~50-180 staff; careers not read (429)"
@@ -886,10 +887,10 @@
   phases: [p1, p2]
   source: sfcc-partners
   careers_url: https://www.redvanworkshop.com/-careers-redvan
-  ats: { vendor: jazzhr, slug: redvanworkshop }
+  ats: { vendor: unknown }
   storefront: null
   status: active
-  notes: "Boulder CO, remote US team, Salesforce Commerce SI"
+  notes: "Boulder CO, remote US team, Salesforce Commerce SI; JazzHR board dead on 2026-11-02 (Inactive Career Page / redirects to jazzhr.com)"
 
 - id: 64labs
   name: 64labs
@@ -944,7 +945,7 @@
   phases: [p1, p2]
   source: sfcc-partners
   careers_url: https://ziffity.zohorecruit.com/jobs/Ziffity-Job-Opening
-  ats: { vendor: zoho, slug: ziffity }
+  ats: { vendor: zoho, slug: ziffity/Ziffity-Job-Opening }
   storefront: null
   status: active
   notes: "Plano TX, ~130 staff, Adobe Commerce-led, also SFCC; delivery in Chennai"
@@ -1153,10 +1154,10 @@
   phases: [p1, p2]
   source: clutch-us
   careers_url: https://www.firstpier.com/careers
-  ats: { vendor: gohire, slug: helm-digital-pd37nmt8 }
+  ats: { vendor: unknown }
   storefront: null
   status: active
-  notes: "Portland ME, 10-49 staff, Shopify; GoHire board under Helm Digital (possible parent)"
+  notes: "Portland ME, 10-49 staff, Shopify; GoHire board under Helm Digital (possible parent); GoHire board jobs.gohire.io/helm-digital-pd37nmt8 (widget hash Pd37nmt8, case matters) was empty on 2026-11-04; keyless JSON at api2.gohire.io/widget-jobs/{hash}; adapter deferred until a populated board is seen"
 
 - id: dyode
   name: DYODE
