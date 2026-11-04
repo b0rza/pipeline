@@ -2,7 +2,7 @@
 
 DK · teamtailor · OUTREACH · run 2026-11-02
 
-- [Solutions Architect](https://career.novicell.co.uk/jobs/2026087-solutions-architect) — London
+- [Solutions Architect](https://career.novicell.co.uk/jobs/2026087-solutions-architect) — London [perm · unknown:GB]
 
 ## Draft
 

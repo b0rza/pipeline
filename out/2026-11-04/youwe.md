@@ -2,8 +2,8 @@
 
 NL · recruitee · OUTREACH · run 2026-11-04
 
-- [Full-Stack Headless Tech Lead](https://careers.youweagency.com/o/full-stack-headless-tech-lead-1) — Groningen, Groningen, Netherlands
-- [Full-Stack Headless Tech Lead](https://careers.youweagency.com/o/full-stack-headless-tech-lead) — Shrewsbury, Shropshire, United Kingdom
+- [Full-Stack Headless Tech Lead](https://careers.youweagency.com/o/full-stack-headless-tech-lead-1) — Groningen, Groningen, Netherlands [perm · hybrid:NL]
+- [Full-Stack Headless Tech Lead](https://careers.youweagency.com/o/full-stack-headless-tech-lead) — Shrewsbury, Shropshire, United Kingdom [perm · hybrid:GB]
 
 ## Draft
 

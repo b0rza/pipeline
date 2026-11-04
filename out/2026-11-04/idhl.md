@@ -2,7 +2,7 @@
 
 GB · teamtailor · OUTREACH · run 2026-11-02
 
-- [Junior .Net Web Developer](https://careers.idhlagency.com/jobs/8538213-junior-net-web-developer) — Southampton
+- [Junior .Net Web Developer](https://careers.idhlagency.com/jobs/8538213-junior-net-web-developer) — Southampton [perm · unknown:GB]
 
 ## Draft
 

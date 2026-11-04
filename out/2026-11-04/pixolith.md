@@ -2,7 +2,7 @@
 
 DE · personio · OUTREACH · run 2026-11-02
 
-- [Senior Requirement Engineer (m/w/d)](https://pixolith.jobs.personio.de/job/2660723) — Düsseldorf Werftstr.
+- [Senior Requirement Engineer (m/w/d)](https://pixolith.jobs.personio.de/job/2660723) — Düsseldorf Werftstr. [perm · unknown:DE]
 
 ## Draft
 

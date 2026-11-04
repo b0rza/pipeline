@@ -2,9 +2,9 @@
 
 FI · teamtailor · OUTREACH · run 2026-11-02
 
-- [AI-Driven Cloud Architect](https://career.solteq.com/jobs/7662916-ai-driven-cloud-architect) — Tampere, Jyväskylä, Kuopio, Seinäjoki, København, Wrocław, Lappeenranta, Johanneshov, Turku, Aarhus, Espoo
-- [Järjestelmäintegraatioiden ohjelmistokehittäjä (.NET / Azure)](https://career.solteq.com/jobs/7035517-jarjestelmaintegraatioiden-ohjelmistokehittaja-net-azure) — Tampere, Jyväskylä, Kuopio, Seinäjoki, Lappeenranta, Espoo, Turku
-- [Solution Architect](https://career.solteq.com/jobs/8308102-solution-architect) — Tampere, Jyväskylä, Kuopio, Seinäjoki, København, Wrocław, Turku, Lappeenranta, Espoo, Aarhus, Johanneshov
+- [AI-Driven Cloud Architect](https://career.solteq.com/jobs/7662916-ai-driven-cloud-architect) — Tampere, Jyväskylä, Kuopio, Seinäjoki, København, Wrocław, Lappeenranta, Johanneshov, Turku, Aarhus, Espoo [perm · remote:FI]
+- [Järjestelmäintegraatioiden ohjelmistokehittäjä (.NET / Azure)](https://career.solteq.com/jobs/7035517-jarjestelmaintegraatioiden-ohjelmistokehittaja-net-azure) — Tampere, Jyväskylä, Kuopio, Seinäjoki, Lappeenranta, Espoo, Turku [perm · remote:FI]
+- [Solution Architect](https://career.solteq.com/jobs/8308102-solution-architect) — Tampere, Jyväskylä, Kuopio, Seinäjoki, København, Wrocław, Turku, Lappeenranta, Espoo, Aarhus, Johanneshov [perm · remote:FI]
 
 ## Draft
 

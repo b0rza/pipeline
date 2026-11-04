@@ -1,18 +1,7 @@
 # Concord
 
-US · jazzhr · OUTREACH · run 2026-11-04
+US · jazzhr · APPLY · run 2026-11-02
 
-- [Sr.Software Developer (Websmart)](https://concordusa.applytojob.com/apply/0Hep5OGWyQ/SrSoftware-Developer-Websmart) — India
-
-## Draft
-
-Subject: Concord: contract storefront engineering
-
-Hi,
-
-I saw Concord is hiring for:
-- Sr.Software Developer (Websmart)
-
-I'm a contract commerce storefront engineer (Vue/Nuxt, React, commercetools, Salesforce Commerce). If a contractor could take one of these on, or help the team that does, I'd be glad to talk.
-
-Ante
+- [Salesforce Commerce Cloud (SFCC) Architect/Lead](https://concordusa.applytojob.com/apply/pecO9wzTZE/Salesforce-Commerce-Cloud-SFCC-ArchitectLead) — Multiple Cities/States, CA [body:c2c · unknown:US]
+- [Business Intelligence Engineer](https://concordusa.applytojob.com/apply/9i8L5P5TVU/Business-Intelligence-Engineer) — Kansas City or Minneapolis, MO [perm · hybrid:US]
+- [Principal Software Engineer - Python/AWS](https://concordusa.applytojob.com/apply/WScdn4UAaw/Principal-Software-Engineer-PythonAWS) — Multiple Cities/States, MN [perm · unknown:US]

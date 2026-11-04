@@ -2,7 +2,7 @@
 
 US · greenhouse · OUTREACH · run 2026-11-04
 
-- [Manager, Analytics Engineering](https://job-boards.greenhouse.io/velir/jobs/5470057008) — Remote
+- [Manager, Analytics Engineering](https://job-boards.greenhouse.io/velir/jobs/5470057008) — Remote [perm · remote:US]
 
 ## Draft
 

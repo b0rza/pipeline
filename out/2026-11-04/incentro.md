@@ -2,12 +2,12 @@
 
 NL · teamtailor · OUTREACH · run 2026-11-04
 
-- [Agentic Engineering Lead](https://careers.incentro.com/jobs/8566210-agentic-engineering-lead) — Utrecht
-- [Junior Mendix Developer](https://careers.incentro.com/jobs/8484161-junior-mendix-developer) — Utrecht
-- [Low-code Developer (IT-omscholingstraject)](https://careers.incentro.com/jobs/8584308-low-code-developer-it-omscholingstraject) — no location
-- [Mendix Developer](https://careers.incentro.com/jobs/7321905-mendix-developer) — Utrecht
-- [OutSystems developer](https://careers.incentro.com/jobs/7321942-outsystems-developer) — Utrecht
-- [Senior Mendix Developer](https://careers.incentro.com/jobs/7159800-senior-mendix-developer) — Utrecht
+- [Agentic Engineering Lead](https://careers.incentro.com/jobs/8566210-agentic-engineering-lead) — Utrecht [perm · unknown:NL]
+- [Junior Mendix Developer](https://careers.incentro.com/jobs/8484161-junior-mendix-developer) — Utrecht [perm · unknown:NL]
+- [Low-code Developer (IT-omscholingstraject)](https://careers.incentro.com/jobs/8584308-low-code-developer-it-omscholingstraject) — no location [perm · hybrid]
+- [Mendix Developer](https://careers.incentro.com/jobs/7321905-mendix-developer) — Utrecht [perm · unknown:NL]
+- [OutSystems developer](https://careers.incentro.com/jobs/7321942-outsystems-developer) — Utrecht [perm · unknown:NL]
+- [Senior Mendix Developer](https://careers.incentro.com/jobs/7159800-senior-mendix-developer) — Utrecht [perm · unknown:NL]
 
 ## Draft
 

@@ -2,7 +2,7 @@
 
 DE · personio · OUTREACH · run 2026-11-02
 
-- [(Senior) PHP Developer TYPO3 (w/m/d)](https://brandung.jobs.personio.de/job/81199) — Berlin
+- [(Senior) PHP Developer TYPO3 (w/m/d)](https://brandung.jobs.personio.de/job/81199) — Berlin [perm · hybrid:DE]
 
 ## Draft
 
