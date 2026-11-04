@@ -45,7 +45,7 @@ test('publishRun writes summary.md and one file per signal, same bytes on a re-r
   assert.ok(summary.startsWith('# Digest 2026-11-02\n\n1 apply · 1 outreach · 1 dropped postings\n'));
   assert.ok(summary.indexOf('## Apply') < summary.indexOf('### zeta'), 'zeta under Apply');
   assert.ok(summary.indexOf('## Outreach') < summary.indexOf('### alpha'), 'alpha under Outreach');
-  assert.ok(summary.includes('[Senior Software Engineer, Contract](https://example.test/z2) — London [title:contract]'));
+  assert.ok(summary.includes('[Senior Software Engineer, Contract](https://example.test/z2) — London [title:contract · unknown:GB]'));
   assert.ok(!summary.includes('Talent Pool'), 'dropped posting not listed');
 
   const alpha = readFileSync(join(dir, 'alpha.md'), 'utf8');

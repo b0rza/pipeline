@@ -59,8 +59,8 @@ function render(rows: SignalRow[]): DigestMessage {
   ];
   let length = visibleLength(lines[0]);
   for (const [i, p] of rows.entries()) {
-    const reason = p.route === 'apply' ? ` [${escapeHtml(p.route_reason)}]` : '';
-    const line = `• <a href="${escapeHtml(p.url)}">${escapeHtml(p.title)}</a> — ${escapeHtml(p.location ?? 'no location')}${reason}`;
+    const line = `• <a href="${escapeHtml(p.url)}">${escapeHtml(p.title)}</a> — ${escapeHtml(p.location ?? 'no location')}` +
+      ` [${escapeHtml(p.route_reason)}]`;
     length += 1 + visibleLength(line);
     if (length > MAX_VISIBLE) {
       lines.push(`… and ${rows.length - i} more`);

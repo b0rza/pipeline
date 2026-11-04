@@ -2,6 +2,7 @@
 import type { DatabaseSync } from 'node:sqlite';
 import { pathToFileURL } from 'node:url';
 import { openDb, sha256 } from './db.ts';
+import { eligible, workCountry, workMode } from './location.ts';
 
 export type Route = 'apply' | 'outreach' | 'drop';
 
@@ -43,19 +44,21 @@ export function classify(title: string, body: string): { route: Route; reason: s
   return { route: 'outreach', reason: 'perm' };
 }
 
-// apply and outreach count signals (companies); dropped counts postings.
+// apply and outreach count signals (companies); dropped counts postings. A kept posting outside the owner's
+// work arrangements (core/location.ts) is dropped; one inside it carries its location tag: `perm · hybrid:GB`.
 export function filterRun(db: DatabaseSync, runDate: string): { apply: number; outreach: number; dropped: number } {
   const rows = db.prepare(`
-    select p.id, p.company_id, p.title, p.body, e.kind
+    select p.id, p.company_id, p.title, p.location, p.body, p.raw, c.country, e.kind
     from events e join postings p on p.id = e.posting_id join companies c on c.id = e.company_id
     where e.run_date = ? and e.kind != 'posting_gone' and c.status = 'active'`).all(runDate) as unknown as {
-      id: string; company_id: string; title: string | null; body: string | null; kind: string;
+      id: string; company_id: string; title: string | null; location: string | null; body: string | null; raw: string | null;
+      country: string | null; kind: string;
     }[];
 
   // A posting can carry two events in one run (edited and reposted); classify it once.
   const routes = new Map<string, Route>();
   const signals = new Map<string, { apply: boolean; kinds: Set<string>; ids: Set<string> }>();
-  const setRoute = db.prepare('update postings set route = ?, route_reason = ? where id = ?');
+  const setRoute = db.prepare('update postings set route = ?, route_reason = ?, work_mode = ?, work_country = ? where id = ?');
   const upsert = db.prepare(`
     insert into signals (id, company_id, run_date, list, kinds, ref_ids) values (:id, :company_id, :run_date, :list, :kinds, :ref_ids)
     on conflict(id) do update set list = excluded.list, kinds = excluded.kinds, ref_ids = excluded.ref_ids, updated_at = datetime('now')
@@ -66,8 +69,15 @@ export function filterRun(db: DatabaseSync, runDate: string): { apply: number; o
     for (const r of rows) {
       let route = routes.get(r.id);
       if (!route) {
-        const c = classify(r.title ?? '', r.body ?? '');
-        setRoute.run(c.route, c.reason, r.id);
+        let c = classify(r.title ?? '', r.body ?? '');
+        const raw: unknown = r.raw ? JSON.parse(r.raw) : null;
+        const mode = workMode(r.title ?? '', r.location, r.body ?? '', raw);
+        const country = workCountry(r.location, raw, r.country ?? '', mode);
+        if (c.route !== 'drop') {
+          const e = eligible(mode, country, r.location);
+          c = e.ok ? { ...c, reason: `${c.reason} · ${e.reason}` } : { route: 'drop', reason: e.reason };
+        }
+        setRoute.run(c.route, c.reason, mode, country, r.id);
         routes.set(r.id, (route = c.route));
       }
       if (route === 'drop') continue;
@@ -128,13 +138,18 @@ export function report(db: DatabaseSync, runDate: string): string {
       const { name, country, ats_vendor } = ps[0];
       lines.push(`${name} (${country}, ${ats_vendor})`);
       for (const p of ps) {
-        const reason = list === 'apply' ? ` [${p.route_reason}]` : '';
-        lines.push(`  - ${p.title} — ${p.location ?? 'no location'} ${p.url}${reason}`);
+        lines.push(`  - ${p.title} — ${p.location ?? 'no location'} ${p.url} [${p.route_reason}]`);
       }
     }
   }
   const nDropped = dropped.reduce((n, d) => n + d.n, 0);
-  lines.push(`dropped: ${dropped.map((d) => `${d.n} ${d.reason}`).join(', ') || 'none'}`);
+  // location:IN and onsite:DE count under location and onsite.
+  const byReason = new Map<string, number>();
+  for (const d of dropped) {
+    const reason = d.reason.replace(/^(location|onsite):.*/, '$1');
+    byReason.set(reason, (byReason.get(reason) ?? 0) + d.n);
+  }
+  lines.push(`dropped: ${[...byReason].map(([reason, n]) => `${n} ${reason}`).join(', ') || 'none'}`);
   lines.push(
     `filter ${runDate}: ${signals.apply} apply, ${signals.outreach} outreach, ${nDropped} dropped ` +
     `across ${companies(signals.apply + signals.outreach)}`,

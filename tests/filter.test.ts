@@ -135,9 +135,48 @@ test('filterRun writes one signal per company, idempotent, keeps the owner statu
   );
 
   const out = report(db, '2026-11-02');
-  assert.match(out, /^APPLY \(1 company, 2 postings\)\nbadger \(GB, greenhouse\)\n {2}- Contract Senior Software Engineer — London \S+ \[title:contract\]/);
+  assert.match(out, /^APPLY \(1 company, 2 postings\)\nbadger \(GB, greenhouse\)\n {2}- Contract Senior Software Engineer — London \S+ \[title:contract · unknown:GB\]\n {2}- Senior Software Engineer — London \S+ \[perm · unknown:GB\]/);
   assert.match(out, /OUTREACH \(1 company, 2 postings\)/);
   assert.match(out, /dropped: 1 evergreen\nfilter 2026-11-02: 1 apply, 1 outreach, 1 dropped across 2 companies$/);
+  db.close();
+});
+
+test('filterRun drops postings outside the owner work arrangements and tags the rest', () => {
+  const db = openDb(':memory:');
+  const mixed = company('mixed');
+  const offshore = company('offshore');
+  const splitco = { ...company('splitco'), country: 'HR' };
+  upsertCompanies(db, [mixed, offshore, splitco]);
+  const at = (p: NormalizedPosting, location: string): NormalizedPosting => ({ ...p, location });
+  snapshotCompany(db, mixed, [
+    at(posting('1', 'Senior Software Engineer'), 'Remote'),
+    at(posting('2', 'Senior Software Engineer, Contract'), 'Ahmedabad'),
+  ], '2026-11-02');
+  snapshotCompany(db, offshore, [at(posting('3', 'Tech Lead'), 'Pune'), at(posting('4', 'Backend Developer'), 'Pune or Bangalore, India')], '2026-11-02');
+  snapshotCompany(db, splitco, [
+    at(posting('5', 'Frontend Developer', 'This role is on-site only.'), 'Split, Croatia'),
+    at(posting('6', 'Backend Developer', 'This role is on-site only.'), 'Zagreb'),
+  ], '2026-11-02');
+  diffRun(db, '2026-11-02');
+
+  assert.deepEqual(filterRun(db, '2026-11-02'), { apply: 0, outreach: 2, dropped: 4 });
+  const signals = db.prepare('select company_id, list, ref_ids from signals order by company_id').all()
+    .map((r) => ({ company_id: r.company_id, list: r.list, refs: (JSON.parse(r.ref_ids as string) as string[]).length }));
+  assert.deepEqual(signals, [
+    { company_id: 'mixed', list: 'outreach', refs: 1 },
+    { company_id: 'splitco', list: 'outreach', refs: 1 },
+  ]);
+  const postings = db.prepare('select external_id, route, route_reason, work_mode, work_country from postings order by external_id')
+    .all().map((r) => ({ ...r }));
+  assert.deepEqual(postings, [
+    { external_id: '1', route: 'outreach', route_reason: 'perm · remote:GB', work_mode: 'remote', work_country: 'GB' },
+    { external_id: '2', route: 'drop', route_reason: 'location:IN', work_mode: 'unknown', work_country: 'IN' },
+    { external_id: '3', route: 'drop', route_reason: 'location:IN', work_mode: 'unknown', work_country: 'IN' },
+    { external_id: '4', route: 'drop', route_reason: 'location:IN', work_mode: 'unknown', work_country: 'IN' },
+    { external_id: '5', route: 'outreach', route_reason: 'perm · onsite:split', work_mode: 'onsite', work_country: 'HR' },
+    { external_id: '6', route: 'drop', route_reason: 'onsite:HR', work_mode: 'onsite', work_country: 'HR' },
+  ]);
+  assert.match(report(db, '2026-11-02'), /dropped: 3 location, 1 onsite\n/);
   db.close();
 });
 

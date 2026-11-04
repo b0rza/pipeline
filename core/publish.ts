@@ -9,7 +9,7 @@ import { composeBody, composeSubject } from '../bot/templates.ts';
 import { openDb } from './db.ts';
 
 const postingLine = (p: SignalRow) =>
-  `- [${p.title}](${p.url}) — ${p.location ?? 'no location'}${p.route === 'apply' ? ` [${p.route_reason}]` : ''}`;
+  `- [${p.title}](${p.url}) — ${p.location ?? 'no location'} [${p.route_reason}]`;
 
 export function signalFile(rows: SignalRow[]): string {
   const { list, name, country, ats_vendor, warm, run_date } = rows[0];

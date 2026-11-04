@@ -47,7 +47,10 @@ create table if not exists postings (
   reposted_at text,                        -- run_date a gone id last came back
   raw text,                                -- json
   route text,                              -- stage 3: apply | outreach | drop
-  route_reason text                        -- keyword that decided it: evergreen, non-engineering, title:contract, body:day rate, perm
+  route_reason text,                       -- keyword that decided it: evergreen, non-engineering, title:contract, body:day rate, perm;
+                                           -- kept postings add the location tag (perm · hybrid:GB), location drops are location:IN or onsite:DE
+  work_mode text,                          -- stage 3: remote | hybrid | onsite | unknown
+  work_country text                        -- stage 3: ISO 3166-1 alpha-2, null when unread
 );
 create index if not exists postings_company on postings(company_id);
 create index if not exists postings_gone on postings(gone_at);

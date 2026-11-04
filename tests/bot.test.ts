@@ -53,8 +53,8 @@ test('buildDigest orders warm, then apply, then outreach, contract postings firs
     '<b>beta</b> · GB · greenhouse · <b>OUTREACH</b>',
   ]);
   assert.deepEqual(digest[2].text.split('\n').slice(1), [
-    '• <a href="https://example.test/z2">Senior Software Engineer, Contract</a> — London [title:contract]',
-    '• <a href="https://example.test/z1">Backend Engineer</a> — London',
+    '• <a href="https://example.test/z2">Senior Software Engineer, Contract</a> — London [title:contract · unknown:GB]',
+    '• <a href="https://example.test/z1">Backend Engineer</a> — London [perm · unknown:GB]',
   ]);
   db.close();
 });
