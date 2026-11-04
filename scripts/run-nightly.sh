@@ -31,6 +31,9 @@ else
 fi
 
 echo "[$RUN_DATE] stage 7: publish"
+if [ -f core/filter.ts ]; then
+  npm run -s publish
+fi
 if [ "${PIPELINE_NO_COMMIT:-}" = 1 ]; then
   echo "stage 7: commit skipped (PIPELINE_NO_COMMIT=1)"
 else

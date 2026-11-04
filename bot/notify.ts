@@ -9,7 +9,7 @@ import { openDb } from '../core/db.ts';
 export interface DigestMessage { signal_id: string | null; text: string; buttons: InlineKeyboardButton[][] }
 
 export interface SignalRow {
-  id: string; run_date: string; list: 'apply' | 'outreach'; status: string; name: string; country: string;
+  id: string; run_date: string; list: 'apply' | 'outreach'; status: string; company_id: string; name: string; country: string;
   ats_vendor: string; warm: number; title: string; location: string | null; url: string; route: string; route_reason: string;
 }
 
@@ -21,7 +21,7 @@ const MAX_VISIBLE = 3500;
 
 // One row per posting; warm first, then apply before outreach, then by name; contract postings first in a signal.
 const rowsQuery = (where: string) => `
-  select s.id, s.run_date, s.list, s.status, c.name, c.country, c.ats_vendor, c.warm,
+  select s.id, s.run_date, s.list, s.status, c.id as company_id, c.name, c.country, c.ats_vendor, c.warm,
     p.title, p.location, p.url, p.route, p.route_reason
   from signals s join companies c on c.id = s.company_id, json_each(s.ref_ids) j join postings p on p.id = j.value
   where ${where}
@@ -77,21 +77,31 @@ function render(rows: SignalRow[]): DigestMessage {
   return { signal_id: id, text: lines.join('\n'), buttons };
 }
 
-// Pure: pending signals, only the newest per company, so the output matches before and after supersede().
-// Empty when there is nothing to send.
-export function buildDigest(db: DatabaseSync, runDate: string): DigestMessage[] {
+// Pending signals, only the newest per company, grouped by signal in digest order. Shared with core/publish.ts
+// so the out/ files and the Telegram messages carry the same set.
+export function pendingSignals(db: DatabaseSync, runDate: string): Map<string, SignalRow[]> {
   const rows = db.prepare(rowsQuery(`${pending('s')} and not ${newerPending('s')}`))
     .all({ run_date: runDate }) as unknown as SignalRow[];
   const bySignal = new Map<string, SignalRow[]>();
   for (const r of rows) bySignal.set(r.id, [...(bySignal.get(r.id) ?? []), r]);
-  if (!bySignal.size) return [];
+  return bySignal;
+}
 
-  // Same count as report() in core/filter.ts.
-  const { dropped } = db.prepare(`
+// Same count as report() in core/filter.ts.
+export function droppedCount(db: DatabaseSync, runDate: string): number {
+  return (db.prepare(`
     select count(distinct p.id) as dropped
     from events e join postings p on p.id = e.posting_id join companies c on c.id = e.company_id
     where e.run_date = :run_date and e.kind != 'posting_gone' and c.status = 'active' and p.route = 'drop'`)
-    .get({ run_date: runDate }) as { dropped: number };
+    .get({ run_date: runDate }) as { dropped: number }).dropped;
+}
+
+// Pure: the output matches before and after supersede(). Empty when there is nothing to send.
+export function buildDigest(db: DatabaseSync, runDate: string): DigestMessage[] {
+  const bySignal = pendingSignals(db, runDate);
+  if (!bySignal.size) return [];
+
+  const dropped = droppedCount(db, runDate);
   const signals = [...bySignal.values()].map(render);
   const apply = [...bySignal.values()].filter((ps) => ps[0].list === 'apply').length;
   const header = `<b>Digest ${escapeHtml(runDate)}</b> · ${apply} apply · ${signals.length - apply} outreach · ${dropped} dropped postings`;
