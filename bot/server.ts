@@ -36,6 +36,12 @@ export function snooze(db: DatabaseSync, id: string, today: string): string {
   return until;
 }
 
+// Back to new, so the next digest carries it again.
+export function reopen(db: DatabaseSync, id: string): void {
+  db.prepare("update signals set status = 'new', skip_reason = null, snooze_until = null, updated_at = datetime('now') where id = :id")
+    .run({ id });
+}
+
 export type Outcome = { kind: 'edit'; text: string; buttons: InlineKeyboardButton[][] } | { kind: 'reply'; text: string };
 
 // data is `${action}:${id16}`, or `skip:${id16}:${code}` once a reason is picked.
