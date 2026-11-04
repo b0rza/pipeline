@@ -5,6 +5,7 @@ import { pathToFileURL } from 'node:url';
 import { Bot, GrammyError } from 'grammy';
 import type { InlineKeyboardButton } from 'grammy/types';
 import { openDb } from '../core/db.ts';
+import { routeTag, withFlag } from '../core/flag.ts';
 
 export interface DigestMessage { signal_id: string | null; text: string; buttons: InlineKeyboardButton[][] }
 
@@ -55,12 +56,12 @@ export function signalMessage(db: DatabaseSync, signalId: string): DigestMessage
 function render(rows: SignalRow[]): DigestMessage {
   const { id, list, name, country, ats_vendor, warm } = rows[0];
   const lines = [
-    `${warm ? '🔥 warm · ' : ''}<b>${escapeHtml(name)}</b> · ${escapeHtml(country)} · ${escapeHtml(ats_vendor)} · <b>${list.toUpperCase()}</b>`,
+    `${warm ? '🔥 warm · ' : ''}<b>${escapeHtml(name)}</b> · ${escapeHtml(withFlag(country))} · ${escapeHtml(ats_vendor)} · <b>${list.toUpperCase()}</b>`,
   ];
   let length = visibleLength(lines[0]);
   for (const [i, p] of rows.entries()) {
     const line = `• <a href="${escapeHtml(p.url)}">${escapeHtml(p.title)}</a> — ${escapeHtml(p.location ?? 'no location')}` +
-      ` [${escapeHtml(p.route_reason)}]`;
+      ` [${escapeHtml(routeTag(p.route_reason))}]`;
     length += 1 + visibleLength(line);
     if (length > MAX_VISIBLE) {
       lines.push(`… and ${rows.length - i} more`);

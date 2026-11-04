@@ -47,14 +47,14 @@ test('buildDigest orders warm, then apply, then outreach, contract postings firs
   const digest = buildDigest(db, '2026-11-02');
   assert.equal(digest.length, 5);
   assert.deepEqual(digest.slice(1).map((m) => m.text.split('\n')[0]), [
-    '🔥 warm · <b>warmco</b> · GB · greenhouse · <b>OUTREACH</b>',
-    '<b>zeta</b> · GB · greenhouse · <b>APPLY</b>',
-    '<b>alpha</b> · GB · greenhouse · <b>OUTREACH</b>',
-    '<b>beta</b> · GB · greenhouse · <b>OUTREACH</b>',
+    '🔥 warm · <b>warmco</b> · 🇬🇧 GB · greenhouse · <b>OUTREACH</b>',
+    '<b>zeta</b> · 🇬🇧 GB · greenhouse · <b>APPLY</b>',
+    '<b>alpha</b> · 🇬🇧 GB · greenhouse · <b>OUTREACH</b>',
+    '<b>beta</b> · 🇬🇧 GB · greenhouse · <b>OUTREACH</b>',
   ]);
   assert.deepEqual(digest[2].text.split('\n').slice(1), [
-    '• <a href="https://example.test/z2">Senior Software Engineer, Contract</a> — London [title:contract · unknown:GB]',
-    '• <a href="https://example.test/z1">Backend Engineer</a> — London [perm · unknown:GB]',
+    '• <a href="https://example.test/z2">Senior Software Engineer, Contract</a> — London [title:contract · unknown:🇬🇧 GB]',
+    '• <a href="https://example.test/z1">Backend Engineer</a> — London [perm · unknown:🇬🇧 GB]',
   ]);
   db.close();
 });
@@ -147,7 +147,7 @@ test('supersede keeps only the newest pending signal of a company', () => {
   seed(db, [[company('acme'), [perm, posting('2', 'Software Engineer, Contract')]]]);
   const digest = buildDigest(db, '2026-11-02');
   assert.equal(digest.length, 2);
-  assert.equal(digest[1].text.split('\n')[0], '<b>acme</b> · GB · greenhouse · <b>APPLY</b>');
+  assert.equal(digest[1].text.split('\n')[0], '<b>acme</b> · 🇬🇧 GB · greenhouse · <b>APPLY</b>');
 
   assert.equal(supersede(db, '2026-11-02'), 1);
   const byRun = (runDate: string) => ({ ...db.prepare('select status, skip_reason from signals where run_date = ?').get(runDate) });
@@ -162,8 +162,8 @@ test('buildDigest sends a new signal from a night notify did not run', () => {
   seed(db, [[company('acme'), [posting('1', 'Software Engineer')]]], '2026-11-01');
   seed(db, [[company('other'), [posting('2', 'Backend Engineer')]]]);
   assert.deepEqual(buildDigest(db, '2026-11-02').slice(1).map((m) => m.text.split('\n')[0]), [
-    '<b>acme</b> · GB · greenhouse · <b>OUTREACH</b>',
-    '<b>other</b> · GB · greenhouse · <b>OUTREACH</b>',
+    '<b>acme</b> · 🇬🇧 GB · greenhouse · <b>OUTREACH</b>',
+    '<b>other</b> · 🇬🇧 GB · greenhouse · <b>OUTREACH</b>',
   ]);
   db.close();
 });

@@ -8,6 +8,7 @@ import { droppedCount, escapeHtml, pendingSignals, signalRows, type SignalRow } 
 import { markApplied, markSkipped, reopen, SKIP_REASONS, snooze } from '../bot/server.ts';
 import { composeMailto } from '../bot/templates.ts';
 import { openDb } from '../core/db.ts';
+import { routeTag, withFlag } from '../core/flag.ts';
 
 export interface Req { method: string; url: string; body?: string }
 export interface Res { status: number; headers: Record<string, string>; body: string }
@@ -60,13 +61,13 @@ function card(rows: SignalRow[], past?: Past): string {
   const { id, run_date, list, status, name, country, ats_vendor, warm } = rows[0];
   const history = past !== undefined;
   const { skip_reason, snooze_until } = past ?? { skip_reason: null, snooze_until: null };
-  const head = `${warm ? '🔥 warm · ' : ''}<b>${escapeHtml(name)}</b> · ${escapeHtml(country)} · ${escapeHtml(ats_vendor)}` +
+  const head = `${warm ? '🔥 warm · ' : ''}<b>${escapeHtml(name)}</b> · ${escapeHtml(withFlag(country))} · ${escapeHtml(ats_vendor)}` +
     ` · <b>${list.toUpperCase()}</b> · run ${escapeHtml(run_date)}` +
     (history ? ` <span class="badge b-${escapeHtml(status)}">${escapeHtml(status)}</span>` : '');
   const meta = [skip_reason && `skipped: ${escapeHtml(skip_reason)}`, snooze_until && `snoozed until ${escapeHtml(snooze_until)}`]
     .filter(Boolean);
   const postings = rows.map((p) => `<li><a href="${escapeHtml(p.url)}">${escapeHtml(p.title)}</a> — ` +
-    `${escapeHtml(p.location ?? 'no location')} <small>[${escapeHtml(p.route_reason)}]</small></li>`);
+    `${escapeHtml(p.location ?? 'no location')} <small>[${escapeHtml(routeTag(p.route_reason))}]</small></li>`);
   return `<article id="s-${id.slice(0, 16)}"><header>${head}</header>` +
     (meta.length ? `<p class="meta">${meta.join(' · ')}</p>` : '') + `<ul>${postings.join('')}</ul>${actions(rows, history)}</article>`;
 }

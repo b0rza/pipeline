@@ -69,10 +69,10 @@ test('GET / shows the pending header and each company once, apply first', () => 
   assert.match(res.body, /<\/h1><p>1 apply · 3 outreach · 1 dropped postings<\/p><\/header>/);
   assert.deepEqual(section(res.body, 'pending'), ['zeta', 'warmco', 'alpha', 'beta']);
   assert.deepEqual(section(res.body, 'history'), []);
-  assert.match(cardOf(res.body, db, 'zeta'), /<b>APPLY<\/b> · run 2026-11-02/);
+  assert.match(cardOf(res.body, db, 'zeta'), /<b>zeta<\/b> · 🇬🇧 GB · greenhouse · <b>APPLY<\/b> · run 2026-11-02/);
   // Contract posting first, with its route tag.
   assert.match(cardOf(res.body, db, 'zeta'),
-    /<li><a href="https:\/\/example.test\/z2">Senior Software Engineer, Contract<\/a> — London <small>\[title:contract · unknown:GB\]<\/small><\/li><li><a href="https:\/\/example.test\/z1">/);
+    /<li><a href="https:\/\/example.test\/z2">Senior Software Engineer, Contract<\/a> — London <small>\[title:contract · unknown:🇬🇧 GB\]<\/small><\/li><li><a href="https:\/\/example.test\/z1">/);
   db.close();
 });
 
