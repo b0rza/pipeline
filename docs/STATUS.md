@@ -22,8 +22,8 @@ The v1 build order is retired; rows below are SPEC-v2's, ordered by how much the
 
 ## Open on the owner
 
-- Create the bot with BotFather and put the token at `op://Pipeline/telegram-bot/credential`. Get the chat id (message the bot once, then read `getUpdates`, or use `@userinfobot`) and put it at `op://Pipeline/telegram-bot/chat_id`.
-- Run `op run --env-file=.env.op -- npm run bot` as a long-running service on the Coolify box. Then send one real digest and press each button once to confirm the edits land.
+- Create the bot with BotFather. Get the chat id (message the bot once, then read `getUpdates`, or use `@userinfobot`). Put both in `~/.config/pipeline/env` as `TELEGRAM_BOT_TOKEN=...` and `TELEGRAM_CHAT_ID=...`, mode 600. On the Coolify box set the same two variables on the service instead; no file needed. 1Password was dropped on 2026-11-04 (owner does not use it); delete `.env.op.example` from the repo root.
+- Run `npm run bot` as a long-running service on the Coolify box with those two variables set. Then send one real digest and press each button once to confirm the edits land.
 - Write the two case-study numbers (members, transactions, team size, timeline) somewhere the agent can read; it drafts the rest.
 - Read PLAN.md "The additive frame" once; it is the rule every other doc now follows.
 - Add network companies (past clients, current agency's clients, Studion alumni) under the marked block at the end of `universe/companies.yaml`.

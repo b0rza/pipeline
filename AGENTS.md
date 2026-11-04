@@ -19,7 +19,7 @@ This repo is a nightly signal pipeline: it finds companies worth contacting, dra
 5. **Rubric edits must pass evals.** Change `rubrics/*.md` only together with a passing `evals/run.ts`. If evals move more than 10% of labeled postings across bands, stop and report; don't tune the eval set to pass.
 6. **Idempotent runs.** Everything keyed by content hash. Re-running the same day must produce no new rows.
 7. **One signal per company per run.** `core/filter.ts` collapses postings. Never emit per-posting drafts.
-8. **Secrets via `op run`.** Never write a token into a file in this repo, including `.env.example` with real values.
+8. **Secrets from the environment only.** `scripts/run-nightly.sh` sources `~/.config/pipeline/env` (or `PIPELINE_ENV_FILE`) when it exists; a deployment host sets the variables itself. Never write a token into a file inside this repo, example files included.
 9. **Two lists, not one.** Contract/freelance engineering postings go to `apply`; everything else to `outreach`. Don't draft a pitch for a posting the owner should apply to.
 
 ## Conventions

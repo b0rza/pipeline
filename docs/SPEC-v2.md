@@ -53,4 +53,4 @@ These sections of SPEC.md still apply as written: Repo layout (minus `bot/action
 
 ## Guardrails that stay hard
 
-No sending. No network in any model stage. No LinkedIn/Indeed/Glassdoor scraping. Rate limits per host. Rubric edits pass evals. One signal per company per run. Secrets via `op run`.
+No sending. No network in any model stage. No LinkedIn/Indeed/Glassdoor scraping. Rate limits per host. Rubric edits pass evals. One signal per company per run. Secrets from the environment, never from a file in the repo.

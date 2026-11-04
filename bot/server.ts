@@ -78,7 +78,7 @@ export function handleCallback(db: DatabaseSync, data: string, today = new Date(
 
 async function main() {
   const token = process.env.TELEGRAM_BOT_TOKEN;
-  if (!token || !process.env.TELEGRAM_CHAT_ID) throw new Error('TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID are required; run via op run');
+  if (!token || !process.env.TELEGRAM_CHAT_ID) throw new Error('TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID are required in the environment');
   const chatId = Number(process.env.TELEGRAM_CHAT_ID);
   const db = openDb();
   const bot = new Bot(token);

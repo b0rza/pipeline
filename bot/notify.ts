@@ -146,7 +146,7 @@ async function main() {
 
     const token = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;
-    if (!token || !chatId) throw new Error('TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID are required; run via op run');
+    if (!token || !chatId) throw new Error('TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID are required in the environment');
     const bot = new Bot(token);
     let first = true;
     await sendDigest(db, messages, async (m) => {
