@@ -1,0 +1,845 @@
+# Slice: Nordics (SE, DK, NO, FI). Date: 2026-11-05.
+# Method: Clutch country e-commerce/Shopify/Magento lists, Shopify partner directory location pages, BigCommerce directory (SE), web search round-ups; careers pages found from homepage links, then npm run resolve (no --verify).
+# source 'other' = found from own knowledge, not seen in any of the six directories (flagged for the coordinator). Qualifying entries first, then screened-out.
+
+# --- qualifying (adapter vendor + slug) ---
+- name: "Vaimo"
+  domain: vaimo.com
+  country: SE
+  source: clutch
+  careers_url: https://careers.vaimo.com/
+  ats: { vendor: teamtailor, slug: careers.vaimo.com }
+  notes: "Stockholm, 250-999 (Clutch), above the 250 guide but a pure e-commerce SI (Adobe Commerce, Shopify Plus; also in Shopify directory). Teamtailor custom domain found by resolver at careers.vaimo.com. Group-wide board, expect roles in many countries"
+
+- name: "Grebban"
+  domain: grebban.com
+  country: SE
+  source: clutch
+  careers_url: https://career.grebban.com/
+  ats: { vendor: teamtailor, slug: career.grebban.com }
+  notes: "Stockholm/Gothenburg, offices London, Copenhagen, Oslo; Clutch says 2-9 which looks stale, size unverified. Centra, Norce, Shopify Plus (also Shopify directory, Centra partner list). Link on grebban.com/careers to career.grebban.com, Teamtailor custom domain confirmed by resolver"
+
+- name: "Ninetech"
+  domain: ninetech.com
+  country: SE
+  source: clutch
+  careers_url: https://ninetech.teamtailor.com/
+  ats: { vendor: teamtailor, slug: ninetech }
+  notes: "Karlstad, 50-249 (Clutch). Digital agency with e-commerce (Clutch e-commerce list). Homepage links to ninetech.teamtailor.com; resolver confirmed"
+
+- name: "Understandit"
+  domain: understandit.se
+  country: SE
+  source: clutch
+  careers_url: https://careers.understandit.se/
+  ats: { vendor: teamtailor, slug: careers.understandit.se }
+  notes: "Gothenburg, 10-49 (Clutch Shopify list). E-commerce/web development. Homepage links to careers.understandit.se, Teamtailor custom domain confirmed by resolver"
+
+- name: "Bombayworks"
+  domain: bombayworks.se
+  country: SE
+  source: clutch
+  careers_url: https://careers.bombayworks.com/
+  ats: { vendor: teamtailor, slug: careers.bombayworks.com }
+  notes: "Stockholm, offices Malmo and Mumbai, 50-249 (Clutch profile). Full-service digital agency with development and testing; e-commerce focus unverified (homepage names no commerce platform). bombayworks.se/karriar links to careers.bombayworks.com, Teamtailor custom domain confirmed by resolver"
+
+- name: "Signifly"
+  domain: signifly.com
+  country: DK
+  source: clutch
+  careers_url: https://signifly.com/careers
+  ats: { vendor: recruitee, slug: signifly }
+  notes: "Copenhagen, 50-249 (Clutch). Shopify Plus partner (Clutch Shopify DK list, Shopify directory). Resolver found signifly.recruitee.com link on signifly.com/careers"
+
+- name: "Kraftvaerk"
+  domain: kraftvaerk.com
+  country: DK
+  source: other
+  careers_url: https://www.kraftvaerk.com/career/
+  ats: { vendor: bamboohr, slug: kraftvaerk }
+  notes: "Copenhagen, offices Aarhus and Helsinki. Size unverified (own site says ~30 developers on Optimizely). Commerce and omnichannel, Optimizely, MACH; commercetools in portfolio per inRiver and Struct partner pages. NOT found in any of the six directories: source 'other' (own knowledge). Resolver found kraftvaerk.bamboohr.com on the career page"
+
+- name: "Maksimer"
+  domain: maksimer.com
+  country: NO
+  source: clutch
+  careers_url: https://careers.maksimer.com/
+  ats: { vendor: teamtailor, slug: careers.maksimer.com }
+  notes: "Bergen, offices Oslo, Bryne, Kristiansand, 50-249 (Clutch). WooCommerce, Shopify, Litium (also Shopify directory NO). Homepage links to careers.maksimer.com, Teamtailor custom domain confirmed by resolver"
+
+- name: "Represent"
+  domain: represent.no
+  country: NO
+  source: clutch
+  careers_url: https://jobs.represent.no/
+  ats: { vendor: teamtailor, slug: jobs.represent.no }
+  notes: "Oslo, 10-49 (Clutch e-commerce list; also Shopify directory NO). Homepage links to jobs.represent.no, Teamtailor custom domain confirmed by resolver"
+
+- name: "Sofokus"
+  domain: sofokus.com
+  country: FI
+  source: shopify-agency-lists
+  careers_url: https://careers.sofokus.com/
+  ats: { vendor: teamtailor, slug: careers.sofokus.com }
+  notes: "Turku (Shopify directory FI), size unverified. E-commerce agency. sofokus.com/careers links to careers.sofokus.com, Teamtailor custom domain confirmed by resolver"
+
+- name: "Columbia Road"
+  domain: columbiaroad.com
+  country: FI
+  source: shopify-agency-lists
+  careers_url: https://www.columbiaroad.com/careers
+  ats: { vendor: teamtailor, slug: columbiaroad }
+  notes: "Helsinki, offices Stockholm, Munich, Tampere, London, 150+ staff (own site). Digital sales consultancy: e-commerce, composable commerce (Shopify directory FI). Careers page embeds a Teamtailor jobs widget and links columbiaroad.teamtailor.com; resolver confirmed"
+
+- name: "Evermade"
+  domain: evermade.fi
+  country: FI
+  source: clutch
+  careers_url: https://careers.evermade.fi/
+  ats: { vendor: teamtailor, slug: careers.evermade.fi }
+  notes: "Helsinki, 10-49 (Clutch e-commerce list FI). Web/WordPress agency, e-commerce share unverified. evermade.fi/about/careers links to careers.evermade.fi, Teamtailor custom domain confirmed by resolver"
+
+# --- screened out ---
+- name: "Fröjd"
+  domain: frojd.se
+  country: SE
+  source: other
+  careers_url: https://career.frojd.se/
+  ats: { vendor: unknown }
+  notes: "Stockholm, ~50 staff (own site). OUT OF SCOPE: websites and digital services, no e-commerce work named. Board exists: Teamtailor custom domain career.frojd.se (resolver). Not in the six directories"
+
+- name: "NetRelations"
+  domain: netrelations.com
+  country: SE
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Gothenburg, 50-249 (Clutch). Domain does not resolve (DNS failure); no careers page reachable"
+
+- name: "Lybe"
+  domain: lybe.se
+  country: SE
+  source: clutch
+  careers_url: https://careers.lybe.se
+  ats: { vendor: unknown }
+  notes: "Stockholm, 10-49 (Clutch), Magento/Shopify. careers.lybe.se runs on Hirefly (not an adapter vendor)"
+
+- name: "Aino"
+  domain: aino.com
+  country: SE
+  source: clutch
+  careers_url: https://aino.agency/careers
+  ats: { vendor: unknown }
+  notes: "Gothenburg, 10-49 (Clutch), Centra partner. aino.com redirects to aino.agency. In-house careers page"
+
+- name: "Zendev"
+  domain: zendev.se
+  country: SE
+  source: clutch
+  careers_url: https://www.zendev.se/career
+  ats: { vendor: unknown }
+  notes: "Gothenburg, 50-249 (Clutch). Jobs on TalentLyft (zendev.talentlyft.com), not an adapter vendor"
+
+- name: "Develit"
+  domain: develit.se
+  country: SE
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Stockholm, 50-249 (Clutch). Site unreachable from sandbox (fetch failed)"
+
+- name: "CO-OP E-Commerce Agency"
+  domain: co-op.se
+  country: SE
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Uddevalla, 10-49 (Clutch). No careers link on homepage, none on standard paths"
+
+- name: "Nordic Web Team"
+  domain: nordicwebteam.com
+  country: SE
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Stockholm, 10-49 (Clutch), Shopify Plus, Magento, Norce. No careers page found (homepage, /careers, /jobs)"
+
+- name: "Dahlquist E-handelskonsulter"
+  domain: dahlquist.nu
+  country: SE
+  source: clutch
+  careers_url: https://dahlquist.se/jobb
+  ats: { vendor: unknown }
+  notes: "Uddevalla, 10-49 (Clutch). dahlquist.nu redirects to dahlquist.se. In-house job page"
+
+- name: "Provide IT"
+  domain: provideit.se
+  country: SE
+  source: clutch
+  careers_url: https://www.provideit.se/karriar/
+  ats: { vendor: unknown }
+  notes: "Gothenburg, 10-49 (Clutch Magento list). Email only (jobb@ mailto links)"
+
+- name: "Stride"
+  domain: stride.se
+  country: SE
+  source: shopify-agency-lists
+  careers_url: https://stride.se/pages/medarbetare
+  ats: { vendor: unknown }
+  notes: "Gothenburg/Malmo, Shopify Plus (own site). In-house page"
+
+- name: "coi"
+  domain: coiagency.com
+  country: SE
+  source: shopify-agency-lists
+  careers_url: https://coiagency.com/pages/career
+  ats: { vendor: unknown }
+  notes: "Stockholm, Shopify Premier (own site). In-house page"
+
+- name: "Iggy Agency"
+  domain: iggy.agency
+  country: SE
+  source: shopify-agency-lists
+  careers_url: https://iggy.agency/pages/career
+  ats: { vendor: unknown }
+  notes: "Stockholm/Norrkoping/Helsinki, Shopify Plus (own site). In-house page; only outbound job link is LinkedIn (not opened)"
+
+- name: "ZAGO Agency"
+  domain: zago.se
+  country: SE
+  source: bigcommerce-agency-lists
+  careers_url: https://zago.se/pages/careers
+  ats: { vendor: unknown }
+  notes: "Malmo/Stockholm, BigCommerce directory and Shopify directory. In-house page (also on zago.agency)"
+
+- name: "Gung"
+  domain: gung.se
+  country: SE
+  source: shopify-agency-lists
+  careers_url: https://www.gung.se/om-oss/jobba-hos-gung/
+  ats: { vendor: unknown }
+  notes: "Gothenburg, e-commerce and ERP integration, size unverified. In-house job pages"
+
+- name: "Wasabi Web"
+  domain: wasabiweb.se
+  country: SE
+  source: shopify-agency-lists
+  careers_url: https://wasabiweb.se/karriar/
+  ats: { vendor: unknown }
+  notes: "Uppsala, size unverified. In-house WordPress job posts"
+
+- name: "Hall & Hatje"
+  domain: hallhatje.se
+  country: SE
+  source: shopify-agency-lists
+  careers_url: https://hallhatje.se/pages/karriar
+  ats: { vendor: unknown }
+  notes: "Sundsvall, size unverified. In-house page, no vendor link"
+
+- name: "Oktagon"
+  domain: oktagon.se
+  country: SE
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Stockholm, size unverified. No careers link on homepage, none on standard paths"
+
+- name: "RIBBAN"
+  domain: ribban.se
+  country: SE
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Stockholm, size unverified. ribban.se redirects to ribban.co; no careers page found"
+
+- name: "Intervaro"
+  domain: intervaro.se
+  country: SE
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Malmo, size unverified. No careers link on homepage"
+
+- name: "Tiburon"
+  domain: tiburon.se
+  country: SE
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Stockholm, size unverified. No careers link on homepage"
+
+- name: "OKKO Agency"
+  domain: okko.se
+  country: SE
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Gavle, size unverified. No careers link on homepage"
+
+- name: "Hyperlab"
+  domain: hyperlab.se
+  country: SE
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Gothenburg, size unverified. Site unreachable from sandbox (fetch failed)"
+
+- name: "Rendera"
+  domain: rendera.se
+  country: SE
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Varnamo, size unverified. Site unreachable from sandbox (fetch failed)"
+
+- name: "Ondigital"
+  domain: ondigital.se
+  country: SE
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Malmo, size unverified. ondigital.se redirects to ondigital.io (not followed); careers not checked"
+
+- name: "Panagora"
+  domain: panagora.se
+  country: SE
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Stockholm, size unverified. panagora.se redirects to panagora.agency; no careers page on standard paths"
+
+- name: "Nansen"
+  domain: nansen.com
+  country: SE
+  source: other
+  careers_url: https://www.nansen.com/careers
+  ats: { vendor: unknown }
+  notes: "Stockholm, size unverified, Optimizely/headless. In-house job pages (/jobs/...). Not checked in the six directories"
+
+- name: "Kodamera"
+  domain: kodamera.se
+  country: SE
+  source: other
+  careers_url: https://www.kodamera.se/karriar
+  ats: { vendor: unknown }
+  notes: "Magento agency, size unverified. Email only (jobb@)"
+
+- name: "Askås"
+  domain: askas.se
+  country: SE
+  source: other
+  careers_url: https://www.askas.se/sv/jobba-hos-oss
+  ats: { vendor: unknown }
+  notes: "Stockholm, Centra/Shopify e-commerce agency, size unverified. Jobs on HaileyHR (askas.careers.haileyhr.app), not an adapter vendor"
+
+- name: "Precio Fishbone"
+  domain: preciofishbone.se
+  country: SE
+  source: other
+  careers_url: https://www.preciofishbone.se/jobba-hos-oss/
+  ats: { vendor: unknown }
+  notes: "Optimizely/Microsoft consultancy, size unverified. No vendor on job page"
+
+- name: "Mogul"
+  domain: mogul.se
+  country: SE
+  source: other
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Stockholm, Optimizely agency, size unverified. No careers link on homepage, none on standard paths"
+
+- name: "Alster"
+  domain: alster.se
+  country: SE
+  source: other
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Formerly Isotop (isotop.se redirects here). No careers link on homepage, none on standard paths"
+
+- name: "Webbhuset"
+  domain: webbhuset.se
+  country: SE
+  source: other
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Magento/Shopify, size unverified. No careers page on homepage or standard paths"
+
+- name: "Hudson Commerce"
+  domain: hudson.co
+  country: DK
+  source: clutch
+  careers_url: https://www.hudson.co/careers
+  ats: { vendor: unknown }
+  notes: "Copenhagen, 10-49 (Clutch). In-house careers pages"
+
+- name: "Slize Commerce"
+  domain: slize.io
+  country: DK
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Skanderborg, 10-49 (Clutch). No careers link on homepage, none on standard paths"
+
+- name: "Co3"
+  domain: co3.dk
+  country: DK
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Herning, 50-249 (Clutch). co3.dk redirects to twoday.dk (acquired by twoday, a large IT group): out of scope"
+
+- name: "Konform"
+  domain: konform.com
+  country: DK
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Copenhagen, 10-49 (Clutch). konform.com redirects to kontainer.com (a SaaS product): out of scope"
+
+- name: "Arktic Studio"
+  domain: arkticstudio.com
+  country: DK
+  source: clutch
+  careers_url: https://www.arkticstudio.com/pages/jobs-shopify-agency-barcelona
+  ats: { vendor: unknown }
+  notes: "Hojbjerg/Aarhus, 2-9 (Clutch), Shopify Plus. In-house job page"
+
+- name: "dtails"
+  domain: dtails.dk
+  country: DK
+  source: shopify-agency-lists
+  careers_url: https://dtails.dk/collections/jobs
+  ats: { vendor: unknown }
+  notes: "Copenhagen, 38 specialists (own site), Shopify only. In-house job page"
+
+- name: "Mercive"
+  domain: mercive.com
+  country: DK
+  source: shopify-agency-lists
+  careers_url: https://mercive.com/careers
+  ats: { vendor: unknown }
+  notes: "Copenhagen, 25+ (own site), Shopify Premier. In-house page (also mercive.dk/karriere)"
+
+- name: "Grafikr"
+  domain: grafikr.agency
+  country: DK
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Randers, Shopify Platinum (own site). No careers link on homepage; /pages/jobs shows no vendor"
+
+- name: "Black Lemon"
+  domain: blacklemon.dk
+  country: DK
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Copenhagen, Shopify Plus (own site). Site unreachable from sandbox (fetch failed)"
+
+- name: "Spring/Summer"
+  domain: springsummer.dk
+  country: DK
+  source: shopify-agency-lists
+  careers_url: https://springsummer.dk/page/join-us
+  ats: { vendor: unknown }
+  notes: "Copenhagen, size unverified. In-house page"
+
+- name: "DVISIONMEDIA"
+  domain: dvisionmedia.dk
+  country: DK
+  source: shopify-agency-lists
+  careers_url: https://www.dvisionmedia.dk/career
+  ats: { vendor: unknown }
+  notes: "Odense, Shopify plus paid social, size unverified. In-house page"
+
+- name: "MCB"
+  domain: mcb.dk
+  country: DK
+  source: shopify-agency-lists
+  careers_url: https://www.mcb.dk/om-mcb/karriere
+  ats: { vendor: unknown }
+  notes: "Holstebro, Shopify Plus, integrations, size unverified. In-house page"
+
+- name: "8Kilo"
+  domain: 8kilo.dk
+  country: DK
+  source: shopify-agency-lists
+  careers_url: https://8kilo.dk/pages/jobs
+  ats: { vendor: unknown }
+  notes: "Aarhus, size unverified. In-house page"
+
+- name: "Conversio"
+  domain: conversio.dk
+  country: DK
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Aarhus, size unverified. No careers page on homepage or standard paths"
+
+- name: "Edition"
+  domain: edition.dk
+  country: DK
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Viborg, size unverified. No careers link on homepage"
+
+- name: "Digitalist"
+  domain: digitalist.dk
+  country: DK
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Kolding, size unverified. No careers link on homepage"
+
+- name: "Vertica"
+  domain: vertica.dk
+  country: DK
+  source: other
+  careers_url: https://vertica.career.emply.com/
+  ats: { vendor: unknown }
+  notes: "Aarhus, commerce agency, size unverified. Jobs on Emply, not an adapter vendor"
+
+- name: "Wexo"
+  domain: wexo.dk
+  country: DK
+  source: other
+  careers_url: https://www.wexo.dk/karriere
+  ats: { vendor: unknown }
+  notes: "E-commerce agency, size unverified. In-house job pages (/job-opslag/...)"
+
+- name: "Abtion"
+  domain: abtion.com
+  country: DK
+  source: other
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Copenhagen, size unverified. No careers link on homepage, none on standard paths"
+
+- name: "Hesehus"
+  domain: hesehus.dk
+  country: DK
+  source: other
+  careers_url: https://www.hesehus.dk/da/karriere/ledige-stillinger
+  ats: { vendor: unknown }
+  notes: "Odense, e-commerce agency, size unverified. Job list via an embedded HR system (?hr=show-job), no adapter vendor seen"
+
+- name: "Pentia"
+  domain: pentia.dk
+  country: DK
+  source: other
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Sitecore agency, size unverified. No careers page on standard paths"
+
+- name: "Stromlin"
+  domain: stromlin.dk
+  country: DK
+  source: other
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Size unverified. No careers page on homepage or standard paths"
+
+- name: "Charlie Tango"
+  domain: charlietango.dk
+  country: DK
+  source: other
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Copenhagen. Site returned HTTP 429 to both fetchers; not checked"
+
+- name: "Hello Group"
+  domain: hellogroup.com
+  country: DK
+  source: other
+  careers_url: https://hellogroup.com/careers
+  ats: { vendor: unknown }
+  notes: "Copenhagen/Oslo digital agency, size unverified. In-house page, no vendor"
+
+- name: "Geta Digital"
+  domain: getadigital.com
+  country: NO
+  source: clutch
+  careers_url: https://www.getadigital.com/contact/careers
+  ats: { vendor: unknown }
+  notes: "Oslo, 50-249 (Clutch), Optimizely commerce. In-house job pages"
+
+- name: "Ideo Solutions"
+  domain: ideosolutions.no
+  country: NO
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Drammen, 50-249 (Clutch). Site unreachable from sandbox (fetch failed)"
+
+- name: "Increo"
+  domain: increo.no
+  country: NO
+  source: clutch
+  careers_url: https://increo.no/karriere
+  ats: { vendor: unknown }
+  notes: "Trondheim (Clutch), size not shown. In-house job pages, email jobb@"
+
+- name: "Fabres"
+  domain: fabres.no
+  country: NO
+  source: clutch
+  careers_url: https://fabres.eu/career/
+  ats: { vendor: unknown }
+  notes: "Oslo, 50-249 (Clutch). fabres.no redirects to fabres.eu. In-house WordPress career page"
+
+- name: "Che IT Group"
+  domain: cheitgroup.com
+  country: NO
+  source: clutch
+  careers_url: https://www.cheitgroup.com/vacancies
+  ats: { vendor: unknown }
+  notes: "Oslo, 50-249 (Clutch), offshore dev shop. In-house vacancies page"
+
+- name: "Appsalon"
+  domain: appsalon.no
+  country: NO
+  source: shopify-agency-lists
+  careers_url: https://appsalon.no/pages/karriere
+  ats: { vendor: unknown }
+  notes: "Bergen/Oslo, Shopify Plus (own site). Email only (karriere@)"
+
+- name: "Scandicommerce"
+  domain: scandicommerce.com
+  country: NO
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Oslo, Shopify Plus since 2024 (own site). No careers page"
+
+- name: "Think Commerce"
+  domain: thinkcommerce.com
+  country: NO
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Shopify Plus (own site), size unverified. No careers page"
+
+- name: "Frontkom"
+  domain: frontkom.com
+  country: NO
+  source: shopify-agency-lists
+  careers_url: https://frontkom.com/karriere
+  ats: { vendor: unknown }
+  notes: "Oslo, Drupal/Shopify (Shopify directory NO); Ny Media (nymedia.no) now redirects here. Jobs on Polymer (jobs.polymer.co), not an adapter vendor"
+
+- name: "Journey Agency"
+  domain: journeyagency.no
+  country: NO
+  source: shopify-agency-lists
+  careers_url: https://journeyagency.com/jobb-hos-oss/
+  ats: { vendor: unknown }
+  notes: "Oslo, size unverified. journeyagency.no redirects to journeyagency.com. In-house page"
+
+- name: "Merchant Group"
+  domain: merchantgroup.no
+  country: NO
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Bergen, size unverified. Site unreachable from sandbox (fetch failed)"
+
+- name: "newcommerce"
+  domain: newcommerce.no
+  country: NO
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Oslo, size unverified. No careers link on homepage"
+
+- name: "Tiny Elephant"
+  domain: tinyelephant.no
+  country: NO
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Oslo, size unverified. No careers link on homepage"
+
+- name: "Epinova"
+  domain: epinova.no
+  country: NO
+  source: other
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Optimizely agency, size unverified. No careers link on homepage, none on standard paths"
+
+- name: "Driv Digital"
+  domain: drivdigital.no
+  country: NO
+  source: other
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Size unverified. No careers link on homepage, none on standard paths"
+
+- name: "Dekode"
+  domain: dekode.no
+  country: NO
+  source: other
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "WordPress/WooCommerce agency. Site returned HTTP 403 to both fetchers; not checked"
+
+- name: "Druid"
+  domain: druid.fi
+  country: FI
+  source: other
+  careers_url: https://careers.druid.fi/
+  ats: { vendor: unknown }
+  notes: "Helsinki. OUT OF SCOPE: Drupal websites, no e-commerce named on site. Board exists: Teamtailor custom domain careers.druid.fi (resolver). Not in the six directories"
+
+- name: "Siili Solutions"
+  domain: siili.com
+  country: FI
+  source: clutch
+  careers_url: https://www.siili.com/join-us
+  ats: { vendor: unknown }
+  notes: "Helsinki, 250-999 and ~1000 experts (Clutch profile). OUT OF SCOPE: too large, listed IT consultancy. Board exists: siili.teamtailor.com (resolver)"
+
+- name: "Brancoy"
+  domain: brancoy.fi
+  country: FI
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Helsinki, Shopify Premier (own site). No careers link on homepage"
+
+- name: "Growly"
+  domain: growly.pro
+  country: FI
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Kuopio, Shopify Plus (own site). No careers link on homepage"
+
+- name: "Woolman"
+  domain: woolman.io
+  country: FI
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Jyvaskyla, Shopify (directory FI). woolman.io redirects to woolman.co; no careers link"
+
+- name: "Solwe"
+  domain: solwe.fi
+  country: FI
+  source: shopify-agency-lists
+  careers_url: https://solwe.fi/blogs/rekry
+  ats: { vendor: unknown }
+  notes: "Helsinki, size unverified. In-house blog post for hiring"
+
+- name: "Wuohi Digital"
+  domain: wuohi.fi
+  country: FI
+  source: shopify-agency-lists
+  careers_url: https://wuohi.fi/pages/ura-wuohella
+  ats: { vendor: unknown }
+  notes: "Helsinki, size unverified. In-house page"
+
+- name: "Wildcard Group"
+  domain: wildcard.fi
+  country: FI
+  source: shopify-agency-lists
+  careers_url: https://wildcard.fi/toihin-wildcardille/
+  ats: { vendor: unknown }
+  notes: "Tampere, size unverified. In-house page"
+
+- name: "Crasman"
+  domain: crasman.fi
+  country: FI
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Helsinki, size unverified. No careers page on homepage or standard paths"
+
+- name: "NoA Ignite"
+  domain: noaignite.com
+  country: FI
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Listed Helsinki in Shopify directory; part of The North Alliance group (careers on thenorthalliance.com). OUT OF SCOPE: large group; Making Waves (makingwaves.com) now redirects here too"
+
+- name: "Bilot"
+  domain: bilot.fi
+  country: FI
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Helsinki, 250-999 (Clutch). TLS handshake failed for both fetchers; not checked"
+
+- name: "Keytech"
+  domain: keytech.fi
+  country: FI
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Helsinki, 10-49 (Clutch). No careers link on homepage"
+
+- name: "Wave Company"
+  domain: wavecompany.fi
+  country: FI
+  source: clutch
+  careers_url: https://www.wavecompany.fi/join
+  ats: { vendor: unknown }
+  notes: "Helsinki, 10-49 (Clutch). In-house page (Slack invite), no vendor"
+
+- name: "Avenis"
+  domain: avenis.fi
+  country: FI
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Helsinki, 10-49 (Clutch). Site unreachable from sandbox (fetch failed)"
+
+- name: "LumoLink"
+  domain: lumolink.com
+  country: FI
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Helsinki, 10-49 (Clutch). Site unreachable from sandbox (fetch failed)"
+
+- name: "Seita Technologies"
+  domain: seitatech.fi
+  country: FI
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Helsinki, 10-49 (Clutch). No careers link on homepage"
+
+- name: "Lamia"
+  domain: lamia.fi
+  country: FI
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Helsinki, 50-249 (Clutch e-commerce list). Homepage timed out; standard paths found nothing"
+
+- name: "Exove"
+  domain: exove.com
+  country: FI
+  source: other
+  careers_url: https://www.exove.com/careers/
+  ats: { vendor: unknown }
+  notes: "Helsinki, web and commerce agency, size unverified. In-house careers page, no vendor"
+
+- name: "Ambientia"
+  domain: ambientia.fi
+  country: FI
+  source: other
+  careers_url: https://careers.ambientia.fi/
+  ats: { vendor: unknown }
+  notes: "Size unverified. careers.ambientia.fi is a custom page with no adapter vendor markers"
+
+- name: "Mearra"
+  domain: mearra.com
+  country: FI
+  source: other
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Formerly Wunder (wunder.io redirects here), Drupal. No careers link on homepage, none on standard paths"

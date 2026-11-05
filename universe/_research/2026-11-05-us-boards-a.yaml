@@ -1,0 +1,99 @@
+# Slice: United States, round 2, board-first discovery on Greenhouse, Lever, Ashby, Workable, SmartRecruiters.
+# Date: 2026-11-05. About 57 web searches plus the Workable public job search; about 80 agency domains screened, 12 logged (non-commerce, non-US, already-known and us-boards-b duplicates dropped); 1 qualifies (bamboohr, not an assigned vendor).
+# Method: search hits on the vendor hosts as leads, then careers page scan with curl and npm run resolve (no --verify); size from Clutch or own site.
+
+- name: Ntara
+  domain: ntara.com
+  country: US
+  source: clutch
+  careers_url: https://www.ntara.com/careers/
+  ats: { vendor: bamboohr, slug: ntara }
+  notes: "Johnson City TN (footer and Clutch), 50-249 staff (Clutch; HQ listing 151-200), builds B2B, B2C and DTC stores plus PIM/DAM, platforms not named on the home page; resolver: ntara.bamboohr.com/careers/105 and /106 linked on careers page"
+
+- name: Kalio Commerce
+  domain: kaliocommerce.com
+  country: US
+  source: web-search
+  careers_url: https://www.kaliocommerce.com/careers/
+  ats: { vendor: unknown }
+  notes: "B2B commerce agency; careers page asks for email to careers@kaliocommerce.com, no board (curl + resolver); size unverified; directory listing not checked"
+
+- name: Uptek
+  domain: uptek.com
+  country: US
+  source: web-search
+  careers_url: https://uptek.com/careers/
+  ats: { vendor: unknown }
+  notes: "Shopify Plus agency; careers page has no board link, only contact@ email (curl + resolver); size unverified; directory listing not checked"
+
+- name: Envalo
+  domain: envalo.com
+  country: US
+  source: web-search
+  careers_url: https://envalo.com/careers
+  ats: { vendor: unknown }
+  notes: "Adobe Commerce/Magento agency; careers page is a HubSpot module with in-house openings, no vendor link (curl + resolver); size unverified"
+
+- name: Calashock
+  domain: calashock.com
+  country: US
+  source: web-search
+  careers_url: https://www.calashock.com/agency/careers
+  ats: { vendor: unknown }
+  notes: "Calashock Commerce, Vercel solution partner (headless commerce); careers page is email only (careers@calashock.com); size unverified"
+
+- name: Levitate Foundry
+  domain: levitatefoundry.com
+  country: US
+  source: web-search
+  careers_url: https://levitatefoundry.com/a/careers
+  ats: { vendor: unknown }
+  notes: "Shopify Plus partner (calls itself the largest female-owned one); in-house page (/a/careers/jobs/...); board workable/levitate-foundry seen in search only, not linked from own site"
+
+- name: Alt & Dot
+  domain: altanddot.com
+  country: US
+  source: web-search
+  careers_url: https://www.altanddot.com/careers/
+  ats: { vendor: unknown }
+  notes: "Small remote Shopify agency founded in NYC (its Workable profile text); careers page is email only (joinus@altanddot.com); board workable/altanddot (0 openings) seen in search only, not linked from own site"
+
+- name: Softlimit
+  domain: softlimit.com
+  country: US
+  source: web-search
+  careers_url: https://www.softlimit.com/careers
+  ats: { vendor: unknown }
+  notes: "Remote-first Shopify Plus studio; no careers page on own site (/careers and /pages/careers 404); board workable/softlimit (0 openings) seen in search only"
+
+- name: Foster Made
+  domain: fostermade.co
+  country: US
+  source: web-search
+  careers_url: https://fostermade.co/about/careers
+  ats: { vendor: unknown }
+  notes: "Richmond VA (phone 804), MACH Alliance certified SI, Shopify and headless commerce; careers page shows no openings and no board link (WebFetch + resolver); size unverified; listing in the six sources not checked"
+
+- name: Luminos Labs
+  domain: luminoslabs.com
+  country: US
+  source: web-search
+  careers_url: https://www.luminoslabs.com/
+  ats: { vendor: unknown }
+  notes: "Venice CA commerce agency, Optimizely Commerce (third-party partner directory); no careers link on home page (curl); size unverified"
+
+- name: Bounteous
+  domain: bounteous.com
+  country: US
+  source: web-search
+  careers_url: https://www.bounteous.com/careers
+  ats: { vendor: unknown }
+  notes: "Chicago, well above 250 staff (merged with Accolite), Adobe Commerce practice; board lever/bounteous seen in search only, careers page HTML shows no vendor link (curl + resolver)"
+
+- name: Gorilla Group
+  domain: gorillagroup.com
+  country: US
+  source: web-search
+  careers_url: https://www.gorillagroup.com/careers
+  ats: { vendor: unknown }
+  notes: "Chicago commerce agency; gorillagroup.com now redirects to vml.com. Out: absorbed into VML"

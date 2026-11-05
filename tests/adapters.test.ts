@@ -117,6 +117,32 @@ test('jazzhr rejects an inactive board and a job page without JobPosting', () =>
   assert.throws(() => jazzhr.detail!.parse(inactive, 'text/html', p), /no JobPosting/);
 });
 
+test('jazzhr older resumator template list page', () => {
+  const list = jazzhr.parse(fixture('jazzhr-resumator-list.html'), 'text/html; charset=UTF-8', 'plumtreegroup');
+  assert.deepEqual(list.map((p) => [p.external_id, p.title, p.location, p.raw, p.body, p.posted_at]), [
+    ['z7gUEEsP7f', 'AI Engineering Lead', 'Remote', { department: null }, '', null],
+    ['cJ2hjqv9yW', 'Business Growth & Operations Manager', 'Karachi, Sindh, Pakistan', { department: null }, '', null],
+    ['jQylQMyZRE', 'SEM/PPC/Paid Social Specialist', 'Chicago, IL', { department: 'Phase 3 Commerce - Customer Acquisition' }, '', null],
+  ]);
+  assert.equal(list[0].url, 'https://plumtreegroup.applytojob.com/apply/z7gUEEsP7f/AI-Engineering-Lead');
+  const empty = '<div id="resumator-content-left" class="resumator-home-joblist">\n'
+    + '<div class="resumator-jobs-text" id="resumator-jobs-title">Current Openings</div>\n</div>';
+  assert.deepEqual(jazzhr.parse(empty, 'text/html', 'plumtreegroup'), []);
+});
+
+test('jazzhr resumator job page without JobPosting takes the page description', () => {
+  const posting = {
+    external_id: 'Iec1yyOgvP', title: 'AI Engineering Lead (LATAM)', location: 'Remote', body: '', posted_at: null,
+    url: 'https://plumtreegroup.applytojob.com/apply/Iec1yyOgvP/AI-Engineering-Lead-LATAM', raw: { department: null },
+  };
+  const job = jazzhr.detail!.parse(fixture('jazzhr-resumator-job.html'), 'text/html; charset=UTF-8', posting);
+  assert.ok(job.body.startsWith('We’re Hiring: AI Engineering Lead\n\nCompany: CoPilot Innovations'), job.body);
+  assert.ok(job.body.includes('help shape the future of AI engineering at CoPilot Innovations.'));
+  assert.ok(!job.body.includes('<') && !job.body.includes('Share Job'));
+  assert.equal(job.posted_at, null);
+  assert.deepEqual(job.raw, { department: null });
+});
+
 test('jazzhr open-application page without JobPosting takes the page description', () => {
   const pool = {
     external_id: 'swMdqwV0MY', title: 'Candidate Pool', location: null, body: '', posted_at: null,

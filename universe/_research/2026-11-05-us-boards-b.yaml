@@ -1,0 +1,217 @@
+# Slice: United States, round 2, board-first on BambooHR, JazzHR, Breezy, Rippling, Zoho Recruit. Date: 2026-11-05. 30 agencies written, 1 qualifies.
+# Method: ~60 web searches on the board hosts; leads confirmed on the agency's own site with scripts/resolve.ts (no --verify) and WebFetch.
+# Round-1 403 sites (Coalition, Forix, Tiller, Binary Anvil, Creatuity, Kensium, Unleashed, Tavano, DotcomWeavers, WebCitz, Weberous, LuminFire, CoSpark, Mobiquity) still 403 to WebFetch; not re-entered.
+
+# --- Qualifying: careers page sits on an adapter vendor ---
+- name: Solvative
+  domain: solvative.com
+  country: US
+  source: clutch
+  careers_url: https://www.solvative.com/careers
+  ats: { vendor: breezy, slug: solvative }
+  notes: "The Colony TX address on careers page (Clutch says Overland Park KS), 50-249 (Clutch), ~130 staff (site metadata); SFCC, commercetools, Shopify Plus, Adobe Commerce, BigCommerce; delivery mostly from Ahmedabad; resolver missed it, slug from solvative.breezy.hr job links on careers page"
+
+# --- Screened out ---
+- name: Blue Acorn iCi
+  domain: blueacornici.com
+  country: US
+  source: web-search
+  careers_url: https://www.blueacornici.com/about-us
+  ats: { vendor: unknown }
+  notes: "Adobe Commerce, Shopify Plus, Salesforce; resolver found jazzhr/blueacornici on own about page, but the site says it is part of Infosys, so out of the 10-250 independent-agency band; owner may override"
+- name: VELOX
+  domain: velox.com
+  country: US
+  source: web-search
+  careers_url: https://www.velox.com/careers
+  ats: { vendor: unknown }
+  notes: "Boise ID; resolver found breezy/velox on own careers page, but the services are SEO, paid media and analytics, a marketing agency, not e-commerce engineering"
+- name: Command C
+  domain: commandc.com
+  country: US
+  source: web-search
+  careers_url: https://www.commandc.com/careers
+  ats: { vendor: unknown }
+  notes: "Shopify Premier Partner badge, Shopify Plus, BigCommerce, Magento; HQ and size not stated on site; in-house careers page, apply by email jobs@commandc.com"
+- name: Xngage
+  domain: xngage.com
+  country: US
+  source: web-search
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Cleveland OH, B2B commerce (Optimizely Configured Commerce, OroCommerce, Virto, Znode, BigCommerce); size unverified; no careers page linked from home page"
+- name: Nishtech
+  domain: nishtech.com
+  country: US
+  source: web-search
+  careers_url: https://www.nishtech.com/careers
+  ats: { vendor: unknown }
+  notes: "Cincinnati-area phone, Sitecore, Optimizely Configured Commerce, Shopify Plus B2B, Znode; size unverified; careers page is email only (info@nishtechinc.com)"
+- name: Commerce Pundit
+  domain: commercepundit.com
+  country: US
+  source: clutch
+  careers_url: https://www.commercepundit.com/careers
+  ats: { vendor: unknown }
+  notes: "Duluth GA / Ahmedabad, 250-999 (Clutch Magento list), Shopify, Magento, headless; in-house careers pages, above size band"
+- name: Rubico
+  domain: rubicotech.com
+  country: US
+  source: clutch
+  careers_url: https://rubicotech.com/careers
+  ats: { vendor: unknown }
+  notes: "Austin TX, 50-249 (Clutch Magento list); in-house careers pages with embedded form"
+- name: Dotlogics
+  domain: dotlogics.com
+  country: US
+  source: web-search
+  careers_url: https://www.dotlogics.com/careers
+  ats: { vendor: unknown }
+  notes: "Huntington/Hicksville NY plus Lahore and Dubai; no commerce platforms named on site; careers is email only"
+- name: Corra
+  domain: corra.com
+  country: US
+  source: web-search
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "New York NY, Shopify Plus / Adobe Commerce; site returns 403 to WebFetch; board jazzhr/corra seen in search only, not confirmed on own site"
+- name: SpinUp Digital
+  domain: spinup.digital
+  country: US
+  source: web-search
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "home page sells digital marketing, web design, SEO, custom software, no commerce platforms named; HQ unverified (one search snippet points to UK/MENA); board breezy/spinup seen in search only, not linked from own site"
+- name: COLAB
+  domain: colablosangeles.com
+  country: US
+  source: web-search
+  careers_url: https://colablosangeles.com/careers
+  ats: { vendor: unknown }
+  notes: "Los Angeles CA, marketing-led agency (ads, feeds) with web builds; resolver found no board on careers page; board jazzhr/colab seen in search only"
+- name: Fuelerate
+  domain: fuelerate.com
+  country: US
+  source: web-search
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Shopify growth/CRO shop per its job posts; /careers returns 404, resolver found no board; board breezy/fuelerate seen in search only; HQ unverified"
+- name: Pearl West
+  domain: pearlwest.com
+  country: US
+  source: web-search
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Shopify CRO shop per its job post; resolver found no board; board jazzhr/pearlwest seen in search only; HQ unverified"
+- name: BVA (Blue Vector Accel)
+  domain: bvaccel.com
+  country: US
+  source: web-search
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "San Diego CA Shopify Plus agency; bvaccel.com/careers now redirects to accenture.com (acquired)"
+- name: Avionos
+  domain: avionos.com
+  country: US
+  source: web-search
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Chicago IL Salesforce B2B commerce; site redirects to accenture.com (acquired)"
+- name: PixelMEDIA
+  domain: pixelmedia.com
+  country: US
+  source: web-search
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Portsmouth NH; pixelmedia.com redirects to rafter.one (merged), not checked further"
+- name: Cuker
+  domain: cukerdesign.com
+  country: US
+  source: web-search
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "San Diego CA, Shopify Plus; redirects to cukeragency.com, which returns 403 to WebFetch"
+- name: BlueModus
+  domain: bluemodus.com
+  country: US
+  source: web-search
+  careers_url: https://www.bluemodus.com/careers
+  ats: { vendor: unknown }
+  notes: "Denver CO; Kentico, Sitefinity, Umbraco, no commerce platform; careers page has no board, email only"
+- name: Ecom Experts
+  domain: ecomexperts.io
+  country: US
+  source: web-search
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Shopify agency; resolver found no board; home page returned 429 to WebFetch, not hand-checked"
+- name: Shift Paradigm
+  domain: shiftparadigm.com
+  country: US
+  source: web-search
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "composable / Adobe EDS; resolver found no board on standard paths, not hand-checked; job posts on ats.rippling.com/shift seen in search only"
+- name: Rocket Code
+  domain: rocketcode.com
+  country: US
+  source: web-search
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Shopify agency; resolver found no board on standard paths, not hand-checked"
+- name: Explore Consulting
+  domain: exploreconsulting.com
+  country: US
+  source: web-search
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "NetSuite SuiteCommerce; resolver found no board; WebFetch failed on a certificate error, not hand-checked"
+- name: We Are Kitty
+  domain: wearekitty.com
+  country: US
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "New York NY, 10-49 (Clutch BigCommerce list); resolver found no board on standard paths, not hand-checked"
+- name: Codup
+  domain: codup.co
+  country: US
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Houston TX, 50-249 (Clutch BigCommerce list); resolver found no board on standard paths, not hand-checked"
+- name: VALMAX
+  domain: valmax.agency
+  country: US
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Chicago IL, 10-49 (Clutch Shopify list); resolver found no board on standard paths, not hand-checked"
+- name: Bryt Designs
+  domain: brytdesigns.com
+  country: US
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Shopify (Clutch Shopify list); size unverified; resolver found no board on standard paths, not hand-checked"
+- name: Bigfolio
+  domain: bigfolio.co
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Los Angeles CA, Shopify Plus (Shopify directory profile seen in search); resolver found no board on standard paths, not hand-checked"
+- name: Creative971
+  domain: creative971.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Shopify Plus directory profile seen in search; HQ and size unverified; resolver found no board on standard paths"
+- name: Soundsgood
+  domain: soundsgood.agency
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Shopify directory profile seen in search; HQ and size unverified; resolver found no board on standard paths"

@@ -6,13 +6,16 @@ import { toIso, type AtsAdapter } from './types.ts';
 // each job page carries a schema.org JobPosting in ld+json with the full description and datePosted.
 // Verified live 2026-11-02 on concordusa (19 jobs) and anattadesigninc (2). robots.txt only disallows /cb.
 // An inactive board serves "JazzHR - Inactive Career Page" (avatria) or redirects to info.jazzhr.com
-// (redvanworkshop); neither has the jobs-list block, so parse throws.
+// (redvanworkshop); neither has a job list block, so parse throws.
+// Some boards still use the older "resumator" template (div.resumator-home-joblist, div.resumator-job items);
+// verified live 2026-11-05 on plumtreegroup (9 jobs). Its job pages mostly carry the same JobPosting ld+json.
 //
 // List item  -> posting: href /apply/{id}/{title-slug} -> external_id = id, url; link text -> title;
-//              fa-map-marker -> location; fa-sitemap -> raw.department.
+//              fa-map-marker (resumator: "Location:" span) -> location; fa-sitemap ("Department:") -> raw.department.
 // JobPosting -> description -> body, datePosted -> posted_at, employmentType, jobLocationType,
 //              applicantLocationRequirements, validThrough, experienceRequirements, uniqueJobCode -> raw.
 //              Open-application pages have no JobPosting: body from div#job-description, posted_at null.
+//              Resumator job pages without JobPosting: body from div#resumator-job-description, posted_at null.
 
 interface JobPosting {
   '@type'?: string;
@@ -28,25 +31,39 @@ interface JobPosting {
 
 const text = (html: string | undefined) => (html === undefined ? null : unescapeHtml(html).trim() || null);
 
+// Current template first, so a page that is on it parses exactly as before.
+const TEMPLATES = [
+  {
+    list: /class=['"][^'"]*\bjobs-list\b/,
+    item: /<li class="list-group-item">([\s\S]*?)<\/ul>\s*<\/li>/g,
+    location: /fa-map-marker['"]><\/i>([^<]*)</,
+    department: /fa-sitemap['"]><\/i>([^<]*)</,
+  },
+  {
+    list: /class=['"][^'"]*\bresumator-home-joblist\b/,
+    item: /<div id="resumator-job-[^"]*" class="resumator-job\b[^"]*">([\s\S]*?)<\/div>\s*<\/div>/g,
+    location: /Location:<\/span>([^<]*)/,
+    department: /Department:<\/span>([^<]*)/,
+  },
+];
+
 export const jazzhr: AtsAdapter = {
   vendor: 'jazzhr',
   feedUrl: (slug) => `https://${slug.toLowerCase()}.applytojob.com/apply`,
   parse(html, contentType) {
-    if (!/html/i.test(contentType) || !/class=['"][^'"]*\bjobs-list\b/.test(html)) {
-      throw new Error('jazzhr: no job list on the board page (inactive or missing board)');
-    }
-    const items = html.matchAll(/<li class="list-group-item">([\s\S]*?)<\/ul>\s*<\/li>/g);
-    return [...items].map(([, item]) => {
+    const t = /html/i.test(contentType) ? TEMPLATES.find((tpl) => tpl.list.test(html)) : undefined;
+    if (!t) throw new Error('jazzhr: no job list on the board page (inactive or missing board)');
+    return [...html.matchAll(t.item)].map(([, item]) => {
       const link = item.match(/<a href="(https:\/\/[^"]+\/apply\/([A-Za-z0-9]+)\/[^"]*)"[^>]*>([\s\S]*?)<\/a>/);
       if (!link) throw new Error('jazzhr: list item without a job link');
       return {
         external_id: link[2],
         title: text(link[3]) ?? link[2],
-        location: text(item.match(/fa-map-marker['"]><\/i>([^<]*)</)?.[1]),
+        location: text(item.match(t.location)?.[1]),
         url: link[1],
         body: '',
         posted_at: null,
-        raw: { department: text(item.match(/fa-sitemap['"]><\/i>([^<]*)</)?.[1]) },
+        raw: { department: text(item.match(t.department)?.[1]) },
       };
     });
   },
@@ -58,8 +75,10 @@ export const jazzhr: AtsAdapter = {
       const blocks = [...scripts].map(([, json]) => { try { return JSON.parse(json) as JobPosting; } catch { return null; } });
       const jp = blocks.find((j) => j?.['@type'] === 'JobPosting');
       // Open-application pages (Candidate Pool, Talent Network) have no JobPosting; their text is only in the page.
+      // So do some resumator-template job pages (plumtreegroup Iec1yyOgvP), in div#resumator-job-description.
       if (!jp) {
-        const page = html.match(/id="job-description">([\s\S]*?)<\/div>\s*<div class="resumator-mobile-apply-wrapper/);
+        const page = html.match(/id="job-description">([\s\S]*?)<\/div>\s*<div class="resumator-mobile-apply-wrapper/)
+          ?? html.match(/id="resumator-job-description"[^>]*>([\s\S]*?)<\/div>\s*<div id="resumator-job-button-email"/);
         if (!page) throw new Error(`jazzhr: no JobPosting ld+json or description on ${posting.url}`);
         return { ...posting, body: htmlToText(page[1]) };
       }

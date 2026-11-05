@@ -5,7 +5,9 @@
 #   smartrecruiters, ashby, zoho. gohire has no adapter yet. zoho slugs are {account}/{Portal}.
 # storefront: URL to fingerprint, or null for agencies.
 # status: active | paused | watch   (watch = fingerprint daily instead of weekly)
-# Research leftovers for the 200-seed expansion live in universe/_research/.
+# 200 seeds since 2026-11-05, 100 of them on a polled vendor. notes starting with ABOVE BAND or WEAK FIT mark seeds
+#   outside the size band or with thin e-commerce engineering evidence (docs/STATUS.md, Open question).
+# Everything screened for the 200-seed expansion, kept or not, is in universe/_research/2026-11-05-*.yaml.
 
 # --- Partner directories (commercetools, SCAYLE, SFCC), 2026-11-02 ---
 
@@ -1415,6 +1417,985 @@
   storefront: null
   status: active
   notes: "Los Angeles CA, ecommerce + custom software, likely small"
+
+# --- Seeds to 200: Shopify partner directory and Shopify Plus agency lists, 2026-11-05 ---
+
+- id: ehouse-studio
+  name: eHouse Studio
+  domain: ehousestudio.com
+  country: US
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://www.ehousestudio.com/
+  ats: { vendor: rippling, slug: ehouse-studio-llc }
+  storefront: null
+  status: active
+  notes: "Charleston SC (Shopify directory), size unverified; Shopify Platinum partner; slug from the Careers link in the site nav. Note: /careers still 301-redirects to ehousestudio.bamboohr.com/careers, probably the old board"
+
+- id: first-and-third
+  name: First and Third
+  domain: firstandthird.com
+  country: US
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://firstandthird.com/careers
+  ats: { vendor: jazzhr, slug: firstandthird }
+  storefront: null
+  status: active
+  notes: "Redondo Beach CA (Shopify directory), size unverified; Shopify Plus tier partner, migrations and custom theming, also WordPress; board link on careers page"
+
+- id: prismfly
+  name: Prismfly
+  domain: prismfly.com
+  country: US
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://prismfly.com/life-at-prismfly
+  ats: { vendor: bamboohr, slug: prismfly }
+  storefront: null
+  status: active
+  notes: "Dallas TX and New York offices (own site), size unverified; Shopify Plus partner, CRO plus Shopify Plus development; board link on careers page"
+
+- id: sharma-brands
+  name: Sharma Brands
+  domain: sharmabrands.com
+  country: US
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://jobs.ashbyhq.com/lunar-solar-group
+  ats: { vendor: ashby, slug: lunar-solar-group }
+  storefront: null
+  status: active
+  notes: "WEAK FIT: board is the parent Lunar Solar Group, mostly marketing roles. New York (directory); size unverified; Shopify Premier partner, Shopify design and development plus growth marketing; footer link 'Careers at Lunar': board belongs to parent Lunar Solar Group, which acquired Sharma Brands, so roles may span the group"
+
+- id: simplistic
+  name: Simplistic
+  domain: simplistic.com
+  country: US
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://simplistic.com/pages/careers
+  ats: { vendor: greenhouse, slug: simplisticllc }
+  storefront: null
+  status: active
+  notes: "New York NY (roundup), size unverified; listed as Shopify Platinum partner; board link on careers page"
+
+- id: uncommon
+  name: UN/COMMON
+  domain: uncommonagency.co
+  country: US
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://apply.workable.com/uncommonagency/
+  ats: { vendor: workable, slug: uncommonagency }
+  storefront: null
+  status: active
+  notes: "Philadelphia (directory); size unverified; Shopify Platinum partner, Shopify Plus redesign and replatform agency; workable link on home page, resolved by resolver"
+
+- id: vaan-group
+  name: Vaan Group
+  domain: vaangroup.com
+  country: US
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://www.vaangroup.com/careers
+  ats: { vendor: rippling, slug: vaan-group }
+  storefront: null
+  status: active
+  notes: "HQ city unverified (US), size unverified; calls itself a Shopify Platinum agency, Shopify engineering and migrations; board link on careers page"
+
+- id: zero-studios
+  name: Zero Studios
+  domain: zero.nyc
+  country: US
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://www.zero.nyc/
+  ats: { vendor: greenhouse, slug: zerostudios }
+  storefront: null
+  status: active
+  notes: "WEAK FIT: creative-led. Milwaukee, offices New York and LA (directory); size unverified; Shopify Plus partner; creative-led agency (brand, packaging, campaigns) that also builds e-commerce sites, so engineering roles will be rare; greenhouse link on home page, resolved by resolver"
+
+- id: by-association-only
+  name: By Association Only
+  domain: byassociationonly.com
+  country: GB
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://www.byassociationonly.com/careers
+  ats: { vendor: bamboohr, slug: byassociationonly }
+  storefront: null
+  status: active
+  notes: "Cambridge HQ, mostly remote UK team; size unverified; Shopify Plus agency; roles link to byassociationonly.bamboohr.com"
+
+- id: swanky
+  name: Swanky
+  domain: swankyagency.com
+  country: GB
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: "https://swankyagency.com/about/#careers"
+  ats: { vendor: bamboohr, slug: swanky }
+  storefront: null
+  status: active
+  notes: "Exeter (per its job ads), offices UK/Australia/France; size unverified; Shopify Platinum partner, Shopify-only since 2012; resolver found bamboohr link on about page"
+
+- id: velstar
+  name: Velstar
+  domain: velstar.agency
+  country: GB
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://velstar.teamtailor.com/
+  ats: { vendor: teamtailor, slug: velstar }
+  storefront: null
+  status: active
+  notes: "Hubs Liverpool, Leeds, Edinburgh, plus Miami; size unverified; Shopify Platinum partner; velstar.co.uk redirects here; slug from velstar.teamtailor.com link on homepage (resolver missed it, no /careers path)"
+
+- id: vervaunt
+  name: Vervaunt
+  domain: vervaunt.com
+  country: GB
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://team.vervaunt.com/
+  ats: { vendor: teamtailor, slug: team.vervaunt.com }
+  storefront: null
+  status: active
+  notes: "London (Devonshire Square), also New York; size unverified; Shopify Plus consultancy (SFCC-to-Shopify migrations); Teamtailor career site on custom domain, found by resolver"
+
+- id: columbia-road
+  name: Columbia Road
+  domain: columbiaroad.com
+  country: FI
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://www.columbiaroad.com/careers
+  ats: { vendor: teamtailor, slug: columbiaroad }
+  storefront: null
+  status: active
+  notes: "Helsinki, offices Stockholm, Munich, Tampere, London, 150+ staff (own site). Digital sales consultancy: e-commerce, composable commerce (Shopify directory FI). Careers page embeds a Teamtailor jobs widget and links columbiaroad.teamtailor.com; resolver confirmed"
+
+- id: sofokus
+  name: Sofokus
+  domain: sofokus.com
+  country: FI
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://careers.sofokus.com/
+  ats: { vendor: teamtailor, slug: careers.sofokus.com }
+  storefront: null
+  status: active
+  notes: "Turku (Shopify directory FI), size unverified. E-commerce agency. sofokus.com/careers links to careers.sofokus.com, Teamtailor custom domain confirmed by resolver"
+
+- id: happy-horizon
+  name: Happy Horizon
+  domain: happyhorizon.com
+  country: NL
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://werkenbijhappyhorizon.com/
+  ats: { vendor: recruitee, slug: werkenbijhappyhorizon.com }
+  storefront: null
+  status: active
+  notes: "ABOVE BAND, group board. Dutch agency group, 7 hubs; 250+ (own exhibitor profile) to ~360 staff (Computable), above band. Owns Experius (experius.nl redirects here; Magento/Adobe, Shopware, Shopify, BigCommerce) and Ask Phill (Shopify Platinum, in Shopify directory). Recruitee custom-domain career site, also links happyhorizonbv.recruitee.com; group board covers all hubs"
+
+- id: fik
+  name: Fik
+  domain: fik.life
+  country: ES
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://fik.life/
+  ats: { vendor: recruitee, slug: fik }
+  storefront: null
+  status: active
+  notes: "Madrid, Shopify Premier partner since 2016 (Shopify directory), size unverified. Shopify Plus builds. fik.recruitee.com linked from homepage"
+
+- id: the-oz
+  name: The Oz
+  domain: the-oz.com
+  country: FR
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://theoz-1744906385.teamtailor.com/
+  ats: { vendor: teamtailor, slug: theoz-1744906385 }
+  storefront: null
+  status: active
+  notes: "Paris and Aix-en-Provence, ~60 staff (its Teamtailor site); Shopify Premier partner, e-commerce site builds since 2008; teamtailor link on home page, resolved by resolver"
+
+- id: sintra
+  name: Sintra Digital Business
+  domain: sintra.eu
+  country: IT
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://career.sintra.eu
+  ats: { vendor: teamtailor, slug: career.sintra.eu }
+  storefront: null
+  status: active
+  notes: "Arezzo and Milan; size unverified; Shopify Premier partner, Shopify Plus and Adobe Commerce builds, headless, ERP/NetSuite integration (own site); Teamtailor career site on custom domain, found by resolver"
+
+- id: blue-stout
+  name: Blue Stout
+  domain: bluestout.com
+  country: US
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Shopify Plus CRO-focused shop; no careers link on site (a Workable board appears in search only, so not used)"
+
+- id: maze
+  name: Maze
+  domain: themazegroup.com
+  country: US
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://mazegroup.bamboohr.com/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "New York (810 Broadway); size unverified; Shopify Premier partner and SFCC implementation partner, enterprise commerce SI (200+ sites launched, own site); home page links mazegroup.bamboohr.com/careers, which redirects to the BambooHR login on 2026-11-05 (careers page switched off)"
+
+- id: ripen
+  name: Ripen eCommerce
+  domain: ripen.com
+  country: US
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://ripen.com/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Princeton NJ (own careers page), remote, size unverified; Shopify and Magento development; Shopify partner status not checked in the directory; JazzHR board ripen.applytojob.com is linked from the careers page but dead on 2026-11-05 (redirects to jazzhr.com)"
+
+- id: structured-agency
+  name: Structured Agency
+  domain: structured.agency
+  country: US
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://structured.agency/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Shopify agency; Webflow careers page with roles inline, no board link (a JazzHR board shows in search only, so not used)"
+
+- id: kubix-media
+  name: Kubix Media
+  domain: kubixmedia.co.uk
+  country: GB
+  phases: [p1, p2]
+  source: shopify-agency-lists
+  careers_url: https://kubixmedia.co.uk/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Birmingham; Shopify; Homerun widget (not an adapter vendor)"
+
+# --- Seeds to 200: BigCommerce partner directory, 2026-11-05 ---
+
+- id: blacksmith-agency
+  name: Blacksmith Agency
+  domain: blacksmith.agency
+  country: US
+  phases: [p1, p2]
+  source: bigcommerce-agency-lists
+  careers_url: https://blacksmith.agency/careers/
+  ats: { vendor: ashby, slug: Blacksmith }
+  storefront: null
+  status: active
+  notes: "Phoenix AZ (BigCommerce directory), size unverified; BigCommerce partner; Ashby slug is capitalised as found in the careers page link"
+
+- id: bluetuskr
+  name: BlueTuskr
+  domain: bluetuskr.com
+  country: US
+  phases: [p1, p2]
+  source: bigcommerce-agency-lists
+  careers_url: https://www.bluetuskr.com/
+  ats: { vendor: workable, slug: bluetuskr }
+  storefront: null
+  status: active
+  notes: "WEAK FIT: marketing-led. Westtown PA (directory), 30+ in-house staff (own site); marketing-led ecommerce agency with a website design and development line, Shopify Plus and BigCommerce partner badges; Workable link on home page"
+
+- id: brilliance-business-solutions
+  name: Brilliance Business Solutions
+  domain: brillianceweb.com
+  country: US
+  phases: [p1, p2]
+  source: bigcommerce-agency-lists
+  careers_url: https://www.brillianceweb.com/aboutus/
+  ats: { vendor: bamboohr, slug: brilliance }
+  storefront: null
+  status: active
+  notes: "Milwaukee WI (BigCommerce directory), size unverified; BigDev certified; /careers lands on the about page, which links the board"
+
+- id: cumula-3-group
+  name: Cumula 3 Group
+  domain: cumula3.com
+  country: US
+  phases: [p1, p2]
+  source: bigcommerce-agency-lists
+  careers_url: https://cumula3.com/
+  ats: { vendor: breezy, slug: cumula3 }
+  storefront: null
+  status: active
+  notes: "Frisco TX (BigCommerce directory), size unverified; BigCommerce partner; board link on home page"
+
+- id: datmos
+  name: Datmos
+  domain: datmos.com
+  country: US
+  phases: [p1, p2]
+  source: bigcommerce-agency-lists
+  careers_url: https://datmos.com/careers
+  ats: { vendor: bamboohr, slug: datmos }
+  storefront: null
+  status: active
+  notes: "Whitefish MT, size unverified; listed in BigCommerce directory as The ZaneRay Group, zaneray.com now redirects to datmos.com; board link on careers page"
+
+- id: envoy
+  name: Envoy
+  domain: weareenvoy.com
+  country: US
+  phases: [p1, p2]
+  source: bigcommerce-agency-lists
+  careers_url: https://www.weareenvoy.com/
+  ats: { vendor: greenhouse, slug: weareenvoy }
+  storefront: null
+  status: active
+  notes: "Irvine CA (BigCommerce directory; San Diego and Chicago offices per own site), size unverified; customer-experience consultancy with a Commerce service line, B2B and B2C sites (VIZIO, Masterbuilt cited); Greenhouse embed for=weareenvoy on home page"
+
+- id: human-marketing
+  name: Human Marketing
+  domain: human.marketing
+  country: US
+  phases: [p1, p2]
+  source: bigcommerce-agency-lists
+  careers_url: https://human.marketing/careers
+  ats: { vendor: workable, slug: human-marketing }
+  storefront: null
+  status: active
+  notes: "WEAK FIT: marketing-led. Irvine CA (directory and own site), size unverified; marketing-led agency (paid, SEO, brand) with a web design and development line and an ecommerce build cited on own site; Workable link on careers page"
+
+- id: intuitsolutions
+  name: IntuitSolutions
+  domain: intuitsolutions.net
+  country: US
+  phases: [p1, p2]
+  source: bigcommerce-agency-lists
+  careers_url: https://www.intuitsolutions.net/employment-opportunities/
+  ats: { vendor: bamboohr, slug: intuitsolutions }
+  storefront: null
+  status: active
+  notes: "Philadelphia PA (own site), size unverified; BigCommerce partner, BigDev-certified developers; board link on careers page"
+
+- id: irish-titan
+  name: Irish Titan
+  domain: irishtitan.com
+  country: US
+  phases: [p1, p2]
+  source: bigcommerce-agency-lists
+  careers_url: https://www.irishtitan.com/careers/
+  ats: { vendor: bamboohr, slug: irishtitan }
+  storefront: null
+  status: active
+  notes: "Minneapolis MN, size unverified; BigCommerce partner (North America list); board link on careers page"
+
+- id: limelight-marketing
+  name: LimeLight Marketing
+  domain: limelightmarketing.com
+  country: US
+  phases: [p1, p2]
+  source: bigcommerce-agency-lists
+  careers_url: https://limelightmarketing.com/careers/
+  ats: { vendor: bamboohr, slug: limelightmarketing }
+  storefront: null
+  status: active
+  notes: "Pittsburg KS and Overland Park KS offices (own site), size unverified; ecommerce agency doing design, custom development and marketing, BigCommerce, Shopify Plus and SCAYLE partner (own site); BambooHR link on careers page"
+
+- id: plum-tree-group
+  name: Plum Tree Group
+  domain: plumtreegroup.net
+  country: US
+  phases: [p1, p2]
+  source: bigcommerce-agency-lists
+  careers_url: https://plumtreegroup.net/
+  ats: { vendor: jazzhr, slug: plumtreegroup }
+  storefront: null
+  status: active
+  notes: "Chicago IL, 60 staff incl. 24 engineers (BigCommerce directory); BigCommerce partner; board link on home page"
+
+- id: rda
+  name: RDA
+  domain: rdadigital.com
+  country: US
+  phases: [p1, p2]
+  source: bigcommerce-agency-lists
+  careers_url: https://www.rdadigital.com/careers
+  ats: { vendor: jazzhr, slug: rda }
+  storefront: null
+  status: active
+  notes: "WEAK FIT: commerce share unverified. Hunt Valley MD (own site and directory), size unverified; digital services consultancy doing platform selection and implementation and custom web app development, Shopify partner on own site, BigCommerce directory listing; commerce share of work not confirmed; rda.applytojob.com link on careers page"
+
+- id: silk-commerce
+  name: Silk Commerce
+  domain: silkcommerce.com
+  country: US
+  phases: [p1, p2]
+  source: bigcommerce-agency-lists
+  careers_url: https://www.silkcommerce.com/about-us/careers/
+  ats: { vendor: bamboohr, slug: silkcommerce }
+  storefront: null
+  status: active
+  notes: "New Jersey, size unverified; listed in BigCommerce directory as Silk Software, silksoftware.com redirects here; Magento/BigCommerce; board link on careers page"
+
+- id: de-nieuwe-zaak
+  name: De Nieuwe Zaak
+  domain: denieuwezaak.nl
+  country: NL
+  phases: [p1, p2]
+  source: bigcommerce-agency-lists
+  careers_url: https://www.denieuwezaak.nl/vacatures
+  ats: { vendor: recruitee, slug: denieuwezaak }
+  storefront: null
+  status: active
+  notes: "Zwolle, 80+ staff (its Intershop partner page), BigCommerce EMEA Partner of the Year 2026, also Shopify/Intershop; part of United Playgrounds. Careers page is in-house but serves offer images from recruitee-main S3; slug denieuwezaak.recruitee.com seen in a search result only, so set by hand: verify"
+
+- id: epic-design-labs
+  name: Epic Design Labs
+  domain: epicdesignlabs.com
+  country: US
+  phases: [p1, p2]
+  source: bigcommerce-agency-lists
+  careers_url: https://jobs.epicdesignlabs.com/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "GoHire board (no adapter yet); revisit if a gohire adapter lands"
+
+# --- Seeds to 200: Clutch e-commerce developer lists (US, UK, EU country lists), 2026-11-05 ---
+
+- id: kasama
+  name: Kasama
+  domain: kasamadigital.com
+  country: US
+  phases: [p1, p2]
+  source: clutch-us
+  careers_url: https://www.kasamadigital.com/careers
+  ats: { vendor: workable, slug: kasama }
+  storefront: null
+  status: active
+  notes: "Acton MA (Clutch; footer says Boston and Manila), 50-249 staff (Clutch), Salesforce Commerce Cloud, Shopify, Oro; apply.workable.com/kasama linked from each role on careers page; open SFCC developer role"
+
+- id: ntara
+  name: Ntara
+  domain: ntara.com
+  country: US
+  phases: [p1, p2]
+  source: clutch-us
+  careers_url: https://www.ntara.com/careers/
+  ats: { vendor: bamboohr, slug: ntara }
+  storefront: null
+  status: active
+  notes: "Johnson City TN (footer and Clutch), 50-249 staff (Clutch; HQ listing 151-200), builds B2B, B2C and DTC stores plus PIM/DAM, platforms not named on the home page; resolver: ntara.bamboohr.com/careers/105 and /106 linked on careers page"
+
+- id: solvative
+  name: Solvative
+  domain: solvative.com
+  country: US
+  phases: [p1, p2]
+  source: clutch-us
+  careers_url: https://www.solvative.com/careers
+  ats: { vendor: breezy, slug: solvative }
+  storefront: null
+  status: active
+  notes: "delivery mostly in India. The Colony TX address on careers page (Clutch says Overland Park KS), 50-249 (Clutch), ~130 staff (site metadata); SFCC, commercetools, Shopify Plus, Adobe Commerce, BigCommerce; delivery mostly from Ahmedabad; resolver missed it, slug from solvative.breezy.hr job links on careers page"
+
+- id: space-dinosaurs
+  name: Space Dinosaurs
+  domain: spacedinosaurs.com
+  country: US
+  phases: [p1, p2]
+  source: clutch-us
+  careers_url: https://www.spacedinosaurs.com/careers
+  ats: { vendor: rippling, slug: spacedinosaurs }
+  storefront: null
+  status: active
+  notes: "Chicago IL (Clutch), 50-249 staff (Clutch), on Clutch Magento US and Chicago lists; careers page says part of the Solara6 group; 'Open jobs board' links ats.rippling.com/spacedinosaurs/jobs"
+
+- id: remarkable
+  name: Remarkable
+  domain: remarkable.global
+  country: GB
+  phases: [p1, p2]
+  source: clutch-uk
+  careers_url: https://careers.remarkable.group/
+  ats: { vendor: teamtailor, slug: careers.remarkable.group }
+  storefront: null
+  status: active
+  notes: "WEAK FIT: mainly Sitecore/Optimizely. London/Manchester, also Chicago and Dubai; 70+ staff (own site); sagittarius.agency redirects here (merger of Sagittarius and three others); Sitecore/Optimizely Platinum, Salesforce, generic commerce, so e-commerce fit is weaker than the rest; Teamtailor career site on custom domain (careersite assets), found by hand via remarkable.global/careers redirect"
+
+- id: visualsoft
+  name: Visualsoft
+  domain: visualsoft.co.uk
+  country: GB
+  phases: [p1, p2]
+  source: clutch-uk
+  careers_url: https://www.visualsoft.co.uk/careers
+  ats: { vendor: workable, slug: visualsoft }
+  storefront: null
+  status: active
+  notes: "Stockton-on-Tees, offices Manchester/Newcastle/London; size unverified (large for the band, likely 200+); now Shopify-focused agency; workable links on careers page"
+
+- id: signifly
+  name: Signifly
+  domain: signifly.com
+  country: DK
+  phases: [p1, p2]
+  source: clutch-eu
+  careers_url: https://signifly.com/careers
+  ats: { vendor: recruitee, slug: signifly }
+  storefront: null
+  status: active
+  notes: "Copenhagen, 50-249 (Clutch). Shopify Plus partner (Clutch Shopify DK list, Shopify directory). Resolver found signifly.recruitee.com link on signifly.com/careers"
+
+- id: evermade
+  name: Evermade
+  domain: evermade.fi
+  country: FI
+  phases: [p1, p2]
+  source: clutch-eu
+  careers_url: https://careers.evermade.fi/
+  ats: { vendor: teamtailor, slug: careers.evermade.fi }
+  storefront: null
+  status: active
+  notes: "WEAK FIT: e-commerce share unverified. Helsinki, 10-49 (Clutch e-commerce list FI). Web/WordPress agency, e-commerce share unverified. evermade.fi/about/careers links to careers.evermade.fi, Teamtailor custom domain confirmed by resolver"
+
+- id: maksimer
+  name: Maksimer
+  domain: maksimer.com
+  country: NO
+  phases: [p1, p2]
+  source: clutch-eu
+  careers_url: https://careers.maksimer.com/
+  ats: { vendor: teamtailor, slug: careers.maksimer.com }
+  storefront: null
+  status: active
+  notes: "Bergen, offices Oslo, Bryne, Kristiansand, 50-249 (Clutch). WooCommerce, Shopify, Litium (also Shopify directory NO). Homepage links to careers.maksimer.com, Teamtailor custom domain confirmed by resolver"
+
+- id: represent
+  name: Represent
+  domain: represent.no
+  country: NO
+  phases: [p1, p2]
+  source: clutch-eu
+  careers_url: https://jobs.represent.no/
+  ats: { vendor: teamtailor, slug: jobs.represent.no }
+  storefront: null
+  status: active
+  notes: "Oslo, 10-49 (Clutch e-commerce list; also Shopify directory NO). Homepage links to jobs.represent.no, Teamtailor custom domain confirmed by resolver"
+
+- id: bombayworks
+  name: Bombayworks
+  domain: bombayworks.se
+  country: SE
+  phases: [p1, p2]
+  source: clutch-eu
+  careers_url: https://careers.bombayworks.com/
+  ats: { vendor: teamtailor, slug: careers.bombayworks.com }
+  storefront: null
+  status: active
+  notes: "WEAK FIT: e-commerce share unverified. Stockholm, offices Malmo and Mumbai, 50-249 (Clutch profile). Full-service digital agency with development and testing; e-commerce focus unverified (homepage names no commerce platform). bombayworks.se/karriar links to careers.bombayworks.com, Teamtailor custom domain confirmed by resolver"
+
+- id: grebban
+  name: Grebban
+  domain: grebban.com
+  country: SE
+  phases: [p1, p2]
+  source: clutch-eu
+  careers_url: https://career.grebban.com/
+  ats: { vendor: teamtailor, slug: career.grebban.com }
+  storefront: null
+  status: active
+  notes: "Stockholm/Gothenburg, offices London, Copenhagen, Oslo; Clutch says 2-9 which looks stale, size unverified. Centra, Norce, Shopify Plus (also Shopify directory, Centra partner list). Link on grebban.com/careers to career.grebban.com, Teamtailor custom domain confirmed by resolver"
+
+- id: ninetech
+  name: Ninetech
+  domain: ninetech.com
+  country: SE
+  phases: [p1, p2]
+  source: clutch-eu
+  careers_url: https://ninetech.teamtailor.com/
+  ats: { vendor: teamtailor, slug: ninetech }
+  storefront: null
+  status: active
+  notes: "Karlstad, 50-249 (Clutch). Digital agency with e-commerce (Clutch e-commerce list). Homepage links to ninetech.teamtailor.com; resolver confirmed"
+
+- id: odd-hill
+  name: Odd Hill
+  domain: oddhill.se
+  country: SE
+  phases: [p1, p2]
+  source: clutch-eu
+  careers_url: https://karriar.oddhill.se/
+  ats: { vendor: teamtailor, slug: karriar.oddhill.se }
+  storefront: null
+  status: active
+  notes: "Malmö, 10-49 (Clutch profile, 16-20 at Malmö), part of Sjöbergska. Web agency building web apps and e-commerce since 2009 (own site); Norce solution partner. Homepage links to karriar.oddhill.se, Teamtailor custom domain confirmed by resolver"
+
+- id: understandit
+  name: Understandit
+  domain: understandit.se
+  country: SE
+  phases: [p1, p2]
+  source: clutch-eu
+  careers_url: https://careers.understandit.se/
+  ats: { vendor: teamtailor, slug: careers.understandit.se }
+  storefront: null
+  status: active
+  notes: "Gothenburg, 10-49 (Clutch Shopify list). E-commerce/web development. Homepage links to careers.understandit.se, Teamtailor custom domain confirmed by resolver"
+
+- id: vaimo
+  name: Vaimo
+  domain: vaimo.com
+  country: SE
+  phases: [p1, p2]
+  source: clutch-eu
+  careers_url: https://careers.vaimo.com/
+  ats: { vendor: teamtailor, slug: careers.vaimo.com }
+  storefront: null
+  status: active
+  notes: "ABOVE BAND. Stockholm, 250-999 (Clutch), above the 250 guide but a pure e-commerce SI (Adobe Commerce, Shopify Plus; also in Shopify directory). Teamtailor custom domain found by resolver at careers.vaimo.com. Group-wide board, expect roles in many countries"
+
+- id: focusreactive
+  name: FocusReactive
+  domain: focusreactive.com
+  country: NL
+  phases: [p1, p2]
+  source: clutch-uk
+  careers_url: https://careers.smartrecruiters.com/FocusReactive
+  ats: { vendor: smartrecruiters, slug: FocusReactive }
+  storefront: null
+  status: active
+  notes: "Netherlands (Focus Reactive BV per site footer), offices incl. London, ~20 engineers; headless web agency, e-commerce share unverified, found on Clutch's UK list; careers link on own site goes to careers.smartrecruiters.com/FocusReactive (resolver only knows jobs.smartrecruiters.com, slug set from that link)"
+
+- id: liip
+  name: Liip
+  domain: liip.ch
+  country: CH
+  phases: [p1, p2]
+  source: clutch-eu
+  careers_url: https://jobs.liip.ch/
+  ats: { vendor: teamtailor, slug: jobs.liip.ch }
+  storefront: null
+  status: active
+  notes: "ABOVE BAND. Lausanne HQ, offices Zürich, Bern, Basel, Fribourg, St. Gallen. Clutch says 250-999 overall, 151-200 at Lausanne; above the 250 guide. Web/mobile agency with an E-Commerce development service (own site, platforms not named; Clutch mentions online shops). Homepage links to jobs.liip.ch, Teamtailor custom domain confirmed by resolver"
+
+- id: synolia
+  name: Synolia
+  domain: synolia.com
+  country: FR
+  phases: [p1, p2]
+  source: clutch-eu
+  careers_url: https://careers.synolia.com/
+  ats: { vendor: teamtailor, slug: careers.synolia.com }
+  storefront: null
+  status: active
+  notes: "Lyon, 50-249 staff (Clutch), CRM (Salesforce) plus e-commerce (Magento/Adobe, Sylius, Akeneo). Teamtailor custom-domain career site linked from synolia.com"
+
+- id: strix
+  name: Strix
+  domain: strix.net
+  country: PL
+  phases: [p1, p2]
+  source: clutch-eu
+  careers_url: https://career.strix.net/
+  ats: { vendor: recruitee, slug: strix1 }
+  storefront: null
+  status: active
+  notes: "size borderline. Krakow HQ (Clutch), offices Utrecht, 's-Hertogenbosch, Frankfurt, Bochum; Clutch says 50-249 but own site says 300+ across Strix Global (above band). Magento/Adobe, Shopware, Shopify Plus, commercetools. career.strix.net redirects to strix1.recruitee.com"
+
+- id: cti-digital
+  name: CTI Digital
+  domain: ctidigital.com
+  country: GB
+  phases: [p1, p2]
+  source: clutch-uk
+  careers_url: https://www.ctidigital.com/about/careers/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Manchester; Adobe Commerce; Pinpoint board (ctidigital.pinpointhq.com), not an adapter vendor"
+
+- id: flatline-agency
+  name: Flatline Agency
+  domain: flatlineagency.com
+  country: NL
+  phases: [p1, p2]
+  source: clutch-eu
+  careers_url: https://jobs.flatlineagency.com/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Amsterdam, 10-49 (Clutch), Shopify. Homerun"
+
+- id: shopforward
+  name: ShopForward
+  domain: shopforward.nl
+  country: NL
+  phases: [p1, p2]
+  source: clutch-eu
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Boxtel, e-commerce agency. Site is a JS shell with no careers link; shopforward.recruitee.com seen in search only, not linked. Source not checked"
+
+# --- Seeds to 200: Salesforce Commerce Cloud partners, 2026-11-05 ---
+
+- id: studio-science
+  name: Studio Science
+  domain: studioscience.com
+  country: US
+  phases: [p1, p2]
+  source: sfcc-partners
+  careers_url: https://www.studioscience.com/careers
+  ats: { vendor: greenhouse, slug: studioscience }
+  storefront: null
+  status: active
+  notes: "Indianapolis IN (own site), size unverified, Salesforce partner agency (own site) with an SFCC Technical Lead posting; found via that posting, not confirmed in a Salesforce partner directory; job-boards.greenhouse.io/studioscience linked from careers page"
+
+# --- Seeds to 200: Web search: other partner lists (Norce, Litium, Dynamicweb) and board-first search, 2026-11-05 ---
+
+- id: blue-acorn-ici
+  name: Blue Acorn iCi
+  domain: blueacornici.com
+  country: US
+  phases: [p1, p2]
+  source: web-search
+  careers_url: https://www.blueacornici.com/about-us
+  ats: { vendor: jazzhr, slug: blueacornici }
+  storefront: null
+  status: active
+  notes: "ABOVE BAND. US, city unverified; Adobe Commerce, Shopify Plus, Salesforce; above the 10-250 band and part of Infosys, kept because it runs its own board; resolver found blueacornici.applytojob.com on its about page"
+
+- id: kollab
+  name: KOLLAB
+  domain: kollab.dk
+  country: DK
+  phases: [p1, p2]
+  source: web-search
+  careers_url: https://karriereside.kollab.dk/
+  ats: { vendor: teamtailor, slug: karriereside.kollab.dk }
+  storefront: null
+  status: active
+  notes: "WEAK FIT: broad IT consultancy. East Jutland (city unverified), size unverified. Digital solutions provider: Microsoft Business Central / Power Platform plus an e-commerce and website service; Dynamicweb alliance partner (dynamicweb.com/partners). Borderline: Microsoft-ERP heavy. Homepage links to karriereside.kollab.dk, Teamtailor custom domain confirmed by resolver"
+
+- id: kraftvaerk
+  name: Kraftvaerk
+  domain: kraftvaerk.com
+  country: DK
+  phases: [p1, p2]
+  source: web-search
+  careers_url: https://www.kraftvaerk.com/career/
+  ats: { vendor: bamboohr, slug: kraftvaerk }
+  storefront: null
+  status: active
+  notes: "Copenhagen, offices Aarhus and Helsinki. Size unverified (own site says ~30 developers on Optimizely). Commerce and omnichannel, Optimizely, MACH; commercetools in portfolio per inRiver and Struct partner pages. NOT found in any of the six directories: source 'other' (own knowledge). Resolver found kraftvaerk.bamboohr.com on the career page"
+
+- id: delorean
+  name: Delorean
+  domain: delorean.se
+  country: SE
+  phases: [p1, p2]
+  source: web-search
+  careers_url: https://jobb.delorean.se/
+  ats: { vendor: teamtailor, slug: jobb.delorean.se }
+  storefront: null
+  status: active
+  notes: "WEAK FIT: commerce evidence is the Norce partner list only. Stockholm, size unverified. Digital partner (web, apps, loyalty for Pressbyrån/7-Eleven); Norce solution partner, own homepage names no commerce platform. No Clutch profile found. Homepage links to jobb.delorean.se, Teamtailor custom domain confirmed by resolver"
+
+- id: great-it
+  name: Great IT
+  domain: greatit.se
+  country: SE
+  phases: [p1, p2]
+  source: web-search
+  careers_url: https://jobb.greatit.se/
+  ats: { vendor: teamtailor, slug: jobb.greatit.se }
+  storefront: null
+  status: active
+  notes: "WEAK FIT: broad IT consultancy. Malmö, size unverified. IT consultancy with a web and e-commerce line (CTEK web/e-commerce case on own site); Norce solution partner. Borderline: broad IT consultancy, e-commerce is one practice. Homepage links to jobb.greatit.se, Teamtailor custom domain confirmed by resolver"
+
+- id: rebel-and-bird
+  name: Rebel and Bird
+  domain: rebelandbird.com
+  country: SE
+  phases: [p1, p2]
+  source: web-search
+  careers_url: https://rebelbird.teamtailor.com/
+  ats: { vendor: teamtailor, slug: rebelbird }
+  storefront: null
+  status: active
+  notes: "WEAK FIT: commerce evidence is the Norce partner list only. Stockholm and Örebro, size unverified. Tech agency, Norce solution partner (norce.io/partners), so builds Norce commerce; no Clutch profile found. Homepage links to rebelbird.teamtailor.com (department 'Utveckling'); resolver confirmed"
+
+- id: antadis
+  name: Antadis
+  domain: antadis.com
+  country: FR
+  phases: [p1, p2]
+  source: web-search
+  careers_url: https://www.antadis.com/nous-rejoindre/
+  ats: { vendor: recruitee, slug: antadis }
+  storefront: null
+  status: active
+  notes: "France, size unverified; e-commerce agency (builds, redesigns, maintenance); careers page embeds the Recruitee jobs widget (company id 12084), whose feed names the account in its mailbox address (job.…@antadis.recruitee.com), so the slug is antadis; the posting links in the feed point to recrutement.antadis.com, which did not resolve on 2026-11-05"
+
+- id: kaliop
+  name: Kaliop
+  domain: kaliop.com
+  country: FR
+  phases: [p1, p2]
+  source: web-search
+  careers_url: https://www.kaliop.com/fr/rejoindre-kaliop
+  ats: { vendor: recruitee, slug: kaliop }
+  storefront: null
+  status: active
+  notes: "Montpellier, Toulouse, Paris (job locations on own site), size unverified. Digital tech agency, composable/headless commerce with commercetools in its stack. No Clutch profile at clutch.co/profile/kaliop. Careers page links kaliop.recruitee.com job posts; resolver confirmed"
+
+- id: alt-and-dot
+  name: "Alt & Dot"
+  domain: altanddot.com
+  country: US
+  phases: [p1, p2]
+  source: web-search
+  careers_url: https://www.altanddot.com/careers/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Small remote Shopify agency founded in NYC (its Workable profile text); careers page is email only (joinus@altanddot.com); board workable/altanddot (0 openings) seen in search only, not linked from own site"
+
+- id: corra
+  name: Corra
+  domain: corra.com
+  country: US
+  phases: [p1, p2]
+  source: web-search
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "New York NY, Shopify Plus / Adobe Commerce; site returns 403 to WebFetch; board jazzhr/corra seen in search only, not confirmed on own site"
+
+- id: levitate-foundry
+  name: Levitate Foundry
+  domain: levitatefoundry.com
+  country: US
+  phases: [p1, p2]
+  source: web-search
+  careers_url: https://levitatefoundry.com/a/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Shopify Plus partner (calls itself the largest female-owned one); in-house page (/a/careers/jobs/...); board workable/levitate-foundry seen in search only, not linked from own site"
+
+- id: softlimit
+  name: Softlimit
+  domain: softlimit.com
+  country: US
+  phases: [p1, p2]
+  source: web-search
+  careers_url: https://www.softlimit.com/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Remote-first Shopify Plus studio; no careers page on own site (/careers and /pages/careers 404); board workable/softlimit (0 openings) seen in search only"
+
+- id: fluid-commerce
+  name: Fluid Commerce
+  domain: fluidcommerce.co.uk
+  country: GB
+  phases: [p1, p2]
+  source: web-search
+  careers_url: https://www.fluidcommerce.co.uk/about-us/careers/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "UK Magento Solution Partner agency, city and size unverified. Board workable/fluidcommerce seen in search only (empty), not linked from own site; careers page is an inline CV form"
+
+- id: mando-group
+  name: Mando Group
+  domain: mandogroup.com
+  country: GB
+  phases: [p1, p2]
+  source: web-search
+  careers_url: https://www.mandogroup.com/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Liverpool digital agency (Optimizely/commerce), size unverified. Homerun board (mandogroup.homerun.co) linked from homepage: not an adapter vendor"
+
+- id: monsoon-consulting
+  name: Monsoon Consulting
+  domain: monsoonconsulting.com
+  country: IE
+  phases: [p1, p2]
+  source: web-search
+  careers_url: https://monsoonconsulting.com/careers/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Dublin (also London phone), Adobe Commerce and Drupal agency, size unverified. Board workable/monsoonconsulting seen in search only, not linked from own site; careers page lists no roles"
+
+- id: studioforty9
+  name: StudioForty9
+  domain: studioforty9.com
+  country: IE
+  phases: [p1, p2]
+  source: web-search
+  careers_url: https://www.studioforty9.com/pages/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Dublin, Magento and Shopify agency, size unverified. HireHive board (studioforty9.hirehive.com): not an adapter vendor"
+
+- id: askas
+  name: Askås
+  domain: askas.se
+  country: SE
+  phases: [p1, p2]
+  source: web-search
+  careers_url: https://www.askas.se/sv/jobba-hos-oss
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Stockholm, Centra/Shopify e-commerce agency, size unverified. Jobs on HaileyHR (askas.careers.haileyhr.app), not an adapter vendor"
+
+- id: toxic
+  name: Toxic
+  domain: toxic.se
+  country: SE
+  phases: [p1, p2]
+  source: web-search
+  careers_url: https://jobb.toxic.se/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Jönköping/Gothenburg/Borås digital agency, Litium and Norce partner. jobb.toxic.se redirects to Hailey HR (not an adapter)"
+
+- id: monogo
+  name: Monogo
+  domain: monogo.pl
+  country: PL
+  phases: [p1, p2]
+  source: web-search
+  careers_url: https://monogo.pl/pl-PL/kariera
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  notes: "Lublin, size unverified. E-commerce agency: Adobe Commerce / Magento 2 and headless (own site). No Clutch profile at clutch.co/profile/monogo. Careers page links monogo.zohorecruit.eu/jobs/Careers (EU Zoho data centre); resolver confirmed; Zoho board monogo.zohorecruit.eu/jobs/Careers is live as a page, but its RSS feed answers \"job list removed\" on 2026-11-05 and the adapter reads only RSS"
 
 # --- Your network: past clients, current agency's clients, Studion alumni companies ---
 # Add entries here by hand. Highest reply rate of any source (SPEC "Universe seeding").

@@ -1,0 +1,168 @@
+# Slice: Shopify partner directory, service partners (shopify.com/partners/directory/locations/{country}), tiers Platinum, Premier, Plus; US, GB, IE, Nordics, Benelux, FR, ES, IT, PL, CH, CZ, rest of EU27 except DE/AT.
+# Date: 2026-11-05. Harvested 854 tiered partners; filtered to 394 (all Platinum/Premier; Plus with >=10 reviews, or >=1 review and Headless/Custom apps/Systems integration on the card); 118 dropped as already under universe/, 7 giants, 4 without a website; 265 probed; 6 on an adapter vendor.
+# Method: scripted harvest + home/careers probe through core/http.ts fetchText (.scratch/shopify-dir/), hits resolved with scripts/resolve.ts (no --verify); meetdomaine.com and ecommerceaccelerators.com redirect to already-listed domaineworldwide.com and zaelab.com.
+
+# --- qualifying ---
+- name: Maze
+  domain: themazegroup.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://mazegroup.bamboohr.com/careers
+  ats: { vendor: bamboohr, slug: mazegroup }
+  notes: "New York (810 Broadway); size unverified; Shopify Premier partner and SFCC implementation partner, enterprise commerce SI (200+ sites launched, own site); bamboohr link on home page, resolved by resolver"
+
+- name: UN/COMMON
+  domain: uncommonagency.co
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://apply.workable.com/uncommonagency/
+  ats: { vendor: workable, slug: uncommonagency }
+  notes: "Philadelphia (directory); size unverified; Shopify Platinum partner, Shopify Plus redesign and replatform agency; workable link on home page, resolved by resolver"
+
+- name: Sharma Brands
+  domain: sharmabrands.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://jobs.ashbyhq.com/lunar-solar-group
+  ats: { vendor: ashby, slug: lunar-solar-group }
+  notes: "New York (directory); size unverified; Shopify Premier partner, Shopify design and development plus growth marketing; footer link 'Careers at Lunar': board belongs to parent Lunar Solar Group, which acquired Sharma Brands, so roles may span the group"
+
+- name: Zero Studios
+  domain: zero.nyc
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://www.zero.nyc/
+  ats: { vendor: greenhouse, slug: zerostudios }
+  notes: "Milwaukee, offices New York and LA (directory); size unverified; Shopify Plus partner; creative-led agency (brand, packaging, campaigns) that also builds e-commerce sites, so engineering roles will be rare; greenhouse link on home page, resolved by resolver"
+
+- name: Sintra Digital Business
+  domain: sintra.eu
+  country: IT
+  source: shopify-agency-lists
+  careers_url: https://career.sintra.eu
+  ats: { vendor: teamtailor, slug: career.sintra.eu }
+  notes: "Arezzo and Milan; size unverified; Shopify Premier partner, Shopify Plus and Adobe Commerce builds, headless, ERP/NetSuite integration (own site); Teamtailor career site on custom domain, found by resolver"
+
+- name: The Oz
+  domain: the-oz.com
+  country: FR
+  source: shopify-agency-lists
+  careers_url: https://theoz-1744906385.teamtailor.com/
+  ats: { vendor: teamtailor, slug: theoz-1744906385 }
+  notes: "Paris and Aix-en-Provence, ~60 staff (its Teamtailor site); Shopify Premier partner, e-commerce site builds since 2008; teamtailor link on home page, resolved by resolver"
+
+# --- screened out (board on a non-adapter vendor, or not a qualifying agency) ---
+- name: Oowlish
+  domain: oowlish.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://www.oowlish.com/careers
+  ats: { vendor: unknown }
+  notes: "Screened out: nearshore Latin America dev and talent firm with a Sheridan WY address; jobs.lever.co/oowlish exists on its careers page but the company is offshore delivery plus staffing"
+
+- name: SLTWTR
+  domain: sltwtr.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://sltwtr.com/blogs/careers
+  ats: { vendor: unknown }
+  notes: "Santa Barbara; Shopify Platinum partner; careers page links jobs.gusto.com (Gusto, not an adapter vendor)"
+
+- name: Pasilobus
+  domain: pasilobus.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://www.pasilobus.com/pages/careers
+  ats: { vendor: unknown }
+  notes: "Seattle; Shopify Plus partner but mainly a Shopify app vendor (18 apps); careers page links jobs.gusto.com (Gusto)"
+
+- name: OneMagnify
+  domain: onemagnify.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://www.onemagnify.com/careers
+  ats: { vendor: unknown }
+  notes: "Manhattan Beach (directory); Shopify Premier partner, marketing, data and technology firm; Workday board (onemagnify.wd5.myworkdayjobs.com)"
+
+- name: Rocket Digital
+  domain: rock.et
+  country: ES
+  source: shopify-agency-lists
+  careers_url: https://rock.et/
+  ats: { vendor: unknown }
+  notes: "Barcelona; Shopify Platinum partner, digital business consultancy; Factorial board (rock-et.factorialhr.es)"
+
+- name: Galadrim
+  domain: galadrim.fr
+  country: FR
+  source: shopify-agency-lists
+  careers_url: https://galadrim.fr/carrieres/
+  ats: { vendor: unknown }
+  notes: "Paris; Shopify Plus partner, custom web/AI development agency; careers on Welcome to the Jungle"
+
+- name: Colorz
+  domain: colorz.fr
+  country: FR
+  source: shopify-agency-lists
+  careers_url: https://www.colorz.fr/careers
+  ats: { vendor: unknown }
+  notes: "Paris; Shopify Platinum partner; careers on Welcome to the Jungle"
+
+- name: Nebulab
+  domain: nebulab.com
+  country: IT
+  source: shopify-agency-lists
+  careers_url: https://nebulab.com/careers
+  ats: { vendor: unknown }
+  notes: "Pescara; Shopify Premier partner, e-commerce consultancy; HiBob board (nebulab.careers.hibob.com)"
+
+- name: Jakala
+  domain: jakala.com
+  country: IT
+  source: shopify-agency-lists
+  careers_url: https://www.jakala.com/work-with-us-join
+  ats: { vendor: unknown }
+  notes: "Milan; Shopify Premier partner; large international group (too large for the brief); careers via Welcome to the Jungle"
+
+# Probed 2026-11-05, no job board found on home or careers page:
+# 1hutch.co.uk, 1r.agency, 20northmarketing.com, 2friendsdesigns.com, 3dids.com, absolute-design.co.uk,
+# acadaca.com, acadia.io, adexlabs.com, ankon.dk, appfleece.com, ard-creative.com, artich.io, attomy.io,
+# atwix.com, autrement.studio, avenuez.com, axceleris.com, axis80.com, b2agency.com, bbold.online,
+# benrummel.com, bf.inc, binaery.com, blackswan.paris, bloom.wine, bluedgeusa.com,
+# bluehorizonsmarketing.co.uk, borngroup.com, brainvire.com, brandography.com, brandsthatbloom.com,
+# buildwithamplify.com, byteex.co, c2-digital.com, carlosenrique.dev, carlowseo.com, cedcommerce.com,
+# cirklestudio.co, co-curator.com, coldsmoke.co, comerix.com, commence.studio, conspireagency.com, cooder.it,
+# craftberry.co, cremedlc.co, cronkstudios.com, dashcreative.co, datasolution.fr, deardigital.com,
+# dekstech.com, designingfresh.com, digismoothie.com, digitalsauna.com, digitalsuits.co, dinhcreative.com,
+# dotsquares.com, dynamate.be, e-commerce.studio, e-lixir.fr, easycomitalia.com, ebiztrait.com, ecommerce-
+# today.com, ecommercepot.com, ecommercepro.com, ecomqueens.com, enkomion.com, eshopgenius.com,
+# fantasticfy.com, favsolution.com, fdgweb.com, fellemedia.com, fmdevelopment.com, folio3.com, freshwater.dev,
+# function.london, fusefabric.com, gloross.com, go2flow.com, gradiweb.com, grafikr.dk, hawkemedia.com,
+# haydonpower.co.uk, hazil.studio, herd.io, heseven.com, hiecom.co, hiltonherbs.com, hippiechickdesign.com,
+# hiveb2x.com, hoculus.com, hypereffekt.com, iceesocial.com, impression-studios.com, inkofpixel.com,
+# inspiradigital.co.uk, jadepuma.com, kopstorm.com, latechfactory.com, lemonade.nyc, librano.it,
+# limesharp.net, lineagrafica.es, lobstter.com, lucentinnovation.com, madagence.fr, magexo.cz,
+# magnetoitsolutions.com, maltertech.com, mandasatech.com, manufactur.co, markloops.com, masscreations.co.uk,
+# mastroke.com, midknightgenius.com, migraciones.io, minionmade.com, mlveda.com, mmshopydevs.com,
+# monumental.is, moon-moon.fr, mote.agency, mtnhaus.co, multivitamin.studio, namastudio.it, neat.digital,
+# nedfinity.com, nethype.co, netsteps.gr, nine15.com, nivacommerce.com, noirluxe.co.uk, northernartillery.com,
+# notchsolutions.com, notsellingliquid.com, numbered.com, obtino.com, ohdigital.eu, on-sight.co, onlineshop-
+# experts.ch, onstate.co.uk, ouxp.com, pacificiq.com, peanutbutter.es, peardigital.co.uk, pelicancommerce.com,
+# pikka.fr, pivotmade.com, plugdigital.io, power2cloud.com, prcapps.com, pthreemedia.com, rankist.ch,
+# raymondmatthew.com, reduncle.es, riessgroup.com, rnrmediagrp.com, roiroi.com, rootsyntax.com, roswell.nyc,
+# rubydigitalagency.com, rundtc.com, satas.pro, savvyprogrammers.com, scandicommerce.no, sdg.la,
+# seamonsterstudios.com, seedcms.com, sharonmoskal.com, sharpmediaagency.com, shopafree.me, shophelten.dk,
+# shopmonkey.nl, shoptrade.co, skratch.co, slicedbread.agency, smartcookie-design.co.uk, softlimit.com,
+# someoneyouknow.online, sophelle.com, soy.es, sparky.us, spellnsell.com, spur-i-t.com, squashedpixel.co.uk,
+# stellar-soft.com, strongerecommerce.com, studiorao.nl, studiorotate.com, sunnyroad.co, supplyant.com,
+# surfturf.digital, swedenunlimited.com, tamaragency.com, tasklon.com, textconnects.com, thails.com,
+# thatworks.agency, theblinc.com, thefunction.works, thegenielab.com, totalcommerce.partners,
+# tracysailors.com, trennder.com, tribe.studio, triboo.com, trsdesign.com, tunca.it, turnaroundcommerce.com,
+# udundi.com, ultramarketinggroup.com, unique.paris, unlikely.technology, varfaj.com, vaulted-oak.com,
+# vectoriam.com, view-source.com, view6.com, w3lead.com, wallmanderco.se, wearecrisp.com, wearehatch.co.uk,
+# weareict.it, wearepeachy.com, weblineo.com, webmefy.com, webstylemarketing.com, whirlwind-ecommerce.com,
+# wlcr.io, wonderful.io, yellowwebmonkey.com, yourstorewizards.com, zettlerdigital.com
+# Probed 2026-11-05, blocked or unreachable:
+# apcommunication.eu, axome.com, ecomgraduates.com, filoblu.com, gomage.com, nogin.com,
+# performdigitalmedia.com, rialtopartners.com, shopasaservice.dk, thedesignarchitechs.com, thetaproom.com,
+# trellis.co, truewepro.co.uk, wolfpointagency.com

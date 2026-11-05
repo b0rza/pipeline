@@ -1,0 +1,911 @@
+# Slice: United States, Shopify Plus partner lists and BigCommerce agency partner directory (US HQ only).
+# Date: 2026-11-05. Stopped at ~110 screened (limit 90 overshot by batching) with 14 qualifying, short of the 22 target.
+# Method: scripts/resolve.ts on each domain (path guesses) then on the careers URL found on the home page; WebFetch for the rest.
+
+# --- Qualifying: careers page sits on an adapter vendor ---
+
+- name: Prismfly
+  domain: prismfly.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://prismfly.com/life-at-prismfly
+  ats: { vendor: bamboohr, slug: prismfly }
+  notes: "Dallas TX and New York offices (own site), size unverified; Shopify Plus partner, CRO plus Shopify Plus development; board link on careers page"
+
+- name: Ripen eCommerce
+  domain: ripen.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://ripen.com/careers
+  ats: { vendor: jazzhr, slug: ripen }
+  notes: "Princeton NJ (own careers page), remote, size unverified; Shopify and Magento development; Shopify partner status not checked in the directory; board link on careers page"
+
+- name: Blacksmith Agency
+  domain: blacksmith.agency
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://blacksmith.agency/careers/
+  ats: { vendor: ashby, slug: Blacksmith }
+  notes: "Phoenix AZ (BigCommerce directory), size unverified; BigCommerce partner; Ashby slug is capitalised as found in the careers page link"
+
+- name: Vaan Group
+  domain: vaangroup.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://www.vaangroup.com/careers
+  ats: { vendor: rippling, slug: vaan-group }
+  notes: "HQ city unverified (US), size unverified; calls itself a Shopify Platinum agency, Shopify engineering and migrations; board link on careers page"
+
+- name: Simplistic
+  domain: simplistic.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://simplistic.com/pages/careers
+  ats: { vendor: greenhouse, slug: simplisticllc }
+  notes: "New York NY (roundup), size unverified; listed as Shopify Platinum partner; board link on careers page"
+
+- name: IntuitSolutions
+  domain: intuitsolutions.net
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://www.intuitsolutions.net/employment-opportunities/
+  ats: { vendor: bamboohr, slug: intuitsolutions }
+  notes: "Philadelphia PA (own site), size unverified; BigCommerce partner, BigDev-certified developers; board link on careers page"
+
+- name: Datmos (formerly The ZaneRay Group)
+  domain: datmos.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://datmos.com/careers
+  ats: { vendor: bamboohr, slug: datmos }
+  notes: "Whitefish MT, size unverified; listed in BigCommerce directory as The ZaneRay Group, zaneray.com now redirects to datmos.com; board link on careers page"
+
+- name: Irish Titan
+  domain: irishtitan.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://www.irishtitan.com/careers/
+  ats: { vendor: bamboohr, slug: irishtitan }
+  notes: "Minneapolis MN, size unverified; BigCommerce partner (North America list); board link on careers page"
+
+- name: Brilliance Business Solutions
+  domain: brillianceweb.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://www.brillianceweb.com/aboutus/
+  ats: { vendor: bamboohr, slug: brilliance }
+  notes: "Milwaukee WI (BigCommerce directory), size unverified; BigDev certified; /careers lands on the about page, which links the board"
+
+- name: eHouse Studio
+  domain: ehousestudio.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://www.ehousestudio.com/
+  ats: { vendor: rippling, slug: ehouse-studio-llc }
+  notes: "Charleston SC (Shopify directory), size unverified; Shopify Platinum partner; slug from the Careers link in the site nav. Note: /careers still 301-redirects to ehousestudio.bamboohr.com/careers, probably the old board"
+
+- name: Cumula 3 Group
+  domain: cumula3.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://cumula3.com/
+  ats: { vendor: breezy, slug: cumula3 }
+  notes: "Frisco TX (BigCommerce directory), size unverified; BigCommerce partner; board link on home page"
+
+- name: Plum Tree Group
+  domain: plumtreegroup.net
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://plumtreegroup.net/
+  ats: { vendor: jazzhr, slug: plumtreegroup }
+  notes: "Chicago IL, 60 staff incl. 24 engineers (BigCommerce directory); BigCommerce partner; board link on home page"
+
+- name: Silk Commerce (formerly Silk Software)
+  domain: silkcommerce.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://www.silkcommerce.com/about-us/careers/
+  ats: { vendor: bamboohr, slug: silkcommerce }
+  notes: "New Jersey, size unverified; listed in BigCommerce directory as Silk Software, silksoftware.com redirects here; Magento/BigCommerce; board link on careers page"
+
+- name: First and Third
+  domain: firstandthird.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://firstandthird.com/careers
+  ats: { vendor: jazzhr, slug: firstandthird }
+  notes: "Redondo Beach CA (Shopify directory), size unverified; Shopify Plus tier partner, migrations and custom theming, also WordPress; board link on careers page"
+
+# --- Screened out ---
+
+- name: Praella
+  domain: praella.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://praella.com/pages/careers
+  ats: { vendor: unknown }
+  notes: "Chicago IL, Shopify Platinum; careers page has no ATS, role buttons link off to a banned job site"
+
+- name: IT Geeks
+  domain: itgeeks.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Miami FL / Salt Lake City (lists disagree), Shopify Platinum; no careers link on home page, path guesses found no board"
+
+- name: Arctic Grey
+  domain: arcticgrey.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://arcticgrey.com/pages/careers
+  ats: { vendor: unknown }
+  notes: "New York NY (lists), Shopify Platinum; careers page has an empty form, no board"
+
+- name: Solo Media Group
+  domain: solomediagroup.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "New York NY, Shopify Platinum (per roundup); no careers page found"
+
+- name: Mobikasa
+  domain: mobikasa.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://www.mobikasa.com/careers/
+  ats: { vendor: unknown }
+  notes: "Miami FL office plus Delhi and Dubai; Shopify Premier and BigCommerce partner; in-house application form"
+
+- name: Sleepless Media
+  domain: sleeplessmedia.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://www.sleeplessmedia.com/pages/careers
+  ats: { vendor: unknown }
+  notes: "California, Shopify Premier; in-house careers page, no board"
+
+- name: Metajive
+  domain: metajive.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://www.metajive.com/careers
+  ats: { vendor: unknown }
+  notes: "Encinitas CA; Paylocity board (not an adapter vendor)"
+
+- name: Blue Stout
+  domain: bluestout.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Shopify Plus CRO-focused shop; no careers link on site (a Workable board appears in search only, so not used)"
+
+- name: Lounge Lizard
+  domain: loungelizard.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://www.loungelizard.com/careers/
+  ats: { vendor: unknown }
+  notes: "Long Island NY, design/marketing heavy, Shopify Premier per roundup; in-house careers page"
+
+- name: Webinopoly
+  domain: webinopoly.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Houston TX (own about page), Shopify Plus; no careers page found"
+
+- name: Verbal+Visual
+  domain: verbalvisual.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "New York NY; no careers link on home page, path guesses found no board"
+
+- name: Coalition Technologies
+  domain: coalitiontechnologies.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://coalitiontechnologies.com/careers
+  ats: { vendor: unknown }
+  notes: "Los Angeles CA, BigCommerce Elite (own blog); site returns 403 to automated fetches, board not checked"
+
+- name: Optimum7
+  domain: optimum7.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://www.optimum7.com/careers
+  ats: { vendor: unknown }
+  notes: "Miami FL; in-house careers page"
+
+- name: Bear Group
+  domain: beargroup.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Seattle WA, Shopify agency; no careers link on site"
+
+- name: Forix
+  domain: forixcommerce.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Portland OR; forixwebdesign.com redirects here; site returns 403 to automated fetches"
+
+- name: Tiller Digital
+  domain: tillerdigital.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "BigCommerce agency; site returns 403 to automated fetches"
+
+- name: Digital Silk
+  domain: digitalsilk.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "New York NY, design-led; no careers link on home page, path guesses found no board"
+
+- name: Charle Agency
+  domain: charleagency.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Los Angeles CA (roundup), Shopify Plus; jobs only via a banned job site link; charle.com also has no careers link"
+
+- name: Dotdev
+  domain: dotdev.co
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Shopify Plus agency, HQ unverified; no careers link on site"
+
+- name: MoJo Active
+  domain: mojoactive.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://www.mojoactive.com/careers
+  ats: { vendor: unknown }
+  notes: "Watsontown PA, BigCommerce Elite; in-house role pages, no board"
+
+- name: Binary Anvil
+  domain: binaryanvil.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "BigCommerce partner; site returns 403 to automated fetches"
+
+- name: Brod Solutions
+  domain: brodsolutions.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://brodsolutions.com/about
+  ats: { vendor: unknown }
+  notes: "BigCommerce partner; careers section on about page, no board"
+
+- name: efelle creative
+  domain: seattlewebdesign.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://www.seattlewebdesign.com/careers
+  ats: { vendor: unknown }
+  notes: "Seattle WA; efelle.com redirects here; careers page has no board"
+
+- name: Sunlight Media
+  domain: sunlightmedia.org
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Los Angeles CA; no careers link on site"
+
+- name: Jamersan
+  domain: jamersan.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Alabama, BigCommerce Preferred; no careers link on site"
+
+- name: Hammer Commerce
+  domain: hammercommerce.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "domain redirects to a domain-sale page; agency site gone or moved"
+
+- name: Klizer
+  domain: klizer.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://careers.klizer.com/
+  ats: { vendor: unknown }
+  notes: "Austin TX, US and India staff; in-house WordPress careers site"
+
+- name: BlueSwitch
+  domain: blueswitch.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "no careers link on site"
+
+- name: Creatuity
+  domain: creatuity.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Dallas TX area, Magento/BigCommerce; site returns 403 to automated fetches"
+
+- name: Something Digital
+  domain: somethingdigital.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "redirects to rightpoint.com (acquired, part of a global group); skip"
+
+- name: Digital Operative
+  domain: digitaloperative.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://www.digitaloperative.com/careers.html
+  ats: { vendor: unknown }
+  notes: "San Diego CA; in-house careers page, links to sister company 85sixty"
+
+- name: Kensium
+  domain: kensium.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "BigCommerce partner, US/India; site returns 403 to automated fetches; sellry.com now redirects here"
+
+- name: eCreative Works
+  domain: ecreativeworks.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "home page answers with a bot challenge (202); no careers link"
+
+- name: Rejuvenate Digital
+  domain: rejuvenatedigital.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "no careers link on site"
+
+- name: Unleashed Technologies
+  domain: unleashed-technologies.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Maryland; site returns 403 to automated fetches"
+
+- name: Customer Paradigm
+  domain: customerparadigm.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://www.customerparadigm.com/about-customer-paradigm-company/careers-jobs-employment-opportunities/
+  ats: { vendor: unknown }
+  notes: "Boulder CO; apply by email (hr@)"
+
+- name: InteractOne
+  domain: interactone.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://interactone.com/careers/
+  ats: { vendor: unknown }
+  notes: "BigCommerce partner (North America list); in-house careers page"
+
+- name: Ethercycle
+  domain: ethercycle.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Brooklyn NY, Shopify Plus; no careers link on site"
+
+- name: Codesign
+  domain: codesignagency.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Los Angeles CA; no careers link on site"
+
+- name: Eurus
+  domain: eurus.io
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "remote US; no careers link on site"
+
+- name: Duckpin
+  domain: rollwithduckpin.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://www.rollwithduckpin.com/career-opportunities/
+  ats: { vendor: unknown }
+  notes: "Baltimore MD; duckpindesign.com redirects here; in-house careers page"
+
+- name: Redstage
+  domain: redstage.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Jersey City NJ, BigCommerce Elite; now redirects to fulcrumdigital.com (acquired by a large IT firm); skip"
+
+- name: Ballistic Agency
+  domain: ballisticagency.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Allen TX; redirects to ballisticcommerce.com, which returns 404"
+
+- name: Arctic Leaf
+  domain: arcticleaf.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://www.arcticleaf.com/careers/
+  ats: { vendor: unknown }
+  notes: "Lake Forest CA, BigCommerce Elite (2022); arcticleaf.io redirects here; careers page has no board"
+
+- name: Anchor Group
+  domain: anchorgroup.tech
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://www.anchorgroup.tech/careers
+  ats: { vendor: unknown }
+  notes: "Sun Prairie WI, NetSuite plus BigCommerce; careers page has no board"
+
+- name: Tavano Team
+  domain: tavanoteam.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Chicago IL; site returns 403 to automated fetches"
+
+- name: EYStudios
+  domain: eystudios.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "no careers link on site"
+
+- name: Friends of Commerce
+  domain: friendsofcommerce.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "no careers link on site"
+
+- name: obundle
+  domain: obundle.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "no careers link on site"
+
+- name: SwiftOtter
+  domain: swiftotter.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Nebraska, Magento/BigCommerce; no careers link, /careers 404"
+
+- name: 121eCommerce
+  domain: 121ecommerce.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "no careers link on site"
+
+- name: Bemeir
+  domain: bemeir.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "no careers link on site"
+
+- name: DotcomWeavers
+  domain: dotcomweavers.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "New Jersey; site returns 403 to automated fetches"
+
+- name: BlueBolt
+  domain: bluebolt.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "domain guessed from directory name, unreachable; real domain unverified"
+
+- name: Crimson Agility
+  domain: crimsonagility.us
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://crimsonagility.us/about-us/careers/
+  ats: { vendor: unknown }
+  notes: "crimsonagility.com redirects here; in-house careers page"
+
+- name: REACH Partners
+  domain: reachpartners.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Westerville OH (BigCommerce directory); careers link on home page returns 404"
+
+- name: Atelier Commerce
+  domain: ateliercommerce.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "New York NY (BigCommerce directory); no careers link on site"
+
+- name: Hi-Five Web
+  domain: hifiveweb.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "New York NY (BigCommerce directory); no careers link on site"
+
+- name: Brand Labs
+  domain: brandlabs.us
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Rochester MI (BigCommerce directory); no careers link on site"
+
+- name: Presidio
+  domain: presidiodev.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://presidiodev.com/careers
+  ats: { vendor: unknown }
+  notes: "Mill Valley CA, Shopify Platinum; presidiocreative.com redirects here; Framer careers page, no board"
+
+- name: IM Digital
+  domain: imdigital.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Boca Raton FL, Shopify Platinum, also BigCommerce; no careers link on site, /careers 404"
+
+- name: Roswell NYC
+  domain: roswellnyc.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "New York NY, Shopify Platinum; no careers link on site"
+
+- name: Fuel Made
+  domain: fuelmade.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://jobs.fuelmade.com/jobs
+  ats: { vendor: unknown }
+  notes: "remote, small team (own board); in-house job board, no vendor"
+
+- name: DefinedLogic
+  domain: definedlogic.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "domain guessed from directory name, unreachable; real domain unverified"
+
+- name: Electric Enjin
+  domain: electricenjin.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "no careers link on site"
+
+- name: Epic Design Labs
+  domain: epicdesignlabs.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://jobs.epicdesignlabs.com/
+  ats: { vendor: unknown }
+  notes: "GoHire board (no adapter yet); revisit if a gohire adapter lands"
+
+- name: EYEMAGINE
+  domain: eyemagine.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "redirects to telusdigital.com (acquired by a global firm); skip"
+
+- name: GRAYBOX
+  domain: graybox.co
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://graybox.co/about/careers
+  ats: { vendor: unknown }
+  notes: "Portland OR; HubSpot form on careers page"
+
+- name: Ignitiv
+  domain: ignitiv.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://www.ignitiv.com/careers/
+  ats: { vendor: unknown }
+  notes: "in-house careers page"
+
+- name: IWD
+  domain: iwdagency.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "BigCommerce Elite (per roundup); no careers link on site"
+
+- name: Fusionary
+  domain: fusionary.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://fusionary.com/careers
+  ats: { vendor: unknown }
+  notes: "Grand Rapids MI; ClickUp form on careers page"
+
+- name: Clap Creative
+  domain: clapcreative.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "no careers link on site"
+
+- name: Big Hairy Dog
+  domain: bighairydog.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://bighairydog.com/join-our-team/
+  ats: { vendor: unknown }
+  notes: "in-house page, apply by email"
+
+- name: Four13
+  domain: four13.co
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://four13.co/pages/careers
+  ats: { vendor: unknown }
+  notes: "Circle Pines MN (BigCommerce directory); in-house careers page"
+
+- name: Freetail Commerce
+  domain: freetailcommerce.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Austin TX (BigCommerce directory); no careers link on site"
+
+- name: Little Fork
+  domain: little-fork.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Minneapolis MN (BigCommerce directory); no careers link on site"
+
+- name: Instrumental
+  domain: instrumental.net
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://www.instrumental.net/careers
+  ats: { vendor: unknown }
+  notes: "Golden CO (BigCommerce directory); in-house careers page"
+
+- name: Kadro Solutions
+  domain: kadro.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Raleigh NC, employee-owned (BigCommerce directory); no careers link on site"
+
+- name: BLKDG
+  domain: blkdg.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Denver CO (roundup); no careers link on site"
+
+- name: Structured Agency
+  domain: structured.agency
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://structured.agency/careers
+  ats: { vendor: unknown }
+  notes: "Shopify agency; Webflow careers page with roles inline, no board link (a JazzHR board shows in search only, so not used)"
+
+- name: The Commerce Shop
+  domain: thecommerceshop.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Atlanta GA; no careers link on site"
+
+- name: Wagento
+  domain: wagento.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://careers.ewaycorp.com/
+  ats: { vendor: unknown }
+  notes: "careers link goes to parent eWay Corp's site; not followed further"
+
+- name: Pixafy
+  domain: pixafy.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "redirects to gammawaves.io (rebrand); not followed"
+
+- name: Razoyo
+  domain: razoyo.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://www.razoyo.com/careers/
+  ats: { vendor: unknown }
+  notes: "in-house careers page"
+
+- name: Peak Activity
+  domain: peakactivity.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://www.peakactivity.com/careers
+  ats: { vendor: unknown }
+  notes: "HubSpot form on careers page"
+
+- name: NETFORMIC
+  domain: netformic.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "no careers link on site; HQ country unverified"
+
+- name: Spotfin Creative
+  domain: spotfincreative.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "no careers link on site"
+
+- name: Redline Minds
+  domain: redlineminds.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "no careers link on site"
+
+- name: WebCitz
+  domain: webcitz.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "site returns 403 to automated fetches"
+
+- name: Variux
+  domain: variux.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "no careers link on site"
+
+- name: ParadoxLabs
+  domain: paradoxlabs.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: https://paradoxlabs.com/about/careers/
+  ats: { vendor: unknown }
+  notes: "apply by email (jobs@)"
+
+- name: Weberous
+  domain: weberous.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Los Angeles CA, Shopify Plus tier; site returns 403 to automated fetches"
+
+- name: Script & Theory
+  domain: scriptandtheory.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Houston TX, Shopify Plus tier; no careers link on site"
+
+- name: Wolfpoint Agency
+  domain: wolfpoint.agency
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "New York NY, Shopify Plus tier; domain guessed, unreachable; real domain unverified"
+
+- name: Clearwave Commerce
+  domain: clearwavecommerce.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Oceanside CA, Shopify Plus tier; no careers link on site"
+
+- name: MTN Haus
+  domain: mtnhaus.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Denver CO, Shopify Platinum (per roundup); home page timed out, not checked"
+
+- name: Platter
+  domain: platter.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://www.useparallel.com/platter/careers
+  ats: { vendor: unknown }
+  notes: "New York NY, Shopify Platinum; board on Parallel (not an adapter vendor)"
+
+- name: Hyghstreet
+  domain: hyghstreet.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: https://hyghstreet.com/pages/career
+  ats: { vendor: unknown }
+  notes: "Shopify Platinum; in-house career page"
+
+- name: Plug Digital
+  domain: plugdigital.com
+  country: US
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "San Francisco, Shopify Plus (per roundup); domain guessed, unreachable; real domain unverified"

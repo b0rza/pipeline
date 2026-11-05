@@ -1,0 +1,637 @@
+# Slice: United States, Clutch e-commerce/Magento city lists, commercetools partner directory, SFCC implementation partners.
+# Date: 2026-11-05. 79 agencies screened, 4 qualify (adapter vendor + slug seen on the agency's own careers page).
+# Method: npm run resolve (no --verify) on standard careers paths; mid-size unknowns re-checked once by WebFetch. "resolver: no board" = not hand-checked.
+
+- name: Irish Titan
+  domain: irishtitan.com
+  country: US
+  source: clutch
+  careers_url: https://www.irishtitan.com/careers/
+  ats: { vendor: bamboohr, slug: irishtitan }
+  notes: "Minneapolis MN (TitanHQ, own site), 10-49 staff (Clutch), Magento/BigCommerce agency on Clutch Minneapolis lists; irishtitan.bamboohr.com link on careers page (resolver + WebFetch); 1 opening (project manager)"
+
+- name: Space Dinosaurs
+  domain: spacedinosaurs.com
+  country: US
+  source: clutch
+  careers_url: https://www.spacedinosaurs.com/careers
+  ats: { vendor: rippling, slug: spacedinosaurs }
+  notes: "Chicago IL (Clutch), 50-249 staff (Clutch), on Clutch Magento US and Chicago lists; careers page says part of the Solara6 group; 'Open jobs board' links ats.rippling.com/spacedinosaurs/jobs"
+
+- name: Kasama
+  domain: kasamadigital.com
+  country: US
+  source: clutch
+  careers_url: https://www.kasamadigital.com/careers
+  ats: { vendor: workable, slug: kasama }
+  notes: "Acton MA (Clutch; footer says Boston and Manila), 50-249 staff (Clutch), Salesforce Commerce Cloud, Shopify, Oro; apply.workable.com/kasama linked from each role on careers page; open SFCC developer role"
+
+- name: Studio Science
+  domain: studioscience.com
+  country: US
+  source: sfcc-partners
+  careers_url: https://www.studioscience.com/careers
+  ats: { vendor: greenhouse, slug: studioscience }
+  notes: "Indianapolis IN (own site), size unverified, Salesforce partner agency (own site) with an SFCC Technical Lead posting; found via that posting, not confirmed in a Salesforce partner directory; job-boards.greenhouse.io/studioscience linked from careers page"
+
+# ---- screened out ----
+
+- name: CoSpark
+  domain: cospark.com
+  country: US
+  source: clutch
+  careers_url: https://cospark.com/
+  ats: { vendor: unknown }
+  notes: "Irvine CA, 10-49 (Clutch), Shopify/BigCommerce/Magento; resolver: no board; /careers returns 403 to WebFetch"
+
+- name: LLT Group
+  domain: llt-group.com
+  country: US
+  source: clutch
+  careers_url: https://www.llt-group.com/
+  ats: { vendor: unknown }
+  notes: "Naperville IL, 10-49 (Clutch); resolver: no board"
+
+- name: BLKDG
+  domain: blkdg.com
+  country: US
+  source: clutch
+  careers_url: https://blkdg.com/
+  ats: { vendor: unknown }
+  notes: "Denver CO, 10-49 (Clutch); /careers 404, resolver: no board"
+
+- name: Storm Brain
+  domain: stormbrain.com
+  country: US
+  source: clutch
+  careers_url: https://stormbrain.com/careers
+  ats: { vendor: unknown }
+  notes: "Carlsbad CA, 50-249 (Clutch), web/marketing agency; in-house job pages (stormbrain.com/jobs/...), no ATS"
+
+- name: Never Settle
+  domain: neversettle.it
+  country: US
+  source: clutch
+  careers_url: https://www.neversettle.it/
+  ats: { vendor: unknown }
+  notes: "Lakewood CO, 10-49 (Clutch); resolver: no board"
+
+- name: Bellwood
+  domain: bellwood.io
+  country: US
+  source: clutch
+  careers_url: https://bellwood.io/careers/
+  ats: { vendor: unknown }
+  notes: "Atlanta GA, 10-49 (Clutch), Magento, remote-first; careers page has no openings and no board, newsletter signup only"
+
+- name: VIVIDSITES
+  domain: vividsites.com
+  country: US
+  source: clutch
+  careers_url: https://www.vividsites.com/
+  ats: { vendor: unknown }
+  notes: "St. Louis MO, 10-49 (Clutch); resolver: no board"
+
+- name: Always Open Commerce
+  domain: alwaysopencommerce.com
+  country: US
+  source: clutch
+  careers_url: https://alwaysopencommerce.com/
+  ats: { vendor: unknown }
+  notes: "Orlando FL, 10-49 (Clutch), Magento; resolver: no board"
+
+- name: Realnets
+  domain: realnets.com
+  country: US
+  source: clutch
+  careers_url: https://realnets.com/
+  ats: { vendor: unknown }
+  notes: "Park Ridge IL, 10-49 (Clutch), Magento; resolver: no board"
+
+- name: Blueshoon
+  domain: blueshoon.com
+  country: US
+  source: clutch
+  careers_url: https://www.blueshoon.com/
+  ats: { vendor: unknown }
+  notes: "Chicago IL, 10-49 (Clutch), Magento; resolver: no board"
+
+- name: Pixafy
+  domain: pixafy.com
+  country: US
+  source: clutch
+  careers_url: https://www.kensium.com/pixafy/careers
+  ats: { vendor: unknown }
+  notes: "New York NY, 50-249 (Clutch), Magento; /careers redirects to kensium.com (now part of Kensium, see Kensium entry)"
+
+- name: Solveda
+  domain: solveda.com
+  country: US
+  source: clutch
+  careers_url: https://www.solveda.com/
+  ats: { vendor: unknown }
+  notes: "Mineola NY, 50-249 (Clutch); resolver's careers requests redirected to saksoft.com (parent group, Indian IT firm); not followed"
+
+- name: Redstage
+  domain: redstage.com
+  country: US
+  source: clutch
+  careers_url: https://fulcrumdigital.com/careers/
+  ats: { vendor: unknown }
+  notes: "Jersey City NJ, 1000+ (Clutch, group size), Magento; careers redirects to fulcrumdigital.com (parent group); too large"
+
+- name: Web Solutions NYC
+  domain: websolutionsnyc.com
+  country: US
+  source: clutch
+  careers_url: https://websolutionsnyc.com/
+  ats: { vendor: unknown }
+  notes: "New York NY, 50-249 (Clutch), Magento; resolver: no board"
+
+- name: August Ash
+  domain: augustash.com
+  country: US
+  source: clutch
+  careers_url: https://www.augustash.com/
+  ats: { vendor: unknown }
+  notes: "Bloomington MN, 10-49 (Clutch); resolver: no board"
+
+- name: Horizontal Digital
+  domain: horizontaldigital.com
+  country: US
+  source: clutch
+  careers_url: https://www.horizontaldigital.com/careers
+  ats: { vendor: unknown }
+  notes: "St. Louis Park MN, 250-999 (Clutch), Salesforce/Sitecore; in-house job list (22 roles, many in Jaipur and Riyadh); also over size"
+
+- name: Rocket55
+  domain: rocket55.com
+  country: US
+  source: clutch
+  careers_url: https://www.rocket55.com/careers
+  ats: { vendor: unknown }
+  notes: "Minneapolis MN, 50-249 (Clutch), web/marketing; Paylocity board linked from careers page"
+
+- name: LuminFire
+  domain: luminfire.com
+  country: US
+  source: clutch
+  careers_url: https://luminfire.com/
+  ats: { vendor: unknown }
+  notes: "Minneapolis MN, 10-49 (Clutch); resolver: no board; /careers/ returns 403 to WebFetch"
+
+- name: Magnetic North
+  domain: magnorth.com
+  country: US
+  source: clutch
+  careers_url: https://www.magnorth.com/
+  ats: { vendor: unknown }
+  notes: "Eden Prairie MN, 10-49 (Clutch), Magento; resolver: no board"
+
+- name: metajive
+  domain: metajive.com
+  country: US
+  source: clutch
+  careers_url: https://metajive.com/careers
+  ats: { vendor: unknown }
+  notes: "Encinitas CA, 10-49 (Clutch), Magento/headless; Paylocity job link on careers page"
+
+- name: Harris Digital
+  domain: harrisdigital.io
+  country: US
+  source: clutch
+  careers_url: https://harrisdigital.io/
+  ats: { vendor: unknown }
+  notes: "New Haven CT, 10-49 (Clutch), Magento; resolver: no board"
+
+- name: Anderson Collaborative
+  domain: andersoncollaborative.com
+  country: US
+  source: clutch
+  careers_url: https://andersoncollaborative.com/
+  ats: { vendor: unknown }
+  notes: "Miami FL, 50-249 (Clutch), Magento; /careers 404, resolver: no board"
+
+- name: Plan Left
+  domain: planleft.com
+  country: US
+  source: clutch
+  careers_url: https://planleft.com/
+  ats: { vendor: unknown }
+  notes: "Nashville TN, 10-49 (Clutch), Magento; resolver: no board"
+
+- name: Bold x Collective
+  domain: boldxcollective.com
+  country: US
+  source: clutch
+  careers_url: https://boldxcollective.com/
+  ats: { vendor: unknown }
+  notes: "West Hollywood CA, 10-49 (Clutch); resolver: no board"
+
+- name: coolblueweb
+  domain: coolblueweb.com
+  country: US
+  source: clutch
+  careers_url: https://www.coolblueweb.com/
+  ats: { vendor: unknown }
+  notes: "Seattle WA, 10-49 (Clutch); resolver: no board"
+
+- name: Aeolidia
+  domain: aeolidia.com
+  country: US
+  source: clutch
+  careers_url: https://www.aeolidia.com/
+  ats: { vendor: unknown }
+  notes: "Seattle WA, 10-49 (Clutch), Shopify design studio; resolver: no board"
+
+- name: Commerce9
+  domain: commerce9.io
+  country: US
+  source: clutch
+  careers_url: https://commerce9.io/
+  ats: { vendor: unknown }
+  notes: "Seattle WA, 10-49 (Clutch); resolver: no board"
+
+- name: Growth Spark
+  domain: growthspark.com
+  country: US
+  source: clutch
+  careers_url: https://www.growthspark.com/
+  ats: { vendor: unknown }
+  notes: "Cambridge MA, 10-49 (Clutch), Shopify; resolver: no board"
+
+- name: Solwey Consulting
+  domain: solwey.com
+  country: US
+  source: clutch
+  careers_url: https://www.solwey.com/
+  ats: { vendor: unknown }
+  notes: "Austin TX, 10-49 (Clutch); resolver: no board"
+
+- name: badpixel
+  domain: badpixel.com
+  country: US
+  source: clutch
+  careers_url: https://www.badpixel.com/
+  ats: { vendor: unknown }
+  notes: "Austin TX, 10-49 (Clutch); resolver: no board"
+
+- name: Kinematic Digital
+  domain: kinematic.digital
+  country: US
+  source: clutch
+  careers_url: https://kinematic.digital/
+  ats: { vendor: unknown }
+  notes: "Austin TX, 10-49 (Clutch); resolver: no board"
+
+- name: Living Proof Creative
+  domain: livingproofcreative.com
+  country: US
+  source: clutch
+  careers_url: https://livingproofcreative.com/
+  ats: { vendor: unknown }
+  notes: "Austin TX, 10-49 (Clutch); resolver: no board"
+
+- name: Oyova
+  domain: oyova.com
+  country: US
+  source: clutch
+  careers_url: https://www.oyova.com/
+  ats: { vendor: unknown }
+  notes: "Jacksonville Beach FL, 10-49 (Clutch), web/marketing; resolver: no board"
+
+- name: Rave Digital
+  domain: ravedigital.agency
+  country: US
+  source: clutch
+  careers_url: https://www.ravedigital.agency/
+  ats: { vendor: unknown }
+  notes: "Coral Springs FL, 250-999 (Clutch); no careers page or board on site ('Life @ Rave' page only)"
+
+- name: Tekglide
+  domain: tekglide.com
+  country: US
+  source: clutch
+  careers_url: https://tekglide.com/
+  ats: { vendor: unknown }
+  notes: "Darien IL, 50-249 (Clutch), Magento; resolver: no board"
+
+- name: Omnycode
+  domain: omnycode.com
+  country: US
+  source: clutch
+  careers_url: https://omnycode.com/
+  ats: { vendor: unknown }
+  notes: "New York NY, 10-49 (Clutch), Magento; resolver: no board"
+
+- name: Evrig
+  domain: evrig.com
+  country: US
+  source: clutch
+  careers_url: https://www.evrig.com/careers
+  ats: { vendor: unknown }
+  notes: "Minneapolis MN with Ahmedabad office, 50-249 (Clutch), Magento/Hyva; in-house application form, no board"
+
+- name: Valtira
+  domain: valtira.com
+  country: US
+  source: clutch
+  careers_url: https://www.valtira.com/
+  ats: { vendor: unknown }
+  notes: "Minneapolis MN, 10-49 (Clutch); resolver: no board"
+
+- name: Creatuity
+  domain: creatuity.com
+  country: US
+  source: clutch
+  careers_url: https://www.creatuity.com/
+  ats: { vendor: unknown }
+  notes: "Richardson TX, 10-49 (Clutch), Magento; resolver: no board; /careers/ returns 403 to WebFetch"
+
+- name: ioVista
+  domain: iovista.com
+  country: US
+  source: clutch
+  careers_url: https://www.iovista.com/
+  ats: { vendor: unknown }
+  notes: "Dallas TX, 50-249 (Clutch); resolver: no board"
+
+- name: Xperity
+  domain: xperity.io
+  country: US
+  source: clutch
+  careers_url: https://www.xperity.io/
+  ats: { vendor: unknown }
+  notes: "Atlanta GA, 250-999 (Clutch), over size; /careers 404, resolver: no board"
+
+- name: CommerceShop
+  domain: thecommerceshop.com
+  country: US
+  source: clutch
+  careers_url: https://www.thecommerceshop.com/
+  ats: { vendor: unknown }
+  notes: "Atlanta GA, 50-249 (Clutch); resolver: no board"
+
+- name: Vonnda
+  domain: vonnda.com
+  country: US
+  source: clutch
+  careers_url: https://www.vonnda.com/
+  ats: { vendor: unknown }
+  notes: "Sausalito CA, 10-49 (Clutch), Shopify/Adobe Commerce; no careers page on site"
+
+- name: Forix
+  domain: forixcommerce.com
+  country: US
+  source: clutch
+  careers_url: https://forixcommerce.com/
+  ats: { vendor: unknown }
+  notes: "Beaverton OR, 50-249 (Clutch), Magento/BigCommerce; resolver: no board; /careers/ returns 403 to WebFetch"
+
+- name: TechSparq
+  domain: techsparq.com
+  country: US
+  source: clutch
+  careers_url: https://www.techsparq.com/
+  ats: { vendor: unknown }
+  notes: "Portland OR, 10-49 (Clutch); /careers 404, resolver: no board"
+
+- name: Above The Fray
+  domain: abovethefray.io
+  country: US
+  source: clutch
+  careers_url: https://abovethefray.io/
+  ats: { vendor: unknown }
+  notes: "Portland OR, 10-49 (Clutch); resolver: no board"
+
+- name: Dog and Rooster
+  domain: dogandrooster.com
+  country: US
+  source: clutch
+  careers_url: https://www.dogandrooster.com/
+  ats: { vendor: unknown }
+  notes: "San Diego CA, 10-49 (Clutch); resolver: no board"
+
+- name: Ajroni
+  domain: ajroni.com
+  country: US
+  source: clutch
+  careers_url: https://ajroni.com/
+  ats: { vendor: unknown }
+  notes: "West Palm Beach/Fort Lauderdale FL, 10-49 (Clutch), Magento; resolver: no board"
+
+- name: Hero Digital
+  domain: herodigital.com
+  country: US
+  source: commercetools-partners
+  careers_url: https://herodigital.com/careers/
+  ats: { vendor: unknown }
+  notes: "San Francisco CA, commercetools Registered partner; careers redirects to hugeinc.com (merged into Huge); size over range"
+
+- name: Sitation
+  domain: sitation.com
+  country: US
+  source: clutch
+  careers_url: https://www.sitation.com/
+  ats: { vendor: unknown }
+  notes: "Apex NC, about 50 staff (own site), PIM consultancy (Salsify/Akeneo), not storefront engineering; no careers page linked"
+
+- name: Wagento
+  domain: wagento.com
+  country: US
+  source: clutch
+  careers_url: https://www.ewaycorp.com/careers/
+  ats: { vendor: unknown }
+  notes: "Offices McLean VA, St. Louis Park MN, Des Moines IA (own site), 40+ developers (own site), Adobe Commerce/BigCommerce/Shopify; careers link goes to parent eWay Corp in-house page (Pune roles only); Clutch listing not re-checked this session"
+
+- name: Customer Paradigm
+  domain: customerparadigm.com
+  country: US
+  source: clutch
+  careers_url: https://www.customerparadigm.com/about-customer-paradigm-company/careers-jobs-employment-opportunities/
+  ats: { vendor: unknown }
+  notes: "Boulder CO (own site), size unverified, Magento/Shopify; email only; Clutch listing not re-checked this session"
+
+- name: Something Digital
+  domain: somethingdigital.com
+  country: US
+  source: clutch
+  careers_url: https://www.rightpoint.com/careers/
+  ats: { vendor: unknown }
+  notes: "New York NY, Magento; careers redirects to rightpoint.com (merged into Rightpoint, too large); Clutch listing not re-checked this session"
+
+- name: Elevated Third
+  domain: elevatedthird.com
+  country: US
+  source: clutch
+  careers_url: https://www.elevatedthird.com/
+  ats: { vendor: unknown }
+  notes: "Denver CO, size unverified; /careers 404, resolver: no board; Clutch listing not re-checked this session"
+
+- name: Mobiquity
+  domain: mobiquity.com
+  country: US
+  source: clutch
+  careers_url: https://www.mobiquity.com/
+  ats: { vendor: unknown }
+  notes: "size unverified; resolver: no board; /careers returns 403 to WebFetch; Clutch listing not re-checked this session"
+
+- name: Divelement Web Services
+  domain: divelement.io
+  country: US
+  source: clutch
+  careers_url: https://divelement.io/
+  ats: { vendor: unknown }
+  notes: "Austin TX, 50-249 (Clutch); resolver: no board"
+
+- name: Creed Interactive
+  domain: creedinteractive.com
+  country: US
+  source: clutch
+  careers_url: https://creedinteractive.com/
+  ats: { vendor: unknown }
+  notes: "Minneapolis MN, 10-49 (Clutch); resolver: no board"
+
+- name: DKS Systems
+  domain: dkssystems.com
+  country: US
+  source: clutch
+  careers_url: https://www.dkssystems.com/
+  ats: { vendor: unknown }
+  notes: "Minneapolis MN, 10-49 (Clutch), Magento; resolver: no board"
+
+- name: WDEVS
+  domain: wdevs.com
+  country: US
+  source: clutch
+  careers_url: https://wdevs.com/
+  ats: { vendor: unknown }
+  notes: "Newton MA, 50-249 (Clutch); resolver: no board"
+
+- name: Black & Black Creative
+  domain: blackandblackcreative.com
+  country: US
+  source: clutch
+  careers_url: https://blackandblackcreative.com/
+  ats: { vendor: unknown }
+  notes: "New York NY, 10-49 (Clutch), Magento; resolver: no board"
+
+- name: Montana Banana
+  domain: montanab.com
+  country: US
+  source: clutch
+  careers_url: https://www.montanab.com/
+  ats: { vendor: unknown }
+  notes: "Seattle WA, 10-49 (Clutch); resolver: no board"
+
+- name: ISBX
+  domain: isbx.com
+  country: US
+  source: clutch
+  careers_url: https://isbx.com/
+  ats: { vendor: unknown }
+  notes: "Los Angeles CA, 50-249 (Clutch), mostly app development; resolver: no board"
+
+- name: Atlantic BT
+  domain: atlanticbt.com
+  country: US
+  source: clutch
+  careers_url: https://www.atlanticbt.com/careers/
+  ats: { vendor: unknown }
+  notes: "Raleigh NC, 28 staff (own site); JobScore board (careers.jobscore.com/jobs/atlanticbt), not an adapter vendor; Clutch listing not re-checked this session"
+
+- name: Optimum7
+  domain: optimum7.com
+  country: US
+  source: clutch
+  careers_url: https://www.optimum7.com/
+  ats: { vendor: unknown }
+  notes: "Miami FL, size unverified; resolver: no board; Clutch listing not re-checked this session"
+
+- name: Digital Silk
+  domain: digitalsilk.com
+  country: US
+  source: clutch
+  careers_url: https://www.digitalsilk.com/
+  ats: { vendor: unknown }
+  notes: "Miami FL (own site), size unverified, design-led web agency; no careers link on site; Clutch listing not re-checked this session"
+
+- name: Steelhead Software
+  domain: steelheadsoftware.io
+  country: US
+  source: clutch
+  careers_url: https://steelheadsoftware.io/
+  ats: { vendor: unknown }
+  notes: "Lake Oswego OR, 10-49 (Clutch); resolver: no board"
+
+- name: Coalition Technologies
+  domain: coalitiontechnologies.com
+  country: US
+  source: clutch
+  careers_url: https://coalitiontechnologies.com/
+  ats: { vendor: unknown }
+  notes: "Los Angeles CA, size unverified; resolver: no board; /careers returns 403 to WebFetch; Clutch listing not re-checked this session"
+
+- name: OuterBox
+  domain: outerboxdesign.com
+  country: US
+  source: clutch
+  careers_url: https://www.outerboxdesign.com/careers
+  ats: { vendor: unknown }
+  notes: "Akron OH, 300+ staff (own site), over size; in-house job pages with SparkHire anchor; Clutch listing not re-checked this session"
+
+- name: Superco
+  domain: superco.io
+  country: US
+  source: clutch
+  careers_url: https://superco.io/
+  ats: { vendor: unknown }
+  notes: "New York NY, 10-49 (Clutch), Shopify; /careers 404, resolver: no board"
+
+- name: ITG Commerce
+  domain: itgcommerce.com
+  country: US
+  source: clutch
+  careers_url: https://www.itgcommerce.com/
+  ats: { vendor: unknown }
+  notes: "Chapel Hill NC, 10-49 (Clutch), Magento; resolver: no board"
+
+- name: XCentium
+  domain: xcentium.com
+  country: US
+  source: clutch
+  careers_url: https://www.xcentium.com/about-us/careers
+  ats: { vendor: unknown }
+  notes: "size unverified, Sitecore/Salesforce/commerce consultancy; in-house job pages; Clutch listing not re-checked this session"
+
+- name: Oshyn
+  domain: oshyn.com
+  country: US
+  source: clutch
+  careers_url: https://www.oshyn.com/
+  ats: { vendor: unknown }
+  notes: "size unverified; /careers 404, resolver: no board; Clutch listing not re-checked this session"
+
+- name: Kensium
+  domain: kensium.com
+  country: US
+  source: clutch
+  careers_url: https://www.kensium.com/
+  ats: { vendor: unknown }
+  notes: "Chicago IL, 250-999 (Clutch), Magento/Acumatica, owns Pixafy; resolver: no board"
+
+- name: Unleashed Technologies
+  domain: unleashed-technologies.com
+  country: US
+  source: clutch
+  careers_url: https://www.unleashed-technologies.com/
+  ats: { vendor: unknown }
+  notes: "careers paths redirect to bluprintx.com (now part of Bluprintx); Clutch listing not re-checked this session"
+
+- name: Royal Cyber
+  domain: royalcyber.com
+  country: US
+  source: commercetools-partners
+  careers_url: https://www.royalcyber.com/
+  ats: { vendor: unknown }
+  notes: "Naperville IL, commercetools Silver partner, size unverified (likely over 250); resolver: no board; /careers/ returns 403 to WebFetch"
