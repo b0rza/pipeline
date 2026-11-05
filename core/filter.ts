@@ -2,7 +2,7 @@
 import type { DatabaseSync } from 'node:sqlite';
 import { pathToFileURL } from 'node:url';
 import { openDb, sha256 } from './db.ts';
-import { eligible, workCountry, workMode } from './location.ts';
+import { eligible, remoteScope, workCountry, workMode } from './location.ts';
 
 export type Route = 'apply' | 'outreach' | 'drop';
 
@@ -45,7 +45,8 @@ export function classify(title: string, body: string): { route: Route; reason: s
 }
 
 // apply and outreach count signals (companies); dropped counts postings. A kept posting outside the owner's
-// work arrangements (core/location.ts) is dropped; one inside it carries its location tag: `perm · hybrid:GB`.
+// work arrangements (core/location.ts) is dropped; one inside it carries its location tag: `perm · hybrid:GB`,
+// `perm · remote:US-only` when the posting restricts remote work to one country other than HR.
 export function filterRun(db: DatabaseSync, runDate: string): { apply: number; outreach: number; dropped: number } {
   const rows = db.prepare(`
     select p.id, p.company_id, p.title, p.location, p.body, p.raw, c.country, e.kind
@@ -74,7 +75,8 @@ export function filterRun(db: DatabaseSync, runDate: string): { apply: number; o
         const mode = workMode(r.title ?? '', r.location, r.body ?? '', raw);
         const country = workCountry(r.location, raw, r.country ?? '', mode);
         if (c.route !== 'drop') {
-          const e = eligible(mode, country, r.location);
+          const scope = mode === 'remote' ? remoteScope(r.title ?? '', r.location, r.body ?? '', country) : null;
+          const e = eligible(mode, country, r.location, scope);
           c = e.ok ? { ...c, reason: `${c.reason} · ${e.reason}` } : { route: 'drop', reason: e.reason };
         }
         setRoute.run(c.route, c.reason, mode, country, r.id);

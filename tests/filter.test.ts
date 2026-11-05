@@ -200,3 +200,36 @@ test('filterRun ignores gone postings and removes untouched signals that no long
   assert.equal((db.prepare('select count(*) as n from signals').get() as { n: number }).n, 0);
   db.close();
 });
+
+test('filterRun tags remote restricted to one country, keeps its route, drops it when the country is out of area', () => {
+  const db = openDb(':memory:');
+  const usco = { ...company('usco'), country: 'US' };
+  const anyco = company('anyco');
+  upsertCompanies(db, [usco, anyco]);
+  const at = (p: NormalizedPosting, location: string): NormalizedPosting => ({ ...p, location });
+  snapshotCompany(db, usco, [
+    at(posting('1', 'Shopify Senior Developer', 'This position qualifies for remote work anywhere in the United States.'), 'Remote (United States)'),
+    at(posting('2', 'Senior Software Engineer', 'Remote. You must be based in India.'), 'Remote'),
+    at(posting('3', 'Contract Senior Software Engineer'), 'Remote, Germany'),
+  ], '2026-11-05');
+  snapshotCompany(db, anyco, [at(posting('4', 'Senior Software Engineer', 'We are a fully remote company.'), 'Remote')], '2026-11-05');
+  diffRun(db, '2026-11-05');
+
+  assert.deepEqual(filterRun(db, '2026-11-05'), { apply: 1, outreach: 1, dropped: 1 });
+  const postings = db.prepare('select external_id, route, route_reason, work_mode, work_country from postings order by external_id')
+    .all().map((r) => ({ ...r }));
+  assert.deepEqual(postings, [
+    { external_id: '1', route: 'outreach', route_reason: 'perm · remote:US-only', work_mode: 'remote', work_country: 'US' },
+    { external_id: '2', route: 'drop', route_reason: 'location:IN', work_mode: 'remote', work_country: 'US' },
+    { external_id: '3', route: 'apply', route_reason: 'title:contract · remote:DE-only', work_mode: 'remote', work_country: 'DE' },
+    { external_id: '4', route: 'outreach', route_reason: 'perm · remote:GB', work_mode: 'remote', work_country: 'GB' },
+  ]);
+  const signals = db.prepare('select company_id, list, ref_ids from signals order by company_id').all()
+    .map((r) => ({ company_id: r.company_id, list: r.list, refs: (JSON.parse(r.ref_ids as string) as string[]).length }));
+  assert.deepEqual(signals, [
+    { company_id: 'anyco', list: 'outreach', refs: 1 },
+    { company_id: 'usco', list: 'apply', refs: 2 },
+  ]);
+  assert.match(report(db, '2026-11-05'), /dropped: 1 location\n/);
+  db.close();
+});

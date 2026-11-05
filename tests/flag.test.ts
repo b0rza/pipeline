@@ -21,4 +21,6 @@ test('routeTag flags the country of a location tag and leaves the rest', () => {
   assert.equal(routeTag('location:IN'), 'location:🇮🇳 IN');
   assert.equal(routeTag('evergreen'), 'evergreen');
   assert.equal(routeTag('perm · unknown:GB'), 'perm · unknown:🇬🇧 GB');
+  assert.equal(routeTag('perm · remote:US-only'), 'perm · remote:🇺🇸 US-only');
+  assert.equal(routeTag('title:contract · remote:DE-only'), 'title:contract · remote:🇩🇪 DE-only');
 });

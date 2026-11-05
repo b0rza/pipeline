@@ -1,5 +1,7 @@
 // Stage 3 location rule, from DECISIONS.md "Work arrangements the owner will take (2026-11-04)": remote in
-// EU/UK/US/CH/NO is eligible, hybrid there is kept for the owner to judge, on-site only in Split. Pure: no db, no network.
+// EU/UK/US/CH/NO is eligible, hybrid there is kept for the owner to judge, on-site only in Split. Remote restricted to
+// one country other than HR is kept and tagged `remote:XX-only` ("Remote within one country is kept and tagged
+// (2026-11-05)"). Pure: no db, no network.
 
 export type WorkMode = 'remote' | 'hybrid' | 'onsite' | 'unknown';
 
@@ -168,11 +170,197 @@ export function workCountry(
   return mode === 'remote' && companyCountry ? companyCountry.toUpperCase() : null;
 }
 
+// The owner's home country: remote restricted to it is plain `remote:HR`, not `remote:HR-only`.
+export const HOME = 'HR';
+
+type Span = { start: number; end: number; code: string };
+
+// Every country, US state and US/UK/USA/state-code mention in text, with its extent.
+function spans(text: string): Span[] {
+  const out: Span[] = [];
+  for (const m of text.matchAll(countryTable.re)) {
+    out.push({ start: m.index, end: m.index + m[0].length, code: countryTable.codes.get(m[1].toLowerCase())! });
+  }
+  for (const m of text.matchAll(SHORT)) {
+    const code = m[1] ?? m[2];
+    const iso = code === 'UK' ? 'GB' : code === 'US' || code === 'USA' || STATE_CODES.has(code) ? 'US' : null;
+    if (iso) out.push({ start: m.index, end: m.index + m[0].length, code: iso });
+  }
+  return out.sort((a, b) => a.start - b.start);
+}
+
+const citySpans = (text: string): Span[] =>
+  [...text.matchAll(cityTable.re)].map((m) => ({ start: m.index, end: m.index + m[0].length, code: cityTable.codes.get(m[1].toLowerCase())! }));
+
+const reSpans = (text: string, re: RegExp): Span[] =>
+  [...text.matchAll(new RegExp(re.source, 'giu'))].map((m) => ({ start: m.index, end: m.index + m[0].length, code: '' }));
+
+// Scopes that include Croatia. "anywhere" alone is wide; "anywhere in the US" is not.
+const WIDE = /(?<![\p{L}])(?:world ?wide|global(?:ly)?|international(?:ly)?|EMEA|EEA|EU|Europe|European Union|European|anywhere(?!\s+(?:in|within)\b))(?![\p{L}])/iu;
+const REMOTE_WORD = /(?<![\p{L}])remote(?![\p{L}])/iu;
+// Between "remote" and the country: punctuation, "in", "within", "from", "the". "Remote (United States)",
+// "Remote - US", "Remote, Germany", "United States (Remote)", "Remote within the UK".
+const GAP = /^[\s()[\],/|\-–—:;]*(?:(?:in|within|from)\s+)?(?:the\s+)?$/iu;
+// A tied country stands as its own segment ("US-based" and "US-only" allowed), so "Remote German-speaking
+// Engineer" is not Germany.
+const SEGMENT_AFTER = /^\s*(?:$|only\b|-(?:based|only)\b|-(?![\p{L}])|[()[\],/|–—:;.])/iu;
+const SEGMENT_BEFORE = /(?:^|[()[\],/|\-–—:;])\s*$/u;
+
+// Countries (or wide scopes) written next to the word "remote" in a title or location.
+function tied(text: string, targets: Span[]): Span[] {
+  const remotes = reSpans(text, REMOTE_WORD);
+  return targets.filter((t) => remotes.some((r) =>
+    (r.end <= t.start && GAP.test(text.slice(r.end, t.start)) && SEGMENT_AFTER.test(text.slice(t.end))) ||
+    (t.end <= r.start && GAP.test(text.slice(t.end, r.start)) && SEGMENT_BEFORE.test(text.slice(0, t.start)))));
+}
+
+// wide: a scope that includes Croatia, final. several: more than one country, which leaves the body to decide.
+type Stated = { kind: 'wide' } | { kind: 'several' } | { kind: 'country'; code: string } | null;
+
+const distinct = (ss: Span[]) => [...new Set(ss.map((s) => s.code))];
+
+// Title: only a country or wide scope tied to "remote" counts ("Senior Engineer (Remote, US)").
+function titleScope(title: string): Stated {
+  if (tied(title, reSpans(title, WIDE)).length) return { kind: 'wide' };
+  const codes = distinct(tied(title, spans(title)));
+  if (codes.length > 1) return { kind: 'several' };
+  return codes.length ? { kind: 'country', code: codes[0] } : null;
+}
+
+// Location: a wide word anywhere is a stated scope that includes Croatia. More than one country (cities included,
+// "Remote (United States), Canada") is no single-country scope. One country counts when it is tied to "remote" or
+// is all the location says ("United States").
+function locationScope(location: string): Stated {
+  if (WIDE.test(location)) return { kind: 'wide' };
+  const named = spans(location);
+  const all = distinct([...named, ...citySpans(location)]);
+  if (all.length > 1) return { kind: 'several' };
+  if (!named.length) return null;
+  let rest = location;
+  for (const s of [...named].reverse()) rest = rest.slice(0, s.start) + rest.slice(s.end);
+  const onlyCountry = /^[\s()[\],/|\-–—:;.&]*(?:(?:remote|only|or|and|based)[\s()[\],/|\-–—:;.&]*)*$/iu.test(rest);
+  return tied(location, named).length || onlyCountry ? { kind: 'country', code: named[0].code } : null;
+}
+
+// Body phrases that restrict where the person works, each followed by the country it names. Derived from live
+// postings on 2026-11-05: "remote work anywhere in the United States", "can be located from anywhere in the United
+// States", "can be based from any location in the United States", "must be based in the United States", "All
+// applicants must live and work in the United States", "Must be legally authorized to work in the United States",
+// "Must be authorized to work legally in the US", "Legal right to work in the US", "Right to Work in the UK",
+// "open to remote work in the US", "Location: Remote (US-based)", "this position is based in Sweden".
+// Not here on purpose, all seen on 2026-11-05: "Our entire team resides in / is U.S.-based" and "100% US-based remote
+// team" (the team, not the hire), "clients are mostly US-based organizations", "preference for candidates based in
+// Canada", "Preferably located in the Philippines", "401k Plan (USA only)" (benefits), "within the UK" without a
+// work word before it ("the leading agency within the UK").
+const BEFORE_COUNTRY = [
+  /\banywhere (?:in|within|across|throughout) /,
+  /\bany location (?:in|within) /,
+  /\b(?:remote|remotely|work|working|based|located|live|living|reside|residing|candidates|applicants) within /,
+  /\bremote(?:ly)?(?: work| working| role| position| opportunity)? (?:in|from) /,
+  /\bremote ?[(\-–—:,|] ?/,
+  /\bmust (?:currently )?(?:be )?(?:based|located|resident|residing|living|reside|live)(?: and work)? (?:in|within) /,
+  /\b(?:need|needs|required|have) to (?:be )?(?:based|located|resident|living|reside|live)(?: and work)? (?:in|within) /,
+  /\b(?:position|role|job) is (?:based|located) in /,
+  /\b(?:authori[sz]ed|eligible|entitled|permitted|right) to work(?: legally| lawfully| permanently)? (?:in|within|for) /,
+  /\bauthori[sz]ation to work (?:in|within|for) /,
+  /\b(?:open|limited|restricted) (?:only )?to (?:candidates|applicants|residents|people)(?: based| located| living| residing)? (?:in|of|from) /,
+];
+// "based in X only".
+const BASED_ONLY = /\bbased in /;
+// After the country: "X-based candidates", "X-based applicants only", "(US-based only)".
+const BASED_AFTER = /^-based (?:candidates|applicants|individuals|professionals|residents|talent|only)\b/i;
+// The country is not the scope when a word like these follows it: "remote within US time zones", "in the US market".
+const NOT_A_PLACE = /^[\s-]*(?:speaking|language|time ?zones?|hours|business hours|market|clients|customers|companies|organi[sz]ations)\b/i;
+// Restrictions that name no country: they restrict to the posting's work_country.
+const COUNTRYLESS = [
+  /\bwork(?:ing)? (?:authori[sz]ation|permit|visa) (?:is )?required/,
+  /\bno (?:visa |immigration )?sponsorship/,
+  /\bnot eligible for (?:visa |immigration )?sponsorship/,
+  /\bwithout (?:the need for )?(?:any )?(?:current or future |company |employer |visa |immigration )*sponsorship/,
+  /\b(?:unable to|not able to|can ?not|can't|do not|does not|don't|doesn't|will not|won't)(?: currently)?(?: offer| provide)?(?: visa| immigration)? sponsor(?:ship)?\b/,
+  /\bvisa sponsorship (?:is )?not (?:available|offered|provided)/,
+];
+// Restricting words followed by a scope that includes Croatia: "remote anywhere in Europe", "eligible to work in the EU".
+const WIDE_AFTER = /^(?:the )?(?:EU|EEA|Europe|European Union|EMEA|world)\b|^(?:anywhere|worldwide|globally)\b/i;
+const BODY_WIDE = /\b(?:work|working) from anywhere\b(?! (?:in|within)\b)|\bremote(?:ly)? (?:from )?(?:anywhere|worldwide|globally)\b(?! (?:in|within)\b)/i;
+const LIST_SEP = /^\s*(?:,|\/|&|\bor\b|\band\b)\s*(?:the )?/i;
+
+type BodyHit = { kind: 'wide' } | { kind: 'country'; codes: string[] };
+
+// Countries in a list starting at pos, and where the list ends: "the US or Canada" is [US, CA].
+function listAt(text: string, pos: number, all: Span[]): { codes: string[]; end: number } {
+  const at = (p: number) => all.find((s) => s.start === p);
+  let p = pos + (/^the /i.exec(text.slice(pos))?.[0].length ?? 0);
+  const codes: string[] = [];
+  let end = pos;
+  for (let s = at(p); s; s = at(p)) {
+    if (NOT_A_PLACE.test(text.slice(s.end))) break;
+    codes.push(s.code);
+    end = s.end;
+    const sep = LIST_SEP.exec(text.slice(s.end));
+    if (!sep) break;
+    p = s.end + sep[0].length;
+  }
+  return { codes, end };
+}
+
+function bodyHits(body: string): BodyHit[] {
+  const all = spans(body);
+  const hits: BodyHit[] = [];
+  for (const re of BEFORE_COUNTRY) {
+    for (const m of body.matchAll(new RegExp(re.source, 'giu'))) {
+      const pos = m.index + m[0].length;
+      if (WIDE_AFTER.test(body.slice(pos))) { hits.push({ kind: 'wide' }); continue; }
+      const { codes } = listAt(body, pos, all);
+      if (codes.length) hits.push({ kind: 'country', codes });
+    }
+  }
+  for (const m of body.matchAll(new RegExp(BASED_ONLY.source, 'giu'))) {
+    const { codes, end } = listAt(body, m.index + m[0].length, all);
+    if (codes.length && /^\s*only\b/i.test(body.slice(end))) hits.push({ kind: 'country', codes });
+  }
+  for (const s of all) if (BASED_AFTER.test(body.slice(s.end))) hits.push({ kind: 'country', codes: [s.code] });
+  if (BODY_WIDE.test(body)) hits.push({ kind: 'wide' });
+  return hits;
+}
+
+// The one country a remote posting restricts remote work to, or null when it states none, states several, or states
+// a scope that includes Croatia (worldwide, EU, Europe, EMEA). Title and location first: a wide scope there wins over
+// the body, one country there is the answer. When they name several countries or disagree, the body decides: "United
+// States, Canada" with "All applicants must live and work in the United States" is US. Then body phrases naming a
+// country, then phrases naming none ("no visa sponsorship"), which restrict to `country`, the posting's
+// work_country. Only meaningful for mode `remote`.
+export function remoteScope(title: string, location: string | null, body: string, country: string | null): string | null {
+  const t = titleScope(title);
+  const l = locationScope(location ?? '');
+  if (t?.kind === 'wide' || l?.kind === 'wide') return null;
+  const codes = [...new Set([t, l].flatMap((s) => (s?.kind === 'country' ? [s.code] : [])))];
+  if (codes.length === 1 && t?.kind !== 'several' && l?.kind !== 'several') return codes[0];
+
+  const text = body.replace(/\s+/g, ' ');
+  const hits = bodyHits(text);
+  const named = hits.flatMap((h) => (h.kind === 'country' ? [h.codes] : []));
+  if (named.length) {
+    const codes = [...new Set(named.flat())];
+    return codes.length === 1 ? codes[0] : null;
+  }
+  if (hits.some((h) => h.kind === 'wide')) return null;
+  return country && COUNTRYLESS.some((re) => new RegExp(re.source, 'iu').test(text)) ? country : null;
+}
+
 const SPLIT = /(?<![\p{L}])split(?![\p{L}])/iu;
 
-export function eligible(mode: WorkMode, country: string | null, location: string | null): { ok: boolean; reason: string } {
+// scope is remoteScope() for a remote posting: HR stays `remote:HR`, outside ELIGIBLE drops as `location:XX`, any
+// other country is `remote:XX-only`.
+export function eligible(
+  mode: WorkMode, country: string | null, location: string | null, scope: string | null = null,
+): { ok: boolean; reason: string } {
   const tag = (m: string) => (country ? `${m}:${country}` : m);
   if (country && !ELIGIBLE.has(country)) return { ok: false, reason: `location:${country}` };
   if (mode === 'onsite') return SPLIT.test(location ?? '') ? { ok: true, reason: 'onsite:split' } : { ok: false, reason: tag('onsite') };
+  if (mode === 'remote' && scope) {
+    if (!ELIGIBLE.has(scope)) return { ok: false, reason: `location:${scope}` };
+    return { ok: true, reason: scope === HOME ? `remote:${HOME}` : `remote:${scope}-only` };
+  }
   return { ok: true, reason: tag(mode) };
 }
