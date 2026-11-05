@@ -4,7 +4,7 @@ import { pathToFileURL } from 'node:url';
 import { Bot } from 'grammy';
 import type { InlineKeyboardButton } from 'grammy/types';
 import { openDb } from '../core/db.ts';
-import { CALLBACK_ID_LEN, escapeHtml, signalMessage, signalRows, visibleLength } from './notify.ts';
+import { CALLBACK_ID_LEN, composeTitles, escapeHtml, signalMessage, signalRows, visibleLength } from './notify.ts';
 import { composeBody, composeMailto, composeSubject } from './templates.ts';
 
 export const SKIP_REASONS: readonly (readonly [code: string, label: string])[] = [
@@ -70,8 +70,7 @@ export function handleCallback(db: DatabaseSync, data: string, today = new Date(
     case 'compose': {
       const rows = signalRows(db, id);
       const name = rows[0].name;
-      // More than ten roles reads as a dump; the digest message carries the full list.
-      const titles = [...new Set(rows.map((r) => r.title))].slice(0, 10);
+      const titles = composeTitles(rows);
       const body = composeBody(name, titles).replaceAll('\r\n', '\n');
       const draft = `<b>${escapeHtml(composeSubject(name))}</b>\n\n${escapeHtml(body)}`;
       const text = `${draft}\n\n<code>${escapeHtml(composeMailto(name, titles))}</code>`;

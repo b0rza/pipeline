@@ -60,3 +60,30 @@ test('publishRun writes summary.md and one file per signal, same bytes on a re-r
   assert.equal(readFileSync(join(dir, 'alpha.md'), 'utf8'), alpha);
   db.close();
 });
+
+test('publishRun leaves out a posting that left the company board', () => {
+  const db = openDb(':memory:');
+  seed(db, '2026-11-02');
+  const c = company('alpha');
+  snapshotCompany(db, c, [posting('a2', 'Engineering Talent Pool')], '2026-11-03');
+  diffRun(db, '2026-11-03');
+  filterRun(db, '2026-11-03');
+  const root = mkdtempSync(join(process.env.TMPDIR ?? tmpdir(), 'publish-'));
+  const dir = join(root, '2026-11-03');
+
+  assert.deepEqual(publishRun(db, '2026-11-03', root), { signals: 1, dir });
+  assert.deepEqual(readdirSync(dir).sort(), ['summary.md', 'zeta.md']);
+  const summary = readFileSync(join(dir, 'summary.md'), 'utf8');
+  assert.ok(summary.startsWith('# Digest 2026-11-03\n\n1 apply · 0 outreach · 0 dropped postings\n'));
+  assert.ok(!summary.includes('Frontend Developer'), 'gone posting not listed');
+
+  // zeta keeps one live posting, one gone: only the live one is in its file.
+  snapshotCompany(db, company('zeta'), [posting('z2', 'Senior Software Engineer, Contract')], '2026-11-04');
+  diffRun(db, '2026-11-04');
+  filterRun(db, '2026-11-04');
+  publishRun(db, '2026-11-04', root);
+  const zeta = readFileSync(join(root, '2026-11-04', 'zeta.md'), 'utf8');
+  assert.ok(zeta.includes('[Senior Software Engineer, Contract](https://example.test/z2)'));
+  assert.ok(!zeta.includes('Backend Engineer'), 'gone posting not listed');
+  db.close();
+});

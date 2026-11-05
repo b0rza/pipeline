@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { createServer } from 'node:http';
 import type { DatabaseSync } from 'node:sqlite';
 import { pathToFileURL } from 'node:url';
-import { droppedCount, escapeHtml, pendingSignals, signalRows, type SignalRow } from '../bot/notify.ts';
+import { composeTitles, droppedCount, escapeHtml, GONE, pendingSignals, signalRows, type SignalRow } from '../bot/notify.ts';
 import { markApplied, markSkipped, reopen, SKIP_REASONS, snooze } from '../bot/server.ts';
 import { composeMailto } from '../bot/templates.ts';
 import { openDb } from '../core/db.ts';
@@ -33,7 +33,8 @@ const STYLE = `
   .b-new { background: #2563eb; } .b-notified { background: #7c3aed; } .b-applied, .b-sent, .b-replied { background: #15803d; }
   .b-skipped { background: #6b7280; } .b-snoozed { background: #b45309; }`;
 
-// A history card that is still new is an older signal the next notify supersedes, so it gets no buttons.
+// A history card that is still new is an older signal the next notify supersedes, or one whose postings are all
+// gone that the next notify expires, so it gets no buttons.
 function actions(rows: SignalRow[], history: boolean): string {
   const { id, list, status, name } = rows[0];
   const form = (action: string, inner: string) => `<form method="post" action="/signal/${id}/${action}">${inner}</form>`;
@@ -42,9 +43,8 @@ function actions(rows: SignalRow[], history: boolean): string {
   if (!history || ['notified', 'snoozed'].includes(status)) {
     if (list === 'apply') out.push(form('applied', '<button>Applied</button>'));
     else {
-      // Same cap as the Telegram Compose reply: more than ten roles reads as a dump.
-      const titles = [...new Set(rows.map((r) => r.title))].slice(0, 10);
-      out.push(`<a role="button" href="${escapeHtml(composeMailto(name, titles))}">Compose</a>`);
+      // Same titles as the Telegram Compose reply.
+      out.push(`<a role="button" href="${escapeHtml(composeMailto(name, composeTitles(rows)))}">Compose</a>`);
     }
     const options = SKIP_REASONS.map(([code, label]) => `<option value="${code}">${escapeHtml(label)}</option>`).join('');
     out.push(form('skip', `<fieldset role="group"><select name="reason">${options}</select>${secondary('Skip')}</fieldset>`),
@@ -66,8 +66,11 @@ function card(rows: SignalRow[], past?: Past): string {
     (history ? ` <span class="badge b-${escapeHtml(status)}">${escapeHtml(status)}</span>` : '');
   const meta = [skip_reason && `skipped: ${escapeHtml(skip_reason)}`, snooze_until && `snoozed until ${escapeHtml(snooze_until)}`]
     .filter(Boolean);
-  const postings = rows.map((p) => `<li><a href="${escapeHtml(p.url)}">${escapeHtml(p.title)}</a> — ` +
-    `${escapeHtml(p.location ?? 'no location')} <small>[${escapeHtml(routeTag(p.route_reason))}]</small></li>`);
+  const postings = rows.map((p) => {
+    const link = `<a href="${escapeHtml(p.url)}">${escapeHtml(p.title)}</a>`;
+    return `<li>${p.gone ? `<s>${link}</s>` : link} — ${escapeHtml(p.location ?? 'no location')}` +
+      ` <small>[${escapeHtml(routeTag(p.route_reason))}]${p.gone ? ` · ${GONE}` : ''}</small></li>`;
+  });
   return `<article id="s-${id.slice(0, 16)}"><header>${head}</header>` +
     (meta.length ? `<p class="meta">${meta.join(' · ')}</p>` : '') + `<ul>${postings.join('')}</ul>${actions(rows, history)}</article>`;
 }

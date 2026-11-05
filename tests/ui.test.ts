@@ -209,3 +209,47 @@ test('page escapes HTML in company names and titles', () => {
   assert.doesNotMatch(html, /<Co>|<Platform>/);
   db.close();
 });
+
+test('a gone posting is hidden on a Pending card and struck through on a History card', () => {
+  const db = openDb(':memory:');
+  const live = posting('m1', 'Software Engineer');
+  seed(db, [[company('mix'), [live, posting('m2', 'Backend Engineer')]], [company('old'), [posting('o1', 'Platform Engineer'), posting('o2', 'Data Engineer')]]]);
+  seed(db, [[company('mix'), [live]], [company('old'), [posting('o1', 'Platform Engineer')]]], '2026-11-03');
+  db.prepare("update signals set status = 'notified' where company_id = 'old'").run();
+  const html = handle(db, { method: 'GET', url: '/' }, '2026-11-03').body;
+
+  assert.deepEqual(section(html, 'pending'), ['mix']);
+  assert.match(html, /<\/h1><p>0 apply · 1 outreach · 0 dropped postings<\/p><\/header>/);
+  const mix = cardOf(html, db, 'mix');
+  assert.match(mix, /<li><a href="https:\/\/example.test\/m1">Software Engineer<\/a>/);
+  assert.doesNotMatch(mix, /Backend Engineer|<s>|gone/);
+
+  const old = cardOf(html, db, 'old');
+  assert.match(old, /<ul><li><a href="https:\/\/example.test\/o1">Platform Engineer<\/a> — London <small>\[perm · unknown:🇬🇧 GB\]<\/small><\/li>/);
+  assert.match(old, /<li><s><a href="https:\/\/example.test\/o2">Data Engineer<\/a><\/s> — London <small>\[perm · unknown:🇬🇧 GB\] · gone<\/small><\/li><\/ul>/);
+  // Compose on the History card drafts for the live posting only.
+  const href = old.match(/<a role="button" href="(mailto:[^"]+)">Compose<\/a>/)?.[1];
+  assert.ok(href);
+  assert.equal(decodeURIComponent(href.replaceAll('&amp;', '&').split('&body=')[1]), composeBody('old', ['Platform Engineer']));
+  db.close();
+});
+
+test('the page renders a History signal whose postings are all gone', () => {
+  const db = openDb(':memory:');
+  seed(db, [[company('dead'), [posting('d1', 'Software Engineer')]]]);
+  seed(db, [[company('dead'), []]], '2026-11-03');
+  const before = handle(db, { method: 'GET', url: '/' }, '2026-11-03');
+  assert.equal(before.status, 200);
+  assert.deepEqual(section(before.body, 'pending'), []);
+  assert.deepEqual(section(before.body, 'history'), ['dead']);
+
+  db.prepare("update signals set status = 'notified'").run();
+  const html = handle(db, { method: 'GET', url: '/' }, '2026-11-03').body;
+  const dead = cardOf(html, db, 'dead');
+  assert.match(dead, /<li><s><a href="https:\/\/example.test\/d1">Software Engineer<\/a><\/s> — London <small>\[perm · unknown:🇬🇧 GB\] · gone<\/small><\/li>/);
+  // No live posting: Compose falls back to every title.
+  const href = dead.match(/<a role="button" href="(mailto:[^"]+)">Compose<\/a>/)?.[1];
+  assert.ok(href);
+  assert.equal(decodeURIComponent(href.replaceAll('&amp;', '&').split('&body=')[1]), composeBody('dead', ['Software Engineer']));
+  db.close();
+});
