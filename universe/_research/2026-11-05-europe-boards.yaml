@@ -1,0 +1,910 @@
+# Slice: continental Europe except DE/AT (Nordics, Benelux, rest of EU27 + CH; IE/GB excluded), round 2. Date: 2026-11-05.
+# Method: board-first web search (vendor-host filtered), Norce/Litium/Dynamicweb partner lists and Clutch country lists as lead sources; careers pages probed from homepage links (scratch script), boards confirmed with npm run resolve (no --verify).
+# source 'web-search' = no listing in the six directories confirmed (lead came from a platform partner list or search). Qualifying entries first, then screened-out agencies.
+
+# --- qualifying (adapter vendor + slug, linked from the agency's own site) ---
+- name: Rebel and Bird
+  domain: rebelandbird.com
+  country: SE
+  source: web-search
+  careers_url: https://rebelbird.teamtailor.com/
+  ats: { vendor: teamtailor, slug: rebelbird }
+  notes: "Stockholm and Örebro, size unverified. Tech agency, Norce solution partner (norce.io/partners), so builds Norce commerce; no Clutch profile found. Homepage links to rebelbird.teamtailor.com (department 'Utveckling'); resolver confirmed"
+
+- name: Odd Hill
+  domain: oddhill.se
+  country: SE
+  source: clutch
+  careers_url: https://karriar.oddhill.se/
+  ats: { vendor: teamtailor, slug: karriar.oddhill.se }
+  notes: "Malmö, 10-49 (Clutch profile, 16-20 at Malmö), part of Sjöbergska. Web agency building web apps and e-commerce since 2009 (own site); Norce solution partner. Homepage links to karriar.oddhill.se, Teamtailor custom domain confirmed by resolver"
+
+- name: Delorean
+  domain: delorean.se
+  country: SE
+  source: web-search
+  careers_url: https://jobb.delorean.se/
+  ats: { vendor: teamtailor, slug: jobb.delorean.se }
+  notes: "Stockholm, size unverified. Digital partner (web, apps, loyalty for Pressbyrån/7-Eleven); Norce solution partner, own homepage names no commerce platform. No Clutch profile found. Homepage links to jobb.delorean.se, Teamtailor custom domain confirmed by resolver"
+
+- name: Great IT
+  domain: greatit.se
+  country: SE
+  source: web-search
+  careers_url: https://jobb.greatit.se/
+  ats: { vendor: teamtailor, slug: jobb.greatit.se }
+  notes: "Malmö, size unverified. IT consultancy with a web and e-commerce line (CTEK web/e-commerce case on own site); Norce solution partner. Borderline: broad IT consultancy, e-commerce is one practice. Homepage links to jobb.greatit.se, Teamtailor custom domain confirmed by resolver"
+
+- name: KOLLAB
+  domain: kollab.dk
+  country: DK
+  source: web-search
+  careers_url: https://karriereside.kollab.dk/
+  ats: { vendor: teamtailor, slug: karriereside.kollab.dk }
+  notes: "East Jutland (city unverified), size unverified. Digital solutions provider: Microsoft Business Central / Power Platform plus an e-commerce and website service; Dynamicweb alliance partner (dynamicweb.com/partners). Borderline: Microsoft-ERP heavy. Homepage links to karriereside.kollab.dk, Teamtailor custom domain confirmed by resolver"
+
+- name: Liip
+  domain: liip.ch
+  country: CH
+  source: clutch
+  careers_url: https://jobs.liip.ch/
+  ats: { vendor: teamtailor, slug: jobs.liip.ch }
+  notes: "Lausanne HQ, offices Zürich, Bern, Basel, Fribourg, St. Gallen. Clutch says 250-999 overall, 151-200 at Lausanne; above the 250 guide. Web/mobile agency with an E-Commerce development service (own site, platforms not named; Clutch mentions online shops). Homepage links to jobs.liip.ch, Teamtailor custom domain confirmed by resolver"
+
+- name: Kaliop
+  domain: kaliop.com
+  country: FR
+  source: web-search
+  careers_url: https://www.kaliop.com/fr/rejoindre-kaliop
+  ats: { vendor: recruitee, slug: kaliop }
+  notes: "Montpellier, Toulouse, Paris (job locations on own site), size unverified. Digital tech agency, composable/headless commerce with commercetools in its stack. No Clutch profile at clutch.co/profile/kaliop. Careers page links kaliop.recruitee.com job posts; resolver confirmed"
+
+- name: Monogo
+  domain: monogo.pl
+  country: PL
+  source: web-search
+  careers_url: https://monogo.pl/pl-PL/kariera
+  ats: { vendor: zoho, slug: monogo.zohorecruit.eu/Careers }
+  notes: "Lublin, size unverified. E-commerce agency: Adobe Commerce / Magento 2 and headless (own site). No Clutch profile at clutch.co/profile/monogo. Careers page links monogo.zohorecruit.eu/jobs/Careers (EU Zoho data centre); resolver confirmed"
+
+# --- screened out: board found but company does not fit ---
+- name: Zitac Consulting
+  domain: zitac.se
+  country: SE
+  source: web-search
+  careers_url: https://www.zitac.se/om-zitac/karriar/
+  ats: { vendor: unknown }
+  notes: "Västra Frölunda. Board teamtailor/zitac linked from own careers page (resolver confirmed), but own site is IT ops / security / ITSM with no e-commerce practice; the Litium partner list names 'Zitac Solutions', link to this company unverified"
+
+- name: Flying Bisons
+  domain: flyingbisons.com
+  country: PL
+  source: clutch
+  careers_url: https://flyingbisons.recruitee.com/
+  ats: { vendor: unknown }
+  notes: "Warsaw, 50-249 (Clutch). Board recruitee/flyingbisons linked from homepage (resolver confirmed), but Clutch lists 100% UX/UI design and the site calls it a strategic design firm; e-commerce clients (KFC, eObuwie) without named platforms. Design-led, screened out"
+
+- name: Divante
+  domain: divante.com
+  country: PL
+  source: web-search
+  careers_url: https://divante.jobs.personio.com/
+  ats: { vendor: unknown }
+  notes: "Wrocław, 1000+ (own site), part of Cloudflight (Munich DE; Clutch profile redirects there, 250-999). Board personio/divante linked from homepage (resolver confirmed). Screened out: too large and German parent"
+
+- name: Antadis
+  domain: antadis.com
+  country: FR
+  source: web-search
+  careers_url: https://www.antadis.com/nous-rejoindre/
+  ats: { vendor: unknown }
+  notes: "E-commerce agency (création, refonte, TMA). Careers page embeds the Recruitee jobs widget with company id 12084 and no slug, so the slug cannot be read from the page; coordinator could resolve it"
+
+- name: Stimmt
+  domain: stimmt.digital
+  country: NL
+  source: web-search
+  careers_url: https://stimmt.digital/jobs
+  ats: { vendor: unknown }
+  notes: "Enschede and Amsterdam, ~25 staff (per its job ad). Shopify and Magento 2 / Hyvä webshops. Board recruitee/stimmt seen in search only, not linked from own site (vacancies are in-house pages)"
+
+# --- screened out: no adapter board found ---
+- name: Capo
+  domain: capo.se
+  country: SE
+  source: web-search
+  careers_url: https://www.capo.se/
+  ats: { vendor: unknown }
+  notes: "Gothenburg web agency, Litium and Dynamicweb partner. No careers page found (no link, common paths 404)"
+
+- name: Andwhy
+  domain: andwhy.se
+  country: SE
+  source: web-search
+  careers_url: https://www.andwhy.se/
+  ats: { vendor: unknown }
+  notes: "Litium partner. No careers page found"
+
+- name: Distancify
+  domain: distancify.com
+  country: SE
+  source: web-search
+  careers_url: https://www.distancify.com/se
+  ats: { vendor: unknown }
+  notes: "Litium specialists. No careers page found"
+
+- name: Toxic
+  domain: toxic.se
+  country: SE
+  source: web-search
+  careers_url: https://jobb.toxic.se/
+  ats: { vendor: unknown }
+  notes: "Jönköping/Gothenburg/Borås digital agency, Litium and Norce partner. jobb.toxic.se redirects to Hailey HR (not an adapter)"
+
+- name: Motillo
+  domain: motillo.com
+  country: SE
+  source: web-search
+  careers_url: https://motillo.careers.haileyhr.app/
+  ats: { vendor: unknown }
+  notes: "B2B/B2C digital growth partner, Litium premium partner. Careers on Hailey HR (not an adapter)"
+
+- name: Partnersense
+  domain: partnersense.se
+  country: SE
+  source: web-search
+  careers_url: https://www.partnersense.se/sv-se/karriar
+  ats: { vendor: unknown }
+  notes: "Stockholm/Åre e-commerce agency, composable and Norce. In-house careers page, no vendor host in HTML"
+
+- name: Oxio
+  domain: oxio.se
+  country: SE
+  source: web-search
+  careers_url: https://www.oxio.se/
+  ats: { vendor: unknown }
+  notes: "Litium and Norce partner. No careers page found"
+
+- name: Dizparc
+  domain: dizparc.se
+  country: SE
+  source: web-search
+  careers_url: https://dizparc.se/jobb
+  ats: { vendor: unknown }
+  notes: "Norce and Dynamicweb partner. In-house jobb page"
+
+- name: Rove
+  domain: rove.se
+  country: SE
+  source: web-search
+  careers_url: https://rove.se/jobb
+  ats: { vendor: unknown }
+  notes: "E-commerce, martech, marketing; Litium premium partner. In-house jobb page"
+
+- name: 3bits
+  domain: 3bits.se
+  country: SE
+  source: web-search
+  careers_url: https://www.3bits.se/sv
+  ats: { vendor: unknown }
+  notes: "E-commerce and customer portals; Litium and Norce partner. No careers page found"
+
+- name: Camelonta
+  domain: camelonta.se
+  country: SE
+  source: web-search
+  careers_url: https://camelonta.se/
+  ats: { vendor: unknown }
+  notes: "Digital agency, Litium and Norce partner. No careers page found"
+
+- name: IVEO
+  domain: iveo.se
+  country: SE
+  source: web-search
+  careers_url: https://www.iveo.se/career
+  ats: { vendor: unknown }
+  notes: "E-commerce and web development, Norce partner. In-house career page"
+
+- name: Glanser
+  domain: glanser.com
+  country: SE
+  source: web-search
+  careers_url: https://www.glanser.com/
+  ats: { vendor: unknown }
+  notes: "Litium premium partner. No careers page found"
+
+- name: Wilson Creative
+  domain: wilsoncreative.se
+  country: SE
+  source: web-search
+  careers_url: https://www.wilsoncreative.se/karriar/
+  ats: { vendor: unknown }
+  notes: "Stockholm/Kalmar digital agency, Norce partner. Careers on Hailey HR (not an adapter)"
+
+- name: Mirror
+  domain: mirror.se
+  country: SE
+  source: web-search
+  careers_url: https://www.mirror.se/karriaer/
+  ats: { vendor: unknown }
+  notes: "Norrbotten digital partner, Norce partner. Careers on Hailey HR (not an adapter)"
+
+- name: bluemint
+  domain: bluemint.se
+  country: SE
+  source: web-search
+  careers_url: https://www.bluemint.se/careers
+  ats: { vendor: unknown }
+  notes: "E-commerce agency for Magento, Shopify, Medusa; Norce partner. In-house careers page"
+
+- name: Kodmyran
+  domain: kodmyran.se
+  country: SE
+  source: web-search
+  careers_url: https://www.kodmyran.se/om-oss/karriar
+  ats: { vendor: unknown }
+  notes: "E-commerce solutions agency. In-house karriär page"
+
+- name: CAG Ateles
+  domain: ateles.se
+  country: SE
+  source: web-search
+  careers_url: https://www.ateles.se/jobb
+  ats: { vendor: unknown }
+  notes: "E-commerce and digital transformation (part of CAG Group). In-house jobb page"
+
+- name: Digitalera
+  domain: digitalera.se
+  country: SE
+  source: web-search
+  careers_url: https://digitalera.se/
+  ats: { vendor: unknown }
+  notes: "Eskilstuna digital agency, Norce partner. No careers page found"
+
+- name: Level Nine
+  domain: levelnine.se
+  country: SE
+  source: web-search
+  careers_url: https://www.levelnine.se/
+  ats: { vendor: unknown }
+  notes: "Norce partner. No careers page found"
+
+- name: Flatmate
+  domain: flatmate.se
+  country: SE
+  source: web-search
+  careers_url: https://www.flatmate.se/
+  ats: { vendor: unknown }
+  notes: "Norce partner. No careers page found"
+
+- name: ROIROI
+  domain: roiroi.com
+  country: SE
+  source: web-search
+  careers_url: https://www.roiroi.com/
+  ats: { vendor: unknown }
+  notes: "Commerce agency for consumer brands, Norce partner. No careers page found"
+
+- name: Indpro
+  domain: indpro.se
+  country: SE
+  source: web-search
+  careers_url: https://www.indpro.se/careers
+  ats: { vendor: unknown }
+  notes: "IT consulting / tech talent, Norce partner. In-house careers page"
+
+- name: Adeprimo
+  domain: adeprimo.com
+  country: SE
+  source: web-search
+  careers_url: https://www.adeprimo.com/career
+  ats: { vendor: unknown }
+  notes: "Independent digital agency since 1994. In-house career page"
+
+- name: Mpya Digital
+  domain: mpya.se
+  country: SE
+  source: web-search
+  careers_url: https://mpya.se/karriar
+  ats: { vendor: unknown }
+  notes: "Digital agency. In-house karriär page"
+
+- name: Tankbar
+  domain: tankbar.com
+  country: SE
+  source: clutch
+  careers_url: https://tankbar.com/karriar/
+  ats: { vendor: unknown }
+  notes: "Stockholm/Nyköping, 10-49 (Clutch SE e-commerce list). In-house karriär page"
+
+- name: LoopLabz
+  domain: looplabz.com
+  country: SE
+  source: clutch
+  careers_url: https://looplabz.com/karriar/
+  ats: { vendor: unknown }
+  notes: "Stockholm, 10-49 (Clutch SE e-commerce list), web and marketing. In-house karriär page"
+
+- name: Buildahome
+  domain: buildahome.se
+  country: SE
+  source: clutch
+  careers_url: https://buildahome.se/
+  ats: { vendor: unknown }
+  notes: "Helsingborg, 10-49 (Clutch SE e-commerce list). No careers page found"
+
+- name: Scandicommerce
+  domain: scandicommerce.no
+  country: NO
+  source: web-search
+  careers_url: https://scandicommerce.no/
+  ats: { vendor: unknown }
+  notes: "Oslo Shopify Plus agency. No careers page found"
+
+- name: Degree
+  domain: degree.no
+  country: NO
+  source: web-search
+  careers_url: https://www.degree.no/
+  ats: { vendor: unknown }
+  notes: "B2B webshop agency, Dynamicweb diamond partner. No careers page found (only news posts about hires)"
+
+- name: Mennt
+  domain: mennt.no
+  country: NO
+  source: web-search
+  careers_url: https://mennt.no/
+  ats: { vendor: unknown }
+  notes: "Digital agency, Dynamicweb diamond partner. No careers page found"
+
+- name: Trollweb
+  domain: trollweb.no
+  country: NO
+  source: web-search
+  careers_url: https://trollweb.no/
+  ats: { vendor: unknown }
+  notes: "Magento agency. Site timed out from fetcher twice; not checked"
+
+- name: Morningtrain
+  domain: morningtrain.dk
+  country: DK
+  source: web-search
+  careers_url: https://morningtrain.dk/om-os/karriere/
+  ats: { vendor: unknown }
+  notes: "B2B digital agency, 40+ specialists (own site). In-house karriere page"
+
+- name: Immeo
+  domain: immeo.dk
+  country: DK
+  source: web-search
+  careers_url: https://www.immeo.dk/karriere/
+  ats: { vendor: unknown }
+  notes: "Dynamicweb diamond partner. In-house karriere page"
+
+- name: Cabana
+  domain: cabana.dk
+  country: DK
+  source: web-search
+  careers_url: https://cabana.dk/jobs
+  ats: { vendor: unknown }
+  notes: "Digital agency. In-house jobs page"
+
+- name: Dwarf
+  domain: dwarf.dk
+  country: DK
+  source: web-search
+  careers_url: https://dwarf.dk/career
+  ats: { vendor: unknown }
+  notes: "Copenhagen digital agency. In-house career page"
+
+- name: Peytz
+  domain: peytz.dk
+  country: DK
+  source: web-search
+  careers_url: https://www.peytz.dk/job
+  ats: { vendor: unknown }
+  notes: "Full-service digital agency, now part of iO. In-house job page"
+
+- name: compose'it
+  domain: composeit.dk
+  country: DK
+  source: web-search
+  careers_url: https://www.composeit.dk/
+  ats: { vendor: unknown }
+  notes: "E-commerce and PIM, Dynamicweb diamond partner. No careers page found"
+
+- name: Pico
+  domain: picopublish.dk
+  country: DK
+  source: web-search
+  careers_url: https://www.picopublish.dk/livet-hos-pico
+  ats: { vendor: unknown }
+  notes: "Dynamicweb diamond partner. In-house careers page"
+
+- name: Flex Media
+  domain: flex-media.dk
+  country: DK
+  source: web-search
+  careers_url: https://www.flex-media.dk/om/ledige-jobs
+  ats: { vendor: unknown }
+  notes: "B2B e-commerce and marketing, Dynamicweb diamond partner. In-house ledige jobs page"
+
+- name: Oxygen
+  domain: oxygen.dk
+  country: DK
+  source: web-search
+  careers_url: https://www.oxygen.dk/karriere
+  ats: { vendor: unknown }
+  notes: "B2B commerce experts, Dynamicweb diamond partner. In-house karriere page"
+
+- name: Kvalifik
+  domain: kvalifik.dk
+  country: DK
+  source: web-search
+  careers_url: https://www.kvalifik.dk/career
+  ats: { vendor: unknown }
+  notes: "Copenhagen web design and digital agency. In-house career page"
+
+- name: Hion Digital
+  domain: hiondigital.com
+  country: FI
+  source: web-search
+  careers_url: https://www.hiondigital.com/tyopaikat/
+  ats: { vendor: unknown }
+  notes: "Customer experience partner (formerly hion.fi). In-house työpaikat page"
+
+- name: Bluedesk
+  domain: bluedesk.nl
+  country: NL
+  source: web-search
+  careers_url: https://bluedesk.nl/over-ons/vacatures
+  ats: { vendor: unknown }
+  notes: "B2B e-commerce and PIM, Dynamicweb diamond partner. In-house vacatures page"
+
+- name: Snakeware
+  domain: snakeware.nl
+  country: NL
+  source: web-search
+  careers_url: https://www.snakeware.nl/over-ons/werken-bij
+  ats: { vendor: unknown }
+  notes: "Dynamicweb partner. In-house werken-bij page"
+
+- name: Innovadis
+  domain: innovadis.com
+  country: NL
+  source: web-search
+  careers_url: https://www.innovadis.com/jobs
+  ats: { vendor: unknown }
+  notes: "Dynamicweb partner. In-house jobs page"
+
+- name: SWIS
+  domain: swis.nl
+  country: NL
+  source: web-search
+  careers_url: https://www.swis.nl/werken-bij-swis
+  ats: { vendor: unknown }
+  notes: "Digital agency. In-house werken-bij page"
+
+- name: Redkiwi
+  domain: redkiwi.com
+  country: NL
+  source: web-search
+  careers_url: https://www.redkiwi.com/werken-bij/
+  ats: { vendor: unknown }
+  notes: "Digital agency. In-house werken-bij page"
+
+- name: Lemone
+  domain: lemone.com
+  country: NL
+  source: web-search
+  careers_url: https://lemone.com/vacatures/
+  ats: { vendor: unknown }
+  notes: "Magento/Shopware agency. In-house vacatures page"
+
+- name: Enrise
+  domain: enrise.com
+  country: NL
+  source: web-search
+  careers_url: https://enrise.com/jobs/
+  ats: { vendor: unknown }
+  notes: "Independent digital partner. In-house jobs page"
+
+- name: Vendic
+  domain: vendic.nl
+  country: NL
+  source: web-search
+  careers_url: https://vendic.nl/nl/jobs
+  ats: { vendor: unknown }
+  notes: "Magento / Hyvä agency. In-house jobs page"
+
+- name: Interactivated
+  domain: interactivated.me
+  country: NL
+  source: web-search
+  careers_url: https://www.interactivated.me/
+  ats: { vendor: unknown }
+  notes: "Now positions itself as AI/SaaS/custom software. No careers board found"
+
+- name: Fenego
+  domain: fenego.be
+  country: BE
+  source: web-search
+  careers_url: https://www.fenego.be/nl/jobs/
+  ats: { vendor: unknown }
+  notes: "Intershop platinum partner. In-house jobs pages"
+
+- name: Codana
+  domain: codana.be
+  country: BE
+  source: web-search
+  careers_url: https://www.codana.be/en/careers
+  ats: { vendor: unknown }
+  notes: "Software and digital agency. In-house careers page"
+
+- name: Yappa
+  domain: yappa.be
+  country: BE
+  source: web-search
+  careers_url: https://www.yappa.be/nl/werken-bij
+  ats: { vendor: unknown }
+  notes: "Digital agency. In-house werken-bij page"
+
+- name: Statik
+  domain: statik.be
+  country: BE
+  source: web-search
+  careers_url: https://www.statik.be/werken-bij-ons
+  ats: { vendor: unknown }
+  notes: "Leuven web development and marketing. In-house page"
+
+- name: Global4Net
+  domain: global4net.com
+  country: PL
+  source: web-search
+  careers_url: https://global4net.com/kariera/
+  ats: { vendor: unknown }
+  notes: "E-commerce software house, Magento. In-house kariera page"
+
+- name: Convertis
+  domain: convertis.pl
+  country: PL
+  source: web-search
+  careers_url: https://convertis.pl/kariera/
+  ats: { vendor: unknown }
+  notes: "eCommerce agency (Magento). In-house kariera page"
+
+- name: Ageno
+  domain: ageno.pl
+  country: PL
+  source: web-search
+  careers_url: https://ageno.pl/kariera/
+  ats: { vendor: unknown }
+  notes: "Magento agency. In-house kariera page"
+
+- name: Fast White Cat
+  domain: fastwhitecat.com
+  country: PL
+  source: web-search
+  careers_url: https://fastwhitecat.com/kariera/
+  ats: { vendor: unknown }
+  notes: "E-commerce agency (Magento). In-house kariera page"
+
+- name: BitBag
+  domain: bitbag.io
+  country: PL
+  source: web-search
+  careers_url: https://bitbag.io/kariera
+  ats: { vendor: unknown }
+  notes: "Sylius / e-commerce software. In-house kariera page"
+
+- name: Univio
+  domain: univio.com
+  country: PL
+  source: web-search
+  careers_url: https://www.univio.com/career/
+  ats: { vendor: unknown }
+  notes: "Formerly Unity Group (unitygroup.com redirects). In-house career page"
+
+- name: Lizard Media
+  domain: lizardmedia.pl
+  country: PL
+  source: web-search
+  careers_url: https://lizardmedia.pl/kariera/
+  ats: { vendor: unknown }
+  notes: "Software house, Magento 2 and PrestaShop. In-house kariera page"
+
+- name: GOTOMA Software House
+  domain: gotoma.pl
+  country: PL
+  source: clutch
+  careers_url: https://gotoma.pl/kariera/
+  ats: { vendor: unknown }
+  notes: "Nowy Sącz, 50-249 (Clutch PL Magento list). In-house kariera page"
+
+- name: Webalize
+  domain: webalize.me
+  country: PL
+  source: clutch
+  careers_url: https://webalize.me/career
+  ats: { vendor: unknown }
+  notes: "Warsaw, 10-49 (Clutch PL Shopify list). In-house career page"
+
+- name: Naturaily
+  domain: naturaily.com
+  country: PL
+  source: clutch
+  careers_url: https://naturaily.com/careers
+  ats: { vendor: unknown }
+  notes: "Wrocław, 10-49 (Clutch PL Shopify list). In-house careers page"
+
+- name: ambiscale
+  domain: ambiscale.com
+  country: PL
+  source: clutch
+  careers_url: https://ambiscale.com/career/
+  ats: { vendor: unknown }
+  notes: "Wrocław, 10-49 (Clutch PL Shopify list). In-house career page"
+
+- name: Fabrity
+  domain: fabrity.com
+  country: PL
+  source: clutch
+  careers_url: https://kariera.fabrity.com/
+  ats: { vendor: unknown }
+  notes: "Fabrity Commerce, Poznań, 10-49 (Clutch PL Magento list); group site fabrity.com. kariera.fabrity.com shows no adapter vendor"
+
+- name: ClawRock
+  domain: clawrock.com
+  country: PL
+  source: clutch
+  careers_url: https://clawrock.com/en
+  ats: { vendor: unknown }
+  notes: "Wrocław, 10-49 (Clutch PL Magento list). No careers page found"
+
+- name: Sutunam
+  domain: sutunam.com
+  country: FR
+  source: clutch
+  careers_url: https://www.sutunam.com/
+  ats: { vendor: unknown }
+  notes: "Lyon, 10-49 (Clutch FR Magento list), Magento/Hyvä/Symfony. No careers page found"
+
+- name: Calliweb
+  domain: calliweb.fr
+  country: FR
+  source: clutch
+  careers_url: https://www.calliweb.fr/recrutement/
+  ats: { vendor: unknown }
+  notes: "Paris, 10-49 (Clutch FR Magento list). In-house recrutement page"
+
+- name: Kernix
+  domain: kernix.com
+  country: FR
+  source: clutch
+  careers_url: https://www.kernix.com/recrutement/
+  ats: { vendor: unknown }
+  notes: "Paris, 10-49 (Clutch FR Magento list). In-house recrutement page"
+
+- name: ACSEO
+  domain: acseo.fr
+  country: FR
+  source: web-search
+  careers_url: https://www.acseo.fr/recrutement/
+  ats: { vendor: unknown }
+  notes: "Web/mobile projects, Sylius. In-house recrutement page"
+
+- name: WEEBY
+  domain: weeby.fr
+  country: FR
+  source: web-search
+  careers_url: https://www.weeby.fr/
+  ats: { vendor: unknown }
+  notes: "E-commerce agency (Shopify, PrestaShop, Sylius). No careers page found; hires via Welcome to the Jungle"
+
+- name: TheCodingMachine
+  domain: thecodingmachine.com
+  country: FR
+  source: clutch
+  careers_url: https://thecodingmachine.com/jobs/
+  ats: { vendor: unknown }
+  notes: "Paris, 50-249 (Clutch FR e-commerce list). In-house jobs page"
+
+- name: Clever Age
+  domain: clever-age.com
+  country: FR
+  source: clutch
+  careers_url: https://www.clever-age.com/
+  ats: { vendor: unknown }
+  notes: "Paris, 50-249 (Clutch FR e-commerce list). Site returns 403 to fetchers; not checked"
+
+- name: Redegal
+  domain: redegal.com
+  country: ES
+  source: clutch
+  careers_url: https://www.redegal.com/es/talento/
+  ats: { vendor: unknown }
+  notes: "Ourense, 50-249 (Clutch ES Magento list). In-house talento page"
+
+- name: Magefy
+  domain: magefy.co
+  country: ES
+  source: clutch
+  careers_url: https://magefy.co/careers
+  ats: { vendor: unknown }
+  notes: "Málaga, 10-49 (Clutch ES Magento list), Magento and Shopify. In-house careers page"
+
+- name: Omitsis
+  domain: omitsis.com
+  country: ES
+  source: clutch
+  careers_url: https://www.omitsis.com/en/work-with-us/
+  ats: { vendor: unknown }
+  notes: "Barcelona, 10-49 (Clutch ES Magento list). In-house page"
+
+- name: Trilogi
+  domain: trilogi.com
+  country: ES
+  source: clutch
+  careers_url: https://trilogi.com/
+  ats: { vendor: unknown }
+  notes: "Igualada, 10-49 (Clutch ES Magento list). No careers page found"
+
+- name: Adiacent
+  domain: adiacent.com
+  country: IT
+  source: web-search
+  careers_url: https://www.adiacent.com/careers/
+  ats: { vendor: unknown }
+  notes: "Digital agency (Var Group). In-house careers page"
+
+- name: Websolute
+  domain: websolute.com
+  country: IT
+  source: web-search
+  careers_url: https://www.websolute.com/lavora-con-noi
+  ats: { vendor: unknown }
+  notes: "Digital agency. In-house lavora-con-noi page"
+
+- name: Hevelop
+  domain: hevelop.com
+  country: IT
+  source: web-search
+  careers_url: https://hevelop.com/it/careers/
+  ats: { vendor: unknown }
+  notes: "E-commerce technology agency (Magento). In-house careers page"
+
+- name: Drop
+  domain: drop.it
+  country: IT
+  source: clutch
+  careers_url: https://www.drop.it/it/job/
+  ats: { vendor: unknown }
+  notes: "Montegranaro, 50-249 (Clutch IT Magento list). In-house job page"
+
+- name: Webgriffe
+  domain: webgriffe.com
+  country: IT
+  source: clutch
+  careers_url: https://www.webgriffe.com/en/
+  ats: { vendor: unknown }
+  notes: "Casalgrande, 10-49 (Clutch IT Magento list), custom B2B e-commerce. No careers board found"
+
+- name: Key-One
+  domain: key-one.it
+  country: IT
+  source: clutch
+  careers_url: https://www.key-one.it/
+  ats: { vendor: unknown }
+  notes: "Milan, 10-49 (Clutch IT Magento list), omnichannel e-commerce. No careers page found"
+
+- name: Webwirkung
+  domain: webwirkung.ch
+  country: CH
+  source: web-search
+  careers_url: https://webwirkung.ch/karriere
+  ats: { vendor: unknown }
+  notes: "E-commerce and Shopware agency. In-house karriere page"
+
+- name: Arcmedia
+  domain: arcmedia.ch
+  country: CH
+  source: clutch
+  careers_url: https://www.arcmedia.ch/de/jobs
+  ats: { vendor: unknown }
+  notes: "Lucerne digital agency (Clutch ES Magento list shows it, 10-49). In-house jobs page"
+
+- name: Snowflake Productions
+  domain: snowflake.ch
+  country: CH
+  source: web-search
+  careers_url: https://www.snowflake.ch/jobs
+  ats: { vendor: unknown }
+  notes: "Digital agency. In-house jobs page"
+
+- name: PeckaDesign
+  domain: peckadesign.cz
+  country: CZ
+  source: web-search
+  careers_url: https://www.peckadesign.cz/kariera
+  ats: { vendor: unknown }
+  notes: "Custom e-shops for large clients. In-house kariera page"
+
+- name: FG Forrest
+  domain: fg.cz
+  country: CZ
+  source: clutch
+  careers_url: https://kariera.fg.cz/
+  ats: { vendor: unknown }
+  notes: "Prague, 50-249 (Clutch CZ e-commerce list). kariera.fg.cz shows no adapter vendor"
+
+- name: Newlogic Digital
+  domain: newlogic.cz
+  country: CZ
+  source: clutch
+  careers_url: https://kariera.newlogic.cz/
+  ats: { vendor: unknown }
+  notes: "Prague, 10-49 (Clutch CZ e-commerce list). kariera.newlogic.cz shows no adapter vendor"
+
+- name: eBRÁNA
+  domain: ebrana.cz
+  country: CZ
+  source: web-search
+  careers_url: https://kariera.ebrana.cz/
+  ats: { vendor: unknown }
+  notes: "Pardubice, webs and e-shops plus marketing. kariera.ebrana.cz shows no adapter vendor"
+
+- name: Evozon
+  domain: evozon.com
+  country: RO
+  source: web-search
+  careers_url: https://www.evozon.com/careers/
+  ats: { vendor: unknown }
+  notes: "Cluj software development (Magento history). In-house careers page"
+
+- name: eCommerce Today
+  domain: ecommerce-today.com
+  country: RO
+  source: clutch
+  careers_url: https://ecommerce-today.com/careers-subscription-page/
+  ats: { vendor: unknown }
+  notes: "Brașov, 10-49 (Clutch RO e-commerce list), Shopify Plus. In-house careers page"
+
+- name: Hi Interactive
+  domain: hi-interactive.com
+  country: PT
+  source: web-search
+  careers_url: https://hi-interactive.com/careers/
+  ats: { vendor: unknown }
+  notes: "Lisbon digital agency. In-house careers page"
+
+- name: Elitek
+  domain: elitek.si
+  country: SI
+  source: web-search
+  careers_url: https://www.elitek.si/sl/
+  ats: { vendor: unknown }
+  notes: "Magento and Shopware agency. No careers page found"
+
+- name: Bornfight
+  domain: bornfight.com
+  country: HR
+  source: web-search
+  careers_url: https://www.bornfight.com/careers/
+  ats: { vendor: unknown }
+  notes: "Digital agency. Careers on TalentLyft (not an adapter)"
+
+- name: Locastic
+  domain: locastic.com
+  country: HR
+  source: web-search
+  careers_url: https://locastic.com/careers
+  ats: { vendor: unknown }
+  notes: "Digital products, Sylius. In-house careers page"
+
+- name: Netsteps
+  domain: netsteps.gr
+  country: GR
+  source: web-search
+  careers_url: https://netsteps.gr/careers/
+  ats: { vendor: unknown }
+  notes: "E-commerce and digital marketing agency (Magento). In-house careers page"

@@ -1,0 +1,585 @@
+# Slice: BENELUX (NL, BE) first, then rest of eligible EU + CH (no DE/AT, UK, Nordics, US).
+# Date: 2026-11-05. 81 agencies screened; 5 qualify (adapter vendor + slug), the rest are the record of what was checked.
+# Method: npm run resolve on careers URLs, plus a scratch fetch of each homepage's careers links grepped for job-board hosts; WebFetch for 403/JS pages. "source not checked" = listing not confirmed.
+
+# --- qualifying ---
+- name: De Nieuwe Zaak
+  domain: denieuwezaak.nl
+  country: NL
+  source: bigcommerce-agency-lists
+  careers_url: https://www.denieuwezaak.nl/vacatures
+  ats: { vendor: recruitee, slug: denieuwezaak }
+  notes: "Zwolle, 80+ staff (its Intershop partner page), BigCommerce EMEA Partner of the Year 2026, also Shopify/Intershop; part of United Playgrounds. Careers page is in-house but serves offer images from recruitee-main S3; slug denieuwezaak.recruitee.com seen in a search result only, so set by hand: verify"
+- name: Happy Horizon
+  domain: happyhorizon.com
+  country: NL
+  source: shopify-agency-lists
+  careers_url: https://werkenbijhappyhorizon.com/
+  ats: { vendor: recruitee, slug: werkenbijhappyhorizon.com }
+  notes: "Dutch agency group, 7 hubs; 250+ (own exhibitor profile) to ~360 staff (Computable), above band. Owns Experius (experius.nl redirects here; Magento/Adobe, Shopware, Shopify, BigCommerce) and Ask Phill (Shopify Platinum, in Shopify directory). Recruitee custom-domain career site, also links happyhorizonbv.recruitee.com; group board covers all hubs"
+- name: Synolia
+  domain: synolia.com
+  country: FR
+  source: clutch
+  careers_url: https://careers.synolia.com/
+  ats: { vendor: teamtailor, slug: careers.synolia.com }
+  notes: "Lyon, 50-249 staff (Clutch), CRM (Salesforce) plus e-commerce (Magento/Adobe, Sylius, Akeneo). Teamtailor custom-domain career site linked from synolia.com"
+- name: Strix
+  domain: strix.net
+  country: PL
+  source: clutch
+  careers_url: https://career.strix.net/
+  ats: { vendor: recruitee, slug: strix1 }
+  notes: "Krakow HQ (Clutch), offices Utrecht, 's-Hertogenbosch, Frankfurt, Bochum; Clutch says 50-249 but own site says 300+ across Strix Global (above band). Magento/Adobe, Shopware, Shopify Plus, commercetools. career.strix.net redirects to strix1.recruitee.com"
+- name: Fik
+  domain: fik.life
+  country: ES
+  source: shopify-agency-lists
+  careers_url: https://fik.life/
+  ats: { vendor: recruitee, slug: fik }
+  notes: "Madrid, Shopify Premier partner since 2016 (Shopify directory), size unverified. Shopify Plus builds. fik.recruitee.com linked from homepage"
+
+# --- screened out: Netherlands ---
+- name: XSARUS
+  domain: xsarus.nl
+  country: NL
+  source: scayle-partners
+  careers_url: https://www.xsarus.nl/werken-bij/vacatures/
+  ats: { vendor: unknown }
+  notes: "Already seeded as xsarus.com. In-house vacancy pages with own apply form (werkenbij@xsarus.nl); no board host in HTML or Nuxt payload. A search result shows xsarus.recruitee.com exists, but the careers page does not link it, so not set"
+- name: Reach Digital
+  domain: reachdigital.nl
+  country: NL
+  source: clutch
+  careers_url: https://www.reachdigital.nl/vacatures
+  ats: { vendor: unknown }
+  notes: "Roelofarendsveen, 10-49 (Clutch), Magento. In-house vacatures page, no board host"
+- name: OrangeValley
+  domain: orangevalley.nl
+  country: NL
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Breukelen, 50-249 (Clutch). Site unreachable from fetcher (fetch failed); not checked further"
+- name: Cube
+  domain: cube.nl
+  country: NL
+  source: clutch
+  careers_url: https://cube.nl/werken-bij
+  ats: { vendor: unknown }
+  notes: "Oldenzaal, 50-249 (Clutch). In-house werken-bij pages, no board host"
+- name: Default-Value
+  domain: default-value.com
+  country: NL
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Amsterdam, 50-249 (Clutch), Magento. No careers link on homepage"
+- name: Evident
+  domain: evident.nl
+  country: NL
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Utrecht, 50-249 (Clutch). Site unreachable from fetcher (fetch failed)"
+- name: Ask Phill
+  domain: askphill.com
+  country: NL
+  source: shopify-agency-lists
+  careers_url: https://jobs.askphill.com/
+  ats: { vendor: unknown }
+  notes: "Amsterdam, 10-49 (Clutch), Shopify Platinum; now part of Happy Horizon. Homerun (jobs.askphill.com)"
+- name: Factor Blue
+  domain: factorblue.com
+  country: NL
+  source: clutch
+  careers_url: https://factorblue.com/werken-bij/
+  ats: { vendor: unknown }
+  notes: "Nijmegen, 10-49 (Clutch). In-house werken-bij page"
+- name: Zeo
+  domain: zeo.nl
+  country: NL
+  source: clutch
+  careers_url: https://jobs.zeo.nl/
+  ats: { vendor: unknown }
+  notes: "Utrecht, 10-49 (Clutch). Homerun"
+- name: Modern Minds
+  domain: modernminds.nl
+  country: NL
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Rotterdam, 10-49 (Clutch). Site returns 403 to fetchers"
+- name: Qlicks
+  domain: qlicks.nl
+  country: NL
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Hilversum, 10-49 (Clutch). No careers link on homepage"
+- name: Raynmakers
+  domain: raynmakers.com
+  country: NL
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Eindhoven, 10-49 (Clutch). Site returns 403 to fetchers"
+- name: Under Reality
+  domain: underreality.com
+  country: NL
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Amsterdam, 10-49 (Clutch). Returns 403; resolver redirect pointed at folloagency.com (possible rebrand)"
+- name: Flatline Agency
+  domain: flatlineagency.com
+  country: NL
+  source: clutch
+  careers_url: https://jobs.flatlineagency.com/
+  ats: { vendor: unknown }
+  notes: "Amsterdam, 10-49 (Clutch), Shopify. Homerun"
+- name: Opklopper
+  domain: opklopper.nl
+  country: NL
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Amsterdam, 10-49 (Clutch), Shopify Plus. No careers link on homepage"
+- name: Your Majesty
+  domain: yourmajesty.co
+  country: NL
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Amsterdam, 10-49 (Clutch). Homerun (yourmajestyco.homerun.co); careers link goes to infinum.com (now part of Infinum)"
+- name: Experius
+  domain: experius.nl
+  country: NL
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Redirects to happyhorizon.com; covered by the Happy Horizon entry above. Clutch listing not found"
+- name: Elgentos
+  domain: elgentos.nl
+  country: NL
+  source: clutch
+  careers_url: https://werkenbijelgentos.nl/
+  ats: { vendor: unknown }
+  notes: "Groningen, Magento. In-house werkenbijelgentos.nl, no board host. Source not checked"
+- name: Isaac
+  domain: isaac.nl
+  country: NL
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Eindhoven; now redirects into iO (iodigital.com), a large group. Source not checked"
+- name: Emico
+  domain: emico.nl
+  country: NL
+  source: clutch
+  careers_url: https://www.emico.nl/vacatures/
+  ats: { vendor: unknown }
+  notes: "Magento. In-house vacatures pages. Source not checked"
+- name: Total Design
+  domain: totaldesign.nl
+  country: NL
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Amsterdam, Magento; moved to totaldesign.com, not fetched. Source not checked"
+- name: Guapa
+  domain: guapa.nl
+  country: NL
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Magento. No careers page found. Source not checked"
+- name: Netvlies
+  domain: netvlies.nl
+  country: NL
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Den Bosch. Site returns 403 to fetchers. Source not checked"
+- name: Osudio
+  domain: osudio.com
+  country: NL
+  source: sfcc-partners
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "SAP/SFCC commerce. Site has an expired TLS certificate, not readable. Partner listing not checked"
+- name: Lukkien
+  domain: lukkien.com
+  country: NL
+  source: clutch
+  careers_url: https://careers.lukkien.com/
+  ats: { vendor: unknown }
+  notes: "Ede. careers.lukkien.com is a JS page with no board host in HTML. Source not checked"
+- name: Comaxx
+  domain: comaxx.nl
+  country: NL
+  source: clutch
+  careers_url: https://www.comaxx.nl/over-comaxx/vacatures/
+  ats: { vendor: unknown }
+  notes: "In-house vacatures page (429 on retry). Source not checked"
+- name: ShopForward
+  domain: shopforward.nl
+  country: NL
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Boxtel, e-commerce agency. Site is a JS shell with no careers link; shopforward.recruitee.com seen in search only, not linked. Source not checked"
+- name: Ecomwise
+  domain: ecomwise.com
+  country: NL
+  source: clutch
+  careers_url: https://www.ecomwise.com/over-ons/werken-bij/
+  ats: { vendor: unknown }
+  notes: "Utrecht, Magento/Shopware. In-house werken-bij page. Source not checked"
+- name: ISM eCompany
+  domain: ism.nl
+  country: NL
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Now redirects to valantic.com (large group). Source not checked"
+- name: Kega
+  domain: kega.nl
+  country: NL
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Magento/Hyva. Homepage returned 429. Source not checked"
+- name: Bluebirdday
+  domain: bluebirdday.nl
+  country: NL
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Magento/Shopware. No careers link on homepage. Source not checked"
+- name: Webbio
+  domain: webbio.nl
+  country: NL
+  source: clutch
+  careers_url: https://www.webbio.nl/werken-bij
+  ats: { vendor: unknown }
+  notes: "Middelburg. In-house werken-bij page. Source not checked"
+- name: E-Sites
+  domain: e-sites.nl
+  country: NL
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Eindhoven. Vacatures links 404. Source not checked"
+- name: Online Origins
+  domain: onlineorigins.nl
+  country: NL
+  source: shopify-agency-lists
+  careers_url: https://onlineorigins.nl/vacatures
+  ats: { vendor: unknown }
+  notes: "'s-Hertogenbosch, Shopify (Shopify directory NL). In-house vacatures pages"
+- name: Someone You Know
+  domain: someoneyouknow.nl
+  country: NL
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Eindhoven, Shopify (Shopify directory NL). TLS handshake failure; domain guessed, not confirmed"
+- name: Webfluencer
+  domain: webfluencer.nl
+  country: NL
+  source: shopify-agency-lists
+  careers_url: https://webfluencer.nl/careers
+  ats: { vendor: unknown }
+  notes: "Amsterdam, Shopify (Shopify directory). In-house careers page, no board host"
+
+# --- screened out: Belgium ---
+- name: Empathy Lab (formerly Emakina)
+  domain: empathylab.com
+  country: BE
+  source: sfcc-partners
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Brussels, ~1000 staff (above band), an EPAM company. emakina.com job pages redirect to empathylab.com, which returns 403 to fetchers; board not found"
+- name: Baldwin
+  domain: baldwin.agency
+  country: BE
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Gent, 10-49 (Clutch), Magento/WordPress. Site returns 403 to fetchers"
+- name: UTD
+  domain: utdweb.team
+  country: BE
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Antwerp, 10-49 (Clutch), Shopify directory too. No careers link on homepage"
+- name: Brainlane
+  domain: brainlane.com
+  country: BE
+  source: clutch
+  careers_url: https://www.brainlane.com/vacatures-webdevelopment-en-online-marketing-bureau-communicatiebureau/
+  ats: { vendor: unknown }
+  notes: "Hasselt, 10-49 (Clutch). In-house vacatures page"
+- name: DigiFist
+  domain: digifist.com
+  country: BE
+  source: clutch
+  careers_url: https://www.digifist.com/careers
+  ats: { vendor: unknown }
+  notes: "Antwerp, 10-49 (Clutch), Shopify Premier. In-house careers page, no board host"
+- name: ProduWeb
+  domain: produweb.be
+  country: BE
+  source: clutch
+  careers_url: https://www.produweb.be/job/
+  ats: { vendor: unknown }
+  notes: "Oudergem, 10-49 (Clutch). In-house job page"
+- name: Springbok
+  domain: springbokagency.com
+  country: BE
+  source: clutch
+  careers_url: https://jobs.springbokagency.com/
+  ats: { vendor: unknown }
+  notes: "Mechelen, 50-249 (Clutch), mostly marketing. Jobtoolz board (not an adapter vendor)"
+- name: The Reference
+  domain: the-reference.com
+  country: BE
+  source: clutch
+  careers_url: https://www.the-reference.com/careers
+  ats: { vendor: unknown }
+  notes: "Gent, 50-249 (Clutch). In-house careers page, no board host"
+- name: Radikal
+  domain: radikal.io
+  country: BE
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Kontich/Antwerp, 10-49 (Clutch), Shopify directory too. No careers link on homepage"
+- name: IDcreation
+  domain: idcreation.be
+  country: BE
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Wevelgem, 10-49 (Clutch). No careers link on homepage"
+- name: PHPro
+  domain: phpro.be
+  country: BE
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Kontich, Magento/PHP. Site returns 403 to fetchers. Source not checked"
+- name: Arcady
+  domain: arcady.be
+  country: BE
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Magento. Site unreachable from fetcher. Source not checked"
+- name: Dropsolid
+  domain: dropsolid.com
+  country: BE
+  source: clutch
+  careers_url: https://dropsolid.com/en/careers
+  ats: { vendor: unknown }
+  notes: "Gent. Off focus: Drupal agency selling its own DXP platform, not e-commerce engineering. Board is recruitee dropsolid (resolver), kept here only for the record. No Clutch profile found"
+- name: Craftzing
+  domain: craftzing.com
+  country: BE
+  source: clutch
+  careers_url: https://www.craftzing.com/our-people/careers
+  ats: { vendor: unknown }
+  notes: "Antwerp/Ghent/Brussels/Leuven, ~300 staff after the Made/INNOCOM deal (own site). Off focus: transformation consultancy, no e-commerce on site. Board is craftzing.recruitee.com, kept here only for the record. No Clutch profile found"
+- name: Esign
+  domain: esign.eu
+  country: BE
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Gent; now Dynamate (Shopify directory lists Dynamate under the esign slug), not fetched"
+- name: Inventis
+  domain: inventis.be
+  country: BE
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Kortrijk. No careers page found. Source not checked"
+- name: Nascom
+  domain: nascom.be
+  country: BE
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Redirects into makeitfly.group. Source not checked"
+- name: Wijs
+  domain: wijs.be
+  country: BE
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Gent; redirects into makeitfly.group. Source not checked"
+
+# --- screened out: rest of EU and CH ---
+- name: Snowdog
+  domain: snow.dog
+  country: PL
+  source: clutch
+  careers_url: https://www.snow.dog/career
+  ats: { vendor: unknown }
+  notes: "Wroclaw, Magento/Alokai. Careers page shows no board host in HTML. Source not checked"
+- name: Inchoo
+  domain: inchoo.net
+  country: HR
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Osijek, Magento. No careers link on homepage. Source not checked"
+- name: Notch (formerly Agency04)
+  domain: agency04.com
+  country: HR
+  source: sfcc-partners
+  careers_url: https://wearenotch.com/careers
+  ats: { vendor: unknown }
+  notes: "Zagreb/Split, 170+ staff (own site), SFCC. agency04.com redirects to wearenotch.com; careers page has only an open-application form, no board host. Partner listing not checked"
+- name: Scandiweb
+  domain: scandiweb.com
+  country: LV
+  source: clutch
+  careers_url: https://scandiweb.com/careers
+  ats: { vendor: unknown }
+  notes: "Riga, Magento/Shopify. Pinpoint (scandiweb.pinpointhq.com)"
+- name: Magebit
+  domain: magebit.com
+  country: LV
+  source: clutch
+  careers_url: https://magebit.com/careers
+  ats: { vendor: unknown }
+  notes: "Riga, Magento. Careers page shows no board host. Source not checked"
+- name: Onestic
+  domain: onestic.com
+  country: ES
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Spain, Magento/Shopify. Bizneo (onestic.bizneo)"
+- name: Interactiv4
+  domain: interactiv4.com
+  country: ES
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Redirects to wam.global (merged into WAM). Source not checked"
+- name: Dn'D
+  domain: dnd.fr
+  country: FR
+  source: clutch
+  careers_url: https://www.dnd.fr/nous-rejoindre/
+  ats: { vendor: unknown }
+  notes: "Paris, Magento/Shopify. Welcome to the Jungle (welcomekit)"
+- name: PH2M
+  domain: ph2m.com
+  country: FR
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Magento/Shopify. No careers link on homepage. Source not checked"
+- name: Alpenite
+  domain: alpenite.com
+  country: IT
+  source: sfcc-partners
+  careers_url: https://careers.arsenalia.com/jobs
+  ats: { vendor: unknown }
+  notes: "Venice, SFCC; careers go to parent Arsenalia's in-house job site"
+- name: Bitbull
+  domain: bitbull.it
+  country: IT
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Magento. No careers link on homepage. Source not checked"
+- name: Unic
+  domain: unic.com
+  country: CH
+  source: clutch
+  careers_url: https://www.unic.com/de/jobs
+  ats: { vendor: unknown }
+  notes: "Zurich, ~300. In-house jobs pages. Source not checked"
+- name: Macopedia
+  domain: macopedia.com
+  country: PL
+  source: clutch
+  careers_url: https://macopedia.com/en/career
+  ats: { vendor: unknown }
+  notes: "Magento/Akeneo. Careers page shows no board host. Source not checked"
+- name: Polcode
+  domain: polcode.com
+  country: PL
+  source: clutch
+  careers_url: https://polcode.com/careers/
+  ats: { vendor: unknown }
+  notes: "Warsaw. Traffit / softgarden (not adapter vendors)"
+- name: Hatimeria
+  domain: hatimeria.com
+  country: PL
+  source: clutch
+  careers_url: https://www.hatimeria.com/careers
+  ats: { vendor: unknown }
+  notes: "Magento. Careers page shows no board host. Source not checked"
+- name: Orba
+  domain: orba.co
+  country: PL
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Magento. No careers link on homepage. Source not checked"
+- name: Advox Studio
+  domain: advoxstudio.com
+  country: PL
+  source: clutch
+  careers_url: https://www.advoxstudio.com/career
+  ats: { vendor: unknown }
+  notes: "Shopify. Careers page shows no board host. Source not checked"
+- name: Zitec
+  domain: zitec.com
+  country: RO
+  source: clutch
+  careers_url: https://careers.makeit.software/jobs
+  ats: { vendor: unknown }
+  notes: "Bucharest, 250-999 (Clutch), e-commerce a minor line. Careers link goes to the MakeIT group's Teamtailor custom-domain site (careers.makeit.software) with unrelated group roles. Too big, off focus, group board"
+- name: Shopsys
+  domain: shopsys.com
+  country: CZ
+  source: clutch
+  careers_url: https://jobs.shopsys.cz/
+  ats: { vendor: unknown }
+  notes: "Brno/Prague, own e-commerce framework plus agency. jobs.shopsys.cz unreachable from fetcher. Source not checked"
+- name: Optiweb
+  domain: optiweb.com
+  country: SI
+  source: clutch
+  careers_url: https://www.optiweb.com/careers
+  ats: { vendor: unknown }
+  notes: "Skofja Loka, Magento/Shopware/Pimcore. In-house careers page, no openings. optiweb.recruitee.com seen in search only, not linked. Source not checked"
+- name: Byte-Code
+  domain: byte-code.com
+  country: IT
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Milan, 40+ Shopify experts (own site), Shopify Plus. No careers page on site; bytecode.recruitee.com seen in search only, not linked. Shopify listing not checked"
+- name: Westum
+  domain: westum.com
+  country: BG
+  source: sfcc-partners
+  careers_url: https://www.westum.com/careers
+  ats: { vendor: unknown }
+  notes: "Sofia, SFCC/Magento. Careers page shows no board host; a SmartRecruiters 'Westum' tenant seen in search only. HQ and partner listing not checked"
+- name: Cloud District
+  domain: clouddistrict.com
+  country: ES
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Madrid, 70+ (Shopify directory), Shopify Plus. Factorial (clouddistrict.factorialhr.es)"

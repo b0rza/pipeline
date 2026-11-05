@@ -1,0 +1,678 @@
+# Slice: United Kingdom (GB). Sources: Shopify Plus / BigCommerce / Clutch UK round-ups and listings, plus web search for SFCC (2 found, neither qualifies). commercetools UK partners were already covered by commercetools.yaml; SCAYLE directory not opened.
+# Date: 2026-11-05. 85 agencies screened (Superco dropped here, the US slice file lists it); 6 on an adapter vendor.
+# Method: scripts/resolve.ts (no --verify) plus a curl scan of each homepage and careers page for ATS hosts; WebFetch where the site blocked curl.
+
+# --- qualifying ---
+- name: Swanky
+  domain: swankyagency.com
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://swankyagency.com/about/#careers
+  ats: { vendor: bamboohr, slug: swanky }
+  notes: "Exeter (per its job ads), offices UK/Australia/France; size unverified; Shopify Platinum partner, Shopify-only since 2012; resolver found bamboohr link on about page"
+
+- name: Vervaunt
+  domain: vervaunt.com
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://team.vervaunt.com/
+  ats: { vendor: teamtailor, slug: team.vervaunt.com }
+  notes: "London (Devonshire Square), also New York; size unverified; Shopify Plus consultancy (SFCC-to-Shopify migrations); Teamtailor career site on custom domain, found by resolver"
+
+- name: By Association Only
+  domain: byassociationonly.com
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://www.byassociationonly.com/careers
+  ats: { vendor: bamboohr, slug: byassociationonly }
+  notes: "Cambridge HQ, mostly remote UK team; size unverified; Shopify Plus agency; roles link to byassociationonly.bamboohr.com"
+
+- name: Velstar
+  domain: velstar.agency
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://velstar.teamtailor.com/
+  ats: { vendor: teamtailor, slug: velstar }
+  notes: "Hubs Liverpool, Leeds, Edinburgh, plus Miami; size unverified; Shopify Platinum partner; velstar.co.uk redirects here; slug from velstar.teamtailor.com link on homepage (resolver missed it, no /careers path)"
+
+- name: Visualsoft
+  domain: visualsoft.co.uk
+  country: GB
+  source: clutch
+  careers_url: https://www.visualsoft.co.uk/careers
+  ats: { vendor: workable, slug: visualsoft }
+  notes: "Stockton-on-Tees, offices Manchester/Newcastle/London; size unverified (large for the band, likely 200+); now Shopify-focused agency; workable links on careers page"
+
+- name: Remarkable (formerly Sagittarius)
+  domain: remarkable.global
+  country: GB
+  source: clutch
+  careers_url: https://careers.remarkable.group/
+  ats: { vendor: teamtailor, slug: careers.remarkable.group }
+  notes: "London/Manchester, also Chicago and Dubai; 70+ staff (own site); sagittarius.agency redirects here (merger of Sagittarius and three others); Sitecore/Optimizely Platinum, Salesforce, generic commerce, so e-commerce fit is weaker than the rest; Teamtailor career site on custom domain (careersite assets), found by hand via remarkable.global/careers redirect"
+
+# --- screened out ---
+- name: We Make Websites
+  domain: wemakewebsites.com
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://www.wemakewebsites.com/careers
+  ats: { vendor: unknown }
+  notes: "London, part of BORN Group; Shopify Platinum; site refuses automated fetch (403, TLS handshake failure), board not checked"
+
+- name: Eastside Co
+  domain: eastsideco.com
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://eastsideco.com/careers
+  ats: { vendor: unknown }
+  notes: "London/Birmingham; Shopify Plus; in-house careers page, apply by email (jobs@)"
+
+- name: Blend Commerce
+  domain: blendcommerce.com
+  country: GB
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Shopify agency; size unverified; no careers page (/careers 404), no link on homepage"
+
+- name: Charle
+  domain: charle.co.uk
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://www.charle.co.uk/careers/
+  ats: { vendor: unknown }
+  notes: "London/Manchester; Shopify Plus; careers link on homepage points only to a banned job site (hard rule 3), no ATS"
+
+- name: Underwaterpistol
+  domain: underwaterpistol.com
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://www.underwaterpistol.com/careers
+  ats: { vendor: unknown }
+  notes: "London; Shopify Plus; in-house careers page, no ATS link"
+
+- name: blubolt
+  domain: blubolt.com
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://blubolt.com/careers/
+  ats: { vendor: unknown }
+  notes: "Bath/Bristol; Shopify Plus; in-house page with HubSpot form"
+
+- name: Sitruna
+  domain: sitruna.com
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://www.sitruna.com/careers
+  ats: { vendor: unknown }
+  notes: "London; Shopify Plus and Amazon; jobs on Employment Hero (not an adapter vendor)"
+
+- name: Cake Agency
+  domain: cake.agency
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://www.cake.agency/careers
+  ats: { vendor: unknown }
+  notes: "Birmingham; Shopify Premier; in-house page, email (careers@)"
+
+- name: WIRO
+  domain: wiro.agency
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://wiroagency.notion.site/careers-at-wiro
+  ats: { vendor: unknown }
+  notes: "Fully remote; Shopify; careers on a Notion page"
+
+- name: Rainy City Agency
+  domain: rainycityagency.com
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://www.rainycityagency.com/pages/careers
+  ats: { vendor: unknown }
+  notes: "Manchester; Shopify; in-house page, no ATS"
+
+- name: Juno Ecommerce
+  domain: junoecommerce.com
+  country: GB
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "London; Shopify; site did not respond"
+
+- name: EcomOne
+  domain: ecomone.com
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://www.ecomone.com/careers/
+  ats: { vendor: unknown }
+  notes: "Lincoln; Shopify; in-house page, email (hello@)"
+
+- name: Radiant
+  domain: byradiant.com
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://byradiant.com/careers
+  ats: { vendor: unknown }
+  notes: "Birmingham and Dubai; Shopify; in-house page (Storyblok), email"
+
+- name: Unified
+  domain: unified.co
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://unified.co/careers
+  ats: { vendor: unknown }
+  notes: "London; Shopify Plus/BigCommerce/Adobe; in-house page, email (careers@)"
+
+- name: Kubix Media
+  domain: kubixmedia.co.uk
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://kubixmedia.co.uk/careers
+  ats: { vendor: unknown }
+  notes: "Birmingham; Shopify; Homerun widget (not an adapter vendor)"
+
+- name: Milk Bottle Labs
+  domain: milkbottlelabs.com
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://milkbottlelabs.com/careers/
+  ats: { vendor: unknown }
+  notes: "Shopify; in-house page, no ATS"
+
+- name: Quickfire Digital
+  domain: quickfiredigital.com
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://www.quickfiredigital.com/careers/
+  ats: { vendor: unknown }
+  notes: "Shopify Plus; in-house page, email (hello@)"
+
+- name: Noughts & Ones
+  domain: noughtsandones.com
+  country: GB
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Shopify; no careers page (/careers 404)"
+
+- name: Create8
+  domain: create8.co.uk
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://www.create8.co.uk/careers/
+  ats: { vendor: unknown }
+  notes: "Stockport; Shopify; email only (jobs@)"
+
+- name: ChilliApple
+  domain: chilliapple.co.uk
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://www.chilliapple.co.uk/careers
+  ats: { vendor: unknown }
+  notes: "London/Kent; Shopify; in-house page, email"
+
+- name: Propeller
+  domain: propeller.co.uk
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://www.propeller.co.uk/careers
+  ats: { vendor: unknown }
+  notes: "London; Shopify; in-house page, email"
+
+- name: duenorth
+  domain: duenorth.co.uk
+  country: GB
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Shopify; no careers link on site"
+
+- name: Heer Digital
+  domain: heer.digital
+  country: GB
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Shopify; no careers link on site"
+
+- name: Dewsign
+  domain: dewsign.co.uk
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://www.dewsign.co.uk/careers
+  ats: { vendor: unknown }
+  notes: "Cornwall; Shopify; email only (work@)"
+
+- name: Limely
+  domain: limely.co.uk
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://www.limely.co.uk/careers
+  ats: { vendor: unknown }
+  notes: "Chester; Shopify; in-house page"
+
+- name: The Pixel
+  domain: thepixel.com
+  country: GB
+  source: bigcommerce-agency-lists
+  careers_url: https://www.thepixel.com/careers
+  ats: { vendor: unknown }
+  notes: "London; BigCommerce/Shopify/Adobe; in-house Webflow page"
+
+- name: 5874 Commerce
+  domain: 5874commerce.com
+  country: GB
+  source: bigcommerce-agency-lists
+  careers_url: https://5874commerce.com/careers
+  ats: { vendor: unknown }
+  notes: "Birmingham/London; BigCommerce Elite and Adobe Commerce; email only (recruitment@)"
+
+- name: Williams Commerce
+  domain: williamscommerce.com
+  country: GB
+  source: bigcommerce-agency-lists
+  careers_url: https://www.williamscommerce.com/careers/
+  ats: { vendor: unknown }
+  notes: "Four UK offices, 110+ staff (mgt-commerce round-up); BigCommerce Elite and Adobe; in-house page"
+
+- name: Space 48
+  domain: space48.com
+  country: GB
+  source: bigcommerce-agency-lists
+  careers_url: https://careers.space48.com/
+  ats: { vendor: unknown }
+  notes: "Manchester; careers redirects to careers.glassatlas.com, merged into Glass Atlas (already seeded)"
+
+- name: Gene Commerce
+  domain: gene.co.uk
+  country: GB
+  source: clutch
+  careers_url: https://gene.co.uk/about/join-us
+  ats: { vendor: unknown }
+  notes: "Brighton; Adobe Commerce; in-house page"
+
+- name: iWeb
+  domain: iweb.co.uk
+  country: GB
+  source: clutch
+  careers_url: https://www.iweb.co.uk/careers
+  ats: { vendor: unknown }
+  notes: "Staffordshire/London; Adobe Commerce; in-house page"
+
+- name: PushON
+  domain: pushon.co.uk
+  country: GB
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Manchester; Adobe Commerce and marketing; /careers redirects to contact page"
+
+- name: illuminise
+  domain: illuminise.com
+  country: GB
+  source: clutch
+  careers_url: https://www.illuminise.com/careers/
+  ats: { vendor: unknown }
+  notes: "Cambridge/London, 10-49 staff (Clutch); Magento; careers page rate-limited (429), no ATS seen on homepage"
+
+- name: CTI Digital
+  domain: ctidigital.com
+  country: GB
+  source: clutch
+  careers_url: https://www.ctidigital.com/about/careers/
+  ats: { vendor: unknown }
+  notes: "Manchester; Adobe Commerce; Pinpoint board (ctidigital.pinpointhq.com), not an adapter vendor"
+
+- name: JH
+  domain: wearejh.com
+  country: GB
+  source: clutch
+  careers_url: https://wearejh.com/careers/
+  ats: { vendor: unknown }
+  notes: "Nottingham; Adobe Gold partner; in-house page, email (jobs@)"
+
+- name: Foundation Commerce
+  domain: foundationcommerce.co.uk
+  country: GB
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Hyva Platinum, Magento; no careers link on site"
+
+- name: Scommerce Mage
+  domain: scommerce-mage.com
+  country: GB
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Woking; Magento extensions and agency; no careers link"
+
+- name: magic42
+  domain: magic42.co.uk
+  country: GB
+  source: clutch
+  careers_url: https://www.magic42.co.uk/joinus/
+  ats: { vendor: unknown }
+  notes: "Birmingham; Magento; email only (hr@)"
+
+- name: Screen Pages
+  domain: screenpages.com
+  country: GB
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Magento, part of Moore-Wilson Group; no careers link on homepage; /careers 404"
+
+- name: Meanbee
+  domain: meanbee.com
+  country: GB
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Bath; redirects to glassatlas.com, merged into Glass Atlas (already seeded)"
+
+- name: Develo
+  domain: develodesign.co.uk
+  country: GB
+  source: clutch
+  careers_url: https://www.develodesign.co.uk/about/careers
+  ats: { vendor: unknown }
+  notes: "Chesterfield; Magento; develo.co.uk redirects here; in-house page"
+
+- name: Peacock Carter
+  domain: peacockcarter.co.uk
+  country: GB
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Newcastle; no careers link on site"
+
+- name: Media Lounge
+  domain: medialounge.co.uk
+  country: GB
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Magento/Shopify; site down (HTTP 522) during check"
+
+- name: Rixxo
+  domain: rixxo.com
+  country: GB
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "London; Magento/Shopify; site refuses automated fetch (403)"
+
+- name: Melonleaf
+  domain: melonleaf.com
+  country: GB
+  source: sfcc-partners
+  careers_url: https://melonleaf.com/careers/
+  ats: { vendor: unknown }
+  notes: "Salesforce consultancy; careers page links Indian review sites, team appears India-based, not UK HQ; no ATS"
+
+- name: Series Eight
+  domain: serieseight.com
+  country: GB
+  source: clutch
+  careers_url: https://serieseight.com/careers
+  ats: { vendor: unknown }
+  notes: "London, 10-49 staff (Clutch); Shopify; in-house page with Formspree form"
+
+- name: Wirebox
+  domain: wirebox.co.uk
+  country: GB
+  source: clutch
+  careers_url: https://wirebox.co.uk/careers/
+  ats: { vendor: unknown }
+  notes: "Watford, 10-49 staff (Clutch); Laravel and e-commerce; in-house page"
+
+- name: Opace
+  domain: opace.agency
+  country: GB
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Birmingham, 10-49 staff (Clutch); no careers link on site"
+
+- name: "ecce."
+  domain: ecce.uk
+  country: GB
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Otford, 10-49 staff (Clutch); no careers link on site"
+
+- name: Artistsweb
+  domain: artistsweb.co.uk
+  country: GB
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "London, 10-49 staff (Clutch); no careers link on site"
+
+- name: SOTechnology
+  domain: sotechnology.co.uk
+  country: GB
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "London; redirects to sotechnology.ai; no careers link"
+
+- name: We Create Digital
+  domain: wecreate.digital
+  country: GB
+  source: clutch
+  careers_url: https://wecreate.digital/careers/
+  ats: { vendor: unknown }
+  notes: "Coggeshall, 10-49 staff (Clutch); in-house page"
+
+- name: Megantic
+  domain: megantic.com
+  country: GB
+  source: bigcommerce-agency-lists
+  careers_url: https://www.megantic.com/careers/
+  ats: { vendor: unknown }
+  notes: "Manchester; Adobe/BigCommerce; in-house page, email"
+
+- name: RVS Media
+  domain: rvsmedia.co.uk
+  country: GB
+  source: bigcommerce-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "London; no careers link on site"
+
+- name: Lemon Hive
+  domain: lemonhive.com
+  country: GB
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "London-listed Shopify partner; no careers link on homepage"
+
+- name: Infinite
+  domain: infinite.agency
+  country: GB
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "London; Shopify; homepage returned an almost empty response, no careers link found"
+
+- name: Rave Digital
+  domain: ravedigital.co.uk
+  country: GB
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Shopify; no careers link on site"
+
+- name: WeCanFly
+  domain: wecanflyagency.com
+  country: GB
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Shopify; no careers link on site"
+
+- name: MadeByField
+  domain: madebyfield.co.uk
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://madebyfield.co.uk/careers
+  ats: { vendor: unknown }
+  notes: "London; Shopify Plus; in-house page, email (studio@)"
+
+- name: Venture Stream
+  domain: venturestream.co.uk
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://venturestream.co.uk/about-us/careers/
+  ats: { vendor: unknown }
+  notes: "Newcastle; Shopify and Adobe; in-house page"
+
+- name: Fostr
+  domain: fostr.io
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://www.fostr.io/careers
+  ats: { vendor: unknown }
+  notes: "Careers page links careers.idhlagency.com, part of IDHL (already seeded)"
+
+- name: Lion Sorbet
+  domain: lionsorbet.com
+  country: GB
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Shopify; no careers link on site"
+
+- name: Liquify
+  domain: liquify.design
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://liquify.design/jobs/
+  ats: { vendor: unknown }
+  notes: "Shopify; in-house page"
+
+- name: Made By Shape
+  domain: madebyshape.co.uk
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://madebyshape.co.uk/careers/
+  ats: { vendor: unknown }
+  notes: "Manchester; Shopify and Craft CMS; in-house page, email"
+
+- name: Flex Commerce
+  domain: flexcommerce.co.uk
+  country: GB
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Manchester/Liverpool; no careers link on site"
+
+- name: Archer Cooper
+  domain: archercooper.co.uk
+  country: GB
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Manchester; small site, no careers link"
+
+- name: Pixel Kicks
+  domain: pixelkicks.co.uk
+  country: GB
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Manchester; no careers link on site"
+
+- name: Strawberry
+  domain: strawberry.co.uk
+  country: GB
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Shopify; no careers link on site"
+
+- name: FocusReactive
+  domain: focusreactive.com
+  country: GB
+  source: clutch
+  careers_url: https://careers.smartrecruiters.com/FocusReactive
+  ats: { vendor: unknown }
+  notes: "Not UK HQ: footer says Focus Reactive BV (The Netherlands), London is one of four offices, ~20 engineers; board is smartrecruiters FocusReactive if the NL slice wants it"
+
+- name: Whole Design Studios
+  domain: wholedesignstudios.com
+  country: GB
+  source: shopify-agency-lists
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Shopify; no careers link on site"
+
+- name: Inviqa
+  domain: inviqa.com
+  country: GB
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "London, large (300+, over the band); /careers redirects to contact page"
+
+- name: MMT Digital
+  domain: mmtdigital.co.uk
+  country: GB
+  source: clutch
+  careers_url: https://www.msqdx.com/en/careers
+  ats: { vendor: unknown }
+  notes: "Redirects to MSQ DX, a large parent group whose careers page mixes Personio and Greenhouse (arke) boards across countries; screened out as parent group"
+
+- name: Box UK
+  domain: boxuk.com
+  country: GB
+  source: clutch
+  careers_url: https://www.boxuk.com/about-us/careers/
+  ats: { vendor: unknown }
+  notes: "Cardiff; software consultancy; in-house careers page"
+
+- name: Amaze
+  domain: amaze.com
+  country: GB
+  source: sfcc-partners
+  careers_url: https://www.amaze.com/careers
+  ats: { vendor: unknown }
+  notes: "Liverpool/London; SFCC and SAP commerce; careers page refuses automated fetch (403), no ATS link on homepage"
+
+- name: Netcel
+  domain: netcel.com
+  country: GB
+  source: clutch
+  careers_url: https://www.netcel.com/careers/
+  ats: { vendor: unknown }
+  notes: "Optimizely and commerce; in-house page, email (careers@)"
+
+- name: Fisheye
+  domain: fisheye.co.uk
+  country: GB
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Redirects to youweagency.co.uk, acquired by Youwe (already seeded)"
+
+- name: Pinpoint Designs
+  domain: pinpointdesigns.co.uk
+  country: GB
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Redirects to idhlagency.com, acquired by IDHL (already seeded)"
+
+- name: Ampersand
+  domain: ampersand.net
+  country: GB
+  source: clutch
+  careers_url: null
+  ats: { vendor: unknown }
+  notes: "Manchester; Adobe Commerce; /careers 404, no careers link, email (info@)"
+

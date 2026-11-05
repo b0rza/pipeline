@@ -1,0 +1,195 @@
+# Slice: BigCommerce partner directory (partners.bigcommerce.com/directory), agency partners, all pages harvested.
+# Date: 2026-11-05. 756 partners harvested, 494 agency partners in allowed countries, 343 new domains probed.
+# Method: scripted harvest of listing + profile pages, probe of home + careers pages via core/http.ts, scripts/resolve.ts on hits.
+
+# --- Qualifying: careers page sits on an adapter vendor ---
+
+- name: "Human Marketing"
+  domain: human.marketing
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: "https://human.marketing/careers"
+  ats: { vendor: workable, slug: human-marketing }
+  notes: "Irvine CA (directory and own site), size unverified; marketing-led agency (paid, SEO, brand) with a web design and development line and an ecommerce build cited on own site; Workable link on careers page"
+
+- name: "LimeLight Marketing"
+  domain: limelightmarketing.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: "https://limelightmarketing.com/careers/"
+  ats: { vendor: bamboohr, slug: limelightmarketing }
+  notes: "Pittsburg KS and Overland Park KS offices (own site), size unverified; ecommerce agency doing design, custom development and marketing, BigCommerce, Shopify Plus and SCAYLE partner (own site); BambooHR link on careers page"
+
+- name: "RDA"
+  domain: rdadigital.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: "https://www.rdadigital.com/careers"
+  ats: { vendor: jazzhr, slug: rda }
+  notes: "Hunt Valley MD (own site and directory), size unverified; digital services consultancy doing platform selection and implementation and custom web app development, Shopify partner on own site, BigCommerce directory listing; commerce share of work not confirmed; rda.applytojob.com link on careers page"
+
+- name: "BlueTuskr"
+  domain: bluetuskr.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: "https://www.bluetuskr.com/"
+  ats: { vendor: workable, slug: bluetuskr }
+  notes: "Westtown PA (directory), 30+ in-house staff (own site); marketing-led ecommerce agency with a website design and development line, Shopify Plus and BigCommerce partner badges; Workable link on home page"
+
+- name: "Envoy"
+  domain: weareenvoy.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: "https://www.weareenvoy.com/"
+  ats: { vendor: greenhouse, slug: weareenvoy }
+  notes: "Irvine CA (BigCommerce directory; San Diego and Chicago offices per own site), size unverified; customer-experience consultancy with a Commerce service line, B2B and B2C sites (VIZIO, Masterbuilt cited); Greenhouse embed for=weareenvoy on home page"
+
+# --- Screened out: board on a non-adapter vendor, or an adapter board but the company does not qualify ---
+
+- name: "Blayzer"
+  domain: blayzer.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: "https://blayzer.com/careers/"
+  ats: { vendor: unknown }
+  notes: "Saint Louis MO (BigCommerce directory), size unverified; digital agency; board on Hireology (blayzerdigitalmarketing.hireology.com) linked from careers page"
+
+- name: "Dedi agency"
+  domain: dedi-agency.com
+  country: FR
+  source: bigcommerce-agency-lists
+  careers_url: "https://www.dedi-agency.com/jobs/"
+  ats: { vendor: unknown }
+  notes: "LYON (BigCommerce directory), size unverified; board on JOIN (join.com widget on jobs page)"
+
+- name: "Gemini Agency"
+  domain: geminiams.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: "https://geminiams.com/careers/"
+  ats: { vendor: unknown }
+  notes: "Minneapolis MN (own site), size unverified; digital marketing agency, web design listed but no ecommerce work shown; BambooHR board geminiams on careers page; screened out as marketing shop"
+
+- name: "MuteSix"
+  domain: mutesix.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: "https://mutesix.com/join-the-team/"
+  ats: { vendor: unknown }
+  notes: "Los Angeles CA (directory); performance marketing agency, part of Dentsu; SmartRecruiters widget on join-the-team page; screened out as marketing shop under a global giant"
+
+- name: "SVA Consulting LLC"
+  domain: sva.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: "https://consulting.sva.com/careers-with-svac"
+  ats: { vendor: unknown }
+  notes: "Madison WI (BigCommerce directory), size unverified; accounting and IT consulting firm; board on UKG UltiPro (recruiting.ultipro.com) linked from careers page"
+
+- name: "Towa Software"
+  domain: towasoftware.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: "https://talent.towasoftware.com/"
+  ats: { vendor: unknown }
+  notes: "San Antonio TX (directory); nearshore team augmentation with engineers in Mexico (own site); Teamtailor career site talent.towasoftware.com; screened out as staffing / offshore delivery model"
+
+- name: "OneIMS"
+  domain: oneims.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: "https://oneims.com/careers"
+  ats: { vendor: unknown }
+  notes: "Bonita Springs FL (directory); B2B inbound marketing and demand generation agency; Workable embed script on careers page, slug not resolved; screened out as marketing shop"
+
+- name: "Adfix online marketing"
+  domain: adfix.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: "https://www.adfix.com/careers"
+  ats: { vendor: unknown }
+  notes: "Jackson WY (directory); ecommerce growth agency doing paid ads and Klaviyo email for Shopify brands; Workable widget account 608751 on careers page; screened out as marketing shop"
+
+- name: "Agital (now Go Fish Digital)"
+  domain: exclusiveconcepts.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: "https://gofishdigital.com/careers/"
+  ats: { vendor: unknown }
+  notes: "Listed as Agital, Burlington MA (directory); exclusiveconcepts.com redirects to gofishdigital.com, an SEO and digital marketing agency; Rippling board gofishdigital on its careers page; screened out as SEO/marketing shop"
+
+- name: "Big Imprint, LLC"
+  domain: bigimprint.com
+  country: US
+  source: bigcommerce-agency-lists
+  careers_url: "https://www.bigimprint.com/jobs/"
+  ats: { vendor: unknown }
+  notes: "West Liberty IA (own site); web design firm, team of four (own jobs page), no ecommerce work shown; old bigimprint.workable.com links on jobs page, no open roles; screened out as too small"
+
+- name: "Elements Interactive"
+  domain: elements.nl
+  country: ES
+  source: bigcommerce-agency-lists
+  careers_url: "https://www.elements.nl/careers"
+  ats: { vendor: unknown }
+  notes: "Barcelona (directory) and Amsterdam offices, part of the MakerStreet network; mobile app agency, no ecommerce work shown; Workable embed script on careers page, slug not found; screened out as app agency"
+
+# Probed 2026-11-05, no job board found on home or careers page:
+# 1center.co, 2digits.nl, 7cgi.com, acc.com.es, access.dev, actumdigital.com, addwebsolution.com,
+# adsharkmarketing.com, advisa.fr, aeffelab.com, aelion.ae, aeontg.com, aiguadevs.com, altudo.co,
+# alturainnovation.com, amitechgrp.com, amsivedigital.com, amswebdesign.com, and.digital, aperturelabs.net,
+# applydigital.com, arishi.agency, arizon.digital, arvadacreative.com, assembleinc.com, atensoftware.com,
+# athinfosys.com, attiqlab.com, ayatacommerce.com, backcountrydigital.com, bekome.digital, bestworlds.com,
+# blueboltsolutions.com, blueskycommerce.io, bootstrapcreative.com, boraso.com, bravebison.com,
+# bravenewmarkets.com, braveriver.com, bspoq.com, bwlab.it, calicantus.com, captiva-marketing.com, cartman.fi,
+# cavalloagency.com, centrelocus.com, certumsolutions.com, chetu.com, cirkularsolutions.com, clouda.io,
+# codaemon.com, codexitos.com, commercestudio.ai, courageous.co.uk, customsoft.io, cyberhull.com, cygnet.io,
+# dataart.com, dckap.com, deeperthanblue.co.uk, digicommercegroup.com, diginius.com, dipietro.biz,
+# ditinteractive.com, dma.it, dpistudios.com, drewl.com, ducksoupecommerce.com, eastmontdigital.com,
+# ecommaz.com, ecomswiftllc.com, ecreo.dk, ekino.com, eliftech.com, elision.eu, ellipsis.systems, elogic.co,
+# elumynt.com, emaginemore.com, epicshops.com, estorefactory.com, etelshop.com, expertvillagemedia.com,
+# eyemaginetech.com, fahrenheitmarketing.com, findcanary.com, flairconsultancy.com, fledgling.tech,
+# fortuitas.com, foxter.io, frooition.com, generous.studio, golim.com, gpmd.co.uk, growecommerce.net,
+# gspann.com, ham.studio, hatchquantified.com, hatfieldmedia.com, hirooks.com, holodyn.com, hypeinc.com,
+# iagt.es, icrunchdata.com, imediainc.com, indiwork.com, infixdigital.com, intedyne.com, integratecnologia.es,
+# intesys.it, itlweb.com, jamminwebdesigns.com, jbconcept.ro, jetpulp.fr, jonathanlewis.rocks,
+# justinewyness.com, knowmadmood.com, knr.paris, koan.is, kokopelliagency.com, kurensolutions.com,
+# lafountaindesign.com, leadige.agency, leantree.co.uk, logicalposition.com, lonestartemplates.com,
+# longdistancebeginners.com, lowthiandesign.com, luccaam.com, luxorhq.com, madcraft.co, madfishsolutions.com,
+# makdigitaldesign.com, makingscience.com, marketingsuccess.com, marketplacesellers.com, mashfrog.com,
+# matrixdigitalfactory.com, mediascalepartners.com, mementia.com, menarasolutions.com, merchantbottomline.com,
+# metaviz.pro, modelic.io, moduluswebdesign.com, msg-global.com, mtc.co.uk, musingwebdesign.com,
+# mustbeonline.net, myzing.io, nautilusmarketing.co.uk, netsolutions.com, newmadisonave.com, nextbracket.io,
+# ngdevlabs.com, nimbleappgenie.com, ninjatemplates.com, no7software.co.uk, noaignite.co.uk, nordicclick.com,
+# notchnet.com, nviz.com, nwwebdev.com, obrienmedia.co.uk, ocdesignsonline.com, onestepretail.com,
+# onetakemedia.net, orangetalent.nl, oryxoutdoorgroup.com, p2h.com, paragaia.se, penguinecommerce.com,
+# pipecodes.com, platinumwebgroup.com, powerserve.net, premiumwebsites.net, priocept.com, progoez.com,
+# projecta.com, prolificdigital.com, proofdigital.com, proproductswebdevelopment.com, purestrategic.com,
+# qeretail.com, quba.co.uk, quietowlmarketing.com, razorcreativelabs.com, reachinteractive.com,
+# realagency.co.uk, redefineinnovations.com, reggao.fr, reply.com, rhinogroup.com, ridgeway.com,
+# roirevolution.com, romolochocolates.com, saleswarp.com, searchauto.app, seeed.us, seisnet.it, select.com,
+# sinapsis.agency, smartsolutions.dev, smcconsulting.it, smotly.com, snapshotdesign.com, solspace.com,
+# sourcewebsolutions.com, spctek.com, sphere-itc.com, spiriit.com, spotview.it, springboardmarketing.com,
+# stoneroosterinc.com, strabo.partners, striketru.com, studioworx.co.uk, summit-digital.co.uk,
+# superiorecom.com, supremeopti.com, swarmingtech.com, sweetvalleyventure.com, synapseindia.com,
+# sysconscorp.com, tadpull.com, takefortytwo.com, talentacommerce.com, targetedwebtraffic.com, techtic.com,
+# thanxmedia.com, thebarn.agency, theetailers.com, thefusedigital.com, thehauserdesigngroup.com,
+# thenoiseofothers.com, thesio.eu, thevisiontech.com, thinkcommerce.no, thinktribe.com, thirdarmmarketing.com,
+# thirdeyegraphicsolutions.com, thundertech.com, tinext.com, tonyasdynamicdesigns.com, toogas.pt,
+# touchtribe.nl, trepoly.com, trinity.one, ubiquedigital.com, uequations.com, venturawebdesign.com,
+# vilmate.com, visioncoursemedia.com, weareinclined.com, webdesksolution.com, webdevstudios.com,
+# webecommercepros.com, webforce5.com, webvisuals.com, whitelabeldigitalmarketingagency.com, wpromote.com,
+# xcconsulting.it, you.digital, zento.fr, zitacsolutions.se
+
+# Probed 2026-11-05, blocked or unreachable:
+# 247commerce.co.uk, 4ng.nl, agency51.com, ameexusa.com, americaneagle.com, aylis.com, bdodigital.com,
+# becloudify.com, canesta.com, collinandcompany.com, data2cash.com, dunnsolutions.com, e2msolutions.com,
+# ecomitize.com, eurostep.it, ffwagency.com, getreadyletsgrow.com, goidp.com, grayloon.com,
+# hummingstudios.com, ilpolodigitale.com, indez.ltd, iona.studio, jozga.co.uk, katedillon.com, like.digital,
+# marketing360.com, mattcotten.com, nagarro.com, novocreative.com.au, nxtlvl.nl, onedogmedia.com,
+# orienteed.com, peterjameswebdesign.com, pixelproductionsinc.com, pomelopixel.com, projectthunder.com,
+# protocolthree.com, redheadlabs.com, refinedimpact.com, retaildimensions.com, rustymonkey.com,
+# sandcastle-web.com, scube.co, seidor.com, silvertech.com, storeporter.com, swktech.com, teamwass.com,
+# tempora.com, thunderboltwebdesign.co.uk, trinamicdigital.com, tunatraffic.com, ubqeurope.com,
+# umamidesignforfood.co.uk, vecora.no, virtualvision.com, vivacommerce.com, vsgcommerce.com,
+# webservicespros.com, westmount.solutions, young-dogs.eu

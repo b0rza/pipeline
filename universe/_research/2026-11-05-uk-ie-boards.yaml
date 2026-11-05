@@ -1,0 +1,351 @@
+# Slice: United Kingdom (GB) and Ireland (IE), round 2, board-first discovery. Date: 2026-11-05.
+# Method: web search on ATS hosts (site:apply.workable.com, teamtailor, bamboohr, lever, greenhouse, ashby, recruitee, personio, breezy, smartrecruiters) plus UK/IE agency round-ups; each agency's own homepage and careers page fetched (curl scan, then npm run resolve, no --verify).
+# Result: no qualifying entries. Every board-first lead in GB/IE was already in universe/ or round-1 files; the two adapter boards found belong to companies that fail the agency test (kept below with the board in notes). source 'web-search' = no directory listing opened.
+
+# --- qualifying (adapter vendor + slug) ---
+# none
+
+# --- screened out ---
+- name: "Tangent"
+  domain: tangent.co
+  country: GB
+  source: web-search
+  careers_url: https://tangent.co/careers
+  ats: { vendor: unknown }
+  notes: "London, size unverified. Board bamboohr/tangentpeople is linked from own careers page (resolver confirmed), but the company is an AI and digital product consultancy, now 'an Exadel company'; no e-commerce platform work named on its site. Not an e-commerce engineering agency"
+
+- name: "Zartis"
+  domain: zartis.com
+  country: IE
+  source: web-search
+  careers_url: https://www.zartis.com/careers/
+  ats: { vendor: unknown }
+  notes: "Dublin, size unverified. Board lever/zartis linked from own careers page (resolver confirmed), but Zartis is a nearshore software team-augmentation firm, not an e-commerce agency (staffing-like)"
+
+- name: "Code Computerlove"
+  domain: codecomputerlove.com
+  country: GB
+  source: web-search
+  careers_url: https://www.codecomputerlove.com/careers
+  ats: { vendor: unknown }
+  notes: "Manchester digital product agency. Careers page links greenhouse/wppmedia, the WPP Media group board with hundreds of unrelated roles; parent is a global giant"
+
+- name: "Monsoon Consulting"
+  domain: monsoonconsulting.com
+  country: IE
+  source: web-search
+  careers_url: https://monsoonconsulting.com/careers/
+  ats: { vendor: unknown }
+  notes: "Dublin (also London phone), Adobe Commerce and Drupal agency, size unverified. Board workable/monsoonconsulting seen in search only, not linked from own site; careers page lists no roles"
+
+- name: "Fluid Commerce"
+  domain: fluidcommerce.co.uk
+  country: GB
+  source: web-search
+  careers_url: https://www.fluidcommerce.co.uk/about-us/careers/
+  ats: { vendor: unknown }
+  notes: "UK Magento Solution Partner agency, city and size unverified. Board workable/fluidcommerce seen in search only (empty), not linked from own site; careers page is an inline CV form"
+
+- name: "Mando Group"
+  domain: mandogroup.com
+  country: GB
+  source: web-search
+  careers_url: https://www.mandogroup.com/
+  ats: { vendor: unknown }
+  notes: "Liverpool digital agency (Optimizely/commerce), size unverified. Homerun board (mandogroup.homerun.co) linked from homepage: not an adapter vendor"
+
+- name: "StudioForty9"
+  domain: studioforty9.com
+  country: IE
+  source: web-search
+  careers_url: https://www.studioforty9.com/pages/careers
+  ats: { vendor: unknown }
+  notes: "Dublin, Magento and Shopify agency, size unverified. HireHive board (studioforty9.hirehive.com): not an adapter vendor"
+
+- name: "Cyber-Duck"
+  domain: cyber-duck.co.uk
+  country: GB
+  source: web-search
+  careers_url: https://www.cyber-duck.co.uk/careers
+  ats: { vendor: unknown }
+  notes: "Elstree/Leicester digital agency, part of CACI (large parent). In-house careers page, applications to a caci.co.uk mailbox"
+
+- name: "Elementary Digital"
+  domain: elementarydigital.co.uk
+  country: GB
+  source: web-search
+  careers_url: https://elementarydigital.co.uk/careers/
+  ats: { vendor: unknown }
+  notes: "Hertfordshire Magento/Adobe Commerce agency, size unverified. In-house careers page, no board"
+
+- name: "Skywire"
+  domain: skywire.co.uk
+  country: GB
+  source: web-search
+  careers_url: https://skywire.co.uk/
+  ats: { vendor: unknown }
+  notes: "London Magento agency, size unverified. No careers page (/careers is 404, no link on homepage)"
+
+- name: "Nublue"
+  domain: nublue.co.uk
+  country: GB
+  source: web-search
+  careers_url: https://nublue.co.uk/
+  ats: { vendor: unknown }
+  notes: "Lancaster Magento/Shopify agency and host, size unverified. No careers page (/careers is 404)"
+
+- name: "Rawnet"
+  domain: rawnet.com
+  country: GB
+  source: web-search
+  careers_url: https://www.rawnet.com/about/careers/
+  ats: { vendor: unknown }
+  notes: "Surrey digital agency with commerce work, size unverified. In-house careers page, email only"
+
+- name: "Graphite Digital"
+  domain: graphitedigital.com
+  country: GB
+  source: web-search
+  careers_url: https://www.graphitedigital.com/careers
+  ats: { vendor: unknown }
+  notes: "Manchester digital agency, size unverified. In-house careers page, no board"
+
+- name: "Big Eye Deers"
+  domain: bigeyedeers.co.uk
+  country: GB
+  source: web-search
+  careers_url: https://bigeyedeers.co.uk/
+  ats: { vendor: unknown }
+  notes: "Cardiff/Exeter Magento and Shopify agency, size unverified. Site returns 403 to the scan and the resolver; no board found"
+
+- name: "Square1"
+  domain: square1.io
+  country: IE
+  source: web-search
+  careers_url: https://www.square1.io/
+  ats: { vendor: unknown }
+  notes: "Dublin web/app development agency, size unverified. No careers page (/careers is 404)"
+
+- name: "Matrix Internet"
+  domain: matrixinternet.ie
+  country: IE
+  source: web-search
+  careers_url: https://www.matrixinternet.ie/careers/
+  ats: { vendor: unknown }
+  notes: "Dublin web development agency, size unverified. In-house careers page, email only"
+
+- name: "Arekibo"
+  domain: arekibo.com
+  country: IE
+  source: web-search
+  careers_url: https://www.arekibo.com/careers
+  ats: { vendor: unknown }
+  notes: "Dublin digital agency, size unverified. In-house careers page, email only"
+
+- name: "Codec"
+  domain: codec.ie
+  country: IE
+  source: web-search
+  careers_url: https://www.codec.ie/careers
+  ats: { vendor: unknown }
+  notes: "Dublin digital agency, size unverified. In-house careers page, email only"
+
+- name: "Each&Other"
+  domain: eachandother.com
+  country: IE
+  source: web-search
+  careers_url: https://www.eachandother.com/about-us/careers
+  ats: { vendor: unknown }
+  notes: "Dublin strategic design consultancy (design-led, not commerce engineering). Board workable/eachandother seen in search only, not linked from own careers page"
+
+- name: "Yoyo Design"
+  domain: yoyodesign.com
+  country: GB
+  source: web-search
+  careers_url: https://yoyodesign.com/careers/
+  ats: { vendor: unknown }
+  notes: "Sheffield e-commerce agency, size unverified. In-house careers page, no board"
+
+- name: "Optix Solutions"
+  domain: optixsolutions.co.uk
+  country: GB
+  source: web-search
+  careers_url: https://www.optixsolutions.co.uk/about/careers
+  ats: { vendor: unknown }
+  notes: "Exeter digital agency, size unverified. In-house careers page, no board"
+
+- name: "Tiro Partners"
+  domain: tiropartners.com
+  country: GB
+  source: web-search
+  careers_url: https://tiropartners.com/jobs/
+  ats: { vendor: unknown }
+  notes: "London, hiring Shopify Plus developers (job-board listings), size unverified. In-house jobs page, email only"
+
+- name: "KiwiCommerce"
+  domain: kiwicommerce.co.uk
+  country: GB
+  source: web-search
+  careers_url: https://kiwicommerce.co.uk/careers/
+  ats: { vendor: unknown }
+  notes: "London Magento/Hyvä agency, size unverified. In-house careers page, no board"
+
+- name: "Envisage Digital"
+  domain: envisagedigital.co.uk
+  country: GB
+  source: web-search
+  careers_url: https://www.envisagedigital.co.uk/careers/
+  ats: { vendor: unknown }
+  notes: "Cheshire Magento/Hyvä Gold agency, size unverified. In-house careers page, no board"
+
+- name: "AYKO"
+  domain: ayko.com
+  country: GB
+  source: shopify-agency-lists
+  careers_url: https://www.ayko.com/careers
+  ats: { vendor: unknown }
+  notes: "Leeds/Sheffield Magento and Shopify agency, size unverified; Shopify Plus Premier listing (shopify.com/plus/partners/ayko) seen in a search result, not opened. In-house careers page, no board"
+
+- name: "Q Division"
+  domain: qdivision.ie
+  country: IE
+  source: web-search
+  careers_url: https://www.qdivision.ie/careers/
+  ats: { vendor: unknown }
+  notes: "Dublin Shopify Plus agency, size unverified. In-house careers page, no board"
+
+- name: "Vevol Media"
+  domain: vevolmedia.com
+  country: IE
+  source: clutch
+  careers_url: https://vevolmedia.com/
+  ats: { vendor: unknown }
+  notes: "Dublin/Kildare Shopify Plus agency, size unverified; Clutch profile (clutch.co/profile/vevol-media-shopify-developers) seen in a search result. No careers page found (scan and resolver)"
+
+- name: "Lightyear"
+  domain: lightyear.ie
+  country: IE
+  source: web-search
+  careers_url: https://www.lightyear.ie/
+  ats: { vendor: unknown }
+  notes: "Dublin Shopify agency (round-up), size unverified. No careers page found"
+
+- name: "PureNet"
+  domain: purenet.co.uk
+  country: GB
+  source: web-search
+  careers_url: https://www.purenet.co.uk/careers/
+  ats: { vendor: unknown }
+  notes: "Liverpool Magento agency, size unverified. In-house careers page, email only"
+
+- name: "Aonach"
+  domain: aonach.com
+  country: IE
+  source: web-search
+  careers_url: https://aonach.com/
+  ats: { vendor: unknown }
+  notes: "Kenmare, Co. Kerry, Adobe Commerce agency, size unverified. No public careers page (only a staff login link)"
+
+- name: "Pronko Consulting"
+  domain: pronkoconsulting.com
+  country: IE
+  source: web-search
+  careers_url: https://www.pronkoconsulting.com/
+  ats: { vendor: unknown }
+  notes: "Dublin Adobe Commerce consultancy, small, size unverified. No careers page found"
+
+- name: "Fourmeta"
+  domain: fourmeta.com
+  country: GB
+  source: web-search
+  careers_url: https://www.fourmeta.com/
+  ats: { vendor: unknown }
+  notes: "London e-commerce agency, size unverified. No careers page found"
+
+- name: "SixBySix"
+  domain: sixbysix.co.uk
+  country: GB
+  source: web-search
+  careers_url: https://www.sixbysix.co.uk/
+  ats: { vendor: unknown }
+  notes: "UK Magento agency, size unverified. No careers page found"
+
+- name: "Timberyard"
+  domain: timberyard.co.uk
+  country: GB
+  source: web-search
+  careers_url: https://www.timberyard.co.uk/
+  ats: { vendor: unknown }
+  notes: "London Pimcore/commerce agency, size unverified. No careers page found"
+
+- name: "Castle Commerce"
+  domain: castlecommerce.ie
+  country: IE
+  source: shopify-agency-lists
+  careers_url: https://castlecommerce.ie/
+  ats: { vendor: unknown }
+  notes: "Claregalway, Shopify agency, small; Shopify directory listing seen in a search result. No careers page found"
+
+- name: "Aware Digital"
+  domain: awaredigital.co.uk
+  country: GB
+  source: web-search
+  careers_url: https://www.awaredigital.co.uk/careers
+  ats: { vendor: unknown }
+  notes: "Stoke-on-Trent/Manchester, Adobe Commerce Bronze and Hyvä Gold, size unverified. In-house careers page, email only"
+
+- name: "Kooba"
+  domain: kooba.ie
+  country: IE
+  source: web-search
+  careers_url: https://www.kooba.ie/
+  ats: { vendor: unknown }
+  notes: "Dublin web/e-commerce development agency, size unverified. No careers page found"
+
+- name: "Glaze Digital"
+  domain: glazedigital.com
+  country: GB
+  source: clutch
+  careers_url: https://glazedigital.com/
+  ats: { vendor: unknown }
+  notes: "Belfast Shopify Plus agency, size unverified; Clutch profile (clutch.co/profile/glaze-digital) seen in a search result. No careers page found"
+
+- name: "Digital Six"
+  domain: digitalsix.co.uk
+  country: GB
+  source: web-search
+  careers_url: https://www.digitalsix.co.uk/careers/
+  ats: { vendor: unknown }
+  notes: "Edinburgh, Shopify Plus / Adobe Commerce / BigCommerce, size unverified. In-house careers page, email only"
+
+- name: "Web Bureau"
+  domain: webbureau.co.uk
+  country: GB
+  source: web-search
+  careers_url: https://webbureau.co.uk/
+  ats: { vendor: unknown }
+  notes: "Belfast e-commerce agency (Shopify, BigCommerce, Magento), size unverified. No careers page found"
+
+- name: "67 Commerce"
+  domain: 67commerce.com
+  country: GB
+  source: web-search
+  careers_url: https://www.67commerce.com/
+  ats: { vendor: unknown }
+  notes: "Leeds Shopify Plus / Adobe Commerce agency, size unverified. No careers page found"
+
+- name: "Fantastic Media"
+  domain: fantasticmedia.co.uk
+  country: GB
+  source: web-search
+  careers_url: https://www.fantasticmedia.co.uk/careers/
+  ats: { vendor: unknown }
+  notes: "Leeds e-commerce agency, size unverified. In-house careers page, no board"
+
+- name: "SHIFT Studios"
+  domain: shiftstudios.co.uk
+  country: GB
+  source: web-search
+  careers_url: https://shiftstudios.co.uk/
+  ats: { vendor: unknown }
+  notes: "Remote UK Shopify agency, small (own job ad says 'small'). Domain guessed, homepage is a 3 KB page, so the domain is unconfirmed. No careers page found (scan and resolver)"
