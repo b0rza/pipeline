@@ -46,6 +46,8 @@ fi
 if [ "${PIPELINE_NO_COMMIT:-}" = 1 ]; then
   echo "stage 7: commit skipped (PIPELINE_NO_COMMIT=1)"
 else
+  # The bot and the UI keep connections open, so closing ours does not checkpoint the WAL.
+  npm run -s checkpoint
   git add out state/pipeline.sqlite
   git diff --cached --quiet || git commit -qm "data: nightly $RUN_DATE"
 fi

@@ -5,7 +5,8 @@ import { DatabaseSync } from 'node:sqlite';
 const schema = readFileSync(new URL('../state/schema.sql', import.meta.url), 'utf8');
 const migrationsDir = new URL('../state/migrations/', import.meta.url);
 
-// Callers must db.close() at exit so the WAL is checkpointed before the nightly commit.
+// Callers must db.close() at exit. Closing checkpoints the WAL only when no other connection is open (the bot and
+// the UI usually are), so the nightly runs core/checkpoint.ts before it commits state/pipeline.sqlite.
 export function openDb(path = process.env.PIPELINE_DB ?? 'state/pipeline.sqlite'): DatabaseSync {
   const db = new DatabaseSync(path);
   const fresh = (db.prepare('select count(*) as n from sqlite_master').get() as { n: number }).n === 0;
