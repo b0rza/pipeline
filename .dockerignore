@@ -1,0 +1,10 @@
+.git
+node_modules
+.env
+.env.*
+.claude
+logs
+out
+state/*.sqlite-wal
+state/*.sqlite-shm
+state/.fuse_hidden*
