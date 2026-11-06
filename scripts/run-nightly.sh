@@ -5,6 +5,21 @@
 # Secrets come from the environment. PIPELINE_ENV_FILE (default ~/.config/pipeline/env) is sourced when it exists;
 # on a host that sets TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID itself (Coolify) no file is needed.
 set -euo pipefail
+
+# Every line this run prints, its own and the stages', stdout and stderr, starts with the local date and time
+# (`2026-11-06 19:42:10 `), so the scheduled task's log shows when things happened. The script runs itself again
+# with both streams merged into one pipe, which keeps line order, and stamps each line. The pipeline waits for the
+# stamper to drain, so nothing is cut off at the end, and its status is the inner run's, so a failing stage still
+# fails the run. `date` per line rather than printf '%(...)T', which the bash 3.2 on macOS does not have.
+if [ -z "${PIPELINE_LOG_STAMPED:-}" ]; then
+  export PIPELINE_LOG_STAMPED=1
+  status=0
+  "$BASH" "$0" "$@" 2>&1 | while IFS= read -r line || [ -n "$line" ]; do
+    printf '%s %s\n' "$(date '+%F %T')" "$line"
+  done || status=$?
+  exit "$status"
+fi
+
 cd "$(dirname "$0")/.."
 export RUN_DATE="${RUN_DATE:-$(date +%F)}"
 mkdir -p logs "out/$RUN_DATE"

@@ -3,6 +3,7 @@
 // and exits non-zero, so neither runs alone. SIGTERM or SIGINT stops both and exits 0.
 import { pathToFileURL } from 'node:url';
 import { startBot } from '../bot/server.ts';
+import { stampConsole } from '../core/log.ts';
 import { startUi, type Running } from '../ui/server.ts';
 
 export interface Deps {
@@ -51,6 +52,8 @@ export async function serve({ startBot, startUi, signals, graceMs }: Deps): Prom
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
+  // First, so every line in the container's log carries a time, the missing-settings error included.
+  stampConsole();
   // Exits explicitly, so nothing left on the event loop can hold the container past its stop.
   serve({ startBot, startUi, signals: process, graceMs: 5000 }).then(
     (code) => process.exit(code),
