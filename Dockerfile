@@ -3,7 +3,19 @@
 # the volume at /data. The page listens on the container's loopback on port 8787 unless PIPELINE_UI_HOST is set on the
 # service; it has no login, so it must only ever be reachable over a private network.
 # No secrets in the image: TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID are set on the Coolify service.
+# Tailscale puts the page on the owner's tailnet when TS_AUTHKEY is set on the service (scripts/start-tailscale.sh).
+
+# Pinned: bump by hand. Only the two static binaries are taken from this image.
+FROM tailscale/tailscale:v1.104.4 AS tailscale
+
 FROM node:26-slim
+
+# The slim image has no CA bundle. tailscaled reaches its control server without one (it carries the Let's Encrypt
+# root), but fetching the page's HTTPS certificate from Let's Encrypt goes through Go's system roots.
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+COPY --from=tailscale /usr/local/bin/tailscaled /usr/local/bin/tailscale /usr/local/bin/
 
 WORKDIR /app
 

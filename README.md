@@ -44,7 +44,20 @@ One container does everything. Its main process (`npm run serve`, `scripts/serve
 6. **Add the scheduled task.** Command `/app/scripts/run-nightly.sh`, frequency for example `0 6 * * *`. Coolify reads the time in the server's configured timezone. Press Execute Now once to test.
 7. **Keep the volume.** Leave Coolify's "Delete Unused Volumes" cleanup off. If `/data` is ever lost, the next start seeds from the git copy again, which by then is old.
 
-Only one process may poll Telegram for a bot, so the bot on the Mac must stay stopped once the server runs. The overview page runs in the container but listens only on the container's own loopback, so nothing outside can reach it yet. It has no login, so never give the application a domain or a port mapping: Coolify's docs warn that a published port bypasses the server firewall. Reaching the page over Tailscale is the plan and is not built yet (docs/STATUS.md). A backup of `/data` needs `pipeline.sqlite` together with its `-wal` and `-shm` files, or `npm run -s checkpoint` run in the container first.
+Only one process may poll Telegram for a bot, so the bot on the Mac must stay stopped once the server runs. The overview page runs in the container but listens only on the container's own loopback, so nothing outside can reach it yet. It has no login, so never give the application a domain or a port mapping: Coolify's docs warn that a published port bypasses the server firewall. The page is reached over Tailscale, set up below. A backup of `/data` needs `pipeline.sqlite` together with its `-wal` and `-shm` files, or `npm run -s checkpoint` run in the container first.
+
+### The overview page over Tailscale
+
+The container can join your Tailscale network as its own device. Tailscale then forwards an HTTPS address inside that network to the page. Nothing is opened on the server, so the page stays unreachable from the internet. It is off until `TS_AUTHKEY` is set.
+
+1. **Enable HTTPS in Tailscale.** Admin console, DNS page: turn on MagicDNS and HTTPS Certificates. Without them the forward cannot get a certificate.
+2. **Create an auth key.** Admin console, Settings, Keys. One-time, not ephemeral. Tick pre-approved if your network requires device approval.
+3. **Set `TS_AUTHKEY` in Coolify and redeploy.** Optional: `TS_HOSTNAME`, the device name, default `pipeline`. Leave `TS_AUTHKEY` set afterwards: Tailscale starts only when the variable is present, although the key itself is used for the first login only.
+4. **Read the log.** It shows `tailscale: logged in as device pipeline, ...` and `tailscale: the page is at https://pipeline.<your-network>.ts.net/ (tailnet only)`.
+5. **Turn off key expiry for the device.** Admin console, Machines, the `pipeline` device, Disable key expiry. Otherwise it drops off the network after 180 days.
+6. **Open the address** from a phone or laptop that has Tailscale on.
+
+If Tailscale fails to start, the log shows a `tailscale: WARNING` line with the reason, and the bot and the nightly run carry on. The device identity lives in `/data/tailscale` on the volume. Do not set `PIPELINE_UI_HOST`, a domain or a port mapping for this, and never use Tailscale Funnel, which is its public-internet feature.
 
 ## Overview page
 
