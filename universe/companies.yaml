@@ -1642,10 +1642,10 @@
   country: US
   phases: [p1, p2]
   source: shopify-agency-lists
-  ats: { vendor: unknown }
+  ats: { vendor: workable, slug: blue-stout }
   storefront: null
   status: active
-  notes: "Shopify Plus CRO-focused shop; no careers link on site (a Workable board appears in search only, so not used)"
+  notes: "Shopify Plus CRO-focused shop; no careers link on site. Board apply.workable.com/blue-stout found by web search, not linked from own site; identity from the board: Workable account website bluestout.com, job text 'a fully remote CRO agency that partners with fast-growing DTC brands on Shopify'. 2 postings on 2026-11-06"
 
 - id: maze
   name: Maze
@@ -1681,7 +1681,7 @@
   ats: { vendor: unknown }
   storefront: null
   status: active
-  notes: "Shopify agency; Webflow careers page with roles inline, no board link (a JazzHR board shows in search only, so not used)"
+  notes: "Shopify agency; Webflow careers page with roles inline, no board link. A JazzHR board showed in search on 2026-11-05; on 2026-11-06 none could be confirmed: structuredagency.applytojob.com serves 'Inactive Career Page' and structured.applytojob.com redirects to jazzhr.com, neither names the agency. Left unknown"
 
 - id: kubix-media
   name: Kubix Media
@@ -2152,7 +2152,7 @@
   ats: { vendor: unknown }
   storefront: null
   status: active
-  notes: "Boxtel, e-commerce agency. Site is a JS shell with no careers link; shopforward.recruitee.com seen in search only, not linked. Source not checked"
+  notes: "Boxtel, e-commerce agency. Site is a JS shell with no careers link. Board shopforward.recruitee.com found by web search parses (6 postings on 2026-11-06, all in Boxtel) but links to www.shopforward.eu, not shopforward.nl, and describes a marketing automation software startup; identity not confirmed, so left unknown. Source not checked"
 
 # --- Seeds to 200: Salesforce Commerce Cloud partners, 2026-11-05 ---
 
@@ -2273,10 +2273,10 @@
   phases: [p1, p2]
   source: web-search
   careers_url: https://www.altanddot.com/careers/
-  ats: { vendor: unknown }
+  ats: { vendor: workable, slug: altanddot }
   storefront: null
   status: active
-  notes: "Small remote Shopify agency founded in NYC (its Workable profile text); careers page is email only (joinus@altanddot.com); board workable/altanddot (0 openings) seen in search only, not linked from own site"
+  notes: "Small remote Shopify agency founded in NYC (its Workable profile text); careers page is email only (joinus@altanddot.com). Board apply.workable.com/altanddot found by web search, not linked from own site; identity from the board: Workable account website www.altanddot.com, profile 'a small remote team crafting Shopify solutions'. 0 postings on 2026-11-06"
 
 - id: corra
   name: Corra
@@ -2287,7 +2287,7 @@
   ats: { vendor: unknown }
   storefront: null
   status: active
-  notes: "New York NY, Shopify Plus / Adobe Commerce; site returns 403 to WebFetch; board jazzhr/corra seen in search only, not confirmed on own site"
+  notes: "New York NY, Shopify Plus / Adobe Commerce; site returns 403 to WebFetch. Board corra.applytojob.com found by web search serves 'JazzHR - Inactive Career Page' on 2026-11-06, so there is nothing to poll. Left unknown"
 
 - id: levitate-foundry
   name: Levitate Foundry
@@ -2296,10 +2296,10 @@
   phases: [p1, p2]
   source: web-search
   careers_url: https://levitatefoundry.com/a/careers
-  ats: { vendor: unknown }
+  ats: { vendor: workable, slug: levitate-foundry }
   storefront: null
   status: active
-  notes: "Shopify Plus partner (calls itself the largest female-owned one); in-house page (/a/careers/jobs/...); board workable/levitate-foundry seen in search only, not linked from own site"
+  notes: "Shopify Plus partner (calls itself the largest female-owned one); in-house page (/a/careers/jobs/...). Board apply.workable.com/levitate-foundry found by web search, not linked from own site; identity from the board: Workable account website levitatefoundry.com, page description 'build eCommerce solutions'. 0 postings on 2026-11-06"
 
 - id: softlimit
   name: Softlimit
@@ -2308,10 +2308,10 @@
   phases: [p1, p2]
   source: web-search
   careers_url: https://www.softlimit.com/careers
-  ats: { vendor: unknown }
+  ats: { vendor: workable, slug: softlimit }
   storefront: null
   status: active
-  notes: "Remote-first Shopify Plus studio; no careers page on own site (/careers and /pages/careers 404); board workable/softlimit (0 openings) seen in search only"
+  notes: "Remote-first Shopify Plus studio; no careers page on own site (/careers and /pages/careers 404). Board apply.workable.com/softlimit found by web search, not linked from own site; identity from the board: Workable account website softlimit.com, profile 'a remote-first web design and development studio' for Shopify merchants. 0 postings on 2026-11-06"
 
 - id: fluid-commerce
   name: Fluid Commerce
@@ -2320,10 +2320,10 @@
   phases: [p1, p2]
   source: web-search
   careers_url: https://www.fluidcommerce.co.uk/about-us/careers/
-  ats: { vendor: unknown }
+  ats: { vendor: workable, slug: fluidcommerce }
   storefront: null
   status: active
-  notes: "UK Magento Solution Partner agency, city and size unverified. Board workable/fluidcommerce seen in search only (empty), not linked from own site; careers page is an inline CV form"
+  notes: "UK Magento Solution Partner agency, city and size unverified; careers page is an inline CV form. Board apply.workable.com/fluidcommerce found by web search, not linked from own site; identity from the board: Workable account website www.fluidcommerce.co.uk, profile 'one of only a handful of agencies in the UK which is both a Magento Solution Partner and Google Premier Partner'. 0 postings on 2026-11-06"
 
 - id: mando-group
   name: Mando Group
@@ -2344,10 +2344,10 @@
   phases: [p1, p2]
   source: web-search
   careers_url: https://monsoonconsulting.com/careers/
-  ats: { vendor: unknown }
+  ats: { vendor: workable, slug: monsoonconsulting }
   storefront: null
   status: active
-  notes: "Dublin (also London phone), Adobe Commerce and Drupal agency, size unverified. Board workable/monsoonconsulting seen in search only, not linked from own site; careers page lists no roles"
+  notes: "Dublin (also London phone), Adobe Commerce and Drupal agency, size unverified (its Workable profile says 38 specialists, date unknown); careers page lists no roles. Board apply.workable.com/monsoonconsulting found by web search, not linked from own site; identity from the board: Workable account website monsoonconsulting.com, profile 'We specialise in Magento Commerce and Drupal digital platforms'. 0 postings on 2026-11-06"
 
 - id: studioforty9
   name: StudioForty9
