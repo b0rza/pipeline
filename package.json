@@ -12,6 +12,7 @@
     "notify": "node --import tsx bot/notify.ts",
     "bot": "node --import tsx bot/server.ts",
     "ui": "node --import tsx ui/server.ts",
+    "serve": "node --import tsx scripts/serve.ts",
     "evals": "node --import tsx evals/run.ts",
     "resolve": "node --import tsx scripts/resolve.ts",
     "test": "node --import tsx --test tests/*.test.ts",

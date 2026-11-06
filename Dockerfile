@@ -1,5 +1,7 @@
-# One container for Coolify: the Telegram button handler is the main process, and Coolify runs
-# /app/scripts/run-nightly.sh inside it as a scheduled task. Both use the database on the volume at /data.
+# One container for Coolify: the main process (scripts/serve.ts) runs the Telegram button handler and the overview
+# page together, and Coolify runs /app/scripts/run-nightly.sh inside it as a scheduled task. All use the database on
+# the volume at /data. The page listens on the container's loopback on port 8787 unless PIPELINE_UI_HOST is set on the
+# service; it has no login, so it must only ever be reachable over a private network.
 # No secrets in the image: TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID are set on the Coolify service.
 FROM node:26-slim
 
@@ -23,4 +25,4 @@ ENV PIPELINE_DB=/data/pipeline.sqlite \
 USER node
 
 ENTRYPOINT ["/app/scripts/docker-entrypoint.sh"]
-CMD ["node", "--import", "tsx", "bot/server.ts"]
+CMD ["node", "--import", "tsx", "scripts/serve.ts"]

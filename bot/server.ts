@@ -4,6 +4,7 @@ import { pathToFileURL } from 'node:url';
 import { Bot } from 'grammy';
 import type { InlineKeyboardButton } from 'grammy/types';
 import { openDb } from '../core/db.ts';
+import type { Running } from '../ui/server.ts';
 import { CALLBACK_ID_LEN, composeTitles, escapeHtml, signalMessage, signalRows, visibleLength } from './notify.ts';
 import { composeBody, composeMailto, composeSubject } from './templates.ts';
 
@@ -81,10 +82,11 @@ export function handleCallback(db: DatabaseSync, data: string, today = new Date(
   return null;
 }
 
-async function main() {
-  const token = process.env.TELEGRAM_BOT_TOKEN;
-  if (!token || !process.env.TELEGRAM_CHAT_ID) throw new Error('TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID are required in the environment');
-  const chatId = Number(process.env.TELEGRAM_CHAT_ID);
+// Throws before opening anything when the Telegram settings are missing; otherwise starts long polling.
+export function startBot(env: NodeJS.ProcessEnv = process.env): Running {
+  const token = env.TELEGRAM_BOT_TOKEN;
+  if (!token || !env.TELEGRAM_CHAT_ID) throw new Error('TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID are required in the environment');
+  const chatId = Number(env.TELEGRAM_CHAT_ID);
   const db = openDb();
   const bot = new Bot(token);
 
@@ -107,18 +109,22 @@ async function main() {
   });
   bot.catch((err) => console.error(err));
 
-  // stop() resolves start(), whose finally closes the DB; close() throws on a closed DB, so only there.
-  const shutdown = async () => {
-    await bot.stop();
-  };
+  // Long polling; no port. stop() resolves start(), whose finally closes the DB; close() throws on a closed DB, so only there.
+  const done = bot.start({ onStart: () => console.log(`bot: listening for callbacks from chat ${chatId}`) })
+    .finally(() => db.close());
+  // Marked handled here; a caller that awaits done still sees the rejection.
+  done.catch(() => {});
+  let stopping: Promise<void> | undefined;
+  const stop = () => (stopping ??= bot.stop().catch((err) => console.error(err)).then(() => done.catch(() => {})));
+  return { done, stop };
+}
+
+async function main() {
+  const bot = startBot();
+  const shutdown = () => void bot.stop();
   process.once('SIGINT', shutdown);
   process.once('SIGTERM', shutdown);
-  // Long polling; no port.
-  try {
-    await bot.start({ onStart: () => console.log(`bot: listening for callbacks from chat ${chatId}`) });
-  } finally {
-    db.close();
-  }
+  await bot.done;
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) await main();

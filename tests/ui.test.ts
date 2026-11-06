@@ -187,6 +187,54 @@ test('bad id, bad reason and unknown routes are rejected', () => {
   db.close();
 });
 
+test('a button press another website sends is refused and changes nothing; same-origin and non-browser presses pass', () => {
+  const db = openDb(':memory:');
+  standard(db);
+  const id = signalId(db, 'zeta');
+  const press = (headers: Record<string, string>) =>
+    handle(db, { method: 'POST', url: `/signal/${id}/applied`, headers: { host: 'pipeline.tail1234.ts.net:8787', ...headers } }, today);
+  const rows = allSignals(db);
+
+  for (const headers of <Record<string, string>[]>[
+    { origin: 'https://evil.test' },
+    { origin: 'http://pipeline.tail1234.ts.net:9999' },
+    { origin: 'http://pipeline.tail1234.ts.net' },
+    { origin: 'null' },
+    { origin: 'not a url' },
+    { 'sec-fetch-site': 'cross-site' },
+    { 'sec-fetch-site': 'same-site' },
+    // Origin decides when present, even if Sec-Fetch-Site says same-origin.
+    { origin: 'https://evil.test', 'sec-fetch-site': 'same-origin' },
+  ]) {
+    const res = press(headers);
+    assert.equal(res.status, 403, JSON.stringify(headers));
+    assert.equal(res.body, 'cross-site request refused');
+  }
+  // An Origin with no Host to compare it to is refused too.
+  assert.equal(handle(db, { method: 'POST', url: `/signal/${id}/applied`, headers: { origin: 'http://127.0.0.1:8787' } }, today).status, 403);
+  assert.deepEqual(allSignals(db), rows);
+
+  // GET is not checked.
+  assert.equal(handle(db, { method: 'GET', url: '/', headers: { origin: 'https://evil.test', 'sec-fetch-site': 'cross-site' } }, today).status, 200);
+
+  // Same origin, compared case-insensitively.
+  assert.equal(press({ origin: 'http://Pipeline.tail1234.ts.net:8787', 'sec-fetch-site': 'same-origin' }).status, 303);
+  assert.equal(status(db, 'zeta').status, 'applied');
+  db.prepare("update signals set status = 'new' where company_id = 'zeta'").run();
+  // No Origin: Sec-Fetch-Site same-origin or none (typed into the address bar) passes.
+  assert.equal(press({ 'sec-fetch-site': 'same-origin' }).status, 303);
+  assert.equal(press({ 'sec-fetch-site': 'none' }).status, 303);
+  // Neither header: not a browser, passes.
+  assert.equal(press({}).status, 303);
+  assert.equal(handle(db, { method: 'POST', url: `/signal/${id}/applied`, headers: {} }, today).status, 303);
+  // A default port written out in Host matches the origin that omits it.
+  const https = handle(db, { method: 'POST', url: `/signal/${id}/snooze`,
+    headers: { host: 'pipeline.tail1234.ts.net:443', origin: 'https://pipeline.tail1234.ts.net' } }, today);
+  assert.equal(https.status, 303);
+  assert.equal(status(db, 'zeta').status, 'snoozed');
+  db.close();
+});
+
 test('GET /pico.css serves the vendored stylesheet the page links, and the page loads nothing else', () => {
   const db = openDb(':memory:');
   standard(db);

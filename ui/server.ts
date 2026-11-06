@@ -1,7 +1,9 @@
 // Local web overview: the pending digest on top, every past signal below, with the same buttons as Telegram.
-// Loopback-only and unauthenticated by design: it is the owner's desk view, not a deployment.
+// Unauthenticated by design: it is the owner's desk view. It listens on loopback unless PIPELINE_UI_HOST names another
+// address (a private network only, never the open internet), and refuses button presses another website sends.
 import { readFileSync } from 'node:fs';
 import { createServer } from 'node:http';
+import type { AddressInfo } from 'node:net';
 import type { DatabaseSync } from 'node:sqlite';
 import { pathToFileURL } from 'node:url';
 import { composeTitles, droppedCount, escapeHtml, GONE, pendingSignals, signalRows, type SignalRow } from '../bot/notify.ts';
@@ -10,7 +12,8 @@ import { composeMailto } from '../bot/templates.ts';
 import { openDb } from '../core/db.ts';
 import { routeTag, withFlag } from '../core/flag.ts';
 
-export interface Req { method: string; url: string; body?: string }
+// headers: lower-case names, as node:http gives them; absent when a caller (the tests) drives handle() directly.
+export interface Req { method: string; url: string; body?: string; headers?: Record<string, string | undefined> }
 export interface Res { status: number; headers: Record<string, string>; body: string }
 
 const SIGNAL_ACTION = /^\/signal\/([0-9a-f]{64})\/([a-z]+)$/;
@@ -99,8 +102,33 @@ function page(db: DatabaseSync, today: string): string {
     `<section><h2>History</h2>${history || '<p>No past signals.</p>'}</section></main></body></html>`;
 }
 
+// Cross-site request forgery check for button presses. A browser marks where a POST comes from with Origin, or failing
+// that Sec-Fetch-Site; either saying "another site" refuses it. A POST with neither is not from a browser and passes.
+export function crossSite(headers: Req['headers'] = {}): boolean {
+  const origin = headers.origin;
+  if (origin !== undefined) {
+    // "null" (sandboxed frames, some redirects) and anything unparsable count as foreign.
+    let from: URL;
+    try {
+      from = new URL(origin);
+    } catch {
+      return true;
+    }
+    if (!headers.host) return true;
+    try {
+      // Host read with the origin's scheme, so a default port written out (":443") compares equal to an omitted one.
+      return new URL(`${from.protocol}//${headers.host}`).host !== from.host;
+    } catch {
+      return true;
+    }
+  }
+  const site = headers['sec-fetch-site'];
+  return site !== undefined && site !== 'same-origin' && site !== 'none';
+}
+
 export function handle(db: DatabaseSync, req: Req, today = new Date().toISOString().slice(0, 10)): Res {
   const path = new URL(req.url, 'http://127.0.0.1').pathname;
+  if (req.method === 'POST' && crossSite(req.headers)) return text(403, 'cross-site request refused');
   if (req.method === 'GET' && path === '/') {
     return { status: 200, headers: { 'content-type': 'text/html; charset=utf-8' }, body: page(db, today) };
   }
@@ -133,8 +161,17 @@ export function handle(db: DatabaseSync, req: Req, today = new Date().toISOStrin
   return { status: 303, headers: { location: `/#s-${id.slice(0, 16)}` }, body: '' };
 }
 
-function main() {
-  const port = Number(process.env.PIPELINE_UI_PORT ?? 8787);
+export interface Running {
+  // Settles when the service ends: resolves after stop(), rejects if it fails on its own.
+  done: Promise<void>;
+  // Idempotent; resolves once the service is down and its database closed.
+  stop(): Promise<void>;
+}
+
+// Resolves once listening; rejects (database closed) if the address cannot be bound.
+export function startUi(env: NodeJS.ProcessEnv = process.env): Promise<Running> {
+  const port = Number(env.PIPELINE_UI_PORT ?? 8787);
+  const host = env.PIPELINE_UI_HOST || '127.0.0.1';
   const db = openDb();
   const server = createServer((req, res) => {
     let body = '';
@@ -143,7 +180,7 @@ function main() {
     req.on('end', () => {
       let out: Res;
       try {
-        out = handle(db, { method: req.method ?? 'GET', url: req.url ?? '/', body });
+        out = handle(db, { method: req.method ?? 'GET', url: req.url ?? '/', body, headers: req.headers as Req['headers'] });
       } catch (err) {
         console.error(err);
         out = text(500, 'internal error');
@@ -152,14 +189,49 @@ function main() {
     });
   });
 
-  const shutdown = () => {
-    server.close();
-    server.closeAllConnections();
-    db.close();
+  let dbOpen = true;
+  const closeDb = () => {
+    if (dbOpen) db.close();
+    dbOpen = false;
   };
-  process.once('SIGINT', shutdown);
-  process.once('SIGTERM', shutdown);
-  server.listen(port, '127.0.0.1', () => console.log(`ui: http://127.0.0.1:${port}/`));
+  const done = new Promise<void>((resolve, reject) => {
+    server.once('close', () => (closeDb(), resolve()));
+    server.once('error', (err) => (closeDb(), reject(err)));
+  });
+  // Marked handled here; a caller that awaits done still sees the rejection.
+  done.catch(() => {});
+  let stopping: Promise<void> | undefined;
+  const stop = () => {
+    if (!stopping) {
+      // closeAllConnections drops keep-alive and in-flight connections, so an open browser tab does not hold the close.
+      server.close();
+      server.closeAllConnections();
+      stopping = done.catch(() => {});
+    }
+    return stopping;
+  };
+
+  return new Promise((resolve, reject) => {
+    const failed = (err: Error) => (closeDb(), reject(err));
+    server.once('error', failed);
+    try {
+      server.listen(port, host, () => {
+        server.off('error', failed);
+        const { address, family, port: bound } = server.address() as AddressInfo;
+        console.log(`ui: http://${family === 'IPv6' ? `[${address}]` : address}:${bound}/`);
+        resolve({ done, stop });
+      });
+    } catch (err) {
+      failed(err as Error);
+    }
+  });
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) main();
+async function main() {
+  const ui = await startUi();
+  const shutdown = () => void ui.stop();
+  process.once('SIGINT', shutdown);
+  process.once('SIGTERM', shutdown);
+}
+
+if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) await main();

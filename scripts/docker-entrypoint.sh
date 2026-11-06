@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Container entrypoint. Seeds the database on the volume from the image's git copy on first start, never overwrites
-# an existing one, then runs the command (the bot by default) as the container's main process so it gets SIGTERM.
+# an existing one, then runs the command (scripts/serve.ts by default) as the container's main process so it gets SIGTERM.
 set -euo pipefail
 
 DB="${PIPELINE_DB:-/data/pipeline.sqlite}"
