@@ -4,6 +4,15 @@ Nightly signal pipeline: polls ATS feeds for a seeded company list, diffs, split
 
 Start here: `AGENTS.md`, then `docs/SPEC-v2.md`, `docs/DECISIONS.md`, `docs/PLAN.md`, `docs/STATUS.md`.
 
+## Glossary
+
+- **Company**: a company on the watch list, one entry in `universe/companies.yaml`. Older docs and commit messages say "seed" for the same thing.
+- **Board**: that company's job page at a hiring vendor such as Teamtailor or Workable. A company is "pollable" when the pipeline has an adapter that can read its board.
+- **Posting**: one job ad read from a board. A row in the `postings` table.
+- **Event**: one change seen on one night: a posting is new, edited, reposted or gone. A row in the `events` table.
+- **Signal**: one company on one night, bundling its postings that passed the filter. A row in the `signals` table, at most one per company per run. It sits on the `apply` list (a contract job to apply to) or the `outreach` list (a company to write to).
+- **Digest**: the night's Telegram messages, a header plus one message per signal. The same content is written to `out/YYYY-MM-DD/`.
+
 ```
 npm install
 RUN_DATE=$(date +%F) ./scripts/run-nightly.sh
