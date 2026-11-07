@@ -69,6 +69,8 @@ test('GET / shows the pending header and each company once, apply first', () => 
   assert.match(res.body, /<\/h1><p>1 apply · 3 outreach · 1 dropped postings<\/p><\/header>/);
   assert.deepEqual(section(res.body, 'pending'), ['zeta', 'warmco', 'alpha', 'beta']);
   assert.deepEqual(section(res.body, 'history'), []);
+  // The theme switch, and its script before the body so a stored choice applies without a flash.
+  assert.match(res.body, /<script>[^]*localStorage\.getItem\('theme'\)[^]*<\/script><\/head><body><header><button id="theme"[^>]*onclick="toggleTheme\(\)">light \/ dark<\/button>/);
   assert.match(cardOf(res.body, db, 'zeta'), /<b>zeta<\/b> · 🇬🇧 GB · greenhouse · <b>APPLY<\/b> · run 2026-11-02/);
   // Contract posting first, with its route tag.
   assert.match(cardOf(res.body, db, 'zeta'),
@@ -244,7 +246,7 @@ test('GET /pico.css serves the vendored stylesheet the page links, and the page 
   assert.match(css.body, /Pico CSS .* v2\.\d+\.\d+/);
   const html = get(db).body;
   assert.match(html, /<link rel="stylesheet" href="\/pico.css">/);
-  assert.doesNotMatch(html, /<script|<link[^>]+href="https?:|@import|url\(/);
+  assert.doesNotMatch(html, /<script[^>]+src=|<link[^>]+href="https?:|@import|url\(/);
   db.close();
 });
 

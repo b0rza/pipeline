@@ -31,12 +31,26 @@ const STYLE = `
   article li small, .meta { color: var(--pico-muted-color); } .meta { font-size: .875em; }
   article > footer { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
   article > footer :is(form, fieldset, select, button, [role=button]) { width: auto; margin: 0; }
-  article > footer :is(select, button, [role=button]) { --pico-form-element-spacing-vertical: .3rem; --pico-form-element-spacing-horizontal: .75rem; font-size: .875rem; }
+  #theme, article > footer :is(select, button, [role=button]) { --pico-form-element-spacing-vertical: .3rem; --pico-form-element-spacing-horizontal: .75rem; font-size: .875rem; }
   .secondary.outline { --pico-background-color: transparent; --pico-color: var(--pico-secondary); --pico-border-color: var(--pico-secondary); }
   .secondary.outline:is(:hover, :active, :focus) { --pico-background-color: transparent; --pico-color: var(--pico-secondary-hover); --pico-border-color: var(--pico-secondary-hover); }
   .badge { display: inline-block; font-size: .75em; padding: 0 .5em; border-radius: 1em; color: #fff; background: #777; vertical-align: middle; }
   .b-new { background: #2563eb; } .b-notified { background: #7c3aed; } .b-applied, .b-sent, .b-replied { background: #15803d; }
-  .b-skipped { background: #6b7280; } .b-snoozed { background: #b45309; }`;
+  .b-skipped { background: #6b7280; } .b-snoozed { background: #b45309; }
+  #theme { float: right; width: auto; margin-top: .25rem; }`;
+
+// Light or dark on demand. Pico follows the system setting unless <html data-theme> says otherwise; the choice is kept
+// in the browser's localStorage and applied before the body renders, so a reload does not flash the other theme.
+const THEME_SCRIPT = `
+  const stored = localStorage.getItem('theme');
+  if (stored) document.documentElement.dataset.theme = stored;
+  function toggleTheme() {
+    const dark = document.documentElement.dataset.theme
+      ? document.documentElement.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    const next = dark ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next;
+    localStorage.setItem('theme', next);
+  }`;
 
 // A history card that is still new is an older signal the next notify supersedes, or one whose postings are all
 // gone that the next notify expires, so it gets no buttons.
@@ -98,8 +112,9 @@ function page(db: DatabaseSync, today: string): string {
 
   const history = [...byDate].map(([date, cards]) => `<h3>${escapeHtml(date)}</h3>${cards.join('')}`).join('');
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">` +
-    `<title>Pipeline ${escapeHtml(today)}</title><link rel="stylesheet" href="/pico.css"><style>${STYLE}</style></head><body>` +
-    `<header><h1>Pipeline overview ${escapeHtml(today)}</h1><p>${header}</p></header><main>` +
+    `<title>Pipeline ${escapeHtml(today)}</title><link rel="stylesheet" href="/pico.css"><style>${STYLE}</style><script>${THEME_SCRIPT}</script></head><body>` +
+    `<header><button id="theme" class="secondary outline" onclick="toggleTheme()">light / dark</button>` +
+    `<h1>Pipeline overview ${escapeHtml(today)}</h1><p>${header}</p></header><main>` +
     `<section><h2>Pending</h2>${[...apply, ...outreach].map((rows) => card(rows)).join('') || '<p>Nothing pending.</p>'}</section>` +
     `<section><h2>History</h2>${history || '<p>No past signals.</p>'}</section></main></body></html>`;
 }
