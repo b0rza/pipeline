@@ -28,20 +28,43 @@ const TITLE_CONTRACT = any(/contract(or)?s?\b/, /freelanc\w*/, /interim/, /fixed
 const BODY_CONTRACT = any(
   /contract basis/, /contract (role|position|engagement|duration|opportunity)/, /contract[ -]based/,
   /(initial|long[ -]term|temporary|short[ -]term) contract/, /\d+[ -]?(month|week)s? contract/, /day rate/,
-  /freelanc\w*/, /interim/, /fixed[ -]term/, /\bbefristet/, /\bb2b (contract|basis|agreement)/, /\bc2c\b/, /\b1099\b/,
+  /freelanc\w*/, /interim/, /fixed[ -]term/, /\bbefristet/,
 );
+
+// Whole words in any script, case-insensitive: \b only knows ASCII letters, so "ä" or "ł" next to a word would count
+// as a boundary. Pass /…/u literals: they keep \p{L} valid.
+const words = (...res: RegExp[]) => new RegExp(`(?<![\\p{L}\\p{N}])(?:${res.map((r) => r.source).join('|')})(?![\\p{L}\\p{N}])`, 'iu');
+
+// B2B: the owner's company invoices the client, as opposed to a temporary job on the agency's payroll. Title and body.
+// The bare "b2b" is a market in most postings ("B2B commerce", "B2B-Umfeld"), so it counts only beside a contract word.
+// "selbstständig" alone means "independently" in German postings; only the self-employment phrases count.
+// "on invoice" alone is a topic in fintech postings ("work on invoice processing").
+const B2B = words(
+  /outside (of )?ir35/u, /(?<!(?:^|[^\p{L}\p{N}])no )(c2c|corp[ -]to[ -]corp)/u, /1099/u, /zzp(ers?)?/u,
+  /freelance[ -]?opdracht\p{L}*/u, /underkonsult\p{L}*/u, /frilans\p{L}*/u, /(umow\p{L}*|kontrak\p{L}*|contract)( type)?:? b2b/u,
+  /b2b[ -](umow\p{L}*|kontrak\p{L}*|contract|basis|agreement)/u, /self[ -]?employed/u,
+  /als selbst(st)?ändige[rn]?/u, /selbst(st)?ändige[rn]? tätigkeit/u, /auf selbst(st)?ändiger basis/u, /invoice basis/u,
+  /(paid|billed) on invoice/u,
+);
+
+// Payroll only: still apply (the owner reads these), marked so the card says so.
+const PAYROLL = words(/w-?2[ -]only/u, /no (c2c|corp[ -]to[ -]corp)/u, /inside (of )?ir35/u, /umbrella (company|contract)/u, /payroll only/u);
 
 const norm = (s: string) => s.toLowerCase().replace(/\s+/g, ' ');
 
+// The reason is the word that decided it; an apply posting that also says payroll only gets ` · payroll` after it, and
+// filterRun adds the location tag after that: `title:contract · payroll · remote:US-only`.
 export function classify(title: string, body: string): { route: Route; reason: string } {
   const t = title.trim();
   if (EVERGREEN.test(t)) return { route: 'drop', reason: 'evergreen' };
   if (!ENGINEERING.test(t)) return { route: 'drop', reason: 'non-engineering' };
+  const b2b = t.match(B2B) ?? body.match(B2B);
   const inTitle = t.match(TITLE_CONTRACT);
-  if (inTitle) return { route: 'apply', reason: `title:${norm(inTitle[0])}` };
   const inBody = body.match(BODY_CONTRACT);
-  if (inBody) return { route: 'apply', reason: `body:${norm(inBody[0])}` };
-  return { route: 'outreach', reason: 'perm' };
+  const reason = b2b ? `b2b:${norm(b2b[0])}` : inTitle ? `title:${norm(inTitle[0])}` : inBody ? `body:${norm(inBody[0])}` : null;
+  if (!reason) return { route: 'outreach', reason: 'perm' };
+  // Title too: "Java Developer (W2 only)" is common.
+  return { route: 'apply', reason: PAYROLL.test(t) || PAYROLL.test(body) ? `${reason} · payroll` : reason };
 }
 
 // apply and outreach count signals (companies); dropped counts postings. A kept posting outside the owner's

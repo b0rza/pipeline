@@ -37,7 +37,13 @@ export function snooze(db: DatabaseSync, id: string, today: string): string {
   return until;
 }
 
-// Back to new, so the next digest carries it again.
+// Tabled for when there is time, with no date (so any snooze date goes). Not pending (pendingSignals in bot/notify.ts),
+// so the nightly neither re-sends it nor retires it as gone or superseded; it waits in the page's Later tab until reopened.
+export function markLater(db: DatabaseSync, id: string): void {
+  db.prepare("update signals set status = 'later', snooze_until = null, updated_at = datetime('now') where id = :id").run({ id });
+}
+
+// Back to new, from any status, so the next digest carries it again.
 export function reopen(db: DatabaseSync, id: string): void {
   db.prepare("update signals set status = 'new', skip_reason = null, snooze_until = null, updated_at = datetime('now') where id = :id")
     .run({ id });
@@ -50,7 +56,8 @@ export function handleCallback(db: DatabaseSync, data: string, today = new Date(
   const [, action, id16, code] = data.match(CALLBACK) ?? [];
   const id = id16 && findSignal(db, id16);
   if (!id) return null;
-  const done = (note: string): Outcome => ({ kind: 'edit', text: `${signalMessage(db, id).text}\n\n${note}`, buttons: [] });
+  const done = (note: string, buttons: InlineKeyboardButton[][] = []): Outcome =>
+    ({ kind: 'edit', text: `${signalMessage(db, id).text}\n\n${note}`, buttons });
 
   switch (action) {
     case 'applied':
@@ -68,6 +75,13 @@ export function handleCallback(db: DatabaseSync, data: string, today = new Date(
     }
     case 'snooze':
       return done(`💤 snoozed until ${snooze(db, id, today)}`);
+    case 'later':
+      markLater(db, id);
+      return done('🗂 later', [[{ text: 'Reopen', callback_data: `reopen:${id16}` }]]);
+    case 'reopen':
+      // No buttons: reopen sets it back to new, so the next digest sends it again with its buttons.
+      reopen(db, id);
+      return done('↩ reopened: back in the next digest');
     case 'compose': {
       const rows = signalRows(db, id);
       const name = rows[0].name;

@@ -67,9 +67,69 @@ test('classify routes contract body phrases to apply', () => {
     ['Software Engineer', 'This is a contract role.'],
     ['Software Engineer', 'A 6-month contract with a view to extend.'],
     ['Software Engineer', 'Day rate: £550.'],
-    ['Software Engineer', 'Paid on a B2B contract.'],
-    ['Software Engineer', 'Corp-to-corp (C2C) welcome.'],
   ]);
+});
+
+test('classify routes B2B words to apply with a b2b reason, ahead of the contract words', () => {
+  const b2b = (reason: string, items: [string, string?][]) => cases({ route: 'apply', reason: `b2b:${reason}` }, items);
+  b2b('outside ir35', [['Software Engineer', '£550 day rate (Outside IR35).'], ['Outside IR35 Contract Developer']]);
+  b2b('outside of ir35', [['Software Engineer', 'This role sits outside of IR35.']]);
+  b2b('c2c', [['Software Engineer', '$65/hr W2 hourly // $80-$95/hr C2C.'], ['Java Developer (C2C)']]);
+  b2b('corp-to-corp', [['Software Engineer', 'Corp-to-corp (C2C) welcome.']]);
+  b2b('corp to corp', [['Software Engineer', 'Open to corp to corp.']]);
+  b2b('1099', [['Software Engineer', 'Paid as a 1099 contractor.']]);
+  b2b('zzp', [['Senior Ontwikkelaar (ZZP)'], ['Software Engineer', 'Ben je ZZP\'er? Dan horen we graag van je.']]);
+  b2b('zzper', [['Software Engineer', 'Wij zoeken een zzper voor zes maanden.']]);
+  b2b('freelance opdracht', [['Ontwikkelaar', 'Dit is een freelance opdracht van 6 maanden.']]);
+  b2b('freelance opdracht', [['Freelance opdracht: Java Developer']]);
+  b2b('underkonsult', [['Systemutvecklare', 'Uppdraget är som underkonsult via oss.']]);
+  b2b('underkonsulter', [['Backend-utvecklare', 'Vi tar emot underkonsulter.']]);
+  b2b('frilans', [['Utvecklare (frilans)']]);
+  b2b('frilansuppdrag', [['Backend-utvecklare', 'Ett frilansuppdrag på 6 månader.']]);
+  b2b('umowa b2b', [['Senior Java Developer', 'Forma zatrudnienia: umowa B2B.']]);
+  b2b('umowie b2b', [['Frontend Developer', 'Współpraca na umowie B2B.']]);
+  b2b('kontrakt b2b', [['Backend Developer', 'Oferujemy kontrakt B2B, 100% zdalnie.']]);
+  b2b('contract type: b2b', [['Software Engineer', 'Contract type: B2B']]);
+  b2b('b2b contract', [['Software Engineer', 'Paid on a B2B contract.'], ['Backend Developer (B2B contract)']]);
+  b2b('b2b-basis', [['Software Engineer', 'Alternativ ist auch eine Zusammenarbeit auf B2B-Basis möglich.']]);
+  b2b('self-employed', [['Software Engineer', 'Open to self-employed contractors.']]);
+  b2b('als selbstständiger', [['Senior Entwickler (m/w/d)', 'Als Selbstständiger rechnest du direkt mit uns ab.']]);
+  b2b('als selbständige', [['Entwickler (m/w/d)', 'Gern auch als Selbständige.']]);
+  b2b('auf selbstständiger basis', [['Softwareentwickler (m/w/d)', 'Mitarbeit auf selbstständiger Basis.']]);
+  b2b('invoice basis', [['Software Engineer', 'Engaged on an invoice basis.']]);
+  b2b('paid on invoice', [['Software Engineer', 'Monthly, paid on invoice.']]);
+  // A B2B word beats a contract word in the title.
+  b2b('outside ir35', [['Contract Software Engineer', 'Outside IR35.']]);
+});
+
+test('classify ignores B2B as a market and German "selbstständig" as "independently"', () => {
+  cases({ route: 'outreach', reason: 'perm' }, [
+    ['Software Engineer', 'Build our B2B ecommerce platform.'],
+    ['Software Engineer', 'Experience with B2B e-commerce and B2B commerce.'],
+    ['Software Engineer', 'Our B2B customers love us.'],
+    ['Software Engineer', 'You will negotiate B2B contracts with retailers.'],
+    ['Shopware Entwickler (m/w/d)', 'Shopware-Projekterfahrung im B2B-Umfeld.'],
+    ['Senior Developer', 'Du arbeitest selbstständig, strukturiert und lösungsorientiert.'],
+    ['Senior Developer', 'Hohe Selbstständigkeit und Eigenverantwortung.'],
+    ['Senior Developer', 'You will work on invoice processing.'],
+    // A letter beside the word, in any script, is not a boundary.
+    ['Software Engineer', 'Ref: xc2c, ac2cä, 10990.'],
+  ]);
+});
+
+test('classify marks payroll-only contract postings, keeps them on apply, and leaves perm alone', () => {
+  cases({ route: 'apply', reason: 'title:contract · payroll' }, [
+    ['Senior Software Engineer, Contract', 'W2 only, no C2C.'],
+    ['Contract Java Developer (W-2 only)'],
+    ['Contract Backend Engineer', 'Inside IR35, via an umbrella company.'],
+    ['Contract Backend Engineer', 'Payroll only.'],
+  ]);
+  cases({ route: 'apply', reason: 'body:day rate · payroll' }, [['Software Engineer', 'Day rate £500, inside IR35.']]);
+  // "no c2c" is the payroll word, not the B2B word.
+  cases({ route: 'apply', reason: 'body:6 month contract · payroll' }, [['Software Engineer', 'A 6 month contract. No Corp-to-Corp.']]);
+  // A posting that offers both carries both.
+  cases({ route: 'apply', reason: 'b2b:outside ir35 · payroll' }, [['Software Engineer', 'Ltd company outside IR35 or Umbrella contract.']]);
+  cases({ route: 'outreach', reason: 'perm' }, [['Software Engineer', 'W2 only. No C2C.']]);
 });
 
 test('classify keeps permanent postings that mention a contract on outreach', () => {
@@ -210,7 +270,7 @@ test('filterRun tags remote restricted to one country, keeps its route, drops it
   snapshotCompany(db, usco, [
     at(posting('1', 'Shopify Senior Developer', 'This position qualifies for remote work anywhere in the United States.'), 'Remote (United States)'),
     at(posting('2', 'Senior Software Engineer', 'Remote. You must be based in India.'), 'Remote'),
-    at(posting('3', 'Contract Senior Software Engineer'), 'Remote, Germany'),
+    at(posting('3', 'Contract Senior Software Engineer', 'W2 only.'), 'Remote, Germany'),
   ], '2026-11-05');
   snapshotCompany(db, anyco, [at(posting('4', 'Senior Software Engineer', 'We are a fully remote company.'), 'Remote')], '2026-11-05');
   diffRun(db, '2026-11-05');
@@ -221,7 +281,8 @@ test('filterRun tags remote restricted to one country, keeps its route, drops it
   assert.deepEqual(postings, [
     { external_id: '1', route: 'outreach', route_reason: 'perm · remote:US-only', work_mode: 'remote', work_country: 'US' },
     { external_id: '2', route: 'drop', route_reason: 'location:IN', work_mode: 'remote', work_country: 'US' },
-    { external_id: '3', route: 'apply', route_reason: 'title:contract · remote:DE-only', work_mode: 'remote', work_country: 'DE' },
+    // Contract reason, then payroll, then the location tag.
+    { external_id: '3', route: 'apply', route_reason: 'title:contract · payroll · remote:DE-only', work_mode: 'remote', work_country: 'DE' },
     { external_id: '4', route: 'outreach', route_reason: 'perm · remote:GB', work_mode: 'remote', work_country: 'GB' },
   ]);
   const signals = db.prepare('select company_id, list, ref_ids from signals order by company_id').all()

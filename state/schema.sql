@@ -47,7 +47,8 @@ create table if not exists postings (
   reposted_at text,                        -- run_date a gone id last came back
   raw text,                                -- json
   route text,                              -- stage 3: apply | outreach | drop
-  route_reason text,                       -- keyword that decided it: evergreen, non-engineering, title:contract, body:day rate, perm;
+  route_reason text,                       -- keyword that decided it: evergreen, non-engineering, b2b:c2c, title:contract, body:day rate, perm;
+                                           -- apply postings that say payroll only add `· payroll` (title:contract · payroll);
                                            -- kept postings add the location tag (perm · hybrid:GB), location drops are location:IN or onsite:DE
   work_mode text,                          -- stage 3: remote | hybrid | onsite | unknown
   work_country text                        -- stage 3: ISO 3166-1 alpha-2, null when unread
@@ -92,7 +93,8 @@ create table if not exists signals (
   list text not null,                      -- apply | outreach
   kinds text not null,                     -- json array of event kinds
   ref_ids text not null,                   -- json array of posting ids that passed the filter
-  status text not null default 'new',      -- new | notified | applied | sent | skipped | snoozed | replied
+  status text not null default 'new',      -- new | notified | applied | sent | skipped | snoozed | later | replied
+                                           -- later: tabled by the owner with no date; no migration, the column takes any text
   skip_reason text,
   snooze_until text,
   sent_body text,

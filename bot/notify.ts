@@ -24,15 +24,23 @@ export const CALLBACK_ID_LEN = 16;
 // Telegram caps a message at 4096 characters after entity parsing; leave room for the status line edits add.
 const MAX_VISIBLE = 3500;
 
-// One row per posting; warm first, then apply before outreach, then by name; in a signal live postings before gone
-// ones, contract postings first within each.
+// A live posting with a B2B reason (core/filter.ts): the owner's preferred contract form, so its signal leads the apply list.
+const hasB2b = (s: string) =>
+  `exists (select 1 from json_each(${s}.ref_ids) bj join postings bp on bp.id = bj.value where bp.gone_at is null and bp.route_reason like 'b2b:%')`;
+
+// Signal order of the digest, shared with the UI page (aliases s and c): warm first, then apply before outreach,
+// apply signals with a B2B posting first, then by name.
+export const SIGNAL_ORDER = `c.warm desc, case s.list when 'apply' then 0 else 1 end, ${hasB2b('s')} desc, c.name collate nocase`;
+
+// One row per posting, in SIGNAL_ORDER; in a signal live postings before gone ones, within each B2B postings first,
+// then the other contract postings.
 const rowsQuery = (where: string) => `
   select s.id, s.run_date, s.list, s.status, c.id as company_id, c.name, c.country, c.ats_vendor, c.warm,
     p.title, p.location, p.url, p.route, p.route_reason, p.gone_at is not null as gone
   from signals s join companies c on c.id = s.company_id, json_each(s.ref_ids) j join postings p on p.id = j.value
   where ${where}
-  order by c.warm desc, case s.list when 'apply' then 0 else 1 end, c.name collate nocase, p.gone_at is not null,
-    case p.route when 'apply' then 0 else 1 end, p.title`;
+  order by ${SIGNAL_ORDER}, p.gone_at is not null,
+    case when p.route_reason like 'b2b:%' then 0 when p.route = 'apply' then 1 else 2 end, p.title`;
 
 // Pending on :run_date: new and never sent (also from a night notify did not run), or snoozed and now due.
 const pending = (s: string) =>
@@ -87,7 +95,10 @@ function render(rows: SignalRow[]): DigestMessage {
   const first = list === 'apply'
     ? { text: 'Applied', callback_data: `applied:${id16}` }
     : { text: 'Compose', callback_data: `compose:${id16}` };
-  const buttons = [[first, { text: 'Skip', callback_data: `skip:${id16}` }, { text: 'Snooze 7d', callback_data: `snooze:${id16}` }]];
+  const buttons = [[
+    first, { text: 'Skip', callback_data: `skip:${id16}` }, { text: 'Snooze 7d', callback_data: `snooze:${id16}` },
+    { text: 'Later', callback_data: `later:${id16}` },
+  ]];
   return { signal_id: id, text: lines.join('\n'), buttons };
 }
 

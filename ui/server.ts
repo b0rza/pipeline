@@ -1,4 +1,5 @@
-// Local web overview: a Pending tab of signals waiting on the owner and a History tab of the rest, with the same buttons as Telegram.
+// Local web overview: a Pending tab of signals waiting on the owner, a Later tab of the ones tabled for when there is time
+// and a History tab of the rest, with the same buttons as Telegram.
 // Unauthenticated by design: it is the owner's desk view. It listens on loopback unless PIPELINE_UI_HOST names another
 // address (a private network only, never the open internet), and refuses button presses another website sends.
 import { readFileSync } from 'node:fs';
@@ -6,8 +7,8 @@ import { createServer } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import type { DatabaseSync } from 'node:sqlite';
 import { pathToFileURL } from 'node:url';
-import { composeTitles, droppedCount, escapeHtml, GONE, pendingSignals, signalRows, type SignalRow } from '../bot/notify.ts';
-import { markApplied, markSkipped, reopen, SKIP_REASONS, snooze } from '../bot/server.ts';
+import { composeTitles, droppedCount, escapeHtml, GONE, pendingSignals, SIGNAL_ORDER, signalRows, type SignalRow } from '../bot/notify.ts';
+import { markApplied, markLater, markSkipped, reopen, SKIP_REASONS, snooze } from '../bot/server.ts';
 import { composeMailto } from '../bot/templates.ts';
 import { openDb } from '../core/db.ts';
 import { routeTag, withFlag } from '../core/flag.ts';
@@ -38,7 +39,7 @@ const STYLE = `
   .badge { display: inline-block; font-size: .75em; padding: 0 .5em; border-radius: 1em; color: #fff; background: #777; vertical-align: middle; }
   .b-new { background: #2563eb; } .b-notified { background: #7c3aed; } .b-applied, .b-sent, .b-replied { background: #15803d; }
   .b-skipped { background: #6b7280; } .b-snoozed { background: #b45309; }
-  .b-unsent { background: transparent; color: var(--pico-muted-color); border: 1px solid var(--pico-muted-border-color); }
+  :is(.b-unsent, .b-later) { background: transparent; color: var(--pico-muted-color); border: 1px solid var(--pico-muted-border-color); }
   #theme { float: right; width: auto; margin-top: .25rem; }`;
 
 // Light or dark on demand. Pico follows the system setting unless <html data-theme> says otherwise; the choice is kept
@@ -54,19 +55,19 @@ const THEME_SCRIPT = `
     localStorage.setItem('theme', next);
   }`;
 
-// Pending or History from the address: #history, or the anchor of a History card (a button press redirects to /#s-<id>),
-// opens History; anything else Pending. Runs at the end of the body, once both sections exist. The section ids differ
-// from the hash words so a tab click does not scroll the page.
+// The tab from the address: #later or #history, or the anchor of a card in that tab (a direct link to /#s-<id>), opens
+// that tab; anything else Pending. Runs at the end of the body, once the sections exist. The section ids differ from the
+// hash words so a tab click does not scroll the page.
 const TABS_SCRIPT = `
   function showTab(name) {
-    for (const t of ['pending', 'history']) {
+    for (const t of ['pending', 'later', 'history']) {
       document.getElementById('sec-' + t).hidden = t !== name;
       document.getElementById('tab-' + t).className = t === name ? '' : 'secondary outline';
     }
   }
   function fromHash() {
     const target = location.hash.length > 1 ? document.getElementById(location.hash.slice(1)) : null;
-    showTab(location.hash === '#history' || target?.closest('#sec-history') ? 'history' : 'pending');
+    showTab(['later', 'history'].find((t) => location.hash === '#' + t || target?.closest('#sec-' + t)) ?? 'pending');
     // The browser could not scroll to a card while its section was hidden.
     target?.scrollIntoView();
   }
@@ -74,13 +75,13 @@ const TABS_SCRIPT = `
   fromHash();`;
 
 // A history card that is still new is an older signal the next notify supersedes, or one whose postings are all
-// gone that the next notify expires, so it gets no buttons.
-function actions(rows: SignalRow[], history: boolean): string {
+// gone that the next notify expires, so it gets no buttons. past is true for a Later or History card.
+function actions(rows: SignalRow[], past: boolean): string {
   const { id, list, status, name } = rows[0];
   const form = (action: string, inner: string) => `<form method="post" action="/signal/${id}/${action}">${inner}</form>`;
   const secondary = (label: string) => `<button class="secondary outline">${label}</button>`;
   const out: string[] = [];
-  if (!history || ['notified', 'snoozed'].includes(status)) {
+  if (!past || ['notified', 'snoozed', 'later'].includes(status)) {
     if (list === 'apply') out.push(form('applied', '<button>Mark applied</button>'));
     else {
       // Same titles as the Telegram Compose reply.
@@ -89,8 +90,9 @@ function actions(rows: SignalRow[], history: boolean): string {
     const options = SKIP_REASONS.map(([code, label]) => `<option value="${code}">${escapeHtml(label)}</option>`).join('');
     out.push(form('skip', `<fieldset role="group"><select name="reason">${options}</select>${secondary('Skip')}</fieldset>`),
       form('snooze', secondary('Snooze 7d')));
+    if (!past) out.push(form('later', secondary('Later')));
   }
-  if (['skipped', 'applied', 'snoozed'].includes(status)) out.push(form('reopen', secondary('Reopen')));
+  if (['skipped', 'applied', 'snoozed', 'later'].includes(status)) out.push(form('reopen', secondary('Reopen')));
   return out.length ? `<footer>${out.join('')}</footer>` : '';
 }
 
@@ -103,13 +105,13 @@ export function runTime(startedAt: string | undefined): string {
   return ` ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
 }
 
-// A history card (past given) also shows status, skip reason and snooze date; skip_reason and snooze_until are not in SignalRow.
+// A Later or History card (past given) also shows status, skip reason and snooze date; skip_reason and snooze_until are not in SignalRow.
 // A pending card only marks what the digest has not sent yet: the owner can act on it here before it reaches Telegram.
 function card(rows: SignalRow[], runs: Map<string, string>, past?: Past): string {
   const { id, run_date, list, status, name, country, ats_vendor, warm } = rows[0];
-  const history = past !== undefined;
+  const isPast = past !== undefined;
   const { skip_reason, snooze_until } = past ?? { skip_reason: null, snooze_until: null };
-  const badge = history ? ` <span class="badge b-${escapeHtml(status)}">${escapeHtml(status)}</span>`
+  const badge = isPast ? ` <span class="badge b-${escapeHtml(status)}">${escapeHtml(status)}</span>`
     : ['new', 'snoozed'].includes(status) ? ' <span class="badge b-unsent">not sent yet</span>' : '';
   const head = `${warm ? '🔥 warm · ' : ''}<b>${escapeHtml(name)}</b> · ${escapeHtml(withFlag(country))} · ${escapeHtml(ats_vendor)}` +
     ` · <b>${list.toUpperCase()}</b> · run ${escapeHtml(run_date)}${runTime(runs.get(run_date))}${badge}`;
@@ -121,23 +123,25 @@ function card(rows: SignalRow[], runs: Map<string, string>, past?: Past): string
       ` <small>[${escapeHtml(routeTag(p.route_reason))}]${p.gone ? ` · ${GONE}` : ''}</small></li>`;
   });
   return `<article id="s-${id.slice(0, 16)}"><header>${head}</header>` +
-    (meta.length ? `<p class="meta">${meta.join(' · ')}</p>` : '') + `<ul>${postings.join('')}</ul>${actions(rows, history)}</article>`;
+    (meta.length ? `<p class="meta">${meta.join(' · ')}</p>` : '') + `<ul>${postings.join('')}</ul>${actions(rows, isPast)}</article>`;
 }
 
 // Pending is what waits on the owner: what the digest will send (pendingSignals, shared with bot/notify.ts, so left as
-// it is) plus what it sent that has no answer yet (notified). History is everything else.
+// it is) plus what it sent that has no answer yet (notified). Later is what the owner tabled (status later, never pending,
+// so the nightly leaves it alone). History is everything else.
 function page(db: DatabaseSync, today: string): string {
   const bySignal = pendingSignals(db, today);
 
   // Same order as the digest within a run date.
   const all = db.prepare(`
     select s.id, s.run_date, s.status, s.skip_reason, s.snooze_until from signals s join companies c on c.id = s.company_id
-    order by s.run_date desc, c.warm desc, case s.list when 'apply' then 0 else 1 end, c.name collate nocase`)
+    order by s.run_date desc, ${SIGNAL_ORDER}`)
     .all() as unknown as (Past & { status: string })[];
   // A notified card shows its gone postings struck through, as its Telegram message does.
   const waiting = all.filter((s) => bySignal.has(s.id) || s.status === 'notified')
     .map((s) => bySignal.get(s.id) ?? signalRows(db, s.id));
-  const others = all.filter((s) => !bySignal.has(s.id) && s.status !== 'notified');
+  const later = all.filter((s) => s.status === 'later');
+  const others = all.filter((s) => !bySignal.has(s.id) && !['notified', 'later'].includes(s.status));
 
   const apply = waiting.filter((s) => s[0].list === 'apply').length;
   const header = `${apply} apply · ${waiting.length - apply} outreach waiting · ${droppedCount(db, today)} dropped postings today`;
@@ -156,8 +160,10 @@ function page(db: DatabaseSync, today: string): string {
     `<title>Pipeline ${escapeHtml(today)}</title><link rel="stylesheet" href="/pico.css"><style>${STYLE}</style><script>${THEME_SCRIPT}</script></head><body>` +
     `<header><button id="theme" class="secondary outline" onclick="toggleTheme()">light / dark</button>` +
     `<h1>Pipeline overview ${escapeHtml(today)}</h1><p>${header}</p></header><main>` +
-    `<nav id="tabs">${tab('pending', 'Pending', waiting.length, true)}${tab('history', 'History', others.length, false)}</nav>` +
+    `<nav id="tabs">${tab('pending', 'Pending', waiting.length, true)}${tab('later', 'Later', later.length, false)}` +
+    `${tab('history', 'History', others.length, false)}</nav>` +
     `<section id="sec-pending">${waiting.map((rows) => card(rows, runs)).join('') || '<p>Nothing pending.</p>'}</section>` +
+    `<section id="sec-later" hidden>${later.map((s) => card(signalRows(db, s.id), runs, s)).join('') || '<p>Nothing for later.</p>'}</section>` +
     `<section id="sec-history" hidden>${history || '<p>No past signals.</p>'}</section></main>` +
     `<script>${TABS_SCRIPT}</script></body></html>`;
 }
@@ -212,13 +218,18 @@ export function handle(db: DatabaseSync, req: Req, today = new Date().toISOStrin
     case 'snooze':
       snooze(db, id, today);
       break;
-    case 'reopen':
-      reopen(db, id);
+    case 'later':
+      markLater(db, id);
       break;
+    case 'reopen':
+      // Back on Pending, at the card.
+      reopen(db, id);
+      return { status: 303, headers: { location: `/#s-${id.slice(0, 16)}` }, body: '' };
     default:
       return text(404, 'not found');
   }
-  return { status: 303, headers: { location: `/#s-${id.slice(0, 16)}` }, body: '' };
+  // The Pending tab, where the owner works through the list, not the tab the card moved to.
+  return { status: 303, headers: { location: '/' }, body: '' };
 }
 
 export interface Running {

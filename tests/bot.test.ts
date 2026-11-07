@@ -59,6 +59,41 @@ test('buildDigest orders warm, then apply, then outreach, contract postings firs
   db.close();
 });
 
+test('buildDigest puts apply signals with a B2B posting first, and B2B postings first in a card', () => {
+  const db = openDb(':memory:');
+  seed(db, [
+    [company('aardvark'), [posting('k1', 'Senior Software Engineer, Contract')]],
+    [company('mixed'), [
+      posting('m1', 'Backend Engineer'), posting('m2', 'Frontend Developer, Contract', 'W2 only.'),
+      posting('m3', 'Software Engineer', 'Paid on a B2B contract.'),
+    ]],
+    [company('zulu'), [posting('u1', 'Software Engineer', 'Outside IR35.')]],
+    [company('warmco', { warm: true }), [posting('w1', 'Solutions Architect')]],
+  ]);
+  const digest = buildDigest(db, '2026-11-02');
+  // Warm still leads; then apply signals with a B2B posting by name, then the other apply signals.
+  assert.deepEqual(digest.slice(1).map((m) => m.text.split('\n')[0].replace(/<\/?b>/g, '').split(' · ')[0]),
+    ['🔥 warm', 'mixed', 'zulu', 'aardvark']);
+  assert.deepEqual(digest[2].text.split('\n').slice(1), [
+    '• <a href="https://example.test/m3">Software Engineer</a> — London [b2b:b2b contract · unknown:🇬🇧 GB]',
+    '• <a href="https://example.test/m2">Frontend Developer, Contract</a> — London [title:contract · payroll · unknown:🇬🇧 GB]',
+    '• <a href="https://example.test/m1">Backend Engineer</a> — London [perm · unknown:🇬🇧 GB]',
+  ]);
+  db.close();
+});
+
+test('a B2B posting that left the board no longer lifts its signal', () => {
+  const db = openDb(':memory:');
+  const contract = posting('b2', 'Data Engineer, Contract');
+  const aardvark = posting('k1', 'Senior Software Engineer, Contract');
+  seed(db, [[company('aardvark'), [aardvark]], [company('bravo'), [posting('b1', 'Software Engineer', 'C2C welcome.'), contract]]]);
+  const names = (runDate: string) => buildDigest(db, runDate).slice(1).map((m) => m.text.split('\n')[0].split('</b>')[0].slice(3));
+  assert.deepEqual(names('2026-11-02'), ['bravo', 'aardvark']);
+  seed(db, [[company('bravo'), [contract]], [company('aardvark'), [aardvark]]], '2026-11-03');
+  assert.deepEqual(names('2026-11-03'), ['aardvark', 'bravo']);
+  db.close();
+});
+
 test('buildDigest header counts apply and outreach signals and dropped postings', () => {
   const db = openDb(':memory:');
   standard(db);
@@ -74,11 +109,12 @@ test('buildDigest buttons: Compose for outreach, Applied for apply, none on the 
   standard(db);
   const [header, warm, apply] = buildDigest(db, '2026-11-02');
   assert.deepEqual(header.buttons, []);
-  assert.deepEqual(warm.buttons.map((row) => row.map((b) => b.text)), [['Compose', 'Skip', 'Snooze 7d']]);
-  assert.deepEqual(apply.buttons.map((row) => row.map((b) => b.text)), [['Applied', 'Skip', 'Snooze 7d']]);
+  assert.deepEqual(warm.buttons.map((row) => row.map((b) => b.text)), [['Compose', 'Skip', 'Snooze 7d', 'Later']]);
+  assert.deepEqual(apply.buttons.map((row) => row.map((b) => b.text)), [['Applied', 'Skip', 'Snooze 7d', 'Later']]);
   const id = id16(db, 'warmco');
   assert.match(id, /^[0-9a-f]{16}$/);
-  assert.deepEqual(warm.buttons[0].map((b) => 'callback_data' in b && b.callback_data), [`compose:${id}`, `skip:${id}`, `snooze:${id}`]);
+  assert.deepEqual(warm.buttons[0].map((b) => 'callback_data' in b && b.callback_data),
+    [`compose:${id}`, `skip:${id}`, `snooze:${id}`, `later:${id}`]);
   assert.equal(warm.signal_id!.slice(0, 16), id);
   db.close();
 });
@@ -124,6 +160,29 @@ test('buildDigest skips notified signals', () => {
   standard(db);
   db.prepare("update signals set status = 'notified'").run();
   assert.deepEqual(buildDigest(db, '2026-11-02'), []);
+  db.close();
+});
+
+test('a later signal is never sent, retired or superseded by the nightly, and Later clears a snooze date', () => {
+  const db = openDb(':memory:');
+  const perm = posting('1', 'Software Engineer');
+  seed(db, [[company('acme'), [perm]], [company('gone'), [posting('2', 'Backend Engineer')]]], '2026-10-26');
+  db.prepare("update signals set status = 'snoozed', snooze_until = '2026-11-02'").run();
+  for (const companyId of ['acme', 'gone']) handleCallback(db, `later:${id16(db, companyId)}`, '2026-10-27');
+  assert.deepEqual(status(db, 'acme'), { status: 'later', skip_reason: null, snooze_until: null });
+  // A newer signal for acme, and gone's only posting leaves the board.
+  seed(db, [[company('acme'), [perm, posting('3', 'Software Engineer, Contract')]], [company('gone'), []]]);
+  assert.equal(expireGone(db, '2026-11-02'), 0);
+  assert.equal(supersede(db, '2026-11-02'), 0);
+  const byRun = (companyId: string, runDate: string) =>
+    (db.prepare('select status from signals where company_id = ? and run_date = ?').get(companyId, runDate) as { status: string }).status;
+  assert.equal(byRun('acme', '2026-10-26'), 'later');
+  assert.equal(byRun('gone', '2026-10-26'), 'later');
+  // Only the newer acme signal goes out.
+  const digest = buildDigest(db, '2026-11-02');
+  assert.equal(digest.length, 2);
+  assert.equal(digest[1].text.split('\n')[0], '<b>acme</b> · 🇬🇧 GB · greenhouse · <b>APPLY</b>');
+  assert.match(digest[1].text, /^[^\n]*\n• <a href="https:\/\/example.test\/3">[^\n]*$/);
   db.close();
 });
 
@@ -242,6 +301,21 @@ test('handleCallback applies, skips with a reason, snoozes and composes', () => 
   assert.match(composed.text, /\n- Solutions Architect\n/);
   assert.match(composed.text, /<code>mailto:\?subject=/);
   assert.equal(status(db, 'warmco').status, 'new');
+
+  const later = handleCallback(db, `later:${id16(db, 'warmco')}`, today);
+  assert.ok(later?.kind === 'edit');
+  assert.ok(later.text.endsWith('\n\n🗂 later'));
+  assert.deepEqual(later.buttons, [[{ text: 'Reopen', callback_data: `reopen:${id16(db, 'warmco')}` }]]);
+  assert.deepEqual(status(db, 'warmco'), { status: 'later', skip_reason: null, snooze_until: null });
+
+  // Reopen from later, and from snoozed: back to new, no buttons until the next digest sends it again.
+  for (const companyId of ['warmco', 'beta']) {
+    const reopened = handleCallback(db, `reopen:${id16(db, companyId)}`, today);
+    assert.ok(reopened?.kind === 'edit');
+    assert.ok(reopened.text.endsWith('\n\n↩ reopened: back in the next digest'));
+    assert.deepEqual(reopened.buttons, []);
+    assert.deepEqual(status(db, companyId), { status: 'new', skip_reason: null, snooze_until: null });
+  }
 
   assert.equal(handleCallback(db, 'applied:0000000000000000', today), null);
   assert.equal(handleCallback(db, `bogus:${id16(db, 'warmco')}`, today), null);

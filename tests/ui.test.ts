@@ -46,14 +46,15 @@ const post = (db: DatabaseSync, id: string, action: string, body?: string) =>
   handle(db, { method: 'POST', url: `/signal/${id}/${action}`, body }, today);
 
 // The markup of one tab's section.
-const sectionHtml = (html: string, which: 'pending' | 'history') => {
+type Tab = 'pending' | 'later' | 'history';
+const sectionHtml = (html: string, which: Tab) => {
   const start = html.search(new RegExp(`<section id="sec-${which}"[^>]*>`));
   assert.ok(start >= 0, `no ${which} section`);
   return html.slice(start, html.indexOf('</section>', start));
 };
 
 // Company names of the cards in one section, in page order.
-const section = (html: string, which: 'pending' | 'history') =>
+const section = (html: string, which: Tab) =>
   [...sectionHtml(html, which).matchAll(/<article id="s-[0-9a-f]{16}"><header>(?:🔥 warm · )?<b>(.*?)<\/b>/g)].map((m) => m[1]);
 
 const cardOf = (html: string, db: DatabaseSync, companyId: string) => {
@@ -101,33 +102,40 @@ test('apply cards get Mark applied, outreach cards a mailto Compose link built f
 
   for (const c of [apply, outreach]) {
     assert.match(c, /<fieldset role="group"><select name="reason"><option value="fit">bad fit<\/option>.*<option value="other">other<\/option><\/select><button class="secondary outline">Skip<\/button><\/fieldset>/);
-    assert.match(c, /<button class="secondary outline">Snooze 7d<\/button>/);
+    // Later after Snooze 7d, the last button on a pending card.
+    assert.match(c, /<button class="secondary outline">Snooze 7d<\/button><\/form><form method="post" action="\/signal\/[0-9a-f]{64}\/later"><button class="secondary outline">Later<\/button><\/form><\/footer>/);
     assert.doesNotMatch(c, /Reopen/);
   }
   db.close();
 });
 
-test('POST applied, skip and snooze change the rows as handleCallback does, and move the card to History', () => {
+test('POST applied, skip, snooze and later change the rows as handleCallback does, move the card and land on Pending', () => {
   const web = openDb(':memory:');
   const bot = openDb(':memory:');
   standard(web);
   standard(bot);
 
-  for (const [companyId, action, body] of [['zeta', 'applied', undefined], ['alpha', 'skip', 'reason=fit'], ['beta', 'snooze', undefined]]) {
+  for (const [companyId, action, body] of [
+    ['zeta', 'applied', undefined], ['alpha', 'skip', 'reason=fit'], ['beta', 'snooze', undefined], ['warmco', 'later', undefined],
+  ]) {
     const id = signalId(web, companyId!);
     const res = post(web, id, action!, body);
     assert.equal(res.status, 303);
-    assert.equal(res.headers.location, `/#s-${id.slice(0, 16)}`);
+    // The Pending tab, not the tab the card moved to.
+    assert.equal(res.headers.location, '/');
     assert.ok(handleCallback(bot, `${action}:${id.slice(0, 16)}${body ? ':fit' : ''}`, today));
   }
   assert.deepEqual(allSignals(web), allSignals(bot));
   assert.deepEqual(status(web, 'alpha'), { status: 'skipped', skip_reason: 'bad fit', snooze_until: null });
   assert.deepEqual(status(web, 'beta'), { status: 'snoozed', skip_reason: null, snooze_until: '2026-11-09' });
 
+  assert.deepEqual(status(web, 'warmco'), { status: 'later', skip_reason: null, snooze_until: null });
+
   const html = get(web).body;
-  assert.match(html, /<\/h1><p>0 apply · 1 outreach waiting · 1 dropped postings today<\/p><\/header>/);
-  assert.match(html, /<button id="tab-pending" onclick="location.hash = 'pending'">Pending \(1\)<\/button><button id="tab-history" class="secondary outline" onclick="location.hash = 'history'">History \(3\)<\/button>/);
-  assert.deepEqual(section(html, 'pending'), ['warmco']);
+  assert.match(html, /<\/h1><p>0 apply · 0 outreach waiting · 1 dropped postings today<\/p><\/header>/);
+  assert.match(html, /<button id="tab-pending" onclick="location.hash = 'pending'">Pending \(0\)<\/button><button id="tab-later" class="secondary outline" onclick="location.hash = 'later'">Later \(1\)<\/button><button id="tab-history" class="secondary outline" onclick="location.hash = 'history'">History \(3\)<\/button>/);
+  assert.deepEqual(section(html, 'pending'), []);
+  assert.deepEqual(section(html, 'later'), ['warmco']);
   assert.deepEqual(section(html, 'history'), ['zeta', 'alpha', 'beta']);
   assert.match(cardOf(html, web, 'alpha'), /<span class="badge b-skipped">skipped<\/span>.*<p class="meta">skipped: bad fit<\/p>/);
   assert.match(cardOf(html, web, 'alpha'), /<button class="secondary outline">Reopen<\/button>/);
@@ -151,8 +159,12 @@ test('POST reopen sets the signal back to new and it returns to Pending', () => 
   assert.deepEqual(section(before, 'pending'), ['warmco', 'zeta']);
   assert.deepEqual(section(before, 'history'), ['alpha', 'beta']);
 
-  assert.equal(post(db, alpha, 'reopen').status, 303);
-  assert.equal(post(db, beta, 'reopen').status, 303);
+  // Reopen keeps the card anchor: the card is back on Pending.
+  for (const id of [alpha, beta]) {
+    const res = post(db, id, 'reopen');
+    assert.equal(res.status, 303);
+    assert.equal(res.headers.location, `/#s-${id.slice(0, 16)}`);
+  }
   assert.deepEqual(status(db, 'alpha'), { status: 'new', skip_reason: null, snooze_until: null });
   assert.deepEqual(status(db, 'beta'), { status: 'new', skip_reason: null, snooze_until: null });
   const after = get(db).body;
@@ -195,15 +207,59 @@ test('Pending holds what waits on the owner: notified signals with buttons, unse
   db.close();
 });
 
-test('the tab bar switches by the address, and a History card anchor opens History', () => {
+test('the tab bar switches by the address, and a Later or History card anchor opens its tab', () => {
   const db = openDb(':memory:');
   standard(db);
   const html = get(db).body;
-  // Pending open as rendered, History hidden until the script reads the address.
-  assert.match(html, /<main><nav id="tabs"><button id="tab-pending" onclick="location.hash = 'pending'">Pending \(4\)<\/button><button id="tab-history" class="secondary outline" onclick="location.hash = 'history'">History \(0\)<\/button><\/nav><section id="sec-pending">/);
-  assert.match(html, /<section id="sec-history" hidden>/);
-  // Inline, after both sections, so it can find them.
-  assert.match(html, /<\/section><\/main><script>[^]*location\.hash === '#history'[^]*closest\('#sec-history'\)[^]*<\/script><\/body><\/html>$/);
+  // Pending open as rendered, Later and History hidden until the script reads the address.
+  assert.match(html, /<main><nav id="tabs"><button id="tab-pending" onclick="location.hash = 'pending'">Pending \(4\)<\/button><button id="tab-later" class="secondary outline" onclick="location.hash = 'later'">Later \(0\)<\/button><button id="tab-history" class="secondary outline" onclick="location.hash = 'history'">History \(0\)<\/button><\/nav><section id="sec-pending">/);
+  assert.match(html, /<\/section><section id="sec-later" hidden><p>Nothing for later.<\/p><\/section><section id="sec-history" hidden>/);
+  // Inline, after the sections, so it can find them.
+  assert.match(html, /<\/section><\/main><script>[^]*\['pending', 'later', 'history'\][^]*\['later', 'history'\]\.find\(\(t\) => location\.hash === '#' \+ t \|\| target\?\.closest\('#sec-' \+ t\)\) \?\? 'pending'[^]*<\/script><\/body><\/html>$/);
+  db.close();
+});
+
+test('a later card waits in the Later tab with its buttons plus Reopen, and leaves it on Reopen or an action', () => {
+  const db = openDb(':memory:');
+  standard(db);
+  for (const companyId of ['zeta', 'alpha', 'beta']) post(db, signalId(db, companyId), 'later');
+  const html = get(db).body;
+  assert.match(html, /<\/h1><p>0 apply · 1 outreach waiting · 1 dropped postings today<\/p><\/header>/);
+  assert.match(html, />Pending \(1\)<\/button><button id="tab-later"[^>]*>Later \(3\)<\/button>[^]*>History \(0\)<\/button>/);
+  // Digest order, as everywhere.
+  assert.deepEqual(section(html, 'later'), ['zeta', 'alpha', 'beta']);
+  assert.deepEqual(section(html, 'history'), []);
+
+  const zeta = cardOf(html, db, 'zeta');
+  assert.match(zeta, /<b>APPLY<\/b> · run 2026-11-02[^<]* <span class="badge b-later">later<\/span><\/header>/);
+  assert.match(zeta, /<button>Mark applied<\/button>.*Skip.*Snooze 7d<\/button><\/form><form method="post" action="\/signal\/[0-9a-f]{64}\/reopen"><button class="secondary outline">Reopen<\/button><\/form><\/footer>/);
+  assert.doesNotMatch(zeta, />Later</);
+  assert.match(cardOf(html, db, 'alpha'), /Compose.*Skip.*Snooze 7d.*Reopen/);
+
+  // Reopen returns it to Pending; Skip sends it to History; Snooze to History until due.
+  post(db, signalId(db, 'zeta'), 'reopen');
+  post(db, signalId(db, 'alpha'), 'skip', 'reason=geo');
+  post(db, signalId(db, 'beta'), 'snooze');
+  const after = get(db).body;
+  assert.deepEqual(section(after, 'pending'), ['warmco', 'zeta']);
+  assert.deepEqual(section(after, 'later'), []);
+  assert.deepEqual(section(after, 'history'), ['alpha', 'beta']);
+  assert.deepEqual(status(db, 'zeta'), { status: 'new', skip_reason: null, snooze_until: null });
+  db.close();
+});
+
+test('the page orders apply signals with a B2B posting first, and B2B postings first in a card, as the digest does', () => {
+  const db = openDb(':memory:');
+  seed(db, [
+    [company('aardvark'), [posting('k1', 'Senior Software Engineer, Contract')]],
+    [company('zulu'), [posting('u1', 'Backend Engineer, Contract'), posting('u2', 'Software Engineer', 'Outside IR35.')]],
+  ]);
+  const html = get(db).body;
+  assert.deepEqual(section(html, 'pending'), ['zulu', 'aardvark']);
+  assert.match(cardOf(html, db, 'zulu'), /<ul><li><a href="https:\/\/example.test\/u2">Software Engineer<\/a> — London <small>\[b2b:outside ir35 · unknown:🇬🇧 GB\]<\/small><\/li><li><a href="https:\/\/example.test\/u1">/);
+  // History keeps the same order within a run date.
+  for (const companyId of ['zulu', 'aardvark']) post(db, signalId(db, companyId), 'applied');
+  assert.deepEqual(section(get(db).body, 'history'), ['zulu', 'aardvark']);
   db.close();
 });
 

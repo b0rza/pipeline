@@ -87,3 +87,24 @@ test('publishRun leaves out a posting that left the company board', () => {
   assert.ok(!zeta.includes('Backend Engineer'), 'gone posting not listed');
   db.close();
 });
+
+test('summary.md lists apply signals with a B2B posting first, B2B postings first, as the digest does', () => {
+  const db = openDb(':memory:');
+  const entries: [Company, NormalizedPosting[]][] = [
+    [company('aardvark'), [posting('k1', 'Senior Software Engineer, Contract')]],
+    [company('zulu'), [posting('u1', 'Backend Engineer, Contract'), { ...posting('u2', 'Software Engineer'), body: 'Corp-to-corp welcome. W2 only for the US.' }]],
+  ];
+  upsertCompanies(db, entries.map(([c]) => c));
+  for (const [c, ps] of entries) snapshotCompany(db, c, ps, '2026-11-02');
+  diffRun(db, '2026-11-02');
+  filterRun(db, '2026-11-02');
+  const root = mkdtempSync(join(process.env.TMPDIR ?? tmpdir(), 'publish-'));
+  publishRun(db, '2026-11-02', root);
+  const summary = readFileSync(join(root, '2026-11-02', 'summary.md'), 'utf8');
+  assert.ok(summary.indexOf('### zulu') < summary.indexOf('### aardvark'), 'zulu (B2B) before aardvark');
+  const zulu = readFileSync(join(root, '2026-11-02', 'zulu.md'), 'utf8');
+  assert.ok(zulu.includes(
+    '- [Software Engineer](https://example.test/u2) — London [b2b:corp-to-corp · payroll · unknown:GB]\n' +
+    '- [Backend Engineer, Contract](https://example.test/u1) — London [title:contract · unknown:GB]\n'));
+  db.close();
+});
