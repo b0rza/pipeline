@@ -4,11 +4,14 @@ import { test } from 'node:test';
 import { ashby } from '../adapters/ats/ashby.ts';
 import { bamboohr } from '../adapters/ats/bamboohr.ts';
 import { breezy } from '../adapters/ats/breezy.ts';
+import { gohire } from '../adapters/ats/gohire.ts';
 import { greenhouse } from '../adapters/ats/greenhouse.ts';
+import { hirehive } from '../adapters/ats/hirehive.ts';
 import { fetchPostings } from '../adapters/ats/index.ts';
 import { jazzhr } from '../adapters/ats/jazzhr.ts';
 import { lever } from '../adapters/ats/lever.ts';
 import { personio } from '../adapters/ats/personio.ts';
+import { pinpoint } from '../adapters/ats/pinpoint.ts';
 import { recruitee } from '../adapters/ats/recruitee.ts';
 import { rippling } from '../adapters/ats/rippling.ts';
 import { smartrecruiters } from '../adapters/ats/smartrecruiters.ts';
@@ -363,4 +366,81 @@ test('normalized postings carry no body_html', () => {
 test('htmlToText separates table cells and drops unknown entities', () => {
   assert.ok(!htmlToText('<table><tr><td>a</td><td>b</td></tr></table>').includes('ab'));
   assert.equal(htmlToText('5&times;3&deg; &hellip;&zwnj; &#123;&#x41;'), '5×3° … {A');
+});
+
+test('pinpoint list joins the headed sections, detail adds datePosted', () => {
+  const list = pinpoint.parse(fixture('pinpoint.json'), 'application/json; charset=utf-8', 'ctidigital');
+  assert.deepEqual(list.map((p) => [p.external_id, p.title, p.location, p.posted_at]), [
+    ['555767', 'Sales Development Representative', 'Manchester', null],
+    ['608839', 'Head of Organic', 'Manchester', null],
+  ]);
+  assert.equal(list[0].url, 'https://ctidigital.pinpointhq.com/en/postings/d8a87bd6-278b-455d-b70f-e91feab579d0');
+  assert.ok(list[0].body.startsWith('About CTI\n\nJoin 150+ strategists'), list[0].body.slice(0, 80));
+  assert.ok(list[0].body.includes('\n\nWhat you’ll be doing\nYou\'ll be responsible for building'), 'section header before its text');
+  assert.ok(list[0].body.includes('\n\nSome useful info\n'));
+  assert.deepEqual(list[1].raw, {
+    employment_type: 'Full Time', workplace_type: 'hybrid', department: 'Growth', compensation: null,
+    deadline_at: '2026-11-13T23:59:59+00:00',
+  });
+  assert.equal(pinpoint.feedUrl('ctidigital'), 'https://ctidigital.pinpointhq.com/postings.json');
+  assert.equal(pinpoint.detail!.url(list[0], 'ctidigital'), list[0].url);
+  const job = pinpoint.detail!.parse(fixture('pinpoint-job.html'), 'text/html; charset=utf-8', list[0]);
+  assertWellFormed([job], 1);
+  assert.equal(job.posted_at, '2026-08-04T15:20:46.000Z');
+  assert.equal(job.body, list[0].body);
+  assert.equal(pinpoint.detail!.parse('<html></html>', 'text/html', list[0]).posted_at, null);
+  assert.throws(() => pinpoint.parse('<!doctype html><html></html>', 'text/html', 'dead'), /not a JSON feed/);
+});
+
+test('hirehive fixture: Unix-second dates, location from city and country', () => {
+  const postings = hirehive.parse(fixture('hirehive.json'), 'application/json; charset=utf-8', 'studioforty9');
+  assertWellFormed(postings, 1);
+  const [p] = postings;
+  assert.equal(p.external_id, '211846');
+  assert.equal(p.title, 'Client Account Manager');
+  assert.equal(p.location, 'Cork, Ireland');
+  assert.equal(p.url, 'https://studioforty9.hirehive.com/client-account-manager-cork-7VVeQB');
+  assert.equal(p.posted_at, '2026-09-07T07:19:50.000Z');
+  assert.ok(p.body.startsWith('Job Description\n\nWe are looking for a Client Account Manager'), p.body.slice(0, 80));
+  assert.deepEqual(p.raw, {
+    category: 'Account Management', type: 'Full Time', experience: 'Mid Level', salary: null,
+    created_at: '2026-09-07T07:19:50.000Z',
+  });
+  assert.equal(hirehive.feedUrl('studioforty9'), 'https://studioforty9.hirehive.com/api/v1/jobs');
+  assert.throws(() => hirehive.parse('<!doctype html><html></html>', 'text/html', 'dead'), /not a JSON feed/);
+});
+
+test('hirehive next follows a nextPage URL and refuses an unknown paging value', () => {
+  const url = 'https://focus-ireland.hirehive.com/api/v1/jobs';
+  assert.equal(hirehive.next!(fixture('hirehive.json'), 'application/json', url), null);
+  const page = (nextPage: unknown) => JSON.stringify({ jobs: [], publishedJobsCount: 0, nextPage });
+  assert.equal(hirehive.next!(page('/api/v1/jobs?page=2'), 'application/json', url),
+    'https://focus-ireland.hirehive.com/api/v1/jobs?page=2');
+  assert.throws(() => hirehive.next!(page(2), 'application/json', url), /unrecognised nextPage/);
+});
+
+test('gohire widget list and job page', () => {
+  const list = gohire.parse(fixture('gohire-list.json'), 'text/html; charset=utf-8', 'mfqEeOYP');
+  assert.deepEqual(list.map((p) => [p.external_id, p.title, p.location, p.url, p.posted_at, p.body]), [
+    ['224955', 'Ecommerce Growth Consultant', 'Portland, United States',
+      'https://jobs.epicdesignlabs.com/ecommerce-growth-consultant-224955/', '2025-03-17T00:00:00.000Z', ''],
+    ['224954', 'Ecommerce Marketing Manager', 'Portland, United States',
+      'https://jobs.epicdesignlabs.com/ecommerce-marketing-manager-224954/', '2025-03-17T00:00:00.000Z', ''],
+  ]);
+  assert.deepEqual(list[1].raw, { salary: 'DOE', type: 'Contract' });
+  assert.equal(gohire.feedUrl('mfqEeOYP'), 'https://api2.gohire.io/widget-jobs/mfqEeOYP');
+  assert.equal(gohire.detail!.url(list[1], 'mfqEeOYP'), list[1].url);
+  const job = gohire.detail!.parse(fixture('gohire-job.html'), 'text/html; charset=utf-8', list[1]);
+  assertWellFormed([job], 1);
+  assert.ok(job.body.startsWith('Epic Design Labs is a fast-growing digital agency'), job.body.slice(0, 80));
+  assert.ok(job.body.includes('Key Responsibilities:\n'));
+  assert.ok(!job.body.includes('Apply Now'));
+  assert.throws(() => gohire.detail!.parse('<html><body></body></html>', 'text/html', list[1]), /no job description/);
+});
+
+test('gohire: an empty board is no postings, a wrong hash throws', () => {
+  const empty = '{"generalApplication":1,"generalPoolID":71072,"template":null,"colour":"#576fcf","jobs":[],"language":"en"}';
+  assert.deepEqual(gohire.parse(empty, 'text/html; charset=utf-8', 'Pd37nmt8'), []);
+  assert.throws(() => gohire.parse('{}', 'text/html; charset=utf-8', 'zzzzzzzz'), /no jobs array/);
+  assert.throws(() => gohire.parse('<html></html>', 'text/html', 'zzzzzzzz'), /not JSON/);
 });

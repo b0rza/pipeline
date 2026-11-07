@@ -3,10 +3,13 @@ import type { Company, NormalizedPosting } from '../../core/types.ts';
 import { ashby } from './ashby.ts';
 import { bamboohr } from './bamboohr.ts';
 import { breezy } from './breezy.ts';
+import { gohire } from './gohire.ts';
 import { greenhouse } from './greenhouse.ts';
+import { hirehive } from './hirehive.ts';
 import { jazzhr } from './jazzhr.ts';
 import { lever } from './lever.ts';
 import { personio } from './personio.ts';
+import { pinpoint } from './pinpoint.ts';
 import { recruitee } from './recruitee.ts';
 import { rippling } from './rippling.ts';
 import { smartrecruiters } from './smartrecruiters.ts';
@@ -17,7 +20,7 @@ import { zoho } from './zoho.ts';
 
 export const adapters: Record<string, AtsAdapter> = {
   greenhouse, lever, personio, teamtailor, jazzhr, bamboohr, breezy, rippling,
-  workable, recruitee, smartrecruiters, ashby, zoho,
+  workable, recruitee, smartrecruiters, ashby, zoho, pinpoint, hirehive, gohire,
 };
 
 export async function fetchPostings(company: Company): Promise<NormalizedPosting[]> {
