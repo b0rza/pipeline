@@ -1,4 +1,4 @@
-// Local web overview: the pending digest on top, every past signal below, with the same buttons as Telegram.
+// Local web overview: a Pending tab of signals waiting on the owner and a History tab of the rest, with the same buttons as Telegram.
 // Unauthenticated by design: it is the owner's desk view. It listens on loopback unless PIPELINE_UI_HOST names another
 // address (a private network only, never the open internet), and refuses button presses another website sends.
 import { readFileSync } from 'node:fs';
@@ -23,7 +23,7 @@ const text = (status: number, body: string): Res => ({ status, headers: { 'conte
 // Vendored Pico CSS (classless, MIT, ui/LICENSE-pico.txt); the page loads nothing from the network.
 const PICO = readFileSync(new URL('./pico.classless.min.css', import.meta.url), 'utf8');
 
-// What classless Pico lacks: a width cap, the inline button row, secondary outline buttons and status badges.
+// What classless Pico lacks: a width cap, the tab bar, the inline button row, secondary outline buttons and status badges.
 const STYLE = `
   :root { --pico-font-size: 100%; }
   body > header, body > main { max-width: 860px; }
@@ -31,12 +31,14 @@ const STYLE = `
   article li small, .meta { color: var(--pico-muted-color); } .meta { font-size: .875em; }
   article > footer { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
   article > footer :is(form, fieldset, select, button, [role=button]) { width: auto; margin: 0; }
-  #theme, article > footer :is(select, button, [role=button]) { --pico-form-element-spacing-vertical: .3rem; --pico-form-element-spacing-horizontal: .75rem; font-size: .875rem; }
+  #theme, #tabs button, article > footer :is(select, button, [role=button]) { --pico-form-element-spacing-vertical: .3rem; --pico-form-element-spacing-horizontal: .75rem; font-size: .875rem; }
+  #tabs { display: flex; gap: .5rem; justify-content: flex-start; margin-bottom: var(--pico-spacing); } #tabs button { width: auto; margin: 0; }
   .secondary.outline { --pico-background-color: transparent; --pico-color: var(--pico-secondary); --pico-border-color: var(--pico-secondary); }
   .secondary.outline:is(:hover, :active, :focus) { --pico-background-color: transparent; --pico-color: var(--pico-secondary-hover); --pico-border-color: var(--pico-secondary-hover); }
   .badge { display: inline-block; font-size: .75em; padding: 0 .5em; border-radius: 1em; color: #fff; background: #777; vertical-align: middle; }
   .b-new { background: #2563eb; } .b-notified { background: #7c3aed; } .b-applied, .b-sent, .b-replied { background: #15803d; }
   .b-skipped { background: #6b7280; } .b-snoozed { background: #b45309; }
+  .b-unsent { background: transparent; color: var(--pico-muted-color); border: 1px solid var(--pico-muted-border-color); }
   #theme { float: right; width: auto; margin-top: .25rem; }`;
 
 // Light or dark on demand. Pico follows the system setting unless <html data-theme> says otherwise; the choice is kept
@@ -51,6 +53,25 @@ const THEME_SCRIPT = `
     document.documentElement.dataset.theme = next;
     localStorage.setItem('theme', next);
   }`;
+
+// Pending or History from the address: #history, or the anchor of a History card (a button press redirects to /#s-<id>),
+// opens History; anything else Pending. Runs at the end of the body, once both sections exist. The section ids differ
+// from the hash words so a tab click does not scroll the page.
+const TABS_SCRIPT = `
+  function showTab(name) {
+    for (const t of ['pending', 'history']) {
+      document.getElementById('sec-' + t).hidden = t !== name;
+      document.getElementById('tab-' + t).className = t === name ? '' : 'secondary outline';
+    }
+  }
+  function fromHash() {
+    const target = location.hash.length > 1 ? document.getElementById(location.hash.slice(1)) : null;
+    showTab(location.hash === '#history' || target?.closest('#sec-history') ? 'history' : 'pending');
+    // The browser could not scroll to a card while its section was hidden.
+    target?.scrollIntoView();
+  }
+  addEventListener('hashchange', fromHash);
+  fromHash();`;
 
 // A history card that is still new is an older signal the next notify supersedes, or one whose postings are all
 // gone that the next notify expires, so it gets no buttons.
@@ -76,13 +97,15 @@ function actions(rows: SignalRow[], history: boolean): string {
 interface Past { id: string; run_date: string; skip_reason: string | null; snooze_until: string | null }
 
 // A history card (past given) also shows status, skip reason and snooze date; skip_reason and snooze_until are not in SignalRow.
+// A pending card only marks what the digest has not sent yet: the owner can act on it here before it reaches Telegram.
 function card(rows: SignalRow[], past?: Past): string {
   const { id, run_date, list, status, name, country, ats_vendor, warm } = rows[0];
   const history = past !== undefined;
   const { skip_reason, snooze_until } = past ?? { skip_reason: null, snooze_until: null };
+  const badge = history ? ` <span class="badge b-${escapeHtml(status)}">${escapeHtml(status)}</span>`
+    : ['new', 'snoozed'].includes(status) ? ' <span class="badge b-unsent">not sent yet</span>' : '';
   const head = `${warm ? '🔥 warm · ' : ''}<b>${escapeHtml(name)}</b> · ${escapeHtml(withFlag(country))} · ${escapeHtml(ats_vendor)}` +
-    ` · <b>${list.toUpperCase()}</b> · run ${escapeHtml(run_date)}` +
-    (history ? ` <span class="badge b-${escapeHtml(status)}">${escapeHtml(status)}</span>` : '');
+    ` · <b>${list.toUpperCase()}</b> · run ${escapeHtml(run_date)}${badge}`;
   const meta = [skip_reason && `skipped: ${escapeHtml(skip_reason)}`, snooze_until && `snoozed until ${escapeHtml(snooze_until)}`]
     .filter(Boolean);
   const postings = rows.map((p) => {
@@ -94,29 +117,39 @@ function card(rows: SignalRow[], past?: Past): string {
     (meta.length ? `<p class="meta">${meta.join(' · ')}</p>` : '') + `<ul>${postings.join('')}</ul>${actions(rows, history)}</article>`;
 }
 
+// Pending is what waits on the owner: what the digest will send (pendingSignals, shared with bot/notify.ts, so left as
+// it is) plus what it sent that has no answer yet (notified). History is everything else.
 function page(db: DatabaseSync, today: string): string {
   const bySignal = pendingSignals(db, today);
-  const pending = [...bySignal.values()];
-  const apply = pending.filter((s) => s[0].list === 'apply');
-  const outreach = pending.filter((s) => s[0].list === 'outreach');
-  const header = `${apply.length} apply · ${outreach.length} outreach · ${droppedCount(db, today)} dropped postings`;
 
   // Same order as the digest within a run date.
-  const others = (db.prepare(`
-    select s.id, s.run_date, s.skip_reason, s.snooze_until from signals s join companies c on c.id = s.company_id
+  const all = db.prepare(`
+    select s.id, s.run_date, s.status, s.skip_reason, s.snooze_until from signals s join companies c on c.id = s.company_id
     order by s.run_date desc, c.warm desc, case s.list when 'apply' then 0 else 1 end, c.name collate nocase`)
-    .all() as unknown as Past[])
-    .filter((s) => !bySignal.has(s.id));
+    .all() as unknown as (Past & { status: string })[];
+  // A notified card shows its gone postings struck through, as its Telegram message does.
+  const waiting = all.filter((s) => bySignal.has(s.id) || s.status === 'notified')
+    .map((s) => bySignal.get(s.id) ?? signalRows(db, s.id));
+  const others = all.filter((s) => !bySignal.has(s.id) && s.status !== 'notified');
+
+  const apply = waiting.filter((s) => s[0].list === 'apply').length;
+  const header = `${apply} apply · ${waiting.length - apply} outreach waiting · ${droppedCount(db, today)} dropped postings today`;
+
   const byDate = new Map<string, string[]>();
   for (const s of others) byDate.set(s.run_date, [...(byDate.get(s.run_date) ?? []), card(signalRows(db, s.id), s)]);
-
   const history = [...byDate].map(([date, cards]) => `<h3>${escapeHtml(date)}</h3>${cards.join('')}`).join('');
+
+  // Rendered with Pending open; TABS_SCRIPT switches by the address before the page shows.
+  const tab = (name: string, label: string, count: number, active: boolean) =>
+    `<button id="tab-${name}"${active ? '' : ' class="secondary outline"'} onclick="location.hash = '${name}'">${label} (${count})</button>`;
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">` +
     `<title>Pipeline ${escapeHtml(today)}</title><link rel="stylesheet" href="/pico.css"><style>${STYLE}</style><script>${THEME_SCRIPT}</script></head><body>` +
     `<header><button id="theme" class="secondary outline" onclick="toggleTheme()">light / dark</button>` +
     `<h1>Pipeline overview ${escapeHtml(today)}</h1><p>${header}</p></header><main>` +
-    `<section><h2>Pending</h2>${[...apply, ...outreach].map((rows) => card(rows)).join('') || '<p>Nothing pending.</p>'}</section>` +
-    `<section><h2>History</h2>${history || '<p>No past signals.</p>'}</section></main></body></html>`;
+    `<nav id="tabs">${tab('pending', 'Pending', waiting.length, true)}${tab('history', 'History', others.length, false)}</nav>` +
+    `<section id="sec-pending">${waiting.map((rows) => card(rows)).join('') || '<p>Nothing pending.</p>'}</section>` +
+    `<section id="sec-history" hidden>${history || '<p>No past signals.</p>'}</section></main>` +
+    `<script>${TABS_SCRIPT}</script></body></html>`;
 }
 
 // Cross-site request forgery check for button presses. A browser marks where a POST comes from with Origin, or failing

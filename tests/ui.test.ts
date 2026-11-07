@@ -45,12 +45,16 @@ const get = (db: DatabaseSync) => handle(db, { method: 'GET', url: '/' }, today)
 const post = (db: DatabaseSync, id: string, action: string, body?: string) =>
   handle(db, { method: 'POST', url: `/signal/${id}/${action}`, body }, today);
 
-// Company names of the cards in one section, in page order.
-const section = (html: string, which: 'pending' | 'history') => {
-  const [, pending, history] = html.split(/<h2>(?:Pending|History)<\/h2>/);
-  return [...(which === 'pending' ? pending : history).matchAll(/<article id="s-[0-9a-f]{16}"><header>(?:🔥 warm · )?<b>(.*?)<\/b>/g)]
-    .map((m) => m[1]);
+// The markup of one tab's section.
+const sectionHtml = (html: string, which: 'pending' | 'history') => {
+  const start = html.search(new RegExp(`<section id="sec-${which}"[^>]*>`));
+  assert.ok(start >= 0, `no ${which} section`);
+  return html.slice(start, html.indexOf('</section>', start));
 };
+
+// Company names of the cards in one section, in page order.
+const section = (html: string, which: 'pending' | 'history') =>
+  [...sectionHtml(html, which).matchAll(/<article id="s-[0-9a-f]{16}"><header>(?:🔥 warm · )?<b>(.*?)<\/b>/g)].map((m) => m[1]);
 
 const cardOf = (html: string, db: DatabaseSync, companyId: string) => {
   const start = html.indexOf(`id="s-${signalId(db, companyId).slice(0, 16)}"`);
@@ -60,14 +64,15 @@ const cardOf = (html: string, db: DatabaseSync, companyId: string) => {
 
 const allSignals = (db: DatabaseSync) => db.prepare('select company_id, status, skip_reason, snooze_until from signals order by company_id').all();
 
-test('GET / shows the pending header and each company once, apply first', () => {
+test('GET / shows the pending header and each company once, in digest order', () => {
   const db = openDb(':memory:');
   standard(db);
   const res = get(db);
   assert.equal(res.status, 200);
   assert.equal(res.headers['content-type'], 'text/html; charset=utf-8');
-  assert.match(res.body, /<\/h1><p>1 apply · 3 outreach · 1 dropped postings<\/p><\/header>/);
-  assert.deepEqual(section(res.body, 'pending'), ['zeta', 'warmco', 'alpha', 'beta']);
+  assert.match(res.body, /<\/h1><p>1 apply · 3 outreach waiting · 1 dropped postings today<\/p><\/header>/);
+  // Warm first, then apply before outreach, then by name, as the Telegram digest sends them.
+  assert.deepEqual(section(res.body, 'pending'), ['warmco', 'zeta', 'alpha', 'beta']);
   assert.deepEqual(section(res.body, 'history'), []);
   // The theme switch, and its script before the body so a stored choice applies without a flash.
   assert.match(res.body, /<script>[^]*localStorage\.getItem\('theme'\)[^]*<\/script><\/head><body><header><button id="theme"[^>]*onclick="toggleTheme\(\)">light \/ dark<\/button>/);
@@ -120,7 +125,8 @@ test('POST applied, skip and snooze change the rows as handleCallback does, and 
   assert.deepEqual(status(web, 'beta'), { status: 'snoozed', skip_reason: null, snooze_until: '2026-11-09' });
 
   const html = get(web).body;
-  assert.match(html, /<\/h1><p>0 apply · 1 outreach · 1 dropped postings<\/p><\/header>/);
+  assert.match(html, /<\/h1><p>0 apply · 1 outreach waiting · 1 dropped postings today<\/p><\/header>/);
+  assert.match(html, /<button id="tab-pending" onclick="location.hash = 'pending'">Pending \(1\)<\/button><button id="tab-history" class="secondary outline" onclick="location.hash = 'history'">History \(3\)<\/button>/);
   assert.deepEqual(section(html, 'pending'), ['warmco']);
   assert.deepEqual(section(html, 'history'), ['zeta', 'alpha', 'beta']);
   assert.match(cardOf(html, web, 'alpha'), /<span class="badge b-skipped">skipped<\/span>.*<p class="meta">skipped: bad fit<\/p>/);
@@ -140,19 +146,64 @@ test('POST reopen sets the signal back to new and it returns to Pending', () => 
   const beta = signalId(db, 'beta');
   post(db, alpha, 'skip', 'reason=geo');
   post(db, beta, 'snooze');
-  db.prepare("update signals set status = 'notified' where company_id = 'warmco'").run();
 
   const before = get(db).body;
-  assert.deepEqual(section(before, 'pending'), ['zeta']);
-  assert.match(cardOf(before, db, 'warmco'), /<span class="badge b-notified">notified<\/span>/);
-  assert.match(cardOf(before, db, 'warmco'), /Compose.*Skip.*Snooze 7d/);
-  assert.doesNotMatch(cardOf(before, db, 'warmco'), /Reopen/);
+  assert.deepEqual(section(before, 'pending'), ['warmco', 'zeta']);
+  assert.deepEqual(section(before, 'history'), ['alpha', 'beta']);
 
   assert.equal(post(db, alpha, 'reopen').status, 303);
   assert.equal(post(db, beta, 'reopen').status, 303);
   assert.deepEqual(status(db, 'alpha'), { status: 'new', skip_reason: null, snooze_until: null });
   assert.deepEqual(status(db, 'beta'), { status: 'new', skip_reason: null, snooze_until: null });
-  assert.deepEqual(section(get(db).body, 'pending'), ['zeta', 'alpha', 'beta']);
+  const after = get(db).body;
+  assert.deepEqual(section(after, 'pending'), ['warmco', 'zeta', 'alpha', 'beta']);
+  assert.deepEqual(section(after, 'history'), []);
+  db.close();
+});
+
+test('Pending holds what waits on the owner: notified signals with buttons, unsent ones marked not sent yet', () => {
+  const db = openDb(':memory:');
+  standard(db);
+  db.prepare("update signals set status = 'notified' where company_id in ('warmco', 'zeta')").run();
+  const html = get(db).body;
+  assert.match(html, /<\/h1><p>1 apply · 3 outreach waiting · 1 dropped postings today<\/p><\/header>/);
+  assert.deepEqual(section(html, 'pending'), ['warmco', 'zeta', 'alpha', 'beta']);
+  assert.deepEqual(section(html, 'history'), []);
+  assert.match(html, />Pending \(4\)<\/button>.*>History \(0\)<\/button>/);
+
+  // Sent to Telegram, not answered: no badge, the same buttons as an unsent card.
+  const warmco = cardOf(html, db, 'warmco');
+  assert.doesNotMatch(warmco, /badge|notified|not sent yet/);
+  assert.match(warmco, /Compose.*Skip.*Snooze 7d/);
+  assert.doesNotMatch(warmco, /Reopen/);
+  assert.match(cardOf(html, db, 'zeta'), /<b>APPLY<\/b> · run 2026-11-02<\/header>.*<button>Mark applied<\/button>/);
+
+  // Not in Telegram yet: marked, and actionable here.
+  const alpha = cardOf(html, db, 'alpha');
+  assert.match(alpha, /<b>OUTREACH<\/b> · run 2026-11-02 <span class="badge b-unsent">not sent yet<\/span><\/header>/);
+  assert.match(alpha, /Compose.*Skip.*Snooze 7d/);
+
+  // A snoozed signal that is due again is unsent too; one still snoozed is History.
+  post(db, signalId(db, 'alpha'), 'snooze');
+  db.prepare("update signals set snooze_until = '2026-11-02' where company_id = 'alpha'").run();
+  post(db, signalId(db, 'beta'), 'snooze');
+  const later = get(db).body;
+  assert.deepEqual(section(later, 'pending'), ['warmco', 'zeta', 'alpha']);
+  assert.deepEqual(section(later, 'history'), ['beta']);
+  assert.match(cardOf(later, db, 'alpha'), /<span class="badge b-unsent">not sent yet<\/span>/);
+  assert.match(cardOf(later, db, 'beta'), /<span class="badge b-snoozed">snoozed<\/span>/);
+  db.close();
+});
+
+test('the tab bar switches by the address, and a History card anchor opens History', () => {
+  const db = openDb(':memory:');
+  standard(db);
+  const html = get(db).body;
+  // Pending open as rendered, History hidden until the script reads the address.
+  assert.match(html, /<main><nav id="tabs"><button id="tab-pending" onclick="location.hash = 'pending'">Pending \(4\)<\/button><button id="tab-history" class="secondary outline" onclick="location.hash = 'history'">History \(0\)<\/button><\/nav><section id="sec-pending">/);
+  assert.match(html, /<section id="sec-history" hidden>/);
+  // Inline, after both sections, so it can find them.
+  assert.match(html, /<\/section><\/main><script>[^]*location\.hash === '#history'[^]*closest\('#sec-history'\)[^]*<\/script><\/body><\/html>$/);
   db.close();
 });
 
@@ -164,7 +215,7 @@ test('an older new signal of a company with a newer pending one is in History wi
   const html = get(db).body;
   assert.deepEqual(section(html, 'pending'), ['acme']);
   assert.deepEqual(section(html, 'history'), ['acme']);
-  const [, history] = html.split('<h2>History</h2>');
+  const history = sectionHtml(html, 'history');
   assert.match(history, /<h3>2026-10-26<\/h3>/);
   assert.match(history, /<span class="badge b-new">new<\/span>/);
   assert.doesNotMatch(history, /<form|mailto:/);
@@ -260,7 +311,7 @@ test('page escapes HTML in company names and titles', () => {
   db.close();
 });
 
-test('a gone posting is hidden on a Pending card and struck through on a History card', () => {
+test('a gone posting is hidden on an unsent card and struck through on a notified one, as Telegram showed it', () => {
   const db = openDb(':memory:');
   const live = posting('m1', 'Software Engineer');
   seed(db, [[company('mix'), [live, posting('m2', 'Backend Engineer')]], [company('old'), [posting('o1', 'Platform Engineer'), posting('o2', 'Data Engineer')]]]);
@@ -268,8 +319,8 @@ test('a gone posting is hidden on a Pending card and struck through on a History
   db.prepare("update signals set status = 'notified' where company_id = 'old'").run();
   const html = handle(db, { method: 'GET', url: '/' }, '2026-11-03').body;
 
-  assert.deepEqual(section(html, 'pending'), ['mix']);
-  assert.match(html, /<\/h1><p>0 apply · 1 outreach · 0 dropped postings<\/p><\/header>/);
+  assert.deepEqual(section(html, 'pending'), ['mix', 'old']);
+  assert.match(html, /<\/h1><p>0 apply · 2 outreach waiting · 0 dropped postings today<\/p><\/header>/);
   const mix = cardOf(html, db, 'mix');
   assert.match(mix, /<li><a href="https:\/\/example.test\/m1">Software Engineer<\/a>/);
   assert.doesNotMatch(mix, /Backend Engineer|<s>|gone/);
@@ -277,14 +328,14 @@ test('a gone posting is hidden on a Pending card and struck through on a History
   const old = cardOf(html, db, 'old');
   assert.match(old, /<ul><li><a href="https:\/\/example.test\/o1">Platform Engineer<\/a> — London <small>\[perm · unknown:🇬🇧 GB\]<\/small><\/li>/);
   assert.match(old, /<li><s><a href="https:\/\/example.test\/o2">Data Engineer<\/a><\/s> — London <small>\[perm · unknown:🇬🇧 GB\] · gone<\/small><\/li><\/ul>/);
-  // Compose on the History card drafts for the live posting only.
+  // Compose on the notified card drafts for the live posting only.
   const href = old.match(/<a role="button" href="(mailto:[^"]+)">Compose<\/a>/)?.[1];
   assert.ok(href);
   assert.equal(decodeURIComponent(href.replaceAll('&amp;', '&').split('&body=')[1]), composeBody('old', ['Platform Engineer']));
   db.close();
 });
 
-test('the page renders a History signal whose postings are all gone', () => {
+test('the page renders a signal whose postings are all gone, in History while new and in Pending once notified', () => {
   const db = openDb(':memory:');
   seed(db, [[company('dead'), [posting('d1', 'Software Engineer')]]]);
   seed(db, [[company('dead'), []]], '2026-11-03');
@@ -295,6 +346,7 @@ test('the page renders a History signal whose postings are all gone', () => {
 
   db.prepare("update signals set status = 'notified'").run();
   const html = handle(db, { method: 'GET', url: '/' }, '2026-11-03').body;
+  assert.deepEqual(section(html, 'pending'), ['dead']);
   const dead = cardOf(html, db, 'dead');
   assert.match(dead, /<li><s><a href="https:\/\/example.test\/d1">Software Engineer<\/a><\/s> — London <small>\[perm · unknown:🇬🇧 GB\] · gone<\/small><\/li>/);
   // No live posting: Compose falls back to every title.
