@@ -76,16 +76,16 @@ test('GET / shows the pending header and each company once, apply first', () => 
   db.close();
 });
 
-test('apply cards get Applied, outreach cards a mailto Compose link built from the template', () => {
+test('apply cards get Mark applied, outreach cards a mailto Compose link built from the template', () => {
   const db = openDb(':memory:');
   standard(db);
   const html = get(db).body;
   const apply = cardOf(html, db, 'zeta');
-  assert.match(apply, /action="\/signal\/[0-9a-f]{64}\/applied"><button>Applied<\/button>/);
+  assert.match(apply, /action="\/signal\/[0-9a-f]{64}\/applied"><button>Mark applied<\/button>/);
   assert.doesNotMatch(apply, /mailto:|Compose/);
 
   const outreach = cardOf(html, db, 'alpha');
-  assert.doesNotMatch(outreach, /Applied/);
+  assert.doesNotMatch(outreach, /Mark applied/);
   const href = outreach.match(/<a role="button" href="(mailto:[^"]+)">Compose<\/a>/)?.[1];
   assert.ok(href);
   const [subject, body] = href.replaceAll('&amp;', '&').slice('mailto:?subject='.length).split('&body=');

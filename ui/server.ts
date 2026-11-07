@@ -25,11 +25,13 @@ const PICO = readFileSync(new URL('./pico.classless.min.css', import.meta.url), 
 
 // What classless Pico lacks: a width cap, the inline button row, secondary outline buttons and status badges.
 const STYLE = `
+  :root { --pico-font-size: 100%; }
   body > header, body > main { max-width: 860px; }
   article ul { margin-bottom: 0; } article li { overflow-wrap: anywhere; }
   article li small, .meta { color: var(--pico-muted-color); } .meta { font-size: .875em; }
   article > footer { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
   article > footer :is(form, fieldset, select, button, [role=button]) { width: auto; margin: 0; }
+  article > footer :is(select, button, [role=button]) { --pico-form-element-spacing-vertical: .3rem; --pico-form-element-spacing-horizontal: .75rem; font-size: .875rem; }
   .secondary.outline { --pico-background-color: transparent; --pico-color: var(--pico-secondary); --pico-border-color: var(--pico-secondary); }
   .secondary.outline:is(:hover, :active, :focus) { --pico-background-color: transparent; --pico-color: var(--pico-secondary-hover); --pico-border-color: var(--pico-secondary-hover); }
   .badge { display: inline-block; font-size: .75em; padding: 0 .5em; border-radius: 1em; color: #fff; background: #777; vertical-align: middle; }
@@ -44,7 +46,7 @@ function actions(rows: SignalRow[], history: boolean): string {
   const secondary = (label: string) => `<button class="secondary outline">${label}</button>`;
   const out: string[] = [];
   if (!history || ['notified', 'snoozed'].includes(status)) {
-    if (list === 'apply') out.push(form('applied', '<button>Applied</button>'));
+    if (list === 'apply') out.push(form('applied', '<button>Mark applied</button>'));
     else {
       // Same titles as the Telegram Compose reply.
       out.push(`<a role="button" href="${escapeHtml(composeMailto(name, composeTitles(rows)))}">Compose</a>`);
