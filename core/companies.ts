@@ -6,7 +6,7 @@ import type { Company } from './types.ts';
 
 export const vendors = [
   'greenhouse', 'lever', 'ashby', 'workable', 'smartrecruiters', 'personio', 'recruitee', 'teamtailor',
-  'bamboohr', 'jazzhr', 'rippling', 'breezy', 'gohire', 'zoho', 'pinpoint', 'hirehive',
+  'bamboohr', 'jazzhr', 'rippling', 'breezy', 'gohire', 'zoho', 'pinpoint', 'hirehive', 'homerun', 'haileyhr',
   'custom', 'unknown',
 ] as const;
 
