@@ -1,8 +1,9 @@
 # Seed list. One entry per company. See docs/SPEC.md "Universe seeding".
 # phases: p1 = contracting target, p2 = agent-enablement target.
-# ats.vendor: greenhouse | lever | ashby | workable | smartrecruiters | personio | recruitee | teamtailor | bamboohr | jazzhr | rippling | breezy | gohire | zoho | custom | unknown
+# ats.vendor: greenhouse | lever | ashby | workable | smartrecruiters | personio | recruitee | teamtailor | bamboohr | jazzhr | rippling | breezy | gohire | zoho | pinpoint | hirehive | custom | unknown
 #   polled (adapters/ats/): greenhouse, lever, personio, teamtailor, jazzhr, bamboohr, breezy, rippling, workable, recruitee,
-#   smartrecruiters, ashby, zoho. gohire has no adapter yet. zoho slugs are {account}/{Portal}.
+#   smartrecruiters, ashby, zoho, pinpoint, hirehive, gohire. zoho slugs are {account}/{Portal}. gohire slugs are the
+#   board's case-sensitive widget hash (widget.gohire.io/widget/{hash}), not its jobs.gohire.io path.
 # storefront: URL to fingerprint, or null for agencies.
 # status: active | paused | watch   (watch = fingerprint daily instead of weekly)
 # 200 seeds since 2026-11-05, 100 of them on a polled vendor. notes starting with ABOVE BAND or WEAK FIT mark seeds
@@ -1159,7 +1160,7 @@
   ats: { vendor: unknown }
   storefront: null
   status: active
-  notes: "Portland ME, 10-49 staff, Shopify; GoHire board under Helm Digital (possible parent); GoHire board jobs.gohire.io/helm-digital-pd37nmt8 (widget hash Pd37nmt8, case matters) was empty on 2026-11-04; keyless JSON at api2.gohire.io/widget-jobs/{hash}; adapter deferred until a populated board is seen"
+  notes: "Portland ME, 10-49 staff, Shopify; GoHire board under Helm Digital (possible parent); GoHire board jobs.gohire.io/helm-digital-pd37nmt8 (widget hash Pd37nmt8, case matters) was empty on 2026-11-04 and again on 2026-11-07 (api2.gohire.io/widget-jobs/Pd37nmt8 has jobs: [], the page says no job openings). The gohire adapter exists since 2026-11-07; set ats to { vendor: gohire, slug: Pd37nmt8 } once the board has a job and Helm Digital is confirmed as First Pier"
 
 - id: dyode
   name: DYODE
@@ -1872,10 +1873,10 @@
   phases: [p1, p2]
   source: bigcommerce-agency-lists
   careers_url: https://jobs.epicdesignlabs.com/
-  ats: { vendor: unknown }
+  ats: { vendor: gohire, slug: mfqEeOYP }
   storefront: null
   status: active
-  notes: "GoHire board (no adapter yet); revisit if a gohire adapter lands"
+  notes: "GoHire board on the agency's own subdomain jobs.epicdesignlabs.com (careers_url), titled Jobs at Epic Design Labs, loading widget.gohire.io/widget/mfqEeOYP; 2 jobs on 2026-11-07, both posted 17 March 2025"
 
 # --- Seeds to 200: Clutch e-commerce developer lists (US, UK, EU country lists), 2026-11-05 ---
 
@@ -2126,10 +2127,10 @@
   phases: [p1, p2]
   source: clutch-uk
   careers_url: https://www.ctidigital.com/about/careers/
-  ats: { vendor: unknown }
+  ats: { vendor: pinpoint, slug: ctidigital }
   storefront: null
   status: active
-  notes: "Manchester; Adobe Commerce; Pinpoint board (ctidigital.pinpointhq.com), not an adapter vendor"
+  notes: "Manchester; Adobe Commerce; Pinpoint board ctidigital.pinpointhq.com, linked from ctidigital.com/about/careers/ (checked 2026-11-07), and its postings name CTI Digital (ctidigital.com) as hiring organization; 2 postings on 2026-11-07"
 
 - id: flatline-agency
   name: Flatline Agency
@@ -2356,10 +2357,10 @@
   phases: [p1, p2]
   source: web-search
   careers_url: https://www.studioforty9.com/pages/careers
-  ats: { vendor: unknown }
+  ats: { vendor: hirehive, slug: studioforty9 }
   storefront: null
   status: active
-  notes: "Dublin, Magento and Shopify agency, size unverified. HireHive board (studioforty9.hirehive.com): not an adapter vendor"
+  notes: "Dublin, Magento and Shopify agency, size unverified. HireHive board studioforty9.hirehive.com, linked from studioforty9.com/pages/careers (checked 2026-11-07), titled Jobs at StudioForty9; 1 job on 2026-11-07 (Client Account Manager, Cork)"
 
 - id: askas
   name: Askås

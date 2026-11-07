@@ -24,9 +24,12 @@ const hostRules: [RegExp, string, 'path' | 'sub' | 'zoho'][] = [
   [/^[\w-]+\.bamboohr\.com$/, 'bamboohr', 'sub'],
   [/^[\w-]+\.breezy\.hr$/, 'breezy', 'sub'],
   [/^ats\.rippling\.com$/, 'rippling', 'path'],
-  [/^jobs\.gohire\.io$/, 'gohire', 'path'],
+  [/^[\w-]+\.pinpointhq\.com$/, 'pinpoint', 'sub'],
+  [/^[\w-]+\.hirehive\.com$/, 'hirehive', 'sub'],
   [/^[\w-]+\.zohorecruit\.(com|eu|in)$/, 'zoho', 'zoho'],
 ];
+// A GoHire slug is the widget hash the board page loads, not its jobs.gohire.io path (see adapters/ats/gohire.ts),
+// so GoHire is found from the page, never from the host.
 
 // A Zoho slug is {account}/{Portal} from /jobs/{Portal}, or {host}/{Portal} off .com (see adapters/ats/zoho.ts).
 // /jobs/Careers/{id}/... is a job page, not a portal.
@@ -57,7 +60,9 @@ const htmlRules: [RegExp, string][] = [
   [/([\w-]+)\.bamboohr\.com/, 'bamboohr'],
   [/([\w-]+)\.breezy\.hr/, 'breezy'],
   [/ats\.rippling\.com\/([\w-]+)/, 'rippling'],
-  [/jobs\.gohire\.io\/([\w-]+)/, 'gohire'],
+  [/widget\.gohire\.io\/widget\/([A-Za-z0-9]+)/, 'gohire'],
+  [/([\w-]+)\.pinpointhq\.com/, 'pinpoint'],
+  [/([\w-]+)\.hirehive\.com/, 'hirehive'],
   [/([\w-]+)\.zohorecruit\.com\/jobs\/(?!Careers\/\d)([\w-]+)/, 'zoho'],
   [/([\w-]+\.zohorecruit\.(?:eu|in))\/jobs\/(?!Careers\/\d)([\w-]+)/, 'zoho'],
 ];
