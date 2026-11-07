@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title type="text">Flatline Agency</title>
+  <subtitle type="html"><![CDATA[Flatline Agency is a global disruptor in custom development &amp; design experiences based in Amsterdam. We deliver high-quality work while leveraging the newest and best technology available.]]></subtitle>
+  <link href="https://feed.homerun.co/flatline-agency_atom_8d482e04e48b62ee7ca5b8ba74853b3fede4faaa0bdab606ef28454b2069d876.xml"></link>
+  <id>https://jobs.flatlineagency.com/</id>
+  <link rel="alternate" type="text/html" href="https://feed.homerun.co/flatline-agency_atom_8d482e04e48b62ee7ca5b8ba74853b3fede4faaa0bdab606ef28454b2069d876.xml" ></link>
+  <link rel="self" type="application/atom+xml" href="https://jobs.flatlineagency.com/" ></link>
+      <logo>https://cdn.homerun.co/68247/d47faaa0-05f4-4582-b520-6f6046d9e99d.png</logo>
+      <updated>2026-10-20T12:17:02+00:00</updated>
+      <entry>
+      <author>
+        <name>Flatline Agency</name>
+      </author>
+      <title type="text">Shopify Consultant</title>
+      <link rel="alternate" type="text/html" href="https://jobs.flatlineagency.com/shopify-consultant"></link>
+      <id>job_SfDfyDBNEHW6kKpAodc7</id>
+      <summary type="html"><![CDATA[Bij Flatline Agency zijn we op zoek naar een Shopify Consultant om ons eCommerce-team te versterken.]]></summary>
+      <content type="html"><![CDATA[Bij Flatline Agency zijn we op zoek naar een Shopify Consultant om ons eCommerce-team te versterken.]]></content>
+      <description type="html"><![CDATA[<p>Bij Flatline Agency zijn we op zoek naar een Shopify Consultant om ons eCommerce-team te versterken.</p><br/><h2>Over ons</h2><p>Wij zijn niet zomaar een digital agency, Flatline Agency creëert unieke customer experiences met behulp van de nieuwste technologieën om merken naar een hoger niveau te tillen. Flatline Agency werkt samen met toonaangevende merken als Bestseller, Stoov, Dekbed Discounter, OGER en Urban Arrow. Om onze sterke groei voort te zetten, zoeken we een Shopify Consultant voor 40 uur per week. Samen met een team van ruim 50 professionals in een 800M2 kantoor met dakterras in de Houthavens Amsterdam werk je aan ambitieuze eCommerceprojecten.</p><br/><h2>Over de rol</h2><p>Als Shopify Consultant ben je de inhoudelijke schakel tussen onze klanten en het projectteam. Je begrijpt de commerciële doelstellingen van de klant en weet deze te vertalen naar slimme, schaalbare oplossingen binnen Shopify.</p><p>Je kent de technische mogelijkheden van Shopify en Shopify Plus, maar hoeft zelf niet te programmeren. Je kunt wel goed samenwerken met developers en begrijpt wat er technisch nodig is om een oplossing te realiseren. Samen met designers, developers, marketeers en projectmanagers zorg je ervoor dat ideeën worden omgezet in succesvolle Shopify-platformen.</p>]]></description>
+      <department>
+        <name>eCommerce</name>
+      </department>
+      <location>
+        <name>Amsterdam</name>
+      </location>
+      <type>
+        <name>Full-time</name>
+      </type>
+      <salary_indication>N/A</salary_indication>
+      <updated>2026-05-01 14:29:50</updated>
+    </entry>
+      <entry>
+      <author>
+        <name>Flatline Agency</name>
+      </author>
+      <title type="text">Recruiter</title>
+      <link rel="alternate" type="text/html" href="https://jobs.flatlineagency.com/recruiter"></link>
+      <id>job_EipTPc3kzojpbJVYvfog</id>
+      <summary type="html"><![CDATA[Vacature voor in-house recruiter bij Flatline Agency]]></summary>
+      <content type="html"><![CDATA[Vacature voor in-house recruiter bij Flatline Agency]]></content>
+      <description type="html"><![CDATA[<p>Bij Flatline Agency zijn we op zoek naar een in-house recruiter (24-40 uur) om ons team te komen versterken.</p><br/><h2>Over ons</h2><p>Flatline Agency is een digital commerce, tech &amp; marketing agency in Amsterdam. We bouwen en runnen de digitale kant van premium merken, van Shopify Plus-stores tot performance marketing en AI. Als Shopify Platinum Partner werken we voor merken als OGÉR, Shimano, Mason Garments en Mystic.</p><p>We groeien hard, en dat zie je aan onze vacaturepagina. Daarom zoeken we iemand die van recruitment een vak maakt.</p><h2>Bouw mee aan het team achter de luxury standard in digital</h2><p>Bij Flatline vinden we dat recruitment meer is dan vacatures vullen. Elke nieuwe collega bepaalt mee hoe ons werk eruitziet en hoe het voelt om hier te werken. Als Inhouse Recruiter ben jij degene die dat talent vindt, overtuigt en binnenhaalt. Je bent daarin ook het visitekaartje van Flatline Agency.</p>]]></description>
+      <department>
+        <name>General</name>
+      </department>
+      <location>
+        <name>Amsterdam</name>
+      </location>
+      <type>
+        <name>Full-time / Part-time</name>
+      </type>
+      <salary_indication>€36000.00 per year</salary_indication>
+      <updated>2026-10-09 07:55:17</updated>
+    </entry>
+  </feed>

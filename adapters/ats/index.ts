@@ -4,6 +4,8 @@ import { ashby } from './ashby.ts';
 import { bamboohr } from './bamboohr.ts';
 import { breezy } from './breezy.ts';
 import { greenhouse } from './greenhouse.ts';
+import { haileyhr } from './haileyhr.ts';
+import { homerun } from './homerun.ts';
 import { jazzhr } from './jazzhr.ts';
 import { lever } from './lever.ts';
 import { personio } from './personio.ts';
@@ -17,7 +19,7 @@ import { zoho } from './zoho.ts';
 
 export const adapters: Record<string, AtsAdapter> = {
   greenhouse, lever, personio, teamtailor, jazzhr, bamboohr, breezy, rippling,
-  workable, recruitee, smartrecruiters, ashby, zoho,
+  workable, recruitee, smartrecruiters, ashby, zoho, homerun, haileyhr,
 };
 
 export async function fetchPostings(company: Company): Promise<NormalizedPosting[]> {

@@ -1,8 +1,10 @@
 # Seed list. One entry per company. See docs/SPEC.md "Universe seeding".
 # phases: p1 = contracting target, p2 = agent-enablement target.
-# ats.vendor: greenhouse | lever | ashby | workable | smartrecruiters | personio | recruitee | teamtailor | bamboohr | jazzhr | rippling | breezy | gohire | zoho | custom | unknown
+# ats.vendor: greenhouse | lever | ashby | workable | smartrecruiters | personio | recruitee | teamtailor | bamboohr | jazzhr | rippling | breezy | gohire | zoho | homerun | haileyhr | custom | unknown
 #   polled (adapters/ats/): greenhouse, lever, personio, teamtailor, jazzhr, bamboohr, breezy, rippling, workable, recruitee,
-#   smartrecruiters, ashby, zoho. gohire has no adapter yet. zoho slugs are {account}/{Portal}.
+#   smartrecruiters, ashby, zoho, homerun, haileyhr. gohire has no adapter yet. zoho slugs are {account}/{Portal}.
+#   homerun slugs are the feed name in the board's feed.homerun.co/{slug} link (not always the board subdomain).
+#   haileyhr slugs are the {slug}.careers.haileyhr.app subdomain.
 # storefront: URL to fingerprint, or null for agencies.
 # status: active | paused | watch   (watch = fingerprint daily instead of weekly)
 # 200 seeds since 2026-11-05, 100 of them on a polled vendor. notes starting with ABOVE BAND or WEAK FIT mark seeds
@@ -377,10 +379,10 @@
   phases: [p1, p2]
   source: commercetools-partners
   careers_url: https://careers.labdigital.nl/
-  ats: { vendor: unknown }
+  ats: { vendor: homerun, slug: labd }
   storefront: null
   status: active
-  notes: "~60 staff, Silver partner; careers on Homerun"
+  notes: "~60 staff, Silver partner; careers on Homerun. Board confirmed 2026-11-07: careers.labdigital.nl, on the agency's own domain, is the Homerun board and links its feed as feed.homerun.co/labd. 6 postings on 2026-11-07"
 
 - id: xsarus-digital-commerce
   name: XSARUS Digital Commerce
@@ -401,10 +403,10 @@
   phases: [p1, p2]
   source: commercetools-partners
   careers_url: https://jobs.dotcontrol.com/
-  ats: { vendor: unknown }
+  ats: { vendor: homerun, slug: dotcontrol }
   storefront: null
   status: active
-  notes: "Rotterdam, ~60 staff; careers on Homerun"
+  notes: "Rotterdam, ~60 staff; careers on Homerun. Board confirmed 2026-11-07: jobs.dotcontrol.com, on the agency's own domain, is the Homerun board and links its feed as feed.homerun.co/dotcontrol. 4 postings on 2026-11-07, one an open application"
 
 - id: rb2
   name: rb2
@@ -542,10 +544,10 @@
   phases: [p1, p2]
   source: commercetools-partners
   careers_url: https://try.house/no/karriere
-  ats: { vendor: unknown }
+  ats: { vendor: homerun, slug: try }
   storefront: null
   status: active
-  notes: "Oslo, TRY group; applications via Homerun"
+  notes: "Oslo, TRY group; applications via Homerun. Board confirmed 2026-11-07: try.house/no/karriere renders its openings from Homerun (fallback text 'Se alle ledige stillinger på Homerun') and lists the same job (sem-raadgiver-3) as try.homerun.co, whose feed is feed.homerun.co/try. The board is the whole TRY group's, not TRY Dig's alone. 2 postings on 2026-11-07, one an open application"
 
 - id: sirocco
   name: Sirocco
@@ -1690,10 +1692,10 @@
   phases: [p1, p2]
   source: shopify-agency-lists
   careers_url: https://kubixmedia.co.uk/careers
-  ats: { vendor: unknown }
+  ats: { vendor: homerun, slug: kubix-media }
   storefront: null
   status: active
-  notes: "Birmingham; Shopify; Homerun widget (not an adapter vendor)"
+  notes: "Birmingham; Shopify. Board confirmed 2026-11-07: the Homerun widget on kubixmedia.co.uk/careers (key kytq3a7a7mfrhcoiqpur) lists jobs on jobs.kubixmedia.co.uk, which links its feed as feed.homerun.co/kubix-media. 6 postings on 2026-11-07, one an open application"
 
 # --- Seeds to 200: BigCommerce partner directory, 2026-11-05 ---
 
@@ -2138,10 +2140,10 @@
   phases: [p1, p2]
   source: clutch-eu
   careers_url: https://jobs.flatlineagency.com/
-  ats: { vendor: unknown }
+  ats: { vendor: homerun, slug: flatline-agency }
   storefront: null
   status: active
-  notes: "Amsterdam, 10-49 (Clutch), Shopify. Homerun"
+  notes: "Amsterdam, 10-49 (Clutch), Shopify. Board confirmed 2026-11-07: jobs.flatlineagency.com, on the agency's own domain, is the Homerun board and links its feed as feed.homerun.co/flatline-agency. 9 postings on 2026-11-07"
 
 - id: shopforward
   name: ShopForward
@@ -2332,10 +2334,10 @@
   phases: [p1, p2]
   source: web-search
   careers_url: https://www.mandogroup.com/
-  ats: { vendor: unknown }
+  ats: { vendor: homerun, slug: mandogroup }
   storefront: null
   status: active
-  notes: "Liverpool digital agency (Optimizely/commerce), size unverified. Homerun board (mandogroup.homerun.co) linked from homepage: not an adapter vendor"
+  notes: "Liverpool digital agency (Optimizely/commerce), size unverified. Board confirmed 2026-11-07: www.mandogroup.com links mandogroup.homerun.co, which links its feed as feed.homerun.co/mandogroup. 1 posting on 2026-11-07, an open application ('I want to work for Mando Group')"
 
 - id: monsoon-consulting
   name: Monsoon Consulting
@@ -2368,10 +2370,10 @@
   phases: [p1, p2]
   source: web-search
   careers_url: https://www.askas.se/sv/jobba-hos-oss
-  ats: { vendor: unknown }
+  ats: { vendor: haileyhr, slug: askas }
   storefront: null
   status: active
-  notes: "Stockholm, Centra/Shopify e-commerce agency, size unverified. Jobs on HaileyHR (askas.careers.haileyhr.app), not an adapter vendor"
+  notes: "Stockholm, Centra/Shopify e-commerce agency, size unverified. Board confirmed 2026-11-07: www.askas.se/sv/jobba-hos-oss links askas.careers.haileyhr.app, and the board's text links back to www.askas.se. 1 posting on 2026-11-07, an open application (Spontanansökan)"
 
 - id: toxic
   name: Toxic
@@ -2380,10 +2382,10 @@
   phases: [p1, p2]
   source: web-search
   careers_url: https://jobb.toxic.se/
-  ats: { vendor: unknown }
+  ats: { vendor: haileyhr, slug: toxic }
   storefront: null
   status: active
-  notes: "Jönköping/Gothenburg/Borås digital agency, Litium and Norce partner. jobb.toxic.se redirects to Hailey HR (not an adapter)"
+  notes: "Jönköping/Gothenburg/Borås digital agency, Litium and Norce partner. Board confirmed 2026-11-07: jobb.toxic.se, on the agency's own domain, redirects to toxic.careers.haileyhr.app, whose job pages link www.toxic.se/integritetspolicy as the company's privacy policy. 1 posting on 2026-11-07"
 
 - id: monogo
   name: Monogo

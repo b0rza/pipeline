@@ -5,6 +5,8 @@ import { ashby } from '../adapters/ats/ashby.ts';
 import { bamboohr } from '../adapters/ats/bamboohr.ts';
 import { breezy } from '../adapters/ats/breezy.ts';
 import { greenhouse } from '../adapters/ats/greenhouse.ts';
+import { haileyhr } from '../adapters/ats/haileyhr.ts';
+import { homerun } from '../adapters/ats/homerun.ts';
 import { fetchPostings } from '../adapters/ats/index.ts';
 import { jazzhr } from '../adapters/ats/jazzhr.ts';
 import { lever } from '../adapters/ats/lever.ts';
@@ -347,6 +349,70 @@ test('zoho RSS: clean url, US-zone date, location from the prefix', () => {
 test('zoho rejects a removed portal and a dead account', () => {
   assert.throws(() => zoho.parse('Oops! It seems that the joblist has been removed.', 'application/rss+xml', 'ziffity/Careers'), /not an RSS feed/);
   assert.throws(() => zoho.parse('<html><head></head><body>Page does not exist</body></html>', 'text/html', 'dead/Jobs'), /not an RSS feed/);
+});
+
+test('homerun Atom feed: description body, UTC entry date, salary only with a figure', () => {
+  const postings = homerun.parse(fixture('homerun.xml'), 'application/xml', 'flatline-agency');
+  assertWellFormed(postings, 2);
+  assert.deepEqual(postings.map((p) => [p.external_id, p.title, p.location, p.url, p.posted_at]), [
+    ['job_SfDfyDBNEHW6kKpAodc7', 'Shopify Consultant', 'Amsterdam', 'https://jobs.flatlineagency.com/shopify-consultant', '2026-05-01T14:29:50.000Z'],
+    ['job_EipTPc3kzojpbJVYvfog', 'Recruiter', 'Amsterdam', 'https://jobs.flatlineagency.com/recruiter', '2026-10-09T07:55:17.000Z'],
+  ]);
+  assert.ok(postings[0].body.startsWith('Bij Flatline Agency zijn we op zoek naar een Shopify Consultant om ons eCommerce-team te versterken.\n\nOver ons\n'));
+  assert.ok(postings[1].body.includes('digital commerce, tech & marketing agency'), 'entities decoded');
+  assert.deepEqual(postings[0].raw, { department: 'eCommerce', type: 'Full-time', salary: null });
+  assert.deepEqual(postings[1].raw, { department: 'General', type: 'Full-time / Part-time', salary: '€36000.00 per year' });
+  assert.equal(homerun.feedUrl('labd'), 'https://feed.homerun.co/labd');
+});
+
+test('homerun: an empty feed is no postings, an HTML page throws', () => {
+  const empty = '<?xml version="1.0" encoding="UTF-8" ?>\n<feed xmlns="http://www.w3.org/2005/Atom">\n'
+    + '  <title type="text">Nobody</title>\n  <updated>2026-01-15T11:08:51+00:00</updated>\n</feed>\n';
+  assert.deepEqual(homerun.parse(empty, 'application/xml', 'nobody'), []);
+  assert.throws(() => homerun.parse('<!doctype html><html><body>404</body></html>', 'text/html', 'dead'), /not an Atom feed/);
+  assert.throws(() => homerun.parse('<?xml version="1.0"?><rss></rss>', 'application/xml', 'dead'), /no <feed>/);
+});
+
+test('haileyhr board page lists every job ad from the flight payload', () => {
+  const list = haileyhr.parse(fixture('haileyhr-list.html'), 'text/html; charset=utf-8', 'motillo');
+  assert.equal(list.length, 5);
+  assert.deepEqual(list.map((p) => [p.title, p.location, p.body, p.posted_at]).slice(3), [
+    ['Ecommerce Manager', 'Karlstad', '', null],
+    ['Spontanansökan', null, '', null],
+  ]);
+  assert.equal(list[0].external_id, '7893d12a-3ca8-43ac-9b81-9f285b600e87');
+  assert.equal(list[0].url, 'https://motillo.careers.haileyhr.app/sv-SE/job/794111fe-4447-49ff-867f-ceef14d1d8ff/cc435cff-4528-42e1-a880-d332557d933e/7893d12a-3ca8-43ac-9b81-9f285b600e87');
+  assert.deepEqual(list[4].raw, {
+    department: null, subtitle: 'Hittar du ingen tjänst som passar just nu? Vi vill ändå gärna höra från dig',
+    recruitment_id: '667e3230-8f64-4af4-8b0f-269ba2b70e27',
+  });
+  assert.equal(haileyhr.detail!.url(list[0], 'motillo'), list[0].url);
+  assert.equal(haileyhr.feedUrl('toxic'), 'https://toxic.careers.haileyhr.app/');
+});
+
+test('haileyhr job page: markdown description row to plain text', () => {
+  const posting = {
+    external_id: 'a7a71795-43fe-45ed-9cfa-8438ec1b9e19', title: 'Backend-utvecklare till Team Tetris', location: 'Jönköping',
+    url: 'https://toxic.careers.haileyhr.app/sv-SE/job/5e392ad9-da08-41a9-8af2-05a22257aa75/fc5730ed-8a00-4c82-b95b-88f0515522bd/a7a71795-43fe-45ed-9cfa-8438ec1b9e19',
+    body: '', posted_at: null, raw: { department: 'Development', subtitle: null, recruitment_id: 'fc5730ed-8a00-4c82-b95b-88f0515522bd' },
+  };
+  const job = haileyhr.detail!.parse(fixture('haileyhr-job.html'), 'text/html; charset=utf-8', posting);
+  assert.ok(job.body.startsWith('Team Tetris söker en backend-stjärna som vill jobba med C# .Net/.Net Core, SQL & API-integrationer'), job.body);
+  assert.ok(job.body.includes('\n\nVem är du?\n\n'), 'bold heading unwrapped');
+  assert.ok(job.body.includes('\n\nLön: Individuell lönesättning\n\n'), 'escaped bold unwrapped');
+  assert.ok(job.body.endsWith('Tveka inte att skicka in din ansökan!'), 'row cut at its byte length');
+  assert.ok(!/[*#\\]{2}|<|\$/.test(job.body.replace(/C#/g, '')), 'no markdown or flight left');
+  assert.deepEqual({ ...job, body: '' }, posting);
+});
+
+test('haileyhr rejects a page without job ads or description', () => {
+  const page = '<html><body><script>self.__next_f.push([1,"0:[\\"$\\",\\"div\\",null,{}]\\n"])</script></body></html>';
+  assert.throws(() => haileyhr.parse(page, 'text/html', 'dead'), /no jobAds/);
+  assert.throws(() => haileyhr.parse('Not Found', 'text/plain', 'dead'), /not a board page/);
+  const [p] = haileyhr.parse(fixture('haileyhr-list.html'), 'text/html', 'motillo');
+  assert.throws(() => haileyhr.detail!.parse(page, 'text/html', p), /no description/);
+  const empty = '<script>self.__next_f.push([1,"4:{\\"jobAds\\":[],\\"x\\":1}\\n"])</script>';
+  assert.deepEqual(haileyhr.parse(empty, 'text/html', 'askas'), []);
 });
 
 test('normalized postings carry no body_html', () => {
