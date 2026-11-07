@@ -96,16 +96,23 @@ function actions(rows: SignalRow[], history: boolean): string {
 
 interface Past { id: string; run_date: string; skip_reason: string | null; snooze_until: string | null }
 
+// Local time of day (the service's TZ) of a run's started_at, or nothing when the run has no row or an odd value.
+export function runTime(startedAt: string | undefined): string {
+  const d = new Date(startedAt ?? '');
+  if (Number.isNaN(d.getTime())) return '';
+  return ` ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+}
+
 // A history card (past given) also shows status, skip reason and snooze date; skip_reason and snooze_until are not in SignalRow.
 // A pending card only marks what the digest has not sent yet: the owner can act on it here before it reaches Telegram.
-function card(rows: SignalRow[], past?: Past): string {
+function card(rows: SignalRow[], runs: Map<string, string>, past?: Past): string {
   const { id, run_date, list, status, name, country, ats_vendor, warm } = rows[0];
   const history = past !== undefined;
   const { skip_reason, snooze_until } = past ?? { skip_reason: null, snooze_until: null };
   const badge = history ? ` <span class="badge b-${escapeHtml(status)}">${escapeHtml(status)}</span>`
     : ['new', 'snoozed'].includes(status) ? ' <span class="badge b-unsent">not sent yet</span>' : '';
   const head = `${warm ? '🔥 warm · ' : ''}<b>${escapeHtml(name)}</b> · ${escapeHtml(withFlag(country))} · ${escapeHtml(ats_vendor)}` +
-    ` · <b>${list.toUpperCase()}</b> · run ${escapeHtml(run_date)}${badge}`;
+    ` · <b>${list.toUpperCase()}</b> · run ${escapeHtml(run_date)}${runTime(runs.get(run_date))}${badge}`;
   const meta = [skip_reason && `skipped: ${escapeHtml(skip_reason)}`, snooze_until && `snoozed until ${escapeHtml(snooze_until)}`]
     .filter(Boolean);
   const postings = rows.map((p) => {
@@ -135,8 +142,11 @@ function page(db: DatabaseSync, today: string): string {
   const apply = waiting.filter((s) => s[0].list === 'apply').length;
   const header = `${apply} apply · ${waiting.length - apply} outreach waiting · ${droppedCount(db, today)} dropped postings today`;
 
+  // When each run started, for the card header.
+  const runs = new Map((db.prepare('select run_date, started_at from runs').all() as { run_date: string; started_at: string }[])
+    .map((r) => [r.run_date, r.started_at]));
   const byDate = new Map<string, string[]>();
-  for (const s of others) byDate.set(s.run_date, [...(byDate.get(s.run_date) ?? []), card(signalRows(db, s.id), s)]);
+  for (const s of others) byDate.set(s.run_date, [...(byDate.get(s.run_date) ?? []), card(signalRows(db, s.id), runs, s)]);
   const history = [...byDate].map(([date, cards]) => `<h3>${escapeHtml(date)}</h3>${cards.join('')}`).join('');
 
   // Rendered with Pending open; TABS_SCRIPT switches by the address before the page shows.
@@ -147,7 +157,7 @@ function page(db: DatabaseSync, today: string): string {
     `<header><button id="theme" class="secondary outline" onclick="toggleTheme()">light / dark</button>` +
     `<h1>Pipeline overview ${escapeHtml(today)}</h1><p>${header}</p></header><main>` +
     `<nav id="tabs">${tab('pending', 'Pending', waiting.length, true)}${tab('history', 'History', others.length, false)}</nav>` +
-    `<section id="sec-pending">${waiting.map((rows) => card(rows)).join('') || '<p>Nothing pending.</p>'}</section>` +
+    `<section id="sec-pending">${waiting.map((rows) => card(rows, runs)).join('') || '<p>Nothing pending.</p>'}</section>` +
     `<section id="sec-history" hidden>${history || '<p>No past signals.</p>'}</section></main>` +
     `<script>${TABS_SCRIPT}</script></body></html>`;
 }

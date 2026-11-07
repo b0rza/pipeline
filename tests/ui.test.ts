@@ -9,7 +9,7 @@ import { diffRun } from '../core/diff.ts';
 import { filterRun } from '../core/filter.ts';
 import { snapshotCompany } from '../core/snapshot.ts';
 import type { Company, NormalizedPosting } from '../core/types.ts';
-import { handle } from '../ui/server.ts';
+import { handle, runTime } from '../ui/server.ts';
 
 const company = (id: string, extra: Partial<Company> = {}): Company => ({
   id, name: id, domain: `${id}.test`, country: 'GB', phases: ['p1'],
@@ -176,11 +176,11 @@ test('Pending holds what waits on the owner: notified signals with buttons, unse
   assert.doesNotMatch(warmco, /badge|notified|not sent yet/);
   assert.match(warmco, /Compose.*Skip.*Snooze 7d/);
   assert.doesNotMatch(warmco, /Reopen/);
-  assert.match(cardOf(html, db, 'zeta'), /<b>APPLY<\/b> · run 2026-11-02<\/header>.*<button>Mark applied<\/button>/);
+  assert.match(cardOf(html, db, 'zeta'), /<b>APPLY<\/b> · run 2026-11-02 \d\d:\d\d<\/header>.*<button>Mark applied<\/button>/);
 
   // Not in Telegram yet: marked, and actionable here.
   const alpha = cardOf(html, db, 'alpha');
-  assert.match(alpha, /<b>OUTREACH<\/b> · run 2026-11-02 <span class="badge b-unsent">not sent yet<\/span><\/header>/);
+  assert.match(alpha, /<b>OUTREACH<\/b> · run 2026-11-02 \d\d:\d\d <span class="badge b-unsent">not sent yet<\/span><\/header>/);
   assert.match(alpha, /Compose.*Skip.*Snooze 7d/);
 
   // A snoozed signal that is due again is unsent too; one still snoozed is History.
@@ -353,5 +353,20 @@ test('the page renders a signal whose postings are all gone, in History while ne
   const href = dead.match(/<a role="button" href="(mailto:[^"]+)">Compose<\/a>/)?.[1];
   assert.ok(href);
   assert.equal(decodeURIComponent(href.replaceAll('&amp;', '&').split('&body=')[1]), composeBody('dead', ['Software Engineer']));
+  db.close();
+});
+
+test('the card header shows the local time the run started, and only the date when the run has no row', () => {
+  const db = openDb(':memory:');
+  standard(db);
+  const startedAt = '2026-11-02T14:34:53.325Z';
+  db.prepare('delete from runs').run();
+  assert.match(cardOf(get(db).body, db, 'zeta'), /run 2026-11-02(<| <span)/);
+  db.prepare('insert into runs (run_date, started_at) values (?, ?)').run(today, startedAt);
+  const d = new Date(startedAt);
+  const hhmm = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+  assert.match(cardOf(get(db).body, db, 'zeta'), new RegExp(`run 2026-11-02 ${hhmm}(<| <span)`));
+  assert.equal(runTime(undefined), '');
+  assert.equal(runTime('not a date'), '');
   db.close();
 });
