@@ -2493,7 +2493,7 @@
   phases: [p1]
   source: desirable-employers
   careers_url: https://www.klarna.com/careers/
-  ats: { vendor: unknown }
+  ats: { vendor: deel, slug: klarna }
   storefront: null
   status: active
   employer:
@@ -2588,7 +2588,7 @@
   phases: [p1]
   source: desirable-employers
   careers_url: https://www.shopify.com/careers
-  ats: { vendor: unknown }
+  ats: { vendor: shopify-careers, slug: www.shopify.com }
   storefront: null
   status: active
   employer:
@@ -2626,7 +2626,7 @@
   phases: [p1]
   source: desirable-employers
   careers_url: https://www.bigcommerce.com/company/careers/flexible-working/
-  ats: { vendor: unknown }
+  ats: { vendor: workday, slug: bigcommerce.wd12/Commerce }
   storefront: null
   status: active
   employer:
@@ -3234,7 +3234,7 @@
   phases: [p1]
   source: desirable-employers
   careers_url: https://www.infobip.com/careers
-  ats: { vendor: unknown }
+  ats: { vendor: workday, slug: infobip.wd3/InfobipCareers }
   storefront: null
   status: active
   employer:
@@ -3329,7 +3329,7 @@
   phases: [p1]
   source: desirable-employers
   careers_url: https://remote.com/careers
-  ats: { vendor: unknown }
+  ats: { vendor: remote-ats, slug: apply.remote.com }
   storefront: null
   status: active
   employer:
@@ -3357,7 +3357,7 @@
     why: "Fully remote since 2014, 43 countries; React/TypeScript full-stack roles, mid-size product company with a known process"
     remote: { europe: yes, says: "Fully remote since 2014, people in 43 countries and 16 time zones; no openings shown today", source: "https://toggl.com/jobs/" }
     engagement: unknown
-  notes: "Board is Toggl Hire, its own product (apply.hire.toggl.com); workable returned an empty 200 that proves nothing. Process: timed test, live coding, paid test week (https://toggl.com/jobs/togglhire-fullstack). A Senior Full Stack role (~EUR 83k, UTC-4 to UTC+4, Oct 2026) seen only on aggregators (unverified)"
+  notes: "2026-11-09: toggl.com/jobs now loads an Ashby embed (jobs.ashbyhq.com/toggl/embed) with 0 postings, and Ashby's posting API returns 404 for slug toggl, so it stays unknown; set ats to { vendor: ashby, slug: toggl } once a role is listed. Earlier research said Toggl Hire, its own product (apply.hire.toggl.com); workable returned an empty 200 that proves nothing. Process: timed test, live coding, paid test week (https://toggl.com/jobs/togglhire-fullstack). A Senior Full Stack role (~EUR 83k, UTC-4 to UTC+4, Oct 2026) seen only on aggregators (unverified)"
 
 # --- Your network: past clients, current agency's clients, Studion alumni companies ---
 # Add entries here by hand. Highest reply rate of any source (SPEC "Universe seeding").
