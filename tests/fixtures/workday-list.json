@@ -1,0 +1,27 @@
+{
+  "total": 141,
+  "jobPostings": [
+    {
+      "title": "Account Executive",
+      "externalPath": "/job/Santiago-de-Chile-Chile/Account-Executive_JR104479",
+      "locationsText": "Santiago de Chile (Chile)",
+      "postedOn": "Posted Today",
+      "remoteType": "Hybrid",
+      "bulletFields": [
+        "JR104479"
+      ]
+    },
+    {
+      "title": "Mid/Senior Software Engineer",
+      "externalPath": "/job/Sarajevo-BiH/Mid-Senior-Software-Engineer_JR105108",
+      "locationsText": "Sarajevo (BiH)",
+      "postedOn": "Posted 4 Days Ago",
+      "remoteType": "Hybrid",
+      "bulletFields": [
+        "JR105108"
+      ]
+    }
+  ],
+  "facets": [],
+  "userAuthenticated": false
+}

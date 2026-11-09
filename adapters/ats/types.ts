@@ -1,8 +1,21 @@
 import type { NormalizedPosting } from '../../core/types.ts';
 
+// One feed request. fetchText sends it, so a POST waits its turn on the host, backs off and fails like a GET.
+export interface FeedRequest {
+  url: string;
+  method?: 'GET' | 'POST';
+  body?: string;
+  headers?: Record<string, string>;
+}
+
 export interface AtsAdapter {
   vendor: string;
   feedUrl(slug: string): string;
+  // For feeds read with something other than a plain GET of feedUrl (Workday: a POST with a JSON body). Pure.
+  feedRequest?(slug: string): FeedRequest;
+  // For feeds paged inside the request body: the request after `req`, or null on the last page. Pure. Used instead
+  // of next() when set.
+  nextRequest?(text: string, contentType: string, req: FeedRequest): FeedRequest | null;
   // Pure: no I/O, so fixtures can test it. Throws on a response that isn't this vendor's feed.
   parse(text: string, contentType: string, slug: string): NormalizedPosting[];
   // For feeds that list postings without a body: fetchPostings fetches url() for each listed posting and

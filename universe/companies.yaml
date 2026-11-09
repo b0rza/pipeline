@@ -1,8 +1,11 @@
 # Seed list. One entry per company. See docs/SPEC.md "Universe seeding".
 # phases: p1 = contracting target, p2 = agent-enablement target.
-# ats.vendor: greenhouse | lever | ashby | workable | smartrecruiters | personio | recruitee | teamtailor | bamboohr | jazzhr | rippling | breezy | gohire | zoho | custom | unknown
+# ats.vendor: greenhouse | lever | ashby | workable | smartrecruiters | personio | recruitee | teamtailor | bamboohr | jazzhr | rippling | breezy | gohire | zoho | workday | deel | shopify-careers | remote-ats | custom | unknown
 #   polled (adapters/ats/): greenhouse, lever, personio, teamtailor, jazzhr, bamboohr, breezy, rippling, workable, recruitee,
-#   smartrecruiters, ashby, zoho. gohire has no adapter yet. zoho slugs are {account}/{Portal}.
+#   smartrecruiters, ashby, zoho, workday, deel, shopify-careers, remote-ats. gohire has no adapter yet.
+#   zoho slugs are {account}/{Portal}. workday slugs are {tenant}.{wdN}/{site} (infobip.wd3/InfobipCareers). deel slugs
+#   are the jobs.deel.com org path (klarna). shopify-careers and remote-ats are one company's own board each; the slug is
+#   the board host (www.shopify.com, apply.remote.com).
 # storefront: URL to fingerprint, or null for agencies.
 # status: active | paused | watch   (watch = fingerprint daily instead of weekly)
 # 200 seeds since 2026-11-05, 100 of them on a polled vendor. notes starting with ABOVE BAND or WEAK FIT mark seeds

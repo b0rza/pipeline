@@ -190,3 +190,20 @@ test('eligible tags remote restricted to one country', () => {
   // the scope is only for remote
   assert.deepEqual(eligible('hybrid', 'GB', 'Hybrid / London', 'GB'), { ok: true, reason: 'hybrid:GB' });
 });
+
+test('raw fields written by the workday, deel, shopify-careers and remote-ats adapters', () => {
+  // workday: remoteType as workplace_type, the requisition country as country
+  const infobip = { workplace_type: 'hybrid', on_site: null, country: 'BA' };
+  assert.equal(workMode('Mid/Senior Software Engineer', 'Sarajevo (BiH)', '', infobip), 'hybrid');
+  assert.equal(workCountry('Sarajevo (BiH)', infobip, 'HR'), 'BA');
+  const zagreb = { workplace_type: 'onsite', on_site: true, country: 'HR' };
+  assert.equal(workMode('Engineer', 'Zagreb (Croatia)', '', zagreb), 'onsite');
+  assert.equal(workMode('Engineer', 'United States - Remote', '', { workplace_type: 'remote', country: 'US' }), 'remote');
+  // deel: workArrangementEnum ON_SITE as on_site, flight-data country codes as countries
+  const klarna = { workplace_type: 'onsite', on_site: true, remote: null, countries: ['GB'] };
+  assert.equal(workMode('Fraud Operations Lead', 'London', 'Remote-first culture.', klarna), 'onsite');
+  assert.equal(workCountry('London', klarna, 'SE'), 'GB');
+  // shopify-careers and remote-ats: Ashby's workplaceType "Remote", Remote's workplace "remote"
+  assert.equal(workMode('Engineer', 'Remote - Ireland', '', { remote: true, workplace_type: 'Remote' }), 'remote');
+  assert.equal(workMode('Principal CRM Engineer', 'EMEA, NORAM', '', { workplace_type: 'remote' }), 'remote');
+});

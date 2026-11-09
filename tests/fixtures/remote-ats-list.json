@@ -1,0 +1,62 @@
+{
+  "jobs": [
+    {
+      "status": "open",
+      "description": ".",
+      "title": "Risk Officer - Remote Payment Services (UK)",
+      "location": "EMEA",
+      "tags": [],
+      "application_id": null,
+      "employment_type": "Full-time",
+      "department": "Risk Operations",
+      "requirements": null,
+      "pwd_role": false,
+      "opened_at": "2026-11-09T10:39:19Z",
+      "accepting_applications": true,
+      "public_id": "fc3c75d0-1579-4543-a609-a5df117d7861",
+      "workplace": "remote",
+      "already_applied": false,
+      "pay": {
+        "rows": [
+          {
+            "code": null,
+            "max": 75400,
+            "min": 67050,
+            "currency": "GBP",
+            "range_text": "£67,050 to £75,400"
+          }
+        ],
+        "range_text": "£67,050 to £75,400"
+      }
+    },
+    {
+      "status": "open",
+      "description": ".",
+      "title": "Principal CRM Engineer",
+      "location": "EMEA, NORAM",
+      "tags": [],
+      "application_id": null,
+      "employment_type": "Full-time",
+      "department": "Sales",
+      "requirements": null,
+      "pwd_role": false,
+      "opened_at": "2026-10-30T09:52:09Z",
+      "accepting_applications": true,
+      "public_id": "ef51d083-81fa-4e0d-ba06-278df11a7630",
+      "workplace": "remote",
+      "already_applied": false,
+      "pay": {
+        "rows": [
+          {
+            "code": null,
+            "max": 212130,
+            "min": 188560,
+            "currency": "USD",
+            "range_text": "$188,560 to $212,130"
+          }
+        ],
+        "range_text": "$188,560 to $212,130"
+      }
+    }
+  ]
+}

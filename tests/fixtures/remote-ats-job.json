@@ -1,0 +1,451 @@
+{
+  "job": {
+    "status": "open",
+    "description": ".",
+    "title": "Principal CRM Engineer",
+    "location": "EMEA, NORAM",
+    "tags": [],
+    "application_id": null,
+    "employment_type": "Full-time",
+    "department": "Sales",
+    "advert_sections": [
+      {
+        "doc": {
+          "content": [
+            {
+              "content": [
+                {
+                  "marks": [
+                    "bold"
+                  ],
+                  "size": "lg",
+                  "text": "About Remote"
+                }
+              ],
+              "type": "heading"
+            },
+            {
+              "content": [
+                {
+                  "text": "Remote is building the infrastructure that makes global payroll and employment possible for everyone, everywhere. Our team is made up of people who want to own a piece of that work, not just contribute to it. That work happens across six continents, only Antarctica left to go, entirely remote. It also requires real fluency with AI in every role, not just familiarity with it."
+                }
+              ],
+              "type": "paragraph"
+            },
+            {
+              "content": [
+                {
+                  "text": "Our standards are high, and the ownership is total. You'll have the trust and space to find your own way to the best answer, and the support to see it through, because that's how we build things that actually work at this scale. In return, your career grows faster, because at Remote, growth is tied to results. We're founded on the principle that where someone lives should never limit what they can achieve, and we operate exactly that way."
+                }
+              ],
+              "type": "paragraph"
+            },
+            {
+              "content": [
+                {
+                  "marks": [
+                    "bold"
+                  ],
+                  "size": "lg",
+                  "text": "What this job can offer you"
+                }
+              ],
+              "type": "heading"
+            },
+            {
+              "content": [
+                {
+                  "text": "As a Principal CRM Engineer, you set the technical standards and architectural direction for Remote's CRM platform. You lead pivotal company-wide initiatives, make decisions that shape the entire RevOps function, and provide thought leadership on how our revenue systems evolve. You combine deep platform expertise with the conceptual thinking required to tackle problems that have no established answer and you build the capability of the engineers around you, including how the team designs and works with AI and agentic systems."
+                }
+              ],
+              "type": "paragraph"
+            },
+            {
+              "content": [
+                {
+                  "marks": [
+                    "bold"
+                  ],
+                  "size": "lg",
+                  "text": "Key Responsibilities"
+                }
+              ],
+              "type": "heading"
+            },
+            {
+              "content": [
+                {
+                  "marks": [
+                    "bold"
+                  ],
+                  "text": "Architecture & Technical Direction"
+                }
+              ],
+              "type": "paragraph"
+            },
+            {
+              "content": [
+                {
+                  "text": "Own the architectural direction of the CRM platform, making decisions that impact the entire RevOps function"
+                }
+              ],
+              "type": "bulleted"
+            },
+            {
+              "content": [
+                {
+                  "text": "Set the technical standards and best practices the team builds to, and ensure the technical infrastructure supports functional goals"
+                }
+              ],
+              "type": "bulleted"
+            },
+            {
+              "content": [
+                {
+                  "text": "Evaluate intangible factors and second-order consequences in build-versus-buy and platform decisions, including where the answer isn't established"
+                }
+              ],
+              "type": "bulleted"
+            },
+            {
+              "content": [
+                {
+                  "text": "Challenge existing approaches rather than defaulting to how things have been done"
+                }
+              ],
+              "type": "bulleted"
+            },
+            {
+              "content": [
+                {
+                  "marks": [
+                    "bold"
+                  ],
+                  "text": "AI and Agentic Engineering"
+                }
+              ],
+              "type": "paragraph"
+            },
+            {
+              "content": [
+                {
+                  "text": "Design agentic workflows with bounded ownership of meaningful end-to-end work, defining the observable outcomes, constraints and checks that determine completion"
+                }
+              ],
+              "type": "bulleted"
+            },
+            {
+              "content": [
+                {
+                  "text": "Establish how AI-generated output is verified before it reaches human review, and own the standards that keep accountability where consequences demand it"
+                }
+              ],
+              "type": "bulleted"
+            },
+            {
+              "content": [
+                {
+                  "text": "Build recurring context, tooling and checks into the shared system so improvements are inherited rather than repeated"
+                }
+              ],
+              "type": "bulleted"
+            },
+            {
+              "content": [
+                {
+                  "text": "Treat repeated avoidable intervention as a system defect and design it out"
+                }
+              ],
+              "type": "bulleted"
+            },
+            {
+              "content": [
+                {
+                  "marks": [
+                    "bold"
+                  ],
+                  "text": "Pivotal Initiatives"
+                }
+              ],
+              "type": "paragraph"
+            },
+            {
+              "content": [
+                {
+                  "text": "Lead company-wide initiatives that shape revenue operations, customer experience and company strategy"
+                }
+              ],
+              "type": "bulleted"
+            },
+            {
+              "content": [
+                {
+                  "text": "Tackle unique and ambiguous problems that require conceptual thinking rather than established patterns"
+                }
+              ],
+              "type": "bulleted"
+            },
+            {
+              "content": [
+                {
+                  "text": "Own the technical approach on work spanning multiple systems, teams and functions"
+                }
+              ],
+              "type": "bulleted"
+            },
+            {
+              "content": [
+                {
+                  "marks": [
+                    "bold"
+                  ],
+                  "text": "Thought Leadership & Influence"
+                }
+              ],
+              "type": "paragraph"
+            },
+            {
+              "content": [
+                {
+                  "text": "Establish networks across Engineering, Data, Finance and Product, and represent the platform in cross-functional technical decisions"
+                }
+              ],
+              "type": "bulleted"
+            },
+            {
+              "content": [
+                {
+                  "text": "Communicate complex technical concepts to diverse stakeholders, from engineers to executive leadership"
+                }
+              ],
+              "type": "bulleted"
+            },
+            {
+              "content": [
+                {
+                  "text": "Advise leadership on platform risk, technical debt and the strategic implications of architectural choices"
+                }
+              ],
+              "type": "bulleted"
+            },
+            {
+              "content": [
+                {
+                  "text": "Anticipate change and prepare the team for it"
+                }
+              ],
+              "type": "bulleted"
+            },
+            {
+              "content": [
+                {
+                  "marks": [
+                    "bold"
+                  ],
+                  "text": "Capability Building"
+                }
+              ],
+              "type": "paragraph"
+            },
+            {
+              "content": [
+                {
+                  "text": "Develop the engineers around you, mentoring Senior Developers toward architectural thinking"
+                }
+              ],
+              "type": "bulleted"
+            },
+            {
+              "content": [
+                {
+                  "text": "Raise the team's capability in AI-assisted and agentic engineering, including the judgement to validate what these tools produce"
+                }
+              ],
+              "type": "bulleted"
+            },
+            {
+              "content": [
+                {
+                  "text": "Foster professional growth and a culture of continuous improvement within the team"
+                }
+              ],
+              "type": "bulleted"
+            },
+            {
+              "content": [
+                {
+                  "text": "Share knowledge openly and set the bar on quality through review and pairing"
+                }
+              ],
+              "type": "bulleted"
+            },
+            {
+              "content": [
+                {
+                  "marks": [
+                    "bold"
+                  ],
+                  "size": "lg",
+                  "text": "What you bring"
+                }
+              ],
+              "type": "heading"
+            },
+            {
+              "content": [
+                {
+                  "text": "Extensive CRM engineering experience, including large-scale migration, re-architecture or equivalent transformative work"
+                }
+              ],
+              "type": "bulleted"
+            },
+            {
+              "content": [
+                {
+                  "text": "Expert-level Apex, LWC and SOQL, with demonstrated problem-solving at volume and under platform constraints"
+                }
+              ],
+              "type": "bulleted"
+            },
+            {
+              "content": [
+                {
+                  "text": "Demonstrated experience designing AI-assisted or agentic workflows in production, with the technical depth to validate their output"
+                }
+              ],
+              "type": "bulleted"
+            },
+            {
+              "content": [
+                {
+                  "text": "Proven ownership of architectural decisions with function-wide or organisation-wide impact"
+                }
+              ],
+              "type": "bulleted"
+            },
+            {
+              "content": [
+                {
+                  "text": "Ability to reason across systems beyond the CRM, including data platforms, billing and revenue systems"
+                }
+              ],
+              "type": "bulleted"
+            },
+            {
+              "content": [
+                {
+                  "text": "Track record of influencing senior stakeholders and shaping technical strategy"
+                }
+              ],
+              "type": "bulleted"
+            },
+            {
+              "content": [
+                {
+                  "text": "Demonstrated mentorship and capability-building with senior engineers"
+                }
+              ],
+              "type": "bulleted"
+            },
+            {
+              "content": [
+                {
+                  "text": "Salesforce Platform Developer II and Application or System Architect certification, or equivalent depth in a comparable CRM platform"
+                }
+              ],
+              "type": "bulleted"
+            },
+            {
+              "content": [
+                {
+                  "marks": [
+                    "bold"
+                  ],
+                  "size": "lg",
+                  "text": "Application process"
+                }
+              ],
+              "type": "heading"
+            },
+            {
+              "content": [
+                {
+                  "text": "Interview with recruiter"
+                }
+              ],
+              "type": "numbered"
+            },
+            {
+              "content": [
+                {
+                  "text": "Interview with hiring manager"
+                }
+              ],
+              "type": "numbered"
+            },
+            {
+              "content": [
+                {
+                  "text": "Team Interview with small live exercise"
+                }
+              ],
+              "type": "numbered"
+            },
+            {
+              "content": [
+                {
+                  "text": "Bar raiser interview"
+                }
+              ],
+              "type": "numbered"
+            },
+            {
+              "content": [
+                {
+                  "text": "Offer and "
+                },
+                {
+                  "href": "https://www.notion.so/Veremark-Remote-96e108c037b8423cbd4c3f07a1f9b38b",
+                  "text": "Prior employment verification check"
+                }
+              ],
+              "type": "numbered"
+            },
+            {
+              "content": [
+                {
+                  "text": "#LI-DNI"
+                }
+              ],
+              "type": "paragraph"
+            }
+          ],
+          "type": "doc"
+        },
+        "key": "job_description",
+        "heading": "Job Description"
+      }
+    ],
+    "requirements": null,
+    "pwd_role": false,
+    "opened_at": "2026-10-30T09:52:09Z",
+    "accepting_applications": true,
+    "public_id": "ef51d083-81fa-4e0d-ba06-278df11a7630",
+    "workplace": "remote",
+    "reapply_restricted": false,
+    "already_applied": false,
+    "pay_heading": "Compensation",
+    "pay": {
+      "rows": [
+        {
+          "code": null,
+          "max": 212130,
+          "min": 188560,
+          "currency": "USD",
+          "range_text": "$188,560 to $212,130"
+        }
+      ],
+      "range_text": "$188,560 to $212,130"
+    }
+  }
+}
