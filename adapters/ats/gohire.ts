@@ -51,6 +51,7 @@ export const gohire: AtsAdapter = {
     }));
   },
   detail: {
+    sets: ['body'],
     url: (posting) => posting.url,
     parse(html, _contentType, posting) {
       const m = html.match(/<div class="jp-text">([\s\S]*?)<div class="jp-btm">/);

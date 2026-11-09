@@ -64,6 +64,7 @@ export const shopifyCareers: AtsAdapter = {
     });
   },
   detail: {
+    sets: ['body', 'posted_at', 'raw'],
     url: (posting) => posting.url,
     parse(text, contentType, posting) {
       const data = loaderData(html(text, contentType, 'detail'), '($locale)/careers/$posting');

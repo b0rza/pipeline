@@ -8,6 +8,8 @@ export interface FeedRequest {
   headers?: Record<string, string>;
 }
 
+export type DetailField = keyof NormalizedPosting;
+
 export interface AtsAdapter {
   vendor: string;
   feedUrl(slug: string): string;
@@ -23,6 +25,13 @@ export interface AtsAdapter {
   detail?: {
     url(posting: NormalizedPosting, slug: string): string;
     parse(text: string, contentType: string, posting: NormalizedPosting): NormalizedPosting;
+    // The fields parse() takes from the detail response. A posting already stored and still live is not fetched
+    // again: these fields come from its stored row, the rest from the list (fetchBoard in index.ts). Title and
+    // location come from the list whenever the list carries them, even when parse() also sets them.
+    sets: readonly DetailField[];
+    // What matches a listed posting to its stored row, read from the list before any detail request and kept by
+    // parse(). Defaults to external_id; an adapter whose parse() replaces external_id must key on something else.
+    key?(posting: NormalizedPosting): string;
   };
   // For paged feeds: the URL of the page after the one fetched from `url`, or null on the last page. Also pure.
   next?(text: string, contentType: string, url: string): string | null;

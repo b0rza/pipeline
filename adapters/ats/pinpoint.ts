@@ -70,6 +70,8 @@ export const pinpoint: AtsAdapter = {
     }));
   },
   detail: {
+    // The body is the feed's, so an edit to a stored posting's text is still seen here.
+    sets: ['posted_at'],
     url: (posting) => posting.url,
     parse(html, _contentType, posting) {
       const scripts = html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g);

@@ -68,6 +68,7 @@ export const jazzhr: AtsAdapter = {
     });
   },
   detail: {
+    sets: ['body', 'posted_at', 'raw'],
     url: (posting) => posting.url,
     parse(html, _contentType, posting) {
       const scripts = html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g);

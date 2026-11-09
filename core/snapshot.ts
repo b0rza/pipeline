@@ -1,13 +1,35 @@
 // Stage 1: fetch each company's ATS feed, normalize, hash, upsert into postings.
 import type { DatabaseSync } from 'node:sqlite';
 import { pathToFileURL } from 'node:url';
-import { adapters, fetchPostings } from '../adapters/ats/index.ts';
+import { adapters, type BoardCounts, fetchBoard, type StoredPosting } from '../adapters/ats/index.ts';
 import { loadCompanies, upsertCompanies } from './companies.ts';
 import { openDb, sha256 } from './db.ts';
 import type { Company, NormalizedPosting } from './types.ts';
 
 const FAILURES_BEFORE_SKIP = 3;
 const SKIP_MS = 24 * 60 * 60 * 1000;
+
+// Every stored posting of the company, live and gone, for fetchBoard to match listed postings against (adapters
+// with a detail page only).
+export function storedPostings(db: DatabaseSync, companyId: string): StoredPosting[] {
+  const rows = db.prepare(`
+    select external_id, url, title, location, body, posted_at, raw, gone_at from postings where company_id = ?`)
+    .all(companyId) as unknown as {
+      external_id: string; url: string | null; title: string | null; location: string | null; body: string | null;
+      posted_at: string | null; raw: string | null; gone_at: string | null;
+    }[];
+  return rows.map((r) => ({
+    external_id: r.external_id, url: r.url ?? '', title: r.title ?? '', location: r.location, body: r.body ?? '',
+    posted_at: r.posted_at, raw: r.raw ? JSON.parse(r.raw) : null, gone: r.gone_at !== null,
+  }));
+}
+
+// The company's board, with what is already stored reused (adapters/ats/index.ts fetchBoard). Reads the database,
+// writes nothing; throws when a request fails.
+export async function fetchCompany(db: DatabaseSync, company: Company) {
+  const adapter = company.ats && adapters[company.ats.vendor];
+  return fetchBoard(company, adapter?.detail ? storedPostings(db, company.id) : undefined);
+}
 
 export function snapshotCompany(db: DatabaseSync, company: Company, postings: NormalizedPosting[], runDate: string) {
   const counts = { seen: 0, new: 0, edited: 0, gone: 0 };
@@ -86,6 +108,7 @@ async function main() {
 
     const unsupported = new Map<string, number>();
     const totals = { polled: 0, ok: 0, failed: 0, skipped: 0, postings: 0, new: 0, edited: 0, gone: 0 };
+    const details = { fetched: 0, reused: 0, skipped: 0 };
     const state = db.prepare('select skip_until from companies where id = ?');
 
     for (const c of companies) {
@@ -103,8 +126,9 @@ async function main() {
       }
       totals.polled++;
       let postings: NormalizedPosting[];
+      let board: BoardCounts;
       try {
-        postings = await fetchPostings(c);
+        ({ postings, counts: board } = await fetchCompany(db, c));
       } catch (err) {
         const n = recordFailure(db, c.id, runDate);
         console.log(`fail ${c.id} (${c.ats.vendor}/${c.ats.slug}): ${(err as Error).message} [${n} in a row]`);
@@ -112,6 +136,16 @@ async function main() {
         continue;
       }
       const counts = snapshotCompany(db, c, postings, runDate);
+      // Boards with a detail page only: the one request per posting is what makes a board slow.
+      if (adapters[c.ats.vendor].detail) {
+        console.log(
+          `board ${c.id} (${c.ats.vendor}/${c.ats.slug}): ${board.listed} listed, ${board.fetched} details fetched, ` +
+          `${board.reused} reused, ${board.skipped} skipped by title; ${counts.new} new, ${counts.edited} edited, ${counts.gone} gone`,
+        );
+        details.fetched += board.fetched;
+        details.reused += board.reused;
+        details.skipped += board.skipped;
+      }
       totals.ok++;
       totals.postings += counts.seen;
       totals.new += counts.new;
@@ -123,7 +157,8 @@ async function main() {
     db.prepare('update runs set companies_polled = ? where run_date = ?').run(totals.polled, runDate);
     console.log(
       `snapshot ${runDate}: polled ${totals.polled} (ok ${totals.ok}, failed ${totals.failed}), skipped ${totals.skipped}; ` +
-      `${totals.postings} postings seen, ${totals.new} new, ${totals.edited} edited, ${totals.gone} gone`,
+      `${totals.postings} postings seen, ${totals.new} new, ${totals.edited} edited, ${totals.gone} gone; ` +
+      `details ${details.fetched} fetched, ${details.reused} reused, ${details.skipped} skipped by title`,
     );
   } finally {
     db.close();

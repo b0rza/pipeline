@@ -65,6 +65,7 @@ export const bamboohr: AtsAdapter = {
     });
   },
   detail: {
+    sets: ['url', 'body', 'posted_at', 'raw'],
     url: (posting, slug) => `https://${slug}.bamboohr.com/careers/${posting.external_id}/detail`,
     parse(text, contentType, posting) {
       const job = json<{ result?: { jobOpening?: JobOpening } }>(text, contentType, 'detail').result?.jobOpening;
