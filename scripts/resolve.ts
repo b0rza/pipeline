@@ -2,7 +2,7 @@
 // Usage: npm run resolve -- <file.yaml> [--verify]
 import { readFileSync, writeFileSync } from 'node:fs';
 import { isMap, isScalar, isSeq, parseDocument, type YAMLMap } from 'yaml';
-import { adapters } from '../adapters/ats/index.ts';
+import { adapters, firstRequest } from '../adapters/ats/index.ts';
 import { fetchText, HttpError } from '../core/http.ts';
 
 const PATHS = ['/careers', '/jobs', '/join', '/karriere', '/karijere', '/vacatures', '/lediga-jobb', '/career', '/jobs/'];
@@ -159,7 +159,8 @@ if (args.includes('--verify')) {
     if (!adapter) continue;
     const label = `${String(e.get('id')).padEnd(28)}  ${vendor}/${slug}`;
     try {
-      const res = await fetchText(adapter.feedUrl(slug));
+      const { url, ...opts } = firstRequest(adapter, slug);
+      const res = await fetchText(url, opts);
       console.log(`${label}  ${adapter.parse(res.text, res.contentType, slug).length} postings`);
     } catch (err) {
       console.log(`${label}  error: ${(err as Error).message}`);

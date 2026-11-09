@@ -68,3 +68,31 @@ test('more than 5 redirects throws HttpError with status 0', async () => {
   await assert.rejects(fetchText('https://hop0.test/'), (err) => err instanceof HttpError && err.status === 0 && /redirects/.test(err.message));
   assert.equal(calls.length, 6);
 });
+
+test('a POST keeps method, body and headers, shares the host queue with GETs and retries with the same body', async () => {
+  const sent: { method: string; body: string | null; type: string | null; ua: string | null; at: number }[] = [];
+  globalThis.fetch = (async (_input: string | URL, init?: RequestInit) => {
+    const h = new Headers(init?.headers);
+    sent.push({
+      method: init?.method ?? 'GET', body: init?.body ? String(init.body) : null, type: h.get('content-type'), ua: h.get('user-agent'),
+      at: Date.now(),
+    });
+    return sent.length === 2 ? new Response('busy', { status: 503 }) : new Response('{"ok":true}');
+  }) as typeof fetch;
+  const body = '{"limit":20,"offset":0}';
+  await fetchText('https://post.test/jobs');
+  const res = await fetchText('https://post.test/jobs', { method: 'POST', body, headers: { 'content-type': 'application/json' } });
+  assert.equal(res.text, '{"ok":true}');
+  assert.deepEqual(sent.map((s) => [s.method, s.body, s.type, s.ua]), [
+    ['GET', null, null, USER_AGENT],
+    ['POST', body, 'application/json', USER_AGENT],
+    ['POST', body, 'application/json', USER_AGENT],
+  ]);
+  assert.ok(sent[1].at - sent[0].at >= 990, `POST waited ${sent[1].at - sent[0].at}ms after the GET`);
+});
+
+test('a POST that keeps failing throws HttpError after the backoff attempts', async () => {
+  stub(() => new Response('down', { status: 500 }));
+  await assert.rejects(fetchText('https://postfail.test/jobs', { method: 'POST', body: '{}' }), (err) => err instanceof HttpError && err.status === 500);
+  assert.equal(calls.length, 1 + BACKOFF_MS.length);
+});

@@ -1,11 +1,15 @@
 # Seed list. One entry per company. See docs/SPEC.md "Universe seeding".
 # phases: p1 = contracting target, p2 = agent-enablement target.
-# ats.vendor: greenhouse | lever | ashby | workable | smartrecruiters | personio | recruitee | teamtailor | bamboohr | jazzhr | rippling | breezy | gohire | zoho | pinpoint | hirehive | homerun | haileyhr | custom | unknown
+# ats.vendor: greenhouse | lever | ashby | workable | smartrecruiters | personio | recruitee | teamtailor | bamboohr | jazzhr | rippling | breezy | gohire | zoho | pinpoint | hirehive | homerun | haileyhr | workday | deel | shopify-careers | remote-ats | custom | unknown
 #   polled (adapters/ats/): greenhouse, lever, personio, teamtailor, jazzhr, bamboohr, breezy, rippling, workable, recruitee,
-#   smartrecruiters, ashby, zoho, pinpoint, hirehive, gohire, homerun, haileyhr. zoho slugs are {account}/{Portal}. gohire slugs are the
-#   board's case-sensitive widget hash (widget.gohire.io/widget/{hash}), not its jobs.gohire.io path.
+#   smartrecruiters, ashby, zoho, pinpoint, hirehive, gohire, homerun, haileyhr, workday, deel, shopify-careers, remote-ats.
+#   zoho slugs are {account}/{Portal}. gohire slugs are the board's case-sensitive widget hash
+#   (widget.gohire.io/widget/{hash}), not its jobs.gohire.io path.
 #   homerun slugs are the feed name in the board's feed.homerun.co/{slug} link (not always the board subdomain).
 #   haileyhr slugs are the {slug}.careers.haileyhr.app subdomain.
+#   workday slugs are {tenant}.{wdN}/{site} (infobip.wd3/InfobipCareers). deel slugs are the jobs.deel.com org path
+#   (klarna). shopify-careers and remote-ats are one company's own board each; the slug is the board host
+#   (www.shopify.com, apply.remote.com).
 # storefront: URL to fingerprint, or null for agencies.
 # status: active | paused | watch   (watch = fingerprint daily instead of weekly)
 # 200 seeds since 2026-11-05, 117 of them on a polled vendor (2026-11-07). notes starting with ABOVE BAND or WEAK FIT mark seeds

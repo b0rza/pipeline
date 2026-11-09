@@ -7,6 +7,7 @@ import { type Company, EMPLOYER_BARS, EMPLOYER_GROUPS, REMOTE_EUROPE } from './t
 export const vendors = [
   'greenhouse', 'lever', 'ashby', 'workable', 'smartrecruiters', 'personio', 'recruitee', 'teamtailor',
   'bamboohr', 'jazzhr', 'rippling', 'breezy', 'gohire', 'zoho', 'pinpoint', 'hirehive', 'homerun', 'haileyhr',
+  'workday', 'deel', 'shopify-careers', 'remote-ats',
   'custom', 'unknown',
 ] as const;
 

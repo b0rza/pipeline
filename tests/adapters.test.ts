@@ -4,6 +4,7 @@ import { test } from 'node:test';
 import { ashby } from '../adapters/ats/ashby.ts';
 import { bamboohr } from '../adapters/ats/bamboohr.ts';
 import { breezy } from '../adapters/ats/breezy.ts';
+import { deel } from '../adapters/ats/deel.ts';
 import { gohire } from '../adapters/ats/gohire.ts';
 import { greenhouse } from '../adapters/ats/greenhouse.ts';
 import { haileyhr } from '../adapters/ats/haileyhr.ts';
@@ -15,10 +16,14 @@ import { lever } from '../adapters/ats/lever.ts';
 import { personio } from '../adapters/ats/personio.ts';
 import { pinpoint } from '../adapters/ats/pinpoint.ts';
 import { recruitee } from '../adapters/ats/recruitee.ts';
+import { docToText, remoteAts } from '../adapters/ats/remote-ats.ts';
 import { rippling } from '../adapters/ats/rippling.ts';
+import { shopifyCareers } from '../adapters/ats/shopify-careers.ts';
 import { smartrecruiters } from '../adapters/ats/smartrecruiters.ts';
 import { teamtailor } from '../adapters/ats/teamtailor.ts';
+import { turboStreamData } from '../adapters/ats/turbo-stream.ts';
 import { workable } from '../adapters/ats/workable.ts';
+import { workday } from '../adapters/ats/workday.ts';
 import { zoho } from '../adapters/ats/zoho.ts';
 import { htmlToText } from '../core/html.ts';
 import type { Company, NormalizedPosting } from '../core/types.ts';
@@ -509,4 +514,176 @@ test('gohire: an empty board is no postings, a wrong hash throws', () => {
   assert.deepEqual(gohire.parse(empty, 'text/html; charset=utf-8', 'Pd37nmt8'), []);
   assert.throws(() => gohire.parse('{}', 'text/html; charset=utf-8', 'zzzzzzzz'), /no jobs array/);
   assert.throws(() => gohire.parse('<html></html>', 'text/html', 'zzzzzzzz'), /not JSON/);
+});
+
+test('workday list, paging by request body, detail', () => {
+  const slug = 'infobip.wd3/InfobipCareers';
+  const api = 'https://infobip.wd3.myworkdayjobs.com/wday/cxs/infobip/InfobipCareers';
+  const first = workday.feedRequest!(slug);
+  assert.equal(first.url, `${api}/jobs`);
+  assert.equal(first.method, 'POST');
+  assert.deepEqual(JSON.parse(first.body!), { appliedFacets: {}, limit: 20, offset: 0, searchText: '' });
+  assert.equal(first.headers!['content-type'], 'application/json');
+  assert.throws(() => workday.feedRequest!('infobip'), /slug must be/);
+
+  const list = workday.parse(fixture('workday-list.json'), 'application/json', slug);
+  assert.deepEqual(list.map((p) => [p.external_id, p.location, p.url]), [
+    ['/job/Santiago-de-Chile-Chile/Account-Executive_JR104479', 'Santiago de Chile (Chile)',
+      'https://infobip.wd3.myworkdayjobs.com/InfobipCareers/job/Santiago-de-Chile-Chile/Account-Executive_JR104479'],
+    ['/job/Sarajevo-BiH/Mid-Senior-Software-Engineer_JR105108', 'Sarajevo (BiH)',
+      'https://infobip.wd3.myworkdayjobs.com/InfobipCareers/job/Sarajevo-BiH/Mid-Senior-Software-Engineer_JR105108'],
+  ]);
+
+  // Only the first page carries total; later pages say 0 and the board ends on a short page.
+  const page = (total: number, n: number) => JSON.stringify({ total, jobPostings: Array(n).fill({ title: 't', externalPath: '/job/x' }) });
+  const second = workday.nextRequest!(page(141, 20), 'application/json', first)!;
+  assert.equal(second.url, first.url);
+  assert.equal(second.method, 'POST');
+  assert.equal(JSON.parse(second.body!).offset, 20);
+  assert.equal(JSON.parse(workday.nextRequest!(page(0, 20), 'application/json', second)!.body!).offset, 40);
+  assert.equal(workday.nextRequest!(page(0, 1), 'application/json', second), null);
+  assert.equal(workday.nextRequest!(page(20, 20), 'application/json', first), null);
+  assert.equal(workday.nextRequest!(fixture('workday-list.json'), 'application/json', first), null);
+
+  assert.equal(workday.detail!.url(list[1], slug), `${api}/job/Sarajevo-BiH/Mid-Senior-Software-Engineer_JR105108`);
+  const job = workday.detail!.parse(fixture('workday-detail.json'), 'application/json', list[1]);
+  assertWellFormed([job], 1);
+  assert.equal(job.external_id, 'f7632dafce4b1001928bfde1f2f50000');
+  assert.equal(job.posted_at, '2026-11-05T00:00:00.000Z');
+  assert.ok(job.body.startsWith('Working at Infobip means'), job.body.slice(0, 40));
+  assert.ok(!job.body.includes('&#'), 'double-escaped line feeds removed');
+  assert.deepEqual(job.raw, {
+    external_path: '/job/Sarajevo-BiH/Mid-Senior-Software-Engineer_JR105108', req_id: 'JR105108', remote_type: 'Hybrid',
+    workplace_type: 'hybrid', on_site: null, country: 'BA', time_type: 'Full time', hiring_organization: 'Infobip BiH',
+  });
+  assert.throws(() => workday.detail!.parse(fixture('workday-detail.json'), 'application/json', list[0]), /is https/);
+  assert.throws(() => workday.parse('<html></html>', 'text/html', slug), /not JSON/);
+});
+
+test('workday detail merges additional locations and reads the remote type', () => {
+  const path = '/job/United-States---Remote/Senior-Backend-Engineer--AI-Agent-_JR102796';
+  const listed: NormalizedPosting = {
+    external_id: path, title: 'Senior Backend Engineer (AI Agent)', location: null, body: '', posted_at: null,
+    url: `https://bigcommerce.wd12.myworkdayjobs.com/Commerce${path}`, raw: { external_path: path },
+  };
+  const job = workday.detail!.parse(fixture('workday-detail-remote.json'), 'application/json', listed);
+  assertWellFormed([job], 1);
+  assert.equal(job.location, 'United States - Remote, Austin, TX, Atlanta, GA');
+  assert.equal(job.posted_at, '2026-10-21T00:00:00.000Z');
+  assert.equal((job.raw as { workplace_type: string }).workplace_type, 'remote');
+  assert.equal((job.raw as { country: string }).country, 'US');
+});
+
+test('fetchPostings sends the workday POST pages before the detail GETs', async () => {
+  const realFetch = globalThis.fetch;
+  const listed = JSON.parse(fixture('workday-list.json')) as { jobPostings: { externalPath: string }[] };
+  const detail = JSON.parse(fixture('workday-detail.json')) as { jobPostingInfo: Record<string, unknown> };
+  const calls: string[] = [];
+  globalThis.fetch = (async (input: string | URL, init?: RequestInit) => {
+    const url = String(input);
+    const method = init?.method ?? 'GET';
+    calls.push(`${method} ${url}${init?.body ? ` ${JSON.parse(String(init.body)).offset}` : ''}`);
+    let body: unknown;
+    if (method === 'POST') {
+      const { offset } = JSON.parse(String(init!.body)) as { offset: number };
+      // A full first page of 20 rows (with total) that repeat one posting, then a page of 1 (total 0, as Workday does).
+      // The repeats keep the test to 4 requests (1 s apart on one host) and check that a page is deduped.
+      body = offset === 0
+        ? { total: 21, jobPostings: Array(20).fill(listed.jobPostings[0]) }
+        : { total: 0, jobPostings: [listed.jobPostings[1]] };
+    } else {
+      const path = url.slice(url.indexOf('/job/'));
+      body = { ...detail, jobPostingInfo: { ...detail.jobPostingInfo, id: `wid-${path}`, externalUrl: `https://x${path}` } };
+    }
+    return new Response(JSON.stringify(body), { headers: { 'content-type': 'application/json' } });
+  }) as typeof fetch;
+  try {
+    const company = { id: 'infobip', ats: { vendor: 'workday', slug: 'infobip.wd3/InfobipCareers' } } as Company;
+    const postings = await fetchPostings(company);
+    const api = 'https://infobip.wd3.myworkdayjobs.com/wday/cxs/infobip/InfobipCareers';
+    assert.deepEqual(calls, [
+      `POST ${api}/jobs 0`, `POST ${api}/jobs 20`,
+      `GET ${api}${listed.jobPostings[0].externalPath}`, `GET ${api}${listed.jobPostings[1].externalPath}`,
+    ]);
+    assertWellFormed(postings, 2);
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+});
+
+test('turbo-stream decoder resolves keys, shared values, null and dates', () => {
+  const flat = [{ _1: 2, _3: -5 }, 'loaderData', { _4: 5, _6: 5 }, 'errors', 'a', [7, 8], 'b', 'x', ['D', 0]];
+  const page = `<script>window.__reactRouterContext.streamController.enqueue(${JSON.stringify(`${JSON.stringify(flat)}\nP9:[1]`)});</script>`;
+  assert.deepEqual(turboStreamData(page), {
+    loaderData: { a: ['x', '1970-01-01T00:00:00.000Z'], b: ['x', '1970-01-01T00:00:00.000Z'] }, errors: null,
+  });
+  assert.throws(() => turboStreamData('<html></html>'), /no streamController/);
+});
+
+test('shopify-careers list and detail from the inlined loader data', () => {
+  const list = shopifyCareers.parse(fixture('shopify-careers-list.html'), 'text/html; charset=utf-8', 'www.shopify.com');
+  assert.deepEqual(list.map((p) => [p.external_id, p.location, p.url]), [
+    ['453ef67b-70fa-4029-a904-97e92df2a40a', 'Remote - Americas',
+      'https://www.shopify.com/careers/senior-infrastructure-engineer-database-platform_453ef67b-70fa-4029-a904-97e92df2a40a'],
+    ['8b0403e4-137a-4f29-8f88-254c2ac0a716', 'Remote - Ireland, Remote - United Kingdom',
+      'https://www.shopify.com/careers/account-executive-smb-existing-business_8b0403e4-137a-4f29-8f88-254c2ac0a716'],
+  ]);
+  assert.equal(shopifyCareers.feedUrl('www.shopify.com'), 'https://www.shopify.com/careers');
+  assert.equal(shopifyCareers.detail!.url(list[0], 'www.shopify.com'), list[0].url);
+  const job = shopifyCareers.detail!.parse(fixture('shopify-careers-job.html'), 'text/html; charset=utf-8', list[0]);
+  assertWellFormed([job], 1);
+  assert.equal(job.posted_at, '2026-10-23T00:00:00.000Z');
+  assert.ok(job.body.startsWith('At Shopify, Infrastructure Engineers build'));
+  assert.deepEqual(job.raw, {
+    discipline: 'Engineering & Data', remote: true, workplace_type: 'Remote', employment_type: 'FullTime',
+    department: 'Shopify', team: 'Engineering', compensation: null,
+  });
+  assert.throws(() => shopifyCareers.detail!.parse(fixture('shopify-careers-job.html'), 'text/html', list[1]), /has id/);
+  assert.throws(() => shopifyCareers.parse(fixture('shopify-careers-job.html'), 'text/html', 'www.shopify.com'), /no loader data/);
+  assert.throws(() => shopifyCareers.parse('{}', 'application/json', 'www.shopify.com'), /not HTML/);
+});
+
+test('deel board ItemList and job page JobPosting', () => {
+  const list = deel.parse(fixture('deel-board.html'), 'text/html; charset=utf-8', 'klarna');
+  assert.deepEqual(list.map((p) => p.external_id), ['87bd8299-48ef-4c79-9005-0347ecf8b054', '05a22eb7-b75d-4c8c-abdc-21e321fd6f92']);
+  assert.equal(deel.feedUrl('klarna'), 'https://jobs.deel.com/klarna');
+  assert.equal(deel.detail!.url(list[1], 'klarna'), 'https://jobs.deel.com/klarna/job-details/05a22eb7-b75d-4c8c-abdc-21e321fd6f92/overview');
+  const job = deel.detail!.parse(fixture('deel-job.html'), 'text/html; charset=utf-8', list[1]);
+  assertWellFormed([job], 1);
+  assert.equal(job.title, 'Fraud Operations Lead');
+  assert.equal(job.location, 'London');
+  assert.equal(job.posted_at, '2026-10-02T12:41:35.439Z');
+  assert.ok(job.body.startsWith('Klarna, briefly At Klarna'));
+  assert.deepEqual(job.raw, { employment_type: 'FULL_TIME', workplace_type: 'onsite', on_site: true, remote: null, countries: ['GB'] });
+  assert.throws(() => deel.detail!.parse(fixture('deel-job.html'), 'text/html', list[0]), /has id/);
+  assert.throws(() => deel.parse('<html><body>Not found</body></html>', 'text/html', 'nobody'), /no ItemList/);
+  // Two jobs' flight data on one page: neither the arrangement nor the countries are trusted.
+  const flight = /<script>self\.__next_f.*?<\/script>/s.exec(fixture('deel-job.html'))![0];
+  const twice = fixture('deel-job.html').replace('</body>', `${flight}</body>`);
+  assert.deepEqual(deel.detail!.parse(twice, 'text/html', list[1]).raw, {
+    employment_type: 'FULL_TIME', workplace_type: null, on_site: null, remote: null, countries: [],
+  });
+});
+
+test('remote-ats list and advert documents', () => {
+  const list = remoteAts.parse(fixture('remote-ats-list.json'), 'application/json; charset=utf-8', 'apply.remote.com');
+  assert.deepEqual(list.map((p) => [p.external_id, p.location, p.posted_at]), [
+    ['fc3c75d0-1579-4543-a609-a5df117d7861', 'EMEA', '2026-11-09T10:39:19.000Z'],
+    ['ef51d083-81fa-4e0d-ba06-278df11a7630', 'EMEA, NORAM', '2026-10-30T09:52:09.000Z'],
+  ]);
+  assert.equal(list[1].url, 'https://apply.remote.com/jobs/ef51d083-81fa-4e0d-ba06-278df11a7630');
+  assert.deepEqual(list[1].raw, {
+    workplace_type: 'remote', employment_type: 'Full-time', department: 'Sales', pay: '$188,560 to $212,130', tags: [],
+  });
+  assert.equal(remoteAts.detail!.url(list[1], 'apply.remote.com'),
+    'https://apply.remote.com/api/public/jobs/ef51d083-81fa-4e0d-ba06-278df11a7630');
+  const job = remoteAts.detail!.parse(fixture('remote-ats-job.json'), 'application/json', list[1]);
+  assertWellFormed([job], 1);
+  assert.ok(job.body.startsWith('About Remote\nRemote is building'));
+  assert.ok(job.body.includes('\n- Own the architectural direction of the CRM platform'), 'bullets kept as list items');
+  assert.throws(() => remoteAts.detail!.parse(fixture('remote-ats-job.json'), 'application/json', list[0]), /has id/);
+  assert.equal(docToText({ type: 'doc', content: [
+    { type: 'heading', content: [{ text: 'Role' }] }, { type: 'paragraph', content: [{ text: 'Build ' }, { text: 'things.' }] },
+    { type: 'numbered', content: [{ text: 'One' }] }, { type: 'paragraph', content: [] },
+  ] }), 'Role\nBuild things.\n- One');
 });
