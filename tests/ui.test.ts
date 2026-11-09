@@ -85,8 +85,11 @@ test('GET / shows the pending header and each company once, in digest order', ()
   // Warm first, then apply before outreach, then by name, as the Telegram digest sends them.
   assert.deepEqual(section(res.body, 'pending'), ['warmco', 'zeta', 'alpha', 'beta']);
   assert.deepEqual(section(res.body, 'history'), []);
-  // The theme switch, and its script before the body so a stored choice applies without a flash.
-  assert.match(res.body, /<script>[^]*localStorage\.getItem\('theme'\)[^]*<\/script><\/head><body><header><button id="theme"[^>]*onclick="toggleTheme\(\)">light \/ dark<\/button>/);
+  // One header line, then the counts.
+  assert.match(res.body, /<body><header><h1>Pipeline 2026-11-02<\/h1><p>/);
+  // The theme script before the body so a stored choice applies without a flash; its switch ends the tab bar.
+  assert.match(res.body, /<script>[^]*localStorage\.getItem\('theme'\)[^]*<\/script><\/head><body><header><h1>/);
+  assert.match(res.body, />Employers <small>0<\/small><\/button><button id="theme" class="secondary outline" onclick="toggleTheme\(\)" aria-label="Light or dark theme" title="Light or dark theme">◐<\/button><\/nav>/);
   assert.match(cardOf(res.body, db, 'zeta'), /<b>zeta<\/b> · 🇬🇧 GB · greenhouse · <b>APPLY<\/b> · run 2026-11-02/);
   // Contract posting first, with its route tag.
   assert.match(cardOf(res.body, db, 'zeta'),
@@ -111,9 +114,12 @@ test('apply cards get Mark applied, outreach cards a mailto Compose link built f
   assert.equal(decodeURIComponent(body), composeBody('alpha', ['Frontend Developer']));
 
   for (const c of [apply, outreach]) {
-    assert.match(c, /<fieldset role="group"><select name="reason"><option value="fit">bad fit<\/option>.*<option value="other">other<\/option><\/select><button class="secondary outline">Skip<\/button><\/fieldset>/);
-    // Later after Snooze 7d, the last button on a pending card.
-    assert.match(c, /<button class="secondary outline">Snooze 7d<\/button><\/form><form method="post" action="\/signal\/[0-9a-f]{64}\/later"><button class="secondary outline">Later<\/button><\/form><\/footer>/);
+    // Skip is the reason dropdown: a placeholder that cannot be chosen, then the reasons; choosing one submits.
+    assert.match(c, /<form method="post" action="\/signal\/[0-9a-f]{64}\/skip"><select name="reason" class="secondary outline" aria-label="Skip, with a reason" onchange="this\.form\.submit\(\)"><option value="" disabled selected>Skip<\/option><option value="fit">bad fit<\/option>.*<option value="other">other<\/option><\/select><\/form>/);
+    assert.doesNotMatch(c, /<fieldset|>Skip<\/button>/);
+    // One row: the first action, Skip, Snooze 7d (Snooze at phone width) and Later, the last button on a pending card.
+    assert.match(c, /<footer>(?:<a role="button" href="mailto:[^"]+">Compose<\/a>|<form method="post" action="\/signal\/[0-9a-f]{64}\/applied"><button>Mark applied<\/button><\/form>)<form method="post" action="\/signal\/[0-9a-f]{64}\/skip">/);
+    assert.match(c, /<\/select><\/form><form method="post" action="\/signal\/[0-9a-f]{64}\/snooze"><button class="secondary outline"><span class="on-wide">Snooze 7d<\/span><span class="on-phone">Snooze<\/span><\/button><\/form><form method="post" action="\/signal\/[0-9a-f]{64}\/later"><button class="secondary outline">Later<\/button><\/form><\/footer>/);
     assert.doesNotMatch(c, /Reopen/);
   }
   db.close();
@@ -143,7 +149,7 @@ test('POST applied, skip, snooze and later change the rows as handleCallback doe
 
   const html = get(web).body;
   assert.match(html, /<\/h1><p>0 apply · 0 outreach waiting · 1 dropped postings today<\/p><\/header>/);
-  assert.match(html, /<button id="tab-pending" onclick="location.hash = 'pending'">Pending \(0\)<\/button><button id="tab-later" class="secondary outline" onclick="location.hash = 'later'">Later \(1\)<\/button><button id="tab-history" class="secondary outline" onclick="location.hash = 'history'">History \(3\)<\/button>/);
+  assert.match(html, /<button id="tab-pending" onclick="location.hash = 'pending'">Pending <small>0<\/small><\/button><button id="tab-later" class="secondary outline" onclick="location.hash = 'later'">Later <small>1<\/small><\/button><button id="tab-history" class="secondary outline" onclick="location.hash = 'history'">History <small>3<\/small><\/button>/);
   assert.deepEqual(section(html, 'pending'), []);
   assert.deepEqual(section(html, 'later'), ['warmco']);
   assert.deepEqual(section(html, 'history'), ['zeta', 'alpha', 'beta']);
@@ -191,7 +197,7 @@ test('Pending holds what waits on the owner: notified signals with buttons, unse
   assert.match(html, /<\/h1><p>1 apply · 3 outreach waiting · 1 dropped postings today<\/p><\/header>/);
   assert.deepEqual(section(html, 'pending'), ['warmco', 'zeta', 'alpha', 'beta']);
   assert.deepEqual(section(html, 'history'), []);
-  assert.match(html, />Pending \(4\)<\/button>.*>History \(0\)<\/button>/);
+  assert.match(html, />Pending <small>4<\/small><\/button>.*>History <small>0<\/small><\/button>/);
 
   // Sent to Telegram, not answered: no badge, the same buttons as an unsent card.
   const warmco = cardOf(html, db, 'warmco');
@@ -222,13 +228,13 @@ test('the tab bar switches by the address, and a Later, History or Employers car
   standard(db);
   const html = get(db, [employer('n8nish')]).body;
   // Pending open as rendered, Later, History and Employers hidden until the script reads the address.
-  assert.match(html, /<main><nav id="tabs"><button id="tab-pending" onclick="location.hash = 'pending'">Pending \(4\)<\/button><button id="tab-later" class="secondary outline" onclick="location.hash = 'later'">Later \(0\)<\/button><button id="tab-history" class="secondary outline" onclick="location.hash = 'history'">History \(0\)<\/button><button id="tab-employers" class="secondary outline" onclick="location.hash = 'employers'">Employers \(1\)<\/button><\/nav><section id="sec-pending">/);
+  assert.match(html, /<main><nav id="tabs"><button id="tab-pending" onclick="location.hash = 'pending'">Pending <small>4<\/small><\/button><button id="tab-later" class="secondary outline" onclick="location.hash = 'later'">Later <small>0<\/small><\/button><button id="tab-history" class="secondary outline" onclick="location.hash = 'history'">History <small>0<\/small><\/button><button id="tab-employers" class="secondary outline" onclick="location.hash = 'employers'">Employers <small>1<\/small><\/button><button id="theme"[^>]*>◐<\/button><\/nav><section id="sec-pending">/);
   assert.match(html, /<\/section><section id="sec-later" hidden><p>Nothing for later.<\/p><\/section><section id="sec-history" hidden><p>No past signals.<\/p><\/section><section id="sec-employers" hidden><h3>/);
   // Inline, after the sections, so it can find them.
   assert.match(html, /<\/section><\/main><script>[^]*\['pending', 'later', 'history', 'employers'\][^]*\['later', 'history', 'employers'\]\.find\(\(t\) => location\.hash === '#' \+ t \|\| target\?\.closest\('#sec-' \+ t\)\) \?\? 'pending'[^]*<\/script><\/body><\/html>$/);
   // No employers: an empty tab that says so.
   const none = get(db).body;
-  assert.match(none, />Employers \(0\)<\/button><\/nav>/);
+  assert.match(none, />Employers <small>0<\/small><\/button><button id="theme"[^>]*>◐<\/button><\/nav>/);
   assert.match(none, /<section id="sec-employers" hidden><p>No employers on the watch list.<\/p><\/section><\/main>/);
   db.close();
 });
@@ -239,14 +245,14 @@ test('a later card waits in the Later tab with its buttons plus Reopen, and leav
   for (const companyId of ['zeta', 'alpha', 'beta']) post(db, signalId(db, companyId), 'later');
   const html = get(db).body;
   assert.match(html, /<\/h1><p>0 apply · 1 outreach waiting · 1 dropped postings today<\/p><\/header>/);
-  assert.match(html, />Pending \(1\)<\/button><button id="tab-later"[^>]*>Later \(3\)<\/button>[^]*>History \(0\)<\/button>/);
+  assert.match(html, />Pending <small>1<\/small><\/button><button id="tab-later"[^>]*>Later <small>3<\/small><\/button>[^]*>History <small>0<\/small><\/button>/);
   // Digest order, as everywhere.
   assert.deepEqual(section(html, 'later'), ['zeta', 'alpha', 'beta']);
   assert.deepEqual(section(html, 'history'), []);
 
   const zeta = cardOf(html, db, 'zeta');
   assert.match(zeta, /<b>APPLY<\/b> · run 2026-11-02[^<]* <span class="badge b-later">later<\/span><\/header>/);
-  assert.match(zeta, /<button>Mark applied<\/button>.*Skip.*Snooze 7d<\/button><\/form><form method="post" action="\/signal\/[0-9a-f]{64}\/reopen"><button class="secondary outline">Reopen<\/button><\/form><\/footer>/);
+  assert.match(zeta, /<button>Mark applied<\/button>.*Skip.*Snooze 7d<\/span><span class="on-phone">Snooze<\/span><\/button><\/form><form method="post" action="\/signal\/[0-9a-f]{64}\/reopen"><button class="secondary outline">Reopen<\/button><\/form><\/footer>/);
   assert.doesNotMatch(zeta, />Later</);
   assert.match(cardOf(html, db, 'alpha'), /Compose.*Skip.*Snooze 7d.*Reopen/);
 
@@ -277,6 +283,33 @@ test('the page orders apply signals with a B2B posting first, and B2B postings f
   db.close();
 });
 
+test('a card with more than five postings shows the first five in order and folds the rest; five stay unfolded', () => {
+  const db = openDb(':memory:');
+  seed(db, [
+    [company('many'), [
+      posting('m1', 'Backend Engineer'), posting('m2', 'Data Engineer'), posting('m3', 'Frontend Developer'),
+      posting('m4', 'Platform Engineer'), posting('m5', 'Software Engineer'), posting('m6', 'Backend Engineer, Contract'),
+      posting('m7', 'Senior Software Engineer', 'Outside IR35.'),
+    ]],
+    [company('five'), ['f1', 'f2', 'f3', 'f4', 'f5'].map((id, i) => posting(id, `Software Engineer ${i + 1}`))],
+  ]);
+  const html = get(db).body;
+  const hrefs = (s: string) => [...s.matchAll(/<li><a href="https:\/\/example.test\/([a-z0-9]+)">/g)].map((m) => m[1]);
+
+  const many = cardOf(html, db, 'many');
+  const fold = many.match(/<\/header><ul>(.*?)<\/ul><details><summary>2 more<\/summary><ul>(.*?)<\/ul><\/details><footer>/);
+  assert.ok(fold, 'no fold');
+  // The page's order is unchanged: B2B, then contract, then by title; the first five of it are shown.
+  assert.deepEqual(hrefs(fold[1]), ['m7', 'm6', 'm1', 'm2', 'm3']);
+  assert.deepEqual(hrefs(fold[2]), ['m4', 'm5']);
+
+  const five = cardOf(html, db, 'five');
+  assert.doesNotMatch(five, /<details|more<\/summary>/);
+  assert.match(five, /<\/header><ul>(<li>.*?<\/li>){5}<\/ul><footer>/);
+  assert.equal(hrefs(five).length, 5);
+  db.close();
+});
+
 test('an older new signal of a company with a newer pending one is in History without buttons', () => {
   const db = openDb(':memory:');
   const perm = posting('1', 'Software Engineer');
@@ -303,6 +336,8 @@ test('bad id, bad reason and unknown routes are rejected', () => {
   assert.equal(post(db, id, 'bogus').status, 404);
   assert.equal(post(db, id, 'skip', 'reason=nope').status, 400);
   assert.equal(post(db, id, 'skip').status, 400);
+  // The dropdown's placeholder has an empty value.
+  assert.equal(post(db, id, 'skip', 'reason=').status, 400);
   assert.equal(handle(db, { method: 'GET', url: `/signal/${id}/applied` }, today).status, 404);
   assert.equal(handle(db, { method: 'GET', url: '/nothing' }, today).status, 404);
   assert.equal(handle(db, { method: 'POST', url: '/' }, today).status, 404);
@@ -511,7 +546,7 @@ test('the Employers tab groups in research order, then orders by bar (reach, fit
     // An agency is not on the tab.
     company('agencyco'),
   ]).body;
-  assert.match(html, />Employers \(8\)<\/button>/);
+  assert.match(html, />Employers <small>8<\/small><\/button>/);
   assert.deepEqual(employerOrder(html), [
     'Payments and fintech', 'pay', 'Commerce platforms', 'shop', 'Commerce-adjacent', 'adj',
     'Developer tools and AI', 'bob', 'cal', 'amy', 'zed', 'Remote-first Europe', 'nate',
@@ -537,7 +572,7 @@ test('without companies given, the Employers tab lists the employers in universe
   const db = openDb(':memory:');
   const employers = loadCompanies().filter((c) => c.kind === 'employer');
   const html = handle(db, { method: 'GET', url: '/' }, today).body;
-  assert.match(html, new RegExp(`>Employers \\(${employers.length}\\)</button>`));
+  assert.match(html, new RegExp(`>Employers <small>${employers.length}</small></button>`));
   assert.equal(employerOrder(html).filter((x) => !/^[A-Z]/.test(x)).length, employers.length);
   assert.match(employerCard(html, 'stripe'), /<b>Stripe<\/b><\/a> · 🇺🇸 US <span class="badge">reach<\/span>/);
   assert.match(employerCard(html, 'stripe'), /Board: greenhouse · not polled yet/);

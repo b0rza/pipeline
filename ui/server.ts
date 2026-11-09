@@ -29,24 +29,50 @@ const text = (status: number, body: string): Res => ({ status, headers: { 'conte
 // Vendored Pico CSS (classless, MIT, ui/LICENSE-pico.txt); the page loads nothing from the network.
 const PICO = readFileSync(new URL('./pico.classless.min.css', import.meta.url), 'utf8');
 
-// What classless Pico lacks: a width cap, the tab bar, the inline button row, secondary outline buttons and status badges.
+// What classless Pico lacks: a width cap, the sticky tab bar, the one-row button footer, the fold of long cards,
+// secondary outline buttons and status badges, and the phone layout (one breakpoint, 600px).
 const STYLE = `
   :root { --pico-font-size: 100%; }
   body > header, body > main { max-width: 860px; }
   article ul { margin-bottom: 0; } article li { overflow-wrap: anywhere; }
   article li small, .meta { color: var(--pico-muted-color); } .meta { font-size: .875em; }
   article > footer { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
-  article > footer :is(form, fieldset, select, button, [role=button]) { width: auto; margin: 0; }
-  #theme, #tabs button, article > footer :is(select, button, [role=button]) { --pico-form-element-spacing-vertical: .3rem; --pico-form-element-spacing-horizontal: .75rem; font-size: .875rem; }
-  #tabs { display: flex; gap: .5rem; justify-content: flex-start; margin-bottom: var(--pico-spacing); } #tabs button { width: auto; margin: 0; }
+  article > footer :is(form, select, button, [role=button]) { width: auto; margin: 0; }
+  #tabs button, article > footer :is(select, button, [role=button]) { --pico-form-element-spacing-vertical: .3rem; --pico-form-element-spacing-horizontal: .75rem; font-size: .875rem; white-space: nowrap; }
+  #tabs { position: sticky; top: 0; z-index: 10; display: flex; gap: .5rem; justify-content: flex-start; align-items: center;
+    margin: -.5rem 0 .5rem; padding: .5rem 0; background: var(--pico-background-color); border-bottom: var(--pico-border-width) solid var(--pico-muted-border-color); }
+  #tabs button { width: auto; margin: 0; } #tabs small { font-size: .8em; opacity: .75; } #tabs #theme { margin-left: auto; }
+  article[id] { scroll-margin-top: 4rem; }
+  article > footer select[name=reason] { width: 5.25rem; }
+  article > footer select option { color: var(--pico-form-element-color); background-color: var(--pico-form-element-background-color); }
+  .on-phone { display: none; }
+  article details { margin: .25rem 0 0; } article details > summary { padding: .25rem 0; font-size: .875em; }
+  article details[open] > summary { margin-bottom: .25rem; }
   .secondary.outline { --pico-background-color: transparent; --pico-color: var(--pico-secondary); --pico-border-color: var(--pico-secondary); }
   .secondary.outline:is(:hover, :active, :focus) { --pico-background-color: transparent; --pico-color: var(--pico-secondary-hover); --pico-border-color: var(--pico-secondary-hover); }
-  .badge { display: inline-block; font-size: .75em; padding: 0 .5em; border-radius: 1em; color: #fff; background: #777; vertical-align: middle; }
+  .badge { display: inline-block; font-size: .75em; padding: 0 .5em; border-radius: 1em; color: #fff; background: #777; vertical-align: middle; white-space: nowrap; }
   .b-new { background: #2563eb; } .b-notified { background: #7c3aed; } .b-applied, .b-sent, .b-replied, .b-yes { background: #15803d; }
   .b-skipped { background: #6b7280; } .b-snoozed { background: #b45309; }
   :is(.b-unsent, .b-later, .b-muted) { background: transparent; color: var(--pico-muted-color); border: 1px solid var(--pico-muted-border-color); }
-  #theme { float: right; width: auto; margin-top: .25rem; }
-  #sec-employers article p { margin-bottom: .25rem; }`;
+  #sec-employers article p { margin-bottom: .25rem; }
+  @media (max-width: 600px) {
+    body > header, body > main { padding-left: .5rem; padding-right: .5rem; }
+    body > header { padding-top: .75rem; padding-bottom: 0; }
+    body > header h1 { --pico-font-size: 1.25rem; margin-bottom: .125rem; }
+    body > header p { margin-bottom: 0; font-size: .8125rem; color: var(--pico-muted-color); }
+    body > main { padding-top: .25rem; }
+    #tabs { margin: 0 -.5rem .5rem; padding: .5rem; gap: .25rem; overflow-x: auto; }
+    #tabs button { flex: 1 1 0; --pico-form-element-spacing-vertical: .375rem; --pico-form-element-spacing-horizontal: .25rem; font-size: .8125rem; }
+    #tabs #theme { flex: none; margin-left: 0; --pico-form-element-spacing-horizontal: .375rem; }
+    article { --pico-block-spacing-horizontal: .75rem; --pico-block-spacing-vertical: .75rem; }
+    article ul { padding-left: 1.25rem; } article li small { display: block; }
+    article > footer { gap: .375rem; }
+    article > footer :is(select, button, [role=button]) { --pico-form-element-spacing-horizontal: .5rem; }
+    article > footer select[name=reason]:not([multiple], [size]) { width: 4.5rem; background-position: center right .5rem;
+      padding-right: calc(var(--pico-form-element-spacing-horizontal) + 1.25rem); padding-inline-end: calc(var(--pico-form-element-spacing-horizontal) + 1.25rem); }
+    .on-wide { display: none; } .on-phone { display: inline; }
+    main h3 { --pico-font-size: 1.125rem; --pico-typography-spacing-top: 1.5rem; margin-bottom: .5rem; }
+  }`;
 
 // Light or dark on demand. Pico follows the system setting unless <html data-theme> says otherwise; the choice is kept
 // in the browser's localStorage and applied before the body renders, so a reload does not flash the other theme.
@@ -76,8 +102,10 @@ const TABS_SCRIPT = `
     showTab(['later', 'history', 'employers'].find((t) => location.hash === '#' + t || target?.closest('#sec-' + t)) ?? 'pending');
     // The browser could not scroll to a card while its section was hidden.
     target?.scrollIntoView();
+    return target;
   }
-  addEventListener('hashchange', fromHash);
+  // A tab chosen from the sticky bar opens at its top, not at the scroll position of the tab it left.
+  addEventListener('hashchange', () => fromHash() || scrollTo(0, 0));
   fromHash();`;
 
 // A history card that is still new is an older signal the next notify supersedes, or one whose postings are all
@@ -93,9 +121,13 @@ function actions(rows: SignalRow[], past: boolean): string {
       // Same titles as the Telegram Compose reply.
       out.push(`<a role="button" href="${escapeHtml(composeMailto(name, composeTitles(rows)))}">Compose</a>`);
     }
+    // Skip is the reason dropdown itself: choosing a reason submits it. The placeholder cannot be chosen, and a POST
+    // without a known reason is refused in handle().
     const options = SKIP_REASONS.map(([code, label]) => `<option value="${code}">${escapeHtml(label)}</option>`).join('');
-    out.push(form('skip', `<fieldset role="group"><select name="reason">${options}</select>${secondary('Skip')}</fieldset>`),
-      form('snooze', secondary('Snooze 7d')));
+    out.push(form('skip', '<select name="reason" class="secondary outline" aria-label="Skip, with a reason" onchange="this.form.submit()">' +
+      `<option value="" disabled selected>Skip</option>${options}</select>`),
+    // The short label at phone width, so the row fits on one line.
+    form('snooze', secondary('<span class="on-wide">Snooze 7d</span><span class="on-phone">Snooze</span>')));
     if (!past) out.push(form('later', secondary('Later')));
   }
   if (['skipped', 'applied', 'snoozed', 'later'].includes(status)) out.push(form('reopen', secondary('Reopen')));
@@ -103,6 +135,9 @@ function actions(rows: SignalRow[], past: boolean): string {
 }
 
 interface Past { id: string; run_date: string; skip_reason: string | null; snooze_until: string | null }
+
+// Postings a signal card shows before the rest fold into "N more".
+const SHOWN_POSTINGS = 5;
 
 // Local time of day (the service's TZ) of a run's started_at, or nothing when the run has no row or an odd value.
 export function runTime(startedAt: string | undefined): string {
@@ -128,8 +163,15 @@ function card(rows: SignalRow[], runs: Map<string, string>, past?: Past): string
     return `<li>${p.gone ? `<s>${link}</s>` : link} — ${escapeHtml(p.location ?? 'no location')}` +
       ` <small>[${escapeHtml(routeTag(p.route_reason))}]${p.gone ? ` · ${GONE}` : ''}</small></li>`;
   });
+  // A long card shows its first postings, in the order they come, and folds the rest.
+  const ul = (items: string[]) => `<ul>${items.join('')}</ul>`;
+  // One hidden posting is not worth a tap: a card of six shows all six.
+  const folded = postings.length > SHOWN_POSTINGS + 1
+    ? `${ul(postings.slice(0, SHOWN_POSTINGS))}<details><summary>${postings.length - SHOWN_POSTINGS} more</summary>` +
+      `${ul(postings.slice(SHOWN_POSTINGS))}</details>`
+    : ul(postings);
   return `<article id="s-${id.slice(0, 16)}"><header>${head}</header>` +
-    (meta.length ? `<p class="meta">${meta.join(' · ')}</p>` : '') + `<ul>${postings.join('')}</ul>${actions(rows, isPast)}</article>`;
+    (meta.length ? `<p class="meta">${meta.join(' · ')}</p>` : '') + `${folded}${actions(rows, isPast)}</article>`;
 }
 
 const GROUP_LABELS: Record<(typeof EMPLOYER_GROUPS)[number], string> = {
@@ -218,15 +260,16 @@ function page(db: DatabaseSync, today: string, companies: Company[]): string {
   for (const s of others) byDate.set(s.run_date, [...(byDate.get(s.run_date) ?? []), card(signalRows(db, s.id), runs, s)]);
   const history = [...byDate].map(([date, cards]) => `<h3>${escapeHtml(date)}</h3>${cards.join('')}`).join('');
 
-  // Rendered with Pending open; TABS_SCRIPT switches by the address before the page shows.
+  // Rendered with Pending open; TABS_SCRIPT switches by the address before the page shows. The light / dark switch
+  // ends the bar, so it stays in reach while the bar is pinned.
   const tab = (name: string, label: string, count: number, active: boolean) =>
-    `<button id="tab-${name}"${active ? '' : ' class="secondary outline"'} onclick="location.hash = '${name}'">${label} (${count})</button>`;
+    `<button id="tab-${name}"${active ? '' : ' class="secondary outline"'} onclick="location.hash = '${name}'">${label} <small>${count}</small></button>`;
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">` +
     `<title>Pipeline ${escapeHtml(today)}</title><link rel="stylesheet" href="/pico.css"><style>${STYLE}</style><script>${THEME_SCRIPT}</script></head><body>` +
-    `<header><button id="theme" class="secondary outline" onclick="toggleTheme()">light / dark</button>` +
-    `<h1>Pipeline overview ${escapeHtml(today)}</h1><p>${header}</p></header><main>` +
+    `<header><h1>Pipeline ${escapeHtml(today)}</h1><p>${header}</p></header><main>` +
     `<nav id="tabs">${tab('pending', 'Pending', waiting.length, true)}${tab('later', 'Later', later.length, false)}` +
-    `${tab('history', 'History', others.length, false)}${tab('employers', 'Employers', employers.count, false)}</nav>` +
+    `${tab('history', 'History', others.length, false)}${tab('employers', 'Employers', employers.count, false)}` +
+    '<button id="theme" class="secondary outline" onclick="toggleTheme()" aria-label="Light or dark theme" title="Light or dark theme">◐</button></nav>' +
     `<section id="sec-pending">${waiting.map((rows) => card(rows, runs)).join('') || '<p>Nothing pending.</p>'}</section>` +
     `<section id="sec-later" hidden>${later.map((s) => card(signalRows(db, s.id), runs, s)).join('') || '<p>Nothing for later.</p>'}</section>` +
     `<section id="sec-history" hidden>${history || '<p>No past signals.</p>'}</section>` +
