@@ -446,7 +446,8 @@ test('an employer signal card says employer after the list name', () => {
   seed(db, [[employer('n8nish', {}, { country: 'DE' }), [{ ...posting('n1', 'Senior Software Engineer'), location: 'Remote (Europe)' }]]]);
   const card = cardOf(get(db).body, db, 'n8nish');
   assert.match(card, /<b>n8nish<\/b> · 🇩🇪 DE · greenhouse · <b>APPLY<\/b> · employer · run 2026-11-02/);
-  assert.match(card, /\[employer · remote:🇩🇪 DE\]/);
+  // The scope, not the company's country (core/location.ts employerRule).
+  assert.match(card, /\[employer · remote:europe\]/);
   assert.match(card, /<button>Mark applied<\/button>/);
   assert.doesNotMatch(card, /Compose/);
   db.close();

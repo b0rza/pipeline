@@ -23,4 +23,7 @@ test('routeTag flags the country of a location tag and leaves the rest', () => {
   assert.equal(routeTag('perm · unknown:GB'), 'perm · unknown:🇬🇧 GB');
   assert.equal(routeTag('perm · remote:US-only'), 'perm · remote:🇺🇸 US-only');
   assert.equal(routeTag('title:contract · remote:DE-only'), 'title:contract · remote:🇩🇪 DE-only');
+  // The employer scope tags are words, not countries: no flag.
+  for (const tag of ['remote:global', 'remote:europe', 'remote:emea', 'remote:unstated']) assert.equal(routeTag(`employer · ${tag}`), `employer · ${tag}`);
+  assert.equal(routeTag('employer · remote:HR'), 'employer · remote:🇭🇷 HR');
 });

@@ -2,7 +2,7 @@
 import type { DatabaseSync } from 'node:sqlite';
 import { pathToFileURL } from 'node:url';
 import { openDb, sha256 } from './db.ts';
-import { eligible, employerEligible, remoteScope, workCountry, workMode } from './location.ts';
+import { eligible, employerRule, HOME, remoteScope, workCountry, workMode } from './location.ts';
 
 export type Route = 'apply' | 'outreach' | 'drop';
 
@@ -70,8 +70,12 @@ export function classify(title: string, body: string): { route: Route; reason: s
 // apply and outreach count signals (companies); dropped counts postings. A kept posting outside the owner's
 // work arrangements (core/location.ts) is dropped; one inside it carries its location tag: `perm · hybrid:GB`,
 // `perm · remote:US-only` when the posting restricts remote work to one country other than HR.
-// An employer's engineering postings all go to apply, a permanent one with reason `employer` (`employer · remote:HR`);
-// employerEligible() drops the ones that are not remote for the owner (`employer:not-remote`, `employer:US-only`).
+// An employer's engineering postings all go to apply, a permanent one with reason `employer`. employerRule() decides
+// from what the posting says about where the work may be done: Croatia named gets the agency tag with HR
+// (`employer · remote:HR`, `employer · hybrid:HR`, on-site outside Split drops as `onsite:HR`); a scope that covers
+// Croatia is `remote:global`, `remote:europe` or `remote:emea`; nothing named is `remote:unstated`; the rest drop
+// (`employer:not-remote`, `employer:US-only`, `employer:elsewhere`). eligible() does not run on the scope and unstated
+// tags: its country is the board's office or the company's own country there, not where the owner would work.
 export function filterRun(db: DatabaseSync, runDate: string): { apply: number; outreach: number; dropped: number } {
   const rows = db.prepare(`
     select p.id, p.company_id, p.title, p.location, p.body, p.raw, c.country, c.kind as company_kind, e.kind
@@ -98,12 +102,19 @@ export function filterRun(db: DatabaseSync, runDate: string): { apply: number; o
         let c = classify(r.title ?? '', r.body ?? '');
         const raw: unknown = r.raw ? JSON.parse(r.raw) : null;
         const mode = workMode(r.title ?? '', r.location, r.body ?? '', raw);
-        const country = workCountry(r.location, raw, r.country ?? '', mode);
+        let country = workCountry(r.location, raw, r.country ?? '', mode);
         if (c.route !== 'drop') {
-          const scope = mode === 'remote' ? remoteScope(r.title ?? '', r.location, r.body ?? '', country) : null;
-          if (r.company_kind === 'employer' && c.route === 'outreach') c = { route: 'apply', reason: 'employer' };
-          const strict = r.company_kind === 'employer' ? employerEligible(mode, country, scope) : { ok: true as const };
-          const e = strict.ok ? eligible(mode, country, r.location, scope) : strict;
+          let e: { ok: boolean; reason: string };
+          if (r.company_kind === 'employer') {
+            if (c.route === 'outreach') c = { route: 'apply', reason: 'employer' };
+            const v = employerRule(r.title ?? '', r.location, r.body ?? '', raw, mode);
+            if (!v.keep) e = { ok: false, reason: v.reason };
+            else if (v.home) e = eligible(mode, (country = HOME), r.location, mode === 'remote' ? HOME : null);
+            else e = { ok: true, reason: v.tag };
+          } else {
+            const scope = mode === 'remote' ? remoteScope(r.title ?? '', r.location, r.body ?? '', country) : null;
+            e = eligible(mode, country, r.location, scope);
+          }
           c = e.ok ? { ...c, reason: `${c.reason} · ${e.reason}` } : { route: 'drop', reason: e.reason };
         }
         setRoute.run(c.route, c.reason, mode, country, r.id);
@@ -172,7 +183,8 @@ export function report(db: DatabaseSync, runDate: string): string {
     }
   }
   const nDropped = dropped.reduce((n, d) => n + d.n, 0);
-  // location:IN and onsite:DE count under location and onsite, employer:US-only under employer:XX-only.
+  // location:IN and onsite:DE count under location and onsite, employer:US-only under employer:XX-only;
+  // employer:elsewhere and employer:not-remote stay as they are.
   const byReason = new Map<string, number>();
   for (const d of dropped) {
     const reason = d.reason.replace(/^(location|onsite):.*/, '$1').replace(/^employer:[A-Z]{2}-only$/, 'employer:XX-only');

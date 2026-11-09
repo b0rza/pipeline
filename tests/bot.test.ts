@@ -464,7 +464,7 @@ test('an employer signal says employer after the list name, an agency signal doe
   assert.equal(digest[0].text, '<b>Digest 2026-11-02</b> · 2 apply · 0 outreach · 1 dropped postings');
   assert.deepEqual(digest.slice(1).map((m) => m.text), [
     '<b>stripeish</b> · 🇺🇸 US · greenhouse · <b>APPLY</b> · employer\n' +
-      '• <a href="https://example.test/s1">Senior Software Engineer</a> — Remote (Europe) [employer · remote:🇺🇸 US]',
+      '• <a href="https://example.test/s1">Senior Software Engineer</a> — Remote (Europe) [employer · remote:europe]',
     '<b>zeta</b> · 🇬🇧 GB · greenhouse · <b>APPLY</b>\n' +
       '• <a href="https://example.test/z1">Senior Software Engineer, Contract</a> — London [title:contract · unknown:🇬🇧 GB]',
   ]);

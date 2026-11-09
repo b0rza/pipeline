@@ -123,7 +123,7 @@ test('the out files say employer after the list name for an employer signal', ()
   publishRun(db, '2026-11-02', root);
   const n8n = readFileSync(join(root, '2026-11-02', 'n8nish.md'), 'utf8');
   assert.equal(n8n, '# n8nish\n\nDE · greenhouse · APPLY · employer · run 2026-11-02\n\n' +
-    '- [Senior Software Engineer](https://example.test/n1) — Remote (Europe) [employer · remote:DE]\n');
+    '- [Senior Software Engineer](https://example.test/n1) — Remote (Europe) [employer · remote:europe]\n');
   assert.ok(readFileSync(join(root, '2026-11-02', 'zeta.md'), 'utf8').includes('\nGB · greenhouse · APPLY · run 2026-11-02\n'));
   const summary = readFileSync(join(root, '2026-11-02', 'summary.md'), 'utf8');
   assert.ok(summary.includes('### n8nish (DE, greenhouse) · employer — [n8nish.md](n8nish.md)'));

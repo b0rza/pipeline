@@ -4,7 +4,6 @@ import { upsertCompanies } from '../core/companies.ts';
 import { openDb } from '../core/db.ts';
 import { diffRun } from '../core/diff.ts';
 import { classify, filterRun, report } from '../core/filter.ts';
-import { employerEligible } from '../core/location.ts';
 import { snapshotCompany } from '../core/snapshot.ts';
 import type { Company, NormalizedPosting } from '../core/types.ts';
 
@@ -296,19 +295,7 @@ test('filterRun tags remote restricted to one country, keeps its route, drops it
   db.close();
 });
 
-test('employerEligible keeps remote open to Croatia and anything in Croatia, and drops the rest', () => {
-  assert.deepEqual(employerEligible('remote', 'US', null), { ok: true });
-  assert.deepEqual(employerEligible('remote', 'DE', 'HR'), { ok: true });
-  assert.deepEqual(employerEligible('remote', 'US', 'US'), { ok: false, reason: 'employer:US-only' });
-  assert.deepEqual(employerEligible('remote', 'IN', 'IN'), { ok: false, reason: 'employer:IN-only' });
-  for (const mode of ['hybrid', 'onsite', 'unknown'] as const) {
-    assert.deepEqual(employerEligible(mode, 'US', null), { ok: false, reason: 'employer:not-remote' });
-    assert.deepEqual(employerEligible(mode, null, null), { ok: false, reason: 'employer:not-remote' });
-    assert.deepEqual(employerEligible(mode, 'HR', null), { ok: true });
-  }
-});
-
-test('filterRun puts an employer\'s engineering postings on apply and keeps only remote open to Croatia or in Croatia', () => {
+test('filterRun puts an employer\'s engineering postings on apply and keeps only what is open to someone in Croatia', () => {
   const db = openDb(':memory:');
   // Stripe-like: US, office roles in US cities, a few remote ones. n8n-like: DE, remote in Europe.
   const stripeish = { ...company('stripeish'), country: 'US', kind: 'employer' as const };
@@ -328,55 +315,87 @@ test('filterRun puts an employer\'s engineering postings on apply and keeps only
     at(posting('s9', 'Platform Engineer', 'This role is on-site only.'), 'Zagreb'),
     at(posting('s10', 'Data Engineer'), 'Bangalore', { workplace_type: 'remote' }),
     at(posting('s11', 'Software Engineer'), 'Split, Croatia'),
+    // Real locations from the 2026-11-09 dry run (GitLab, Supabase, Sentry, Anthropic, Cursor).
+    at(posting('s12', 'Senior Solutions Architect - Japan'), 'Remote, Japan'),
+    at(posting('s13', 'Software Engineer - Auth'), 'Remote, Global', { remote: true }),
+    at(posting('s14', 'Support Engineer (AMER)'), 'Remote, AMER', { remote: true }),
+    at(posting('s15', 'Senior Software Engineer, AI Platform'), 'San Francisco, California', { remote: true, workplace_type: 'Hybrid' }),
+    at(posting('s16', 'Data Center Mechanical Engineer'), 'Remote-Friendly, United States'),
+    at(posting('s17', 'Backend Engineer (Ruby), Create: Change Record'), 'Remote, Poland; Remote, United Kingdom'),
+    at(posting('s18', 'Field Engineer - South Korea'), 'South Korea', { remote: true }),
   ], '2026-11-09');
   snapshotCompany(db, n8nish, [
     at(posting('n1', 'Senior Software Engineer'), 'Remote (Europe)'),
     at(posting('n2', 'Engineering Talent Pool'), 'Remote'),
     at(posting('n3', 'Fullstack Engineer (B2B contract)'), 'Remote'),
     at(posting('n4', 'Software Engineer'), 'Berlin'),
+    at(posting('n5', 'Engineering Manager | Remote | Europe'), 'Berlin Office', { remote: true }),
+    at(posting('n6', 'Senior Product Engineer (TS/NodeJS/Vue)'), 'Berlin Office',
+      { remote: true, secondary_locations: ['Slovenia', 'Germany', 'London Office', 'United Kingdom', 'Croatia', 'Spain'] }),
+    at(posting('n7', 'Forward Deployed Engineer - US East Coast'), 'Boston', { remote: true }),
   ], '2026-11-09');
-  snapshotCompany(db, agency, [at(posting('a1', 'Senior Software Engineer'), 'San Francisco, CA')], '2026-11-09');
+  snapshotCompany(db, agency, [
+    at(posting('a1', 'Senior Software Engineer'), 'San Francisco, CA'),
+    // The agency rule is unchanged except for the country table: Japan is no longer read as the company's US.
+    at(posting('a2', 'Senior Solutions Architect - Japan'), 'Remote, Japan'),
+    at(posting('a3', 'Full Stack Engineer'), 'Remote (Europe)'),
+    at(posting('a4', 'Senior Software Engineer'), 'Remote - US'),
+  ], '2026-11-09');
   diffRun(db, '2026-11-09');
 
-  assert.deepEqual(filterRun(db, '2026-11-09'), { apply: 2, outreach: 1, dropped: 8 });
-  const postings = db.prepare('select external_id, route, route_reason from postings order by company_id, external_id')
-    .all().map((r) => [r.external_id, r.route, r.route_reason]);
+  assert.deepEqual(filterRun(db, '2026-11-09'), { apply: 2, outreach: 1, dropped: 17 });
+  const postings = db.prepare('select external_id, route, route_reason, work_country from postings order by company_id, external_id')
+    .all().map((r) => [r.external_id, r.route, r.route_reason, r.work_country]);
   assert.deepEqual(postings, [
-    // The agency is unchanged: an office role in the US stays on outreach.
-    ['a1', 'outreach', 'perm · unknown:US'],
-    // Remote in Europe: no single-country scope. The tag carries the company's country, as for an agency.
-    ['n1', 'apply', 'employer · remote:DE'],
-    ['n2', 'drop', 'evergreen'],
-    // A B2B posting keeps its reason.
-    ['n3', 'apply', 'b2b:b2b contract · remote:DE'],
-    ['n4', 'drop', 'employer:not-remote'],
+    ['a1', 'outreach', 'perm · unknown:US', 'US'],
+    ['a2', 'drop', 'location:JP', 'JP'],
+    ['a3', 'outreach', 'perm · remote:US', 'US'],
+    ['a4', 'outreach', 'perm · remote:US-only', 'US'],
+    // A covering scope is tagged by the scope, not the company's country.
+    ['n1', 'apply', 'employer · remote:europe', 'DE'],
+    ['n2', 'drop', 'evergreen', 'DE'],
+    // Nothing said about where: kept for the owner to judge. A B2B posting keeps its reason.
+    ['n3', 'apply', 'b2b:b2b contract · remote:unstated', 'DE'],
+    ['n4', 'drop', 'employer:not-remote', 'DE'],
+    // An office city in the location, the scope in the title.
+    ['n5', 'apply', 'employer · remote:europe', 'DE'],
+    // Croatia among the secondary locations: tagged and stored as HR.
+    ['n6', 'apply', 'employer · remote:HR', 'HR'],
+    ['n7', 'drop', 'employer:US-only', 'US'],
     // An office city with nothing said about remote, and hybrid outside Croatia.
-    ['s1', 'drop', 'employer:not-remote'],
-    ['s10', 'drop', 'location:IN'],
-    ['s11', 'apply', 'employer · unknown:HR'],
-    ['s2', 'drop', 'employer:not-remote'],
-    ['s3', 'drop', 'employer:US-only'],
-    ['s4', 'apply', 'employer · remote:US'],
-    ['s5', 'drop', 'non-engineering'],
-    // Several countries are no single-country restriction.
-    ['s6', 'apply', 'employer · remote:US'],
-    ['s7', 'apply', 'employer · hybrid:HR'],
-    ['s8', 'apply', 'title:contract · remote:HR'],
+    ['s1', 'drop', 'employer:not-remote', 'US'],
+    ['s10', 'drop', 'employer:IN-only', 'IN'],
+    ['s11', 'apply', 'employer · unknown:HR', 'HR'],
+    ['s12', 'drop', 'employer:JP-only', 'JP'],
+    ['s13', 'apply', 'employer · remote:global', 'US'],
+    ['s14', 'drop', 'employer:elsewhere', 'US'],
+    ['s15', 'drop', 'employer:US-only', 'US'],
+    ['s16', 'drop', 'employer:US-only', 'US'],
+    // A list of countries without Croatia is a restriction.
+    ['s17', 'drop', 'employer:elsewhere', 'PL'],
+    ['s18', 'drop', 'employer:KR-only', 'KR'],
+    ['s2', 'drop', 'employer:not-remote', 'IE'],
+    ['s3', 'drop', 'employer:US-only', 'US'],
+    ['s4', 'apply', 'employer · remote:europe', 'US'],
+    ['s5', 'drop', 'non-engineering', 'US'],
+    ['s6', 'drop', 'employer:elsewhere', 'US'],
+    ['s7', 'apply', 'employer · hybrid:HR', 'HR'],
+    ['s8', 'apply', 'title:contract · remote:HR', 'HR'],
     // In Croatia whatever the mode, but the owner's on-site rule still holds.
-    ['s9', 'drop', 'onsite:HR'],
+    ['s9', 'drop', 'onsite:HR', 'HR'],
   ]);
   // One signal per company, on apply.
   const signals = db.prepare('select company_id, list, ref_ids from signals order by company_id').all()
     .map((r) => [r.company_id, r.list, (JSON.parse(r.ref_ids as string) as string[]).length]);
-  assert.deepEqual(signals, [['agency', 'outreach', 1], ['n8nish', 'apply', 2], ['stripeish', 'apply', 5]]);
+  assert.deepEqual(signals, [['agency', 'outreach', 3], ['n8nish', 'apply', 4], ['stripeish', 'apply', 5]]);
   assert.match(report(db, '2026-11-09'),
-    /dropped: 1 employer:XX-only, 3 employer:not-remote, 1 evergreen, 1 location, 1 non-engineering, 1 onsite\n/);
+    /dropped: 7 employer:XX-only, 3 employer:elsewhere, 3 employer:not-remote, 1 evergreen, 1 location, 1 non-engineering, 1 onsite\n/);
 
   // Same day again: no new rows, same values.
   const before = postings;
   filterRun(db, '2026-11-09');
-  assert.deepEqual(db.prepare('select external_id, route, route_reason from postings order by company_id, external_id')
-    .all().map((r) => [r.external_id, r.route, r.route_reason]), before);
+  assert.deepEqual(db.prepare('select external_id, route, route_reason, work_country from postings order by company_id, external_id')
+    .all().map((r) => [r.external_id, r.route, r.route_reason, r.work_country]), before);
   assert.equal((db.prepare('select count(*) as n from signals').get() as { n: number }).n, 3);
   db.close();
 });

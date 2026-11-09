@@ -32,6 +32,50 @@ const COUNTRIES: Record<string, string[]> = {
   CO: ['Colombia', 'Colombian'], VN: ['Vietnam', 'Viet Nam', 'Vietnamese'], ID: ['Indonesia', 'Indonesian'],
   AE: ['United Arab Emirates', 'UAE'], AL: ['Albania', 'Albanian'], CA: ['Canada', 'Canadian'],
   AU: ['Australia', 'Australian'], EC: ['Ecuador'],
+  // The rest of ISO 3166-1, names and common variants only (no demonyms), so a posting in Japan reads as JP and not as
+  // the company's country. Left out on purpose: "Georgia" (the US state wins, see US_STATES; the country is "Republic
+  // of Georgia") and "Jersey" (New Jersey).
+  AD: ['Andorra'], AF: ['Afghanistan'], AG: ['Antigua and Barbuda', 'Antigua'], AI: ['Anguilla'], AM: ['Armenia'],
+  AO: ['Angola'], AQ: ['Antarctica'], AS: ['American Samoa'], AW: ['Aruba'], AX: ['Åland Islands', 'Aland Islands'],
+  AZ: ['Azerbaijan'], BB: ['Barbados'], BD: ['Bangladesh'], BF: ['Burkina Faso'], BH: ['Bahrain'], BI: ['Burundi'],
+  BJ: ['Benin'], BL: ['Saint Barthélemy'], BM: ['Bermuda'], BN: ['Brunei', 'Brunei Darussalam'],
+  BO: ['Bolivia'], BQ: ['Bonaire', 'Caribbean Netherlands'], BS: ['Bahamas', 'The Bahamas'], BT: ['Bhutan'],
+  BV: ['Bouvet Island'], BW: ['Botswana'], BY: ['Belarus'], BZ: ['Belize'], CC: ['Cocos Islands', 'Cocos (Keeling) Islands'],
+  CD: ['Democratic Republic of the Congo', 'DR Congo', 'DRC', 'Congo-Kinshasa'], CF: ['Central African Republic'],
+  CG: ['Republic of the Congo', 'Congo-Brazzaville', 'Congo'], CI: ["Côte d'Ivoire", "Cote d'Ivoire", 'Ivory Coast'],
+  CK: ['Cook Islands'], CL: ['Chile'], CM: ['Cameroon'], CN: ['China', "People's Republic of China", 'PRC'],
+  CR: ['Costa Rica'], CU: ['Cuba'], CV: ['Cabo Verde', 'Cape Verde'], CW: ['Curaçao', 'Curacao'], CX: ['Christmas Island'],
+  DJ: ['Djibouti'], DM: ['Dominica'], DO: ['Dominican Republic'], DZ: ['Algeria'], EH: ['Western Sahara'],
+  ER: ['Eritrea'], ET: ['Ethiopia'], FJ: ['Fiji'], FK: ['Falkland Islands'], FM: ['Micronesia'], FO: ['Faroe Islands'],
+  GA: ['Gabon'], GD: ['Grenada'], GE: ['Republic of Georgia'], GF: ['French Guiana'], GG: ['Guernsey'], GH: ['Ghana'],
+  GI: ['Gibraltar'], GL: ['Greenland'], GM: ['Gambia', 'The Gambia'], GN: ['Guinea'], GP: ['Guadeloupe'],
+  GQ: ['Equatorial Guinea'], GS: ['South Georgia and the South Sandwich Islands'], GT: ['Guatemala'], GU: ['Guam'],
+  GW: ['Guinea-Bissau'], GY: ['Guyana'], HK: ['Hong Kong'], HM: ['Heard Island and McDonald Islands'], HN: ['Honduras'],
+  HT: ['Haiti'], IL: ['Israel'], IM: ['Isle of Man'], IO: ['British Indian Ocean Territory'], IQ: ['Iraq'], IR: ['Iran'],
+  IS: ['Iceland'], JM: ['Jamaica'], JO: ['Jordan'], JP: ['Japan'], KE: ['Kenya'], KG: ['Kyrgyzstan'], KH: ['Cambodia'],
+  KI: ['Kiribati'], KM: ['Comoros'], KN: ['Saint Kitts and Nevis'], KP: ['North Korea'],
+  KR: ['South Korea', 'Republic of Korea', 'Korea'], KW: ['Kuwait'], KY: ['Cayman Islands'], KZ: ['Kazakhstan'],
+  LA: ['Laos', 'Lao PDR'], LB: ['Lebanon'], LC: ['Saint Lucia'], LI: ['Liechtenstein'], LK: ['Sri Lanka'], LR: ['Liberia'],
+  LS: ['Lesotho'], LY: ['Libya'], MA: ['Morocco'], MC: ['Monaco'], MD: ['Moldova'], ME: ['Montenegro'],
+  MF: ['Saint Martin'], MG: ['Madagascar'], MH: ['Marshall Islands'], MK: ['North Macedonia', 'Macedonia'], ML: ['Mali'],
+  MM: ['Myanmar', 'Burma'], MN: ['Mongolia'], MO: ['Macau', 'Macao'], MP: ['Northern Mariana Islands'], MQ: ['Martinique'],
+  MR: ['Mauritania'], MS: ['Montserrat'], MU: ['Mauritius'], MV: ['Maldives'], MW: ['Malawi'], MY: ['Malaysia'],
+  MZ: ['Mozambique'], NA: ['Namibia'], NC: ['New Caledonia'], NE: ['Niger'], NF: ['Norfolk Island'], NG: ['Nigeria'],
+  NI: ['Nicaragua'], NP: ['Nepal'], NR: ['Nauru'], NU: ['Niue'], NZ: ['New Zealand', 'Aotearoa'], OM: ['Oman'],
+  PA: ['Panama'], PE: ['Peru'], PF: ['French Polynesia'], PG: ['Papua New Guinea'], PM: ['Saint Pierre and Miquelon'],
+  PN: ['Pitcairn Islands'], PR: ['Puerto Rico'], PS: ['Palestine'], PW: ['Palau'], PY: ['Paraguay'], QA: ['Qatar'],
+  RE: ['Réunion', 'Reunion'], RU: ['Russia', 'Russian Federation'], RW: ['Rwanda'], SA: ['Saudi Arabia', 'KSA'],
+  SB: ['Solomon Islands'], SC: ['Seychelles'], SD: ['Sudan'], SG: ['Singapore'], SH: ['Saint Helena'],
+  SJ: ['Svalbard and Jan Mayen'], SL: ['Sierra Leone'], SM: ['San Marino'], SN: ['Senegal'], SO: ['Somalia'],
+  SR: ['Suriname'], SS: ['South Sudan'], ST: ['São Tomé and Príncipe', 'Sao Tome and Principe'], SV: ['El Salvador'],
+  SX: ['Sint Maarten'], SY: ['Syria'], SZ: ['Eswatini', 'Swaziland'], TC: ['Turks and Caicos Islands'], TD: ['Chad'],
+  TF: ['French Southern Territories'], TG: ['Togo'], TH: ['Thailand'], TJ: ['Tajikistan'], TK: ['Tokelau'],
+  TL: ['Timor-Leste', 'East Timor'], TM: ['Turkmenistan'], TN: ['Tunisia'], TO: ['Tonga'], TT: ['Trinidad and Tobago'],
+  TV: ['Tuvalu'], TW: ['Taiwan'], TZ: ['Tanzania'], UG: ['Uganda'], UM: ['United States Minor Outlying Islands'],
+  UY: ['Uruguay'], UZ: ['Uzbekistan'], VA: ['Vatican City', 'Holy See'], VC: ['Saint Vincent and the Grenadines'],
+  VE: ['Venezuela'], VG: ['British Virgin Islands'], VI: ['U.S. Virgin Islands', 'US Virgin Islands'], VU: ['Vanuatu'],
+  WF: ['Wallis and Futuna'], WS: ['Samoa'], XK: ['Kosovo'], YE: ['Yemen'], YT: ['Mayotte'], ZM: ['Zambia'],
+  ZW: ['Zimbabwe'],
 };
 
 const US_STATES = [
@@ -152,18 +196,22 @@ export function workMode(title: string, location: string | null, body: string, r
   return 'unknown';
 }
 
+// Every country an adapter wrote into raw: `countries` (Teamtailor, Breezy, Deel), `country` (Workday, Lever,
+// SmartRecruiters, BambooHR), `country_code`, in that order.
+function rawCountries(raw: unknown): string[] {
+  const r = asRecord(raw);
+  const fields = [...(Array.isArray(r.countries) ? r.countries : []), r.country, r.country_code];
+  return fields.flatMap((f) => (typeof f === 'string' ? [countryOf(f)].filter((c): c is string => !!c) : []));
+}
+
 // ISO 3166-1 alpha-2 or null. Raw country fields, then country names in the location, then cities, then the
 // company's seed country for a remote posting that names none ("Remote", "Remote (Global)"). Pass the posting's
 // mode when it is known; without it, only raw flags and the location text decide whether it is remote.
 export function workCountry(
   location: string | null, raw: unknown, companyCountry: string, mode: WorkMode = workMode('', location, '', raw),
 ): string | null {
-  const r = asRecord(raw);
-  const fields = [...(Array.isArray(r.countries) ? r.countries : []), r.country, r.country_code];
-  for (const f of fields) {
-    const code = typeof f === 'string' ? countryOf(f) : null;
-    if (code) return code;
-  }
+  const fromRaw = rawCountries(raw)[0];
+  if (fromRaw) return fromRaw;
   const text = location ?? '';
   const named = first([...matches(text, countryTable), ...shortMatches(text)]) ?? first(matches(text, cityTable));
   if (named) return named;
@@ -365,16 +413,248 @@ export function eligible(
   return { ok: true, reason: tag(mode) };
 }
 
-// An employer (companies.kind = 'employer') is held to a stricter rule than an agency, so one with hundreds of office
-// roles abroad cannot fill a card: a posting is kept only when it is remote with no single-country scope other than HR
-// (scope is remoteScope(): null for worldwide, Europe, EMEA, several countries or none stated), or when it is in HR
-// whatever the mode. Checked before eligible(), which still applies to what this keeps (a remote posting read as
-// India drops as `location:IN`, on-site in Zagreb as `onsite:HR`).
-export function employerEligible(
-  mode: WorkMode, country: string | null, scope: string | null,
-): { ok: true } | { ok: false; reason: string } {
-  if (country === HOME) return { ok: true };
-  if (mode !== 'remote') return { ok: false, reason: 'employer:not-remote' };
-  if (scope && scope !== HOME) return { ok: false, reason: `employer:${scope}-only` };
-  return { ok: true };
+// --- Employer rule ---------------------------------------------------------------------------------------------------
+// An employer (companies.kind = 'employer') hires in the places a posting names and nowhere else, so its postings are
+// held to what they say about where the work may be done, not to the agency rule above. See employerRule().
+
+// Scopes that include Croatia, by tag. "Eastern Europe", "Central Europe" and "CEE" count; Croatia is in them on most
+// lists. Upper-case abbreviations match case-sensitively, everything else case-insensitively.
+export type Cover = 'global' | 'europe' | 'emea';
+const COVERS: Record<Cover, string[]> = {
+  global: ['Global', 'Globally', 'Worldwide', 'World-wide', 'World wide', 'World', 'Anywhere', 'International', 'Internationally'],
+  emea: ['EMEA', 'Europe, Middle East and Africa', 'Europe, the Middle East and Africa', 'Europe, Middle East & Africa'],
+  europe: [
+    'Europe', 'European Union', 'European Economic Area', 'EU', 'EEA', 'European time zones', 'European timezones',
+    'European time zone', 'European timezone', 'European hours', 'CET', 'CEST', 'Central European Time', 'Central Europe',
+    'Southern Europe', 'Eastern Europe', 'South-East Europe', 'Southeast Europe', 'South Eastern Europe',
+    'Central and Eastern Europe', 'Central & Eastern Europe', 'CEE', 'Balkans', 'Western Balkans', 'UTC+1', 'UTC+2', 'GMT+1', 'GMT+2',
+  ],
+};
+// Regions that leave Croatia out. The ones inside the US resolve to US, so "US East Coast" drops as `employer:US-only`.
+const REGIONS_US = [
+  'East Coast', 'West Coast', 'US East', 'US West', 'Bay Area', 'San Francisco Bay Area', 'Silicon Valley', 'Midwest',
+  'Southwest', 'Northeast', 'Northwest', 'Southeast', 'Mid-Atlantic', 'Pacific Northwest',
+  'Pacific Time', 'Eastern Time', 'Central Time', 'Mountain Time', 'EST', 'PST', 'CST', 'MST', 'EDT', 'PDT', 'ET', 'PT',
+];
+const REGIONS_ELSEWHERE = [
+  'AMER', 'AMERS', 'Americas', 'North America', 'NORAM', 'NAMER', 'NA', 'LATAM', 'Latin America', 'South America',
+  'Central America', 'Caribbean', 'APAC', 'APJ', 'APJC', 'Asia Pacific', 'Asia-Pacific', 'Asia', 'Southeast Asia',
+  'South Asia', 'East Asia', 'ASEAN', 'ANZ', 'Oceania', 'Middle East', 'Middle Eastern', 'MENA', 'GCC', 'Africa',
+  'Sub-Saharan Africa', 'Nordics', 'Nordic', 'Nordic countries', 'Scandinavia', 'DACH', 'Benelux', 'UK&I', 'UKI',
+  'UK & Ireland', 'Iberia', 'Western Europe', 'Northern Europe',
+];
+// Region spans carry these codes; countries and cities carry their ISO code.
+const ELSEWHERE = '@elsewhere';
+const coverCode = (c: Cover) => `@${c}`;
+
+function regionTable(): { cs: RegExp; ci: RegExp; codes: Map<string, string> } {
+  const entries: [string, string][] = [
+    ...(Object.entries(COVERS) as [Cover, string[]][]).flatMap(([c, names]) => names.map((n): [string, string] => [n, coverCode(c)])),
+    ...REGIONS_US.map((n): [string, string] => [n, 'US']),
+    ...REGIONS_ELSEWHERE.map((n): [string, string] => [n, ELSEWHERE]),
+  ];
+  const abbr = (n: string) => n === n.toUpperCase() && n.length <= 5;
+  const codes = new Map(entries.map(([n, code]) => [abbr(n) ? n : n.toLowerCase(), code]));
+  const build = (names: string[], flags: string) => new RegExp(
+    `(?<![\\p{L}\\p{N}])(${names.sort((a, b) => b.length - a.length).map(escape).join('|')})(?![\\p{L}\\p{N}])`, flags);
+  return {
+    cs: build(entries.map(([n]) => n).filter(abbr), 'gu'), ci: build(entries.map(([n]) => n).filter((n) => !abbr(n)), 'giu'), codes,
+  };
+}
+const regions = regionTable();
+
+// Every place in text: countries, US states and codes, cities, covering scopes and regions. Where two overlap, the
+// longer wins ("South Africa" over "Africa", "Western Europe" over "Europe"). "Anywhere in the US" is not a scope.
+function places(text: string): Span[] {
+  const found: Span[] = [...spans(text), ...citySpans(text)];
+  for (const re of [regions.cs, regions.ci]) {
+    for (const m of text.matchAll(re)) {
+      const code = regions.codes.get(m[1]) ?? regions.codes.get(m[1].toLowerCase())!;
+      if (/^anywhere$/i.test(m[1]) && /^\s+(?:in|within|across|throughout)\b/i.test(text.slice(m.index + m[0].length))) continue;
+      found.push({ start: m.index, end: m.index + m[0].length, code });
+    }
+  }
+  found.sort((a, b) => a.start - b.start || b.end - a.end);
+  const out: Span[] = [];
+  for (const s of found) if (!out.length || s.start >= out[out.length - 1].end) out.push(s);
+  return out;
+}
+
+const isCover = (code: string) => code.startsWith('@') && code !== ELSEWHERE;
+// The widest covering scope among codes: global, then EMEA, then Europe.
+function widest(codes: string[]): Cover | null {
+  for (const c of ['global', 'emea', 'europe'] as const) if (codes.includes(coverCode(c))) return c;
+  return null;
+}
+
+// Words that say nothing about where: what is left of a location after these and its places is an unknown place.
+const FILLER = new RegExp(String.raw`(?<![\p{L}])(?:remote|remotely|distributed|friendly|first|fully|100%|hybrid|office|offices|on-?site|on site|in-office|home|work|from|wfh|based|only|travel|required|flexible|locations?|multiple|various|any|all|n/?a|tbd|and|or|the|in|within|of|time ?zones?|hours|regions?|countries|hq|headquarters|job|position|opportunity|preferred|north|south|east|west|northern|southern|eastern|western|central|greater|metro|area)(?![\p{L}])`, 'giu');
+const strip = (text: string, ss: Span[]) => {
+  let rest = text;
+  for (const s of [...ss].sort((a, b) => b.start - a.start)) rest = rest.slice(0, s.start) + ' ' + rest.slice(s.end);
+  return rest.replace(FILLER, ' ');
+};
+const leftover = (text: string, ss: Span[]) => /[\p{L}\p{N}]/u.test(strip(text, ss));
+
+// A title names a place only as a segment of its own: "Field Engineer - Japan", "Support Engineer (EMEA - Weekends)",
+// "Engineering Manager | Remote | Europe", "Senior DBRE - Germany/Austria/UK". Not "Sales Engineer - Italian Speaking"
+// (a language) and not "Global Payments Engineer".
+// Also a US state or Canadian province code after a comma ("Senior Customer Engineer, Majors - Pittsburgh, PA") and
+// "based in" a capitalised name ("Senior Presales Customer Engineer (based in Canberra)").
+const CA_PROVINCES = new Set(['AB', 'BC', 'MB', 'NB', 'NL', 'NS', 'ON', 'PE', 'QC', 'SK']);
+function titlePlaces(title: string): Span[] {
+  const out: Span[] = [];
+  for (const seg of title.split(/[-–—|()[\],/:;_]+/u)) {
+    const ss = places(seg);
+    // "Vancouver BC": a city and its state or province code.
+    const bare = seg.replace(/\s([A-Z]{2})\s*$/u, (m, code: string) => (STATE_CODES.has(code) || CA_PROVINCES.has(code) ? ' ' : m));
+    if (ss.length && !leftover(bare, places(bare))) out.push(...ss);
+  }
+  for (const m of title.matchAll(/(?<=\p{L}),\s*([A-Z]{2})(?![\p{L}])/gu)) {
+    const code = STATE_CODES.has(m[1]) ? 'US' : CA_PROVINCES.has(m[1]) ? 'CA' : null;
+    if (code) out.push({ start: m.index, end: m.index + m[0].length, code });
+  }
+  for (const m of title.matchAll(/\bbased in ((?:\p{Lu}[\p{L}.'-]*\s?)+)/gu)) {
+    const ss = places(m[1]);
+    out.push(...(ss.length ? ss : [{ start: m.index, end: m.index + m[0].length, code: ELSEWHERE }]));
+  }
+  return out;
+}
+
+// After a body phrase like "open to candidates based in": the places listed there, "the US and Europe", "Europe,
+// Africa, or Middle Eastern timezones", "Croatia, Serbia, Romania or Bulgaria". Stops at the first item that is not a place.
+const ITEM_TAIL = /^\s*(?:time ?zones?|timezones?|hours|regions?|countries|only)\b/iu;
+const ITEM_SEP = /^\s*(?:,\s*(?:(?:and|or)\s+)?|\/\s*|&\s*|(?:and\/or|and|or)\s+)(?:the\s+)?/iu;
+function listAfter(text: string, pos: number, all: Span[]): string[] {
+  const at = (p: number) => all.find((s) => s.start === p);
+  let p = pos + (/^(?:the )/i.exec(text.slice(pos))?.[0].length ?? 0);
+  const codes: string[] = [];
+  for (let s = at(p); s; s = at(p)) {
+    codes.push(s.code);
+    let end = s.end;
+    for (let t = ITEM_TAIL.exec(text.slice(end)); t; t = ITEM_TAIL.exec(text.slice(end))) end += t[0].length;
+    const sep = ITEM_SEP.exec(text.slice(end));
+    if (!sep) break;
+    p = end + sep[0].length;
+  }
+  return codes;
+}
+
+// Body phrases that say where the hire may be, each followed by a list of places. Tested against the 4153 employer
+// postings of 2026-11-09. Deliberately not here, all seen in those bodies: "our team works remotely across Europe"
+// (n8n, every posting, also the US East Coast one), "opportunities across Southern EMEA", "distributed globally across
+// the AMER, EMEA, and APAC regions" (GitLab), "a WeWork membership you can use anywhere in the world" (Supabase),
+// "one of Europe's fastest-growing fintechs" (Mollie), "remote-first company across the US and Europe" (Linear, on an
+// office-based APAC role).
+const BODY_LISTS = [
+  /\b(?:open|available) to (?:candidates|applicants|people|engineers|anyone)(?: who are)?(?: currently)?(?: based| located| living| residing)?(?: anywhere)? (?:in|from|within) /,
+  /\b(?:looking for|seeking|considering|interested in|accepting applications from|hiring)(?: candidates| applicants| people| someone| engineers| talent)?(?: who are)?(?: based| located| living| residing)?(?: anywhere)? (?:in|from|within) /,
+  /\b(?:you|candidates?|applicants?|you're|you are)(?: must| should| will| need to)?(?: be)?(?: currently)? (?:based|located|living|residing)(?: anywhere)? (?:in|within):? /,
+  /(?:^|[-•*·:] )based (?:anywhere )?in:? /,
+  /\bbased in: /,
+  /\b(?:required |requires? (?:a )?)?(?:location|residency|residence)(?:\/location)? (?:is )?(?:in|within) /,
+  /\bremote(?:ly)?(?: work| working| role| position)?(?: from| in| within)?(?: anywhere)? (?:in|within|from) /,
+  /\b(?:work|working|hire|hiring|live|living|based|located)(?: remotely)?(?: from)?(?: almost)? anywhere (?:in|within|across|throughout) /,
+  /\b(?:authori[sz]ed|eligible|entitled|permitted|right) to work(?: legally| lawfully| permanently)? (?:in|within|for) /,
+  /\b(?:must|need to|needs to|have to|required to)(?: currently)?(?: be)? (?:based|located|resident|residing|living|reside|live)(?: and work)? (?:in|within) /,
+  /\b(?:position|role|job) is (?:based|located) in /,
+];
+// Phrases that are a covering scope on their own.
+const BODY_COVERS: [RegExp, Cover][] = [
+  [/\bwork(?:ing)? (?:remotely )?from anywhere\b(?!\s+(?:in|within)\b)/, 'global'],
+  [/\b(?:we hire|hiring|we recruit) (?:globally|worldwide|internationally|from anywhere)\b/, 'global'],
+  [/\blooking for (?:[\p{L}-]+ ){0,4}(?:engineers|developers|people|talent) (?:from )?(?:worldwide|globally|all over the world)\b/u, 'global'],
+  [/\b(?:EMEA)[ -]only\b/, 'emea'],
+  [/\b(?:Europe|EU|EEA)[ -]only\b/, 'europe'],
+];
+// "Preferred time zones are UTC+1 to UTC+7", "between UTC-8 and UTC+2": a band that includes CET (UTC+1) or CEST (+2).
+const UTC_BAND = /\b(?:time ?zones?|hours)\b[^.]{0,30}?\b(?:UTC|GMT) ?([+\-−–]) ?(\d{1,2})(?::\d\d)?\s*(?:to|and|-|–)\s*(?:UTC|GMT)? ?([+\-−–]) ?(\d{1,2})/iu;
+
+// codes: places the body restricts the hire to. cover: Europe or EMEA named in those phrases. global: worldwide said
+// anywhere ("We hire globally", "work from anywhere", "hire almost anywhere in the world"); that is company boilerplate
+// on every posting (Supabase, Sourcegraph, Doist), so a restriction in the same body wins over it.
+type BodySays = { codes: string[]; cover: Cover | null; global: boolean };
+function bodySays(body: string): BodySays {
+  const text = body.replace(/\s+/g, ' ');
+  const all = places(text);
+  const codes: string[] = [];
+  for (const re of BODY_LISTS) {
+    for (const m of text.matchAll(new RegExp(re.source, 'giu'))) codes.push(...listAfter(text, m.index + m[0].length, all));
+  }
+  // The agency rule's restrictions too: "US-based candidates only", "based in Spain only".
+  for (const h of bodyHits(text)) if (h.kind === 'country') codes.push(...h.codes);
+  // Pay by hire location lists where the hire may be (Cloudflare): "For Germany based hires: Estimated annual salary".
+  for (const m of text.matchAll(/\bfor ([^.:;$€£]{2,120}?)[ -]based hires\b/giu)) {
+    const ss = places(m[1]);
+    codes.push(...(ss.length ? ss.map((s) => s.code) : [ELSEWHERE]));
+  }
+  for (const [re, c] of BODY_COVERS) if (new RegExp(re.source, 'iu').test(text)) codes.push(coverCode(c));
+  const band = UTC_BAND.exec(text);
+  if (band) {
+    const n = (sign: string, h: string) => (sign === '+' ? 1 : -1) * Number(h);
+    const [lo, hi] = [n(band[1], band[2]), n(band[3], band[4])].sort((a, b) => a - b);
+    if (lo <= 2 && hi >= 1) codes.push(coverCode('europe'));
+  }
+  return {
+    codes: codes.filter((c) => !isCover(c)), cover: widest(codes.filter((c) => c !== coverCode('global'))),
+    global: codes.includes(coverCode('global')),
+  };
+}
+
+// The drop reason for places that leave Croatia out: one country is `employer:XX-only`, anything else (several
+// countries, a region, a place the tables do not know) is `employer:elsewhere`.
+function elsewhere(codes: string[]): { keep: false; reason: string } {
+  const distinct = [...new Set(codes)];
+  return { keep: false, reason: distinct.length === 1 && distinct[0] !== ELSEWHERE ? `employer:${distinct[0]}-only` : 'employer:elsewhere' };
+}
+
+export type EmployerVerdict = { keep: true; home: true } | { keep: true; home: false; tag: string } | { keep: false; reason: string };
+
+// Where an employer posting may be worked from, decided from what it says, first match wins:
+//  1. Croatia named (location, an Ashby secondary location, a title segment, a body list, the raw country) → keep;
+//     the caller tags it with eligible() as today (`remote:HR`, `hybrid:HR`, on-site outside Split drops).
+//  2. Not remote → `employer:not-remote`.
+//  3. The location ties places to "remote" ("Remote, Poland; Remote, United Kingdom", "Remote, AMER") and names no
+//     covering scope → drop. That list is the hire list; a title's "EMEA" does not widen it.
+//  4. A title segment names a covering scope ("Remote | Europe", "(EMEA)") → keep, `remote:europe` etc.
+//  5. A title segment names another place ("- Japan", "(AMER/APAC)", "- US East Coast") → drop.
+//  6. The location names a covering scope ("Remote, Global", "Europe", "Remote - EMEA") → keep.
+//  7. A body phrase names Europe or EMEA (BODY_LISTS, "EU only", UTC_BAND) → keep.
+//  8. A body phrase names other places ("open to candidates based in North America", "must be based in the US",
+//     "For Germany based hires") → drop.
+//  9. The body says worldwide ("We hire globally", "work from anywhere") → keep, `remote:global`. After 8 because it is
+//     boilerplate: Sourcegraph says "hire almost anywhere in the world" and then "require ... located in the United States".
+// 10. The location names any other place, a city or a word the tables do not know included ("San Francisco,
+//     California", "London", "Sao Paulo") → drop.
+// 11. Nothing named ("Remote", "Distributed", empty) → keep, `remote:unstated`, for the owner to judge.
+// The title outranks the location because the location is often the board's default office (n8n: "Berlin Office" on
+// every posting) or a blanket "Remote, Global" (Supabase "Platform Security Engineer (AMER/APAC)").
+export function employerRule(title: string, location: string | null, body: string, raw: unknown, mode: WorkMode): EmployerVerdict {
+  const r = asRecord(raw);
+  const secondary = Array.isArray(r.secondary_locations) ? r.secondary_locations.filter((s): s is string => typeof s === 'string') : [];
+  const loc = [location ?? '', ...secondary].filter(Boolean).join('; ');
+  const locPlaces = places(loc);
+  const rawCodes = rawCountries(raw);
+  const tPlaces = titlePlaces(title);
+  const said = bodySays(body);
+
+  if ([...locPlaces, ...tPlaces].some((s) => s.code === HOME) || rawCodes.includes(HOME) || said.codes.includes(HOME)) {
+    return { keep: true, home: true };
+  }
+  if (mode !== 'remote') return { keep: false, reason: 'employer:not-remote' };
+
+  const locCover = widest(locPlaces.map((s) => s.code));
+  const tiedPlaces = loc.split(/[;|\n]/).filter((seg) => REMOTE_WORD.test(seg)).flatMap(places);
+  if (tiedPlaces.length && !locCover) return elsewhere(tiedPlaces.map((s) => s.code));
+  const keep = (c: Cover) => ({ keep: true as const, home: false as const, tag: `remote:${c}` });
+  const tCover = widest(tPlaces.map((s) => s.code));
+  if (tCover) return keep(tCover);
+  if (tPlaces.length) return elsewhere(tPlaces.map((s) => s.code));
+  if (locCover) return keep(locCover);
+  if (said.cover) return keep(said.cover);
+  if (said.codes.length) return elsewhere(said.codes);
+  if (said.global) return keep('global');
+  const named = [...locPlaces.map((s) => s.code), ...rawCodes];
+  if (named.length || leftover(loc, locPlaces)) return elsewhere(named.length ? named : [ELSEWHERE]);
+  return { keep: true, home: false, tag: 'remote:unstated' };
 }
