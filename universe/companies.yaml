@@ -2400,5 +2400,960 @@
   status: active
   notes: "Lublin, size unverified. E-commerce agency: Adobe Commerce / Magento 2 and headless (own site). No Clutch profile at clutch.co/profile/monogo. Careers page links monogo.zohorecruit.eu/jobs/Careers (EU Zoho data centre); resolver confirmed; Zoho board monogo.zohorecruit.eu/jobs/Careers is live as a page, but its RSS feed answers \"job list removed\" on 2026-11-05 and the adapter reads only RSS"
 
+# --- Desirable employers (kind: employer), 2026-11-07 research, on the list since 2026-11-09 ---
+# Product companies the owner would work for directly, not agencies (README "Glossary", employer). From
+#   universe/_research/2026-11-07-desirable-employers.yaml; notes start with the postings count read that day.
+#   core/filter.ts puts their engineering postings on apply and keeps only remote ones open to Croatia, or ones in Croatia.
+
+- id: stripe
+  name: Stripe
+  domain: stripe.com
+  country: US
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://stripe.com/jobs/search
+  ats: { vendor: greenhouse, slug: stripe }
+  storefront: null
+  status: active
+  employer:
+    group: payments-fintech
+    bar: reach
+    why: "Payments infrastructure behind most storefront checkouts he has built; senior full-stack and integration-heavy engineering is the core of what Stripe hires for"
+    remote: { europe: partial, says: "Remote only in named countries where Stripe has a presence (e.g. Ireland, Spain, Poland, Romania, Sweden); Croatia never listed", source: "https://stripe.com/blog/remote-hub-one-year" }
+    engagement: employment
+  notes: "766 postings on 2026-11-07; eng 232, none with a Europe/EMEA/global location string. Cut ~300 roles Jan 2025 (https://www.bankingdive.com/news/stripe-cuts-300-employees/737977/); no 2026 cuts found. No Croatian entity found"
+
+- id: adyen
+  name: Adyen
+  domain: adyen.com
+  country: NL
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://careers.adyen.com/
+  ats: { vendor: greenhouse, slug: adyen }
+  storefront: null
+  status: active
+  employer:
+    group: payments-fintech
+    bar: reach
+    why: "Enterprise payments platform used by large retail storefronts; his checkout and payment-integration work is exactly the merchant side of Adyen's product"
+    remote: { europe: no, says: "Office-first company; postings say no remote-only roles, about 3 office days a week. Nearest offices Prague, Warsaw, Munich", source: "https://careers.adyen.com/" }
+    engagement: employment
+  notes: "255 postings on 2026-11-07; eng 73. In-house careers front end, applications on Greenhouse. Agreed to buy Talon.One for EUR 750m in April 2026 (https://www.fintechfutures.com/m-a/adyen-to-acquire-talon-one-for-750m). Relocation would be required"
+
+- id: mollie
+  name: Mollie
+  domain: mollie.com
+  country: NL
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://jobs.mollie.com/vacancies
+  ats: { vendor: ashby, slug: Mollie }
+  storefront: null
+  status: active
+  employer:
+    group: payments-fintech
+    bar: stretch
+    why: "European payments for SMB and mid-market merchants, Shopify/WooCommerce plug-ins and checkout APIs; Benelux, which is on his target list"
+    remote: { europe: partial, says: "All 17 engineering vacancies tied to Amsterdam, Milan or Lisbon offices; one says relocation support is not offered", source: "https://jobs.mollie.com/vacancies" }
+    engagement: employment
+  notes: "51 postings on 2026-11-07; eng 19. Completed acquisition of GoCardless on 2026-09-01 (https://www.finextra.com/pressarticle/110784/mollie-completes-acquisition-of-gocardless); watch for integration roles"
+
+- id: checkout-com
+  name: Checkout.com
+  domain: checkout.com
+  country: GB
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://www.checkout.com/jobs
+  ats: { vendor: ashby, slug: checkout.com }
+  storefront: null
+  status: active
+  employer:
+    group: payments-fintech
+    bar: stretch
+    why: "Enterprise card acquiring and checkout APIs for large merchants; his payment-integration depth is the customer side of their product"
+    remote: { europe: no, says: "Hybrid, three office days a week Tuesday to Thursday; engineering roles OnSite or Hybrid", source: "https://www.checkout.com/jobs" }
+    engagement: employment
+  notes: "173 postings on 2026-11-07; eng 43. Closed Berlin and Porto offices in late-2023 cuts (https://sifted.eu/articles/checkout-com-layoffs); no 2026 cuts found"
+
+- id: klarna
+  name: Klarna
+  domain: klarna.com
+  country: SE
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://www.klarna.com/careers/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  employer:
+    group: payments-fintech
+    bar: stretch
+    why: "BNPL inside checkout; he has integrated payment methods like it into storefronts. Nordics is on his target list"
+    remote: { europe: unknown, says: "Careers page names offices from Stockholm to Madrid and says nothing on remote; a third-party guide says hybrid within the employment country (unverified)", source: "https://www.klarna.com/careers/" }
+    engagement: employment
+  notes: "Board is on Deel (jobs.deel.com/job-boards/klarna), not a polled vendor; greenhouse and ashby slug klarna both 404. Headcount fell ~5,500 to ~3,400 under an AI-first freeze that spared engineering (https://newsletter.pragmaticengineer.com/p/inside-the-layoffs-at-klarna)"
+
+- id: primer
+  name: Primer
+  domain: primer.io
+  country: GB
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://primer.io/careers
+  ats: { vendor: ashby, slug: primer.io }
+  storefront: null
+  status: active
+  employer:
+    group: payments-fintech
+    bar: fit
+    why: "Payments orchestration for merchants: checkout, multiple processors, fraud and routing, the integration layer he builds by hand on storefronts"
+    remote: { europe: partial, says: "Fully remote since day one, staff in 30+ countries; current postings name countries (e.g. UK, Ireland, South Africa) and a remote Europe talent-community form", source: "https://primer.io/careers" }
+    engagement: employment
+  notes: "24 postings on 2026-11-07; eng 11. Europe talent pool: https://jobs.ashbyhq.com/primer.io/6aaaf2e8-a90e-484f-a587-505f200d1927. Raised USD 100M Series C in May 2026, US hiring focus (https://fintech.global/2026/05/20/primer-raises-100m-series-c-to-power-ai-payments/)"
+
+- id: paddle
+  name: Paddle
+  domain: paddle.com
+  country: GB
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://www.paddle.com/careers
+  ats: { vendor: ashby, slug: paddle }
+  storefront: null
+  status: active
+  employer:
+    group: payments-fintech
+    bar: stretch
+    why: "Merchant of record and checkout for software companies; checkout, tax and subscription billing are his territory"
+    remote: { europe: partial, says: "Engineering roles remote but limited to UK, Portugal and Ireland; each posting names its allowed locations", source: "https://jobs.ashbyhq.com/paddle/461578a0-a996-4468-a2dc-5055fa08503e" }
+    engagement: employment
+  notes: "15 postings on 2026-11-07; eng 5. Mostly Go backend. Last reported cut 8% in Jan 2023 (https://www.fintechfutures.com/job-cuts-new-hires/uk-fintech-paddle-cuts-8-of-workforce)"
+
+- id: gocardless
+  name: GoCardless
+  domain: gocardless.com
+  country: GB
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://gocardless.com/about/careers/
+  ats: { vendor: greenhouse, slug: gocardless }
+  storefront: null
+  status: active
+  employer:
+    group: payments-fintech
+    bar: stretch
+    why: "Bank-debit and open-banking payments for recurring billing; payments integration for subscription commerce"
+    remote: { europe: partial, says: "Hybrid working model; all 26 jobs in London, Leeds, Lisbon, Riga or Melbourne, none remote", source: "https://gocardless.com/about/careers/" }
+    engagement: employment
+  notes: "26 postings on 2026-11-07; eng 11. Now 'GoCardless, a Mollie company' since 2026-09-01 (https://thepaypers.com/mergers-aquisitions-and-investments/news/mollie-finalises-gocardless-acquisition-to-expand-payments-offer). ~90 roles restructured in year to June 2025 (https://www.cityam.com/gocardless-to-axe-90-jobs-as-uk-fintech-eyes-profitability/)"
+
+- id: wise
+  name: Wise
+  domain: wise.com
+  country: GB
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://wise.jobs/
+  ats: { vendor: smartrecruiters, slug: Wise }
+  storefront: null
+  status: active
+  employer:
+    group: payments-fintech
+    bar: stretch
+    why: "Cross-border payments infrastructure with a large product engineering org; payments domain knowledge carries over, and Wise Platform sells to banks and merchants"
+    remote: { europe: no, says: "Most teams do not support permanent virtual working; new joiners live within commuting distance and are in office most days for six months, then up to 90 days a year elsewhere", source: "https://wise.jobs/flexible-working" }
+    engagement: employment
+  notes: "427 postings on 2026-11-07; Engineering on page 1 in London, Tallinn, Budapest, Singapore, Austin, Hyderabad; 0 remote flags on page 1. Polling costs one detail request per posting (~428 requests a run). Budapest is the nearest office. Kept polled (owner, 2026-11-09): about 7 minutes a run at 1 request per second"
+
+- id: shopify
+  name: Shopify
+  domain: shopify.com
+  country: CA
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://www.shopify.com/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  employer:
+    group: commerce-platforms
+    bar: reach
+    why: "He builds Shopify storefronts; checkout, payments and apps engineering at the platform itself is the top of that ladder"
+    remote: { europe: partial, says: "Remote by design, but the location filter lists only Germany, Ireland, Luxembourg, Poland, Spain and the UK in Europe", source: "https://www.shopify.com/careers" }
+    engagement: employment
+  notes: "Jobs served in-house on shopify.com/careers; greenhouse, ashby and lever slug shopify all 404. Would need a custom scraper. April 2025 'AI before headcount' memo slowed net hiring (secondary source)"
+
+- id: commercetools
+  name: commercetools
+  domain: commercetools.com
+  country: DE
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://commercetools.com/careers
+  ats: { vendor: greenhouse, slug: commercetools }
+  storefront: null
+  status: active
+  employer:
+    group: commerce-platforms
+    bar: fit
+    why: "He has shipped commercetools storefronts; a vendor engineer who knows the client side of their APIs is rare. Also the anchor of the pipeline's partner universe"
+    remote: { europe: partial, says: "Hybrid-first, three office days a week, hiring in selected hubs; all 17 engineering roles hybrid in Berlin, Munich, London or Valencia", source: "https://commercetools.com/careers" }
+    engagement: employment
+  notes: "35 postings on 2026-11-07; eng 17. DACH, which is last on his list for contracting but neutral for employment. ~10% laid off Feb 2025 (https://techcrunch.com/2025/02/26/commercetools-a-pioneer-in-headless-commerce-lays-off-dozens-of-staff/)"
+
+- id: bigcommerce
+  name: "Commerce (formerly BigCommerce)"
+  domain: bigcommerce.com
+  country: US
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://www.bigcommerce.com/company/careers/flexible-working/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  employer:
+    group: commerce-platforms
+    bar: stretch
+    why: "SaaS commerce platform with headless (Catalyst/Next.js) storefronts and B2B; his storefront and checkout background maps directly"
+    remote: { europe: partial, says: "Most roles can be remote; recent engineering postings remote within the US only, earlier Spain/Poland/UK roles closed", source: "https://www.bigcommerce.com/company/careers/flexible-working/" }
+    engagement: employment
+  notes: "Workday: bigcommerce.wd12.myworkdayjobs.com/Commerce (needs a Workday adapter); greenhouse slug bigcommerce 404. Renamed Commerce.com Aug 2025; workforce cuts committed 2025-12-31 and 2026-09-09, restructuring through H1 2027 (https://www.globenewswire.com/news-release/2026/11/05/3396272/0/en/commerce-announces-third-quarter-2026-financial-results.html). Poor timing"
+
+- id: medusa
+  name: Medusa
+  domain: medusajs.com
+  country: DK
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://medusajs.com/careers/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  employer:
+    group: commerce-platforms
+    bar: fit
+    why: "Open-source TypeScript/Node headless commerce engine; his stack and commerce depth exactly, small team where a lead-level hire matters"
+    remote: { europe: unknown, says: "No open roles today; a Feb 2025 hiring post said remote, Europe + US East Coast", source: "https://news.ycombinator.com/item?id=43005637" }
+    engagement: employment
+  notes: "In-house careers page with no roles; ashby slugs medusa and medusajs 404. A third-party profile lists staff in Croatia (unverified). Direct approach is the only route"
+
+- id: saleor
+  name: Saleor
+  domain: saleor.io
+  country: PL
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://saleor.io/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  employer:
+    group: commerce-platforms
+    bar: fit
+    why: "Open-source GraphQL headless commerce (Python core, React/Next storefront and apps); composable commerce he already builds for clients"
+    remote: { europe: unknown, says: "Careers page redirects to a Notion page that only renders with JavaScript; not read", source: "https://saleor.notion.site/open-positions" }
+    engagement: unknown
+  notes: "Board is a Notion page (saleor.notion.site); workable and ashby slug saleor 404. Saleor Commerce sp. z o.o., Wroclaw, spun out of Mirumee. Check by hand"
+
+- id: spryker
+  name: Spryker
+  domain: spryker.com
+  country: DE
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://spryker.com/career
+  ats: { vendor: greenhouse, slug: spryker }
+  storefront: null
+  status: active
+  employer:
+    group: commerce-platforms
+    bar: fit
+    why: "Composable B2B/B2C commerce platform sold to the same enterprise retailers as commercetools and SFCC; his platform knowledge transfers"
+    remote: { europe: unknown, says: "No open roles; older postings seen only on aggregators said remote Europe or worldwide (unverified)", source: "https://spryker.com/career/open-positions" }
+    engagement: employment
+  notes: "0 postings on 2026-11-07; Greenhouse board exists (200) but empty. Funding round led by TCV and One Peak Jan 2026 (secondary source). A tracker shows headcount down ~25% year on year (unverified)"
+
+- id: elastic-path
+  name: "Elastic Path"
+  domain: elasticpath.com
+  country: CA
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://www.elasticpath.com/company/careers
+  ats: { vendor: bamboohr, slug: elasticpath }
+  storefront: null
+  status: active
+  employer:
+    group: commerce-platforms
+    bar: stretch
+    why: "Composable commerce APIs plus a Next.js storefront kit; same headless architecture he ships on"
+    remote: { europe: partial, says: "Moved to remote and hires regardless of location, but current senior engineer posting requires Canada", source: "https://www.elasticpath.com/company/careers" }
+    engagement: employment
+  notes: "3 postings on 2026-11-07; eng 0 by title on 2026-11-07. Vancouver HQ. Layoff news not searched specifically"
+
+- id: automattic
+  name: Automattic
+  domain: automattic.com
+  country: US
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://automattic.com/work-with-us/
+  ats: { vendor: greenhouse, slug: automatticcareers }
+  storefront: null
+  status: active
+  employer:
+    group: commerce-platforms
+    bar: fit
+    why: "Owns WooCommerce (and WordPress.com, WordPress VIP); fully distributed, hires from anywhere, and commerce engineering is a core product line"
+    remote: { europe: yes, says: "Work from anywhere with internet access; staff in 80 countries", source: "https://automattic.com/work-with-us/" }
+    engagement: both
+  notes: "11 postings on 2026-11-07; eng 2 (board shows WordPress VIP and Pressable roles; developer hiring page is in-house at automattic.com/jobs). Hiring uses a paid trial project (https://automattic.com/work-with-us/how-we-hire-developers/). B2B contractor pay for international staff is from HN comments only (unverified). Cut 16% Apr 2025; new staggered layoffs from Oct 2026 (https://techcrunch.com/2026/10/21/automattic-begins-layoffs-following-board-upheaval-and-executive-departures/). Poor timing"
+
+- id: talon-one
+  name: Talon.One
+  domain: talon.one
+  country: DE
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://www.talon.one/careers
+  ats: { vendor: greenhouse, slug: talonone }
+  storefront: null
+  status: active
+  employer:
+    group: commerce-adjacent
+    bar: stretch
+    why: "Promotions and loyalty engine; he integrates loyalty programmes into checkouts, which is Talon.One's customer-facing integration work"
+    remote: { europe: no, says: "Prioritizes regular in-person collaboration; all 25 roles office-tied, engineering Berlin only", source: "https://www.talon.one/careers" }
+    engagement: employment
+  notes: "25 postings on 2026-11-07; eng 10. EU Greenhouse board (job-boards.eu.greenhouse.io) answers on the standard boards-api host. Being acquired by Adyen, EUR 750m, announced 2026-04-23 (https://www.talon.one/blog/adyen-to-acquire-talon-one); close date 2026-07-01 unverified"
+
+- id: voucherify
+  name: Voucherify
+  domain: voucherify.io
+  country: PL
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://www.voucherify.io/careers
+  ats: { vendor: bamboohr, slug: voucherify }
+  storefront: null
+  status: active
+  employer:
+    group: commerce-adjacent
+    bar: fit
+    why: "Promotions, coupons and loyalty API for commerce; TypeScript/Node integration work and loyalty depth line up"
+    remote: { europe: unclear, says: "Hybrid and fully remote work offered; team in Poland, Hungary, Germany, US; current technical role Remote / Katowice, Poland", source: "https://www.voucherify.io/careers" }
+    engagement: unknown
+  notes: "4 postings on 2026-11-07; eng 2 by title (GTM Engineer and an engineering general application). Polish companies often hire on B2B contracts; whether this one does is unverified"
+
+- id: antavo
+  name: Antavo
+  domain: antavo.com
+  country: HU
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://antavo.com/careers/
+  ats: { vendor: bamboohr, slug: antavo }
+  storefront: null
+  status: active
+  employer:
+    group: commerce-adjacent
+    bar: fit
+    why: "Enterprise loyalty platform; his Salesforce Loyalty Management and loyalty integration work is the direct match, and Budapest is close"
+    remote: { europe: partial, says: "Remote-first company; product and engineering teams in Hungary, client-facing in UK, NL, US", source: "https://antavo.com/careers/" }
+    engagement: unknown
+  notes: "1 postings on 2026-11-07; Only a London general CV application. Engineering hires outside Hungary unverified. HQ listed as Budapest/London"
+
+- id: algolia
+  name: Algolia
+  domain: algolia.com
+  country: US
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://www.algolia.com/careers
+  ats: { vendor: greenhouse, slug: algolia }
+  storefront: null
+  status: active
+  employer:
+    group: commerce-adjacent
+    bar: stretch
+    why: "Search and discovery on most headless storefronts, with Vue and React InstantSearch libraries; he has integrated it as a customer"
+    remote: { europe: partial, says: "Hiring worldwide with remote and hybrid, but all 13 open engineering roles are office-based in Paris or London", source: "https://www.algolia.com/careers" }
+    engagement: employment
+  notes: "28 postings on 2026-11-07; eng 13. Founded in Paris, engineering there. Last recorded layoff Feb 2023; hiring has slowed (third-party data)"
+
+- id: constructor
+  name: Constructor
+  domain: constructor.com
+  country: US
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://constructor.com/about/careers
+  ats: { vendor: ashby, slug: constructor }
+  storefront: null
+  status: active
+  employer:
+    group: commerce-adjacent
+    bar: fit
+    why: "AI product search and discovery built only for e-commerce; storefront integration and commerce data are what its engineers work on"
+    remote: { europe: yes, says: "100% remote-first, live and work from wherever; live postings say Remote - EMEA", source: "https://constructor.com/about/careers" }
+    engagement: unknown
+  notes: "41 postings on 2026-11-07; eng 14, 5 with a Remote - EMEA location (e.g. Senior Backend Engineer: ML Infrastructure, Integration Engineer). Croatia named only on aggregators (unverified). Not Constructor Tech/Labs in Bremen"
+
+- id: contentful
+  name: Contentful
+  domain: contentful.com
+  country: DE
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://www.contentful.com/careers/
+  ats: { vendor: greenhouse, slug: contentful }
+  storefront: null
+  status: active
+  employer:
+    group: commerce-adjacent
+    bar: stretch
+    why: "Headless CMS that sits beside commercetools/SFCC in composable storefronts he has built; TypeScript/React product"
+    remote: { europe: partial, says: "Hybrid in UK, Ireland, Netherlands, Germany, US (search snippet; page returned 429); two engineering roles in Berlin and Denver, neither remote", source: "https://www.contentful.com/careers/" }
+    engagement: employment
+  notes: "29 postings on 2026-11-07; eng 6. Remote policy not read first-hand (HTTP 429). No 2025-2026 layoffs found"
+
+- id: storyblok
+  name: Storyblok
+  domain: storyblok.com
+  country: AT
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://www.storyblok.com/jobs
+  ats: { vendor: greenhouse, slug: storyblok }
+  storefront: null
+  status: active
+  employer:
+    group: commerce-adjacent
+    bar: fit
+    why: "Headless CMS with a strong Vue/Nuxt ecosystem and commerce integrations; Vue/Nuxt plus composable storefronts is his centre"
+    remote: { europe: yes, says: "Remote-only since day one, 45+ countries; all 11 roles remote, some scoped to Europe", source: "https://www.storyblok.com/jobs" }
+    engagement: unknown
+  notes: "11 postings on 2026-11-07; eng 5. Europe-scoped example: https://www.storyblok.com/job?gh_jid=4749653101 (countries not listed). Some roles exclude Croatia (Germany/Austria/UK). Linz HQ, close to Split. USD 80M Series C 2024"
+
+- id: recharge
+  name: Recharge
+  domain: getrecharge.com
+  country: US
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://getrecharge.com/careers/
+  ats: { vendor: ashby, slug: recharge }
+  storefront: null
+  status: active
+  employer:
+    group: commerce-adjacent
+    bar: stretch
+    why: "Subscription billing and checkout for Shopify merchants; Shopify plus checkout plus payments in one product"
+    remote: { europe: no, says: "All four open roles US & Canada or Toronto", source: "https://jobs.ashbyhq.com/recharge" }
+    engagement: employment
+  notes: "4 postings on 2026-11-07; eng 1 (Senior DevOps, US & Canada). Bought Skio for USD 105M on 2026-04-30 (https://thenextweb.com/news/skio-recharge-105m-exit-subscription-shopify). Watch only for a contract or a policy change"
+
+- id: klaviyo
+  name: Klaviyo
+  domain: klaviyo.com
+  country: US
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://www.klaviyo.com/careers
+  ats: { vendor: greenhouse, slug: klaviyo }
+  storefront: null
+  status: active
+  employer:
+    group: commerce-adjacent
+    bar: stretch
+    why: "Commerce CRM and marketing automation wired into Shopify and other storefronts; CRM sync is one of the integrations he owns"
+    remote: { europe: partial, says: "Regional hubs; European offices London and Dublin; none of 152 roles remote", source: "https://www.klaviyo.com/careers" }
+    engagement: employment
+  notes: "152 postings on 2026-11-07; eng 58, European engineering London only. Munich also appears as a location"
+
+- id: sanity
+  name: Sanity
+  domain: sanity.io
+  country: US
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://www.sanity.io/careers
+  ats: { vendor: ashby, slug: sanity }
+  storefront: null
+  status: active
+  employer:
+    group: commerce-adjacent
+    bar: stretch
+    why: "Structured content platform used in headless commerce, TypeScript/React throughout, and now shipping agent features (Agent Foundations team)"
+    remote: { europe: partial, says: "Engineering in Europe hybrid in London or Oslo; only non-engineering roles say Remote in Europe", source: "https://www.sanity.io/careers" }
+    engagement: employment
+  notes: "32 postings on 2026-11-07; eng 15, 1 Remote in Europe (Director, Support Engineering). Founded in Oslo. USD 85M Series C 2025"
+
+- id: vercel
+  name: Vercel
+  domain: vercel.com
+  country: US
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://vercel.com/careers
+  ats: { vendor: greenhouse, slug: vercel }
+  storefront: null
+  status: active
+  employer:
+    group: devtools-ai
+    bar: reach
+    why: "Next.js and the hosting layer for headless storefronts; also owns Nuxt's core team since 2025 (own knowledge), and sells v0 and AI SDK, so Vue/Nuxt plus agent depth both count"
+    remote: { europe: partial, says: "European roles hybrid, e.g. 3 in-office days in London or Berlin; software engineering roles SF or NYC", source: "https://job-boards.greenhouse.io/vercel/jobs/5778418004" }
+    engagement: employment
+  notes: "87 postings on 2026-11-07; eng 35, none Europe-remote. Remote locations only Germany (sales), Australia, US"
+
+- id: supabase
+  name: Supabase
+  domain: supabase.com
+  country: US
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://supabase.com/careers
+  ats: { vendor: ashby, slug: supabase }
+  storefront: null
+  status: active
+  employer:
+    group: devtools-ai
+    bar: reach
+    why: "Postgres backend platform heavily used by AI coding tools; TypeScript, full-stack, and a team that hires globally with no location pay adjustment"
+    remote: { europe: yes, says: "Born remote, hires globally, no offices, 60+ countries; most engineering roles Remote, Global", source: "https://supabase.com/careers" }
+    engagement: unknown
+  notes: "70 postings on 2026-11-07; eng 48, 32 with a Remote Global/EMEA location. Uses Rippling, Remote and Deel for global hiring (https://supabase.com/blog/why-supabase-remote); employee vs contractor not stated. Strongest live match for Croatia"
+
+- id: sentry
+  name: Sentry
+  domain: sentry.io
+  country: US
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://sentry.io/careers/
+  ats: { vendor: ashby, slug: sentry }
+  storefront: null
+  status: active
+  employer:
+    group: devtools-ai
+    bar: stretch
+    why: "Error monitoring with large JS/TS SDKs and AI debugging (Seer, agent tracing); Python/React/TypeScript stack"
+    remote: { europe: partial, says: "European engineering in the Vienna office; postings ask candidates to live near Vienna or relocate", source: "https://jobs.ashbyhq.com/sentry/c796cd46-d80c-4ea8-9b0d-0eecbfc1353e" }
+    engagement: employment
+  notes: "39 postings on 2026-11-07; eng 32. Vienna pay per Austrian IT collective agreement. Vienna is a short move from Split"
+
+- id: anthropic
+  name: Anthropic
+  domain: anthropic.com
+  country: US
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://www.anthropic.com/careers
+  ats: { vendor: greenhouse, slug: anthropic }
+  storefront: null
+  status: active
+  employer:
+    group: devtools-ai
+    bar: reach
+    why: "Makes Claude Code; his hardened team setup (sandboxing, secrets, review flow) is the kind of field experience their applied and Claude Code teams want"
+    remote: { europe: no, says: "Most staff in the Bay Area; European roles office-based in London, Dublin, Munich, Paris, Milan; remote-friendly only US, Canada, Australia", source: "https://www.anthropic.com/careers" }
+    engagement: employment
+  notes: "675 postings on 2026-11-07; eng 276. Sponsors visas for eligible roles. Relocation to a European office would be required"
+
+- id: cursor
+  name: "Cursor (Anysphere)"
+  domain: cursor.com
+  country: US
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://cursor.com/careers
+  ats: { vendor: ashby, slug: cursor }
+  storefront: null
+  status: active
+  employer:
+    group: devtools-ai
+    bar: reach
+    why: "AI code editor; daily heavy agent use in real teams is the product's core user, and he has the governance side most applicants lack"
+    remote: { europe: partial, says: "Mostly SF, NYC, Palo Alto; a few roles say Remote with no country; London has solutions and forward-deployed roles only", source: "https://cursor.com/careers" }
+    engagement: employment
+  notes: "121 postings on 2026-11-07; eng 51. Correction to the research agent's read: the careers page looked in-house, but the board is Ashby slug cursor (postings at jobs.ashbyhq.com/cursor). SpaceX agreed to buy Anysphere for USD 60B in stock on 2026-06-16 (https://www.cnbc.com/2026/06/16/spacex-spcx-cursor-acquisition-ipo.html); close in Aug 2026 and move into the xAI group unverified"
+
+- id: posthog
+  name: PostHog
+  domain: posthog.com
+  country: US
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://posthog.com/careers
+  ats: { vendor: ashby, slug: posthog }
+  storefront: null
+  status: active
+  employer:
+    group: devtools-ai
+    bar: stretch
+    why: "Product analytics and dev tools, TypeScript/React plus Python, ships AI features fast, and hires product engineers who own things end to end"
+    remote: { europe: yes, says: "Hiring limited to people based in GMT+2 through GMT-8, which covers Croatia; Croatia not on the EOR exclusion list", source: "https://posthog.com/handbook/people/hiring-process" }
+    engagement: both
+  notes: "10 postings on 2026-11-07; eng 6, current ones mostly US or hybrid UK. Own entities US, UK, Germany; elsewhere Deel EOR or contractor via Deel (handbook search snippets, partly unverified). Country rules page is ~435 days old"
+
+- id: gitlab
+  name: GitLab
+  domain: gitlab.com
+  country: US
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://about.gitlab.com/jobs/
+  ats: { vendor: greenhouse, slug: gitlab }
+  storefront: null
+  status: active
+  employer:
+    group: devtools-ai
+    bar: stretch
+    why: "All-remote DevSecOps platform with a Vue frontend and Duo agent features; Vue plus agent workflow plus review/governance is a direct fit"
+    remote: { europe: partial, says: "All-remote, but each posting names countries; Europe listings name PL, UK, DE, AT, IE, NL, FR, ES, SE, CH, IL; Croatia on none", source: "https://handbook.gitlab.com/handbook/people-group/employment-solutions/" }
+    engagement: both
+  notes: "248 postings on 2026-11-07; eng 114. Hires only where it has an entity or PEO; contractor in some countries. Cut ~14% (~350) in June 2026 and exited 22 of ~60 countries (https://techcrunch.com/2026/06/03/gitlab-cuts-14-of-staff-as-it-scales-its-platform-to-serve-ai-workloads/); whether Croatia was one is unknown"
+
+- id: netlify
+  name: Netlify
+  domain: netlify.com
+  country: US
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://www.netlify.com/careers/
+  ats: { vendor: greenhouse, slug: netlify }
+  storefront: null
+  status: active
+  employer:
+    group: devtools-ai
+    bar: fit
+    why: "Hosting and composable-web platform used for headless storefronts; framework-agnostic, Vue/Nuxt friendly"
+    remote: { europe: unclear, says: "Remote-first and fully distributed, 14+ countries; all 5 open roles Remote with no country named", source: "https://www.netlify.com/careers/" }
+    engagement: unknown
+  notes: "5 postings on 2026-11-07; eng 0 by title. Hiring very low. Last layoffs 2023"
+
+- id: linear
+  name: Linear
+  domain: linear.app
+  country: US
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://linear.app/careers
+  ats: { vendor: ashby, slug: linear }
+  storefront: null
+  status: active
+  employer:
+    group: devtools-ai
+    bar: reach
+    why: "Issue tracking for engineering teams, TypeScript/React, building agent integrations; small senior team with live Europe full-stack roles"
+    remote: { europe: yes, says: "Fully remote; Senior/Staff Fullstack and Product Engineer roles open to candidates based in the US and Europe", source: "https://jobs.ashbyhq.com/linear/d3bc1ced-3ce4-4086-a050-555055dbb1ff" }
+    engagement: employment
+  notes: "32 postings on 2026-11-07; eng 11, 3 with a Europe location (Senior/Staff Fullstack, Senior/Staff Product Engineer, DevRel). Second Europe role: https://jobs.ashbyhq.com/linear/069c4628-88d7-4e4d-b393-c996fc7f3076. No layoff news"
+
+- id: sourcegraph
+  name: Sourcegraph
+  domain: sourcegraph.com
+  country: US
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://sourcegraph.com/jobs
+  ats: { vendor: greenhouse, slug: sourcegraph91 }
+  storefront: null
+  status: active
+  employer:
+    group: devtools-ai
+    bar: stretch
+    why: "Code search and code-intelligence for large codebases, the context layer coding agents use; his agent setup is directly relevant"
+    remote: { europe: yes, says: "All-remote, hires almost anywhere; platform role prefers EST or Europe, time zone UTC-8 to UTC+2 with 20h EST overlap", source: "https://job-boards.greenhouse.io/sourcegraph91/jobs/6103628004" }
+    engagement: employment
+  notes: "7 postings on 2026-11-07; eng 2. Amp (the coding agent) split off as its own company on 2025-12-02 (https://ampcode.com/news/amp-frontier-corporation) and hires separately; Amp careers channel not found. Pay by location zone 1-4"
+
+- id: grafana-labs
+  name: "Grafana Labs"
+  domain: grafana.com
+  country: US
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://grafana.com/careers/
+  ats: { vendor: greenhouse, slug: grafanalabs }
+  storefront: null
+  status: active
+  employer:
+    group: devtools-ai
+    bar: stretch
+    why: "Observability platform, Go backend with a large TypeScript/React frontend; fully remote at 1,600+ people"
+    remote: { europe: partial, says: "100% remote, 40+ countries; current European engineering postings name Germany, Ireland, Spain, Sweden, UK; older ones were EMEA-wide", source: "https://job-boards.greenhouse.io/grafanalabs/jobs/6250631004" }
+    engagement: employment
+  notes: "134 postings on 2026-11-07; eng 81. Country list changes per posting, so worth watching for an EMEA-wide one. Reported accelerating growth Feb 2026"
+
+- id: prisma
+  name: Prisma
+  domain: prisma.io
+  country: DE
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://www.prisma.io/careers
+  ats: { vendor: rippling, slug: prisma-careers }
+  storefront: null
+  status: active
+  employer:
+    group: devtools-ai
+    bar: fit
+    why: "TypeScript ORM and Postgres platform for Node developers, now with AI/MCP tooling; small remote team where TS/Node seniority counts"
+    remote: { europe: partial, says: "Work from anywhere within UTC-5 to UTC+3 (covers Croatia), but the two open listings are general applications marked Remote (Germany)", source: "https://www.prisma.io/careers" }
+    engagement: unknown
+  notes: "2 postings on 2026-11-07; eng 1 (general engineering application). 45 people in 16 countries. Greenhouse prisma6 is a different company (PRISMA, Leipzig)"
+
+- id: clerk
+  name: Clerk
+  domain: clerk.com
+  country: US
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://clerk.com/careers
+  ats: { vendor: ashby, slug: clerk }
+  storefront: null
+  status: active
+  employer:
+    group: devtools-ai
+    bar: stretch
+    why: "Auth and user management for React/Next apps, including B2B and billing; the checkout/account side of storefronts he builds"
+    remote: { europe: unknown, says: "Global fully remote team, always looking for Staff+ engineers; only open roles are design, Americas only", source: "https://clerk.com/careers" }
+    engagement: employment
+  notes: "2 postings on 2026-11-07; eng 0. Staff+ open invitation is the only engineering route"
+
+- id: cloudflare
+  name: Cloudflare
+  domain: cloudflare.com
+  country: US
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://www.cloudflare.com/careers/jobs/
+  ats: { vendor: greenhouse, slug: cloudflare }
+  storefront: null
+  status: active
+  employer:
+    group: devtools-ai
+    bar: reach
+    why: "Workers, edge storefront hosting and an agents platform; edge rendering for commerce plus agent infrastructure"
+    remote: { europe: partial, says: "Evolving into a hybrid model; European engineering hybrid, in-office or distributed in Lisbon, London, Munich, Amsterdam, Paris", source: "https://www.cloudflare.com/careers/jobs/" }
+    engagement: employment
+  notes: "464 postings on 2026-11-07; eng 220. Cut ~1,100 jobs (~20%) on 2026-05-07, engineering mostly spared, still hiring (https://techcrunch.com/2026/05/08/cloudflare-says-ai-made-1100-jobs-obsolete-even-as-revenue-hit-a-record-high/)"
+
+- id: tailscale
+  name: Tailscale
+  domain: tailscale.com
+  country: CA
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://www.tailscale.com/careers
+  ats: { vendor: greenhouse, slug: tailscale }
+  storefront: null
+  status: active
+  employer:
+    group: devtools-ai
+    bar: stretch
+    why: "Zero-trust networking used to sandbox and connect dev and agent environments (this pipeline's own deploy uses it); TypeScript frontend roles exist"
+    remote: { europe: partial, says: "Work from almost anywhere, but located in Canada, the US and the UK; all 23 engineering listings remote US or Canada", source: "https://www.tailscale.com/careers" }
+    engagement: employment
+  notes: "76 postings on 2026-11-07; eng 28. UK listings are support and marketing only"
+
+- id: n8n
+  name: n8n
+  domain: n8n.io
+  country: DE
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://n8n.io/careers/
+  ats: { vendor: ashby, slug: n8n }
+  storefront: null
+  status: active
+  employer:
+    group: remote-first-europe
+    bar: fit
+    why: "Workflow automation with AI agents, built in TypeScript/Node with a Vue frontend; his stack exactly, plus agent depth"
+    remote: { europe: yes, says: "Remote-first across Europe, the UK and select US; live Senior Product Engineer (TS/Node/Vue) lists Croatia among eligible countries", source: "https://jobs.ashbyhq.com/n8n/896c58a8-0388-4037-b265-82b15633a568" }
+    engagement: unknown
+  notes: "48 postings on 2026-11-07; eng 8. The only company found that names Croatia on a live senior role. Berlin-centred, meets in person at least three times a year; right to work required outside Germany"
+
+- id: infobip
+  name: Infobip
+  domain: infobip.com
+  country: HR
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://www.infobip.com/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  employer:
+    group: remote-first-europe
+    bar: fit
+    why: "Croatian CPaaS with a high engineering bar and conversational-commerce products (WhatsApp, RCS checkout flows); a senior lead role in his own country"
+    remote: { europe: partial, says: "Zagreb engineering roles hybrid, flexible model tailored to local regulations (seen only on aggregator copies, unverified)", source: "https://www.infobip.com/careers" }
+    engagement: employment
+  notes: "Workday: infobip.wd3.myworkdayjobs.com/InfobipCareers, applications only through Workday (needs a Workday adapter). Croatian entities. Split office unverified"
+
+- id: microblink
+  name: Microblink
+  domain: microblink.com
+  country: HR
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://microblink.com/careers/
+  ats: { vendor: greenhouse, slug: microblink }
+  storefront: null
+  status: active
+  employer:
+    group: remote-first-europe
+    bar: stretch
+    why: "Croatian ID and document scanning SDK company with a high bar, web SDKs, and identity checks used in checkout/KYC flows"
+    remote: { europe: partial, says: "No remote statement; some postings are region-wide, e.g. Croatia, Serbia, Romania or Bulgaria", source: "https://job-boards.greenhouse.io/microblink/jobs/5259933007" }
+    engagement: employment
+  notes: "7 postings on 2026-11-07; eng 2, 3 postings located in Croatia; no senior web/full-stack role now. HQ New York, R&D Zagreb. Headcount ~372 (2023) to ~200 (2026) per a third-party estimate (https://www.reveliolabs.com/companies/microblink/employees)"
+
+- id: reversinglabs
+  name: ReversingLabs
+  domain: reversinglabs.com
+  country: US
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://www.reversinglabs.com/careers
+  ats: { vendor: workable, slug: reversinglabs }
+  storefront: null
+  status: active
+  employer:
+    group: remote-first-europe
+    bar: stretch
+    why: "Software supply-chain security with its main engineering office in Zagreb; his secrets and sandboxing work for agent setups is the same threat model"
+    remote: { europe: partial, says: "In-office, fully remote and hybrid offered depending on location; staff in US, Croatia, EMEA", source: "https://www.reversinglabs.com/careers" }
+    engagement: employment
+  notes: "9 postings on 2026-11-07; eng 8, 5 in Zagreb (Senior Software, Senior Data, Senior DevOps Engineer). Working model per Zagreb role unverified. Senior Full Stack role listed Ireland/UK only. Backend/security stack, a gap from his commerce frontend"
+
+- id: productive
+  name: Productive
+  domain: productive.io
+  country: HR
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://productive.io/careers/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  employer:
+    group: remote-first-europe
+    bar: fit
+    why: "Croatian SaaS for agency operations (projects, budgets, billing); he knows the agency buyer from the inside, and it is self-funded and profitable"
+    remote: { europe: partial, says: "Remote is here to stay, work from anywhere; the only listing is an open application in Zagreb, hybrid", source: "https://productive.io/careers/open-job-application/" }
+    engagement: employment
+  notes: "In-house careers page (productive.io/careers); teamtailor slug productive 404, workable returned an empty 200 that proves nothing. Entity: The Productive Company d.o.o. Not Productiv, Inc."
+
+- id: doist
+  name: Doist
+  domain: doist.com
+  country: US
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://www.todoist.com/careers
+  ats: { vendor: ashby, slug: todoist-inc }
+  storefront: null
+  status: active
+  employer:
+    group: remote-first-europe
+    bar: stretch
+    why: "Fully remote product company (Todoist, Twist) that never restricts location and pays by formula; long-tenure senior culture"
+    remote: { europe: yes, says: "Never places restrictions on location; current Apple Engineer posting fully remote with no time-zone rule", source: "https://www.todoist.com/careers" }
+    engagement: unknown
+  notes: "2 postings on 2026-11-07; eng 1 (Apple Engineer), no web role now. doist.com/careers redirects to todoist.com; postings under 'Todoist Inc.' (ashby slugs doist, Doist, Todoist 404). ~100 people, 30+ countries"
+
+- id: remote-com
+  name: Remote
+  domain: remote.com
+  country: US
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://remote.com/careers
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  employer:
+    group: remote-first-europe
+    bar: fit
+    why: "EOR and global HR platform that is itself globally remote; full-stack product engineering, and the company that could employ him in Croatia for anyone else"
+    remote: { europe: yes, says: "Most jobs are globally remote; title locations are for advertising only, each posting's Practicals section sets limits", source: "https://remote.com/openings" }
+    engagement: employment
+  notes: "In-house board at apply.remote.com/jobs/<uuid>. A Greenhouse board remotecom exists but has 0 postings; ashby slug remote 404. No Engineering department listings on 2026-11-07. Last layoff found 10% in July 2022"
+
+- id: toggl
+  name: Toggl
+  domain: toggl.com
+  country: EE
+  kind: employer
+  phases: [p1]
+  source: desirable-employers
+  careers_url: https://toggl.com/jobs/
+  ats: { vendor: unknown }
+  storefront: null
+  status: active
+  employer:
+    group: remote-first-europe
+    bar: fit
+    why: "Fully remote since 2014, 43 countries; React/TypeScript full-stack roles, mid-size product company with a known process"
+    remote: { europe: yes, says: "Fully remote since 2014, people in 43 countries and 16 time zones; no openings shown today", source: "https://toggl.com/jobs/" }
+    engagement: unknown
+  notes: "Board is Toggl Hire, its own product (apply.hire.toggl.com); workable returned an empty 200 that proves nothing. Process: timed test, live coding, paid test week (https://toggl.com/jobs/togglhire-fullstack). A Senior Full Stack role (~EUR 83k, UTC-4 to UTC+4, Oct 2026) seen only on aggregators (unverified)"
+
 # --- Your network: past clients, current agency's clients, Studion alumni companies ---
 # Add entries here by hand. Highest reply rate of any source (SPEC "Universe seeding").

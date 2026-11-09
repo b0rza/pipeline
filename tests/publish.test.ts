@@ -108,3 +108,25 @@ test('summary.md lists apply signals with a B2B posting first, B2B postings firs
     '- [Backend Engineer, Contract](https://example.test/u1) — London [title:contract · unknown:GB]\n'));
   db.close();
 });
+
+test('the out files say employer after the list name for an employer signal', () => {
+  const db = openDb(':memory:');
+  const entries: [Company, NormalizedPosting[]][] = [
+    [company('n8nish', { country: 'DE', kind: 'employer' }), [{ ...posting('n1', 'Senior Software Engineer'), location: 'Remote (Europe)' }]],
+    [company('zeta'), [posting('z1', 'Senior Software Engineer, Contract')]],
+  ];
+  upsertCompanies(db, entries.map(([c]) => c));
+  for (const [c, ps] of entries) snapshotCompany(db, c, ps, '2026-11-02');
+  diffRun(db, '2026-11-02');
+  filterRun(db, '2026-11-02');
+  const root = mkdtempSync(join(process.env.TMPDIR ?? tmpdir(), 'publish-'));
+  publishRun(db, '2026-11-02', root);
+  const n8n = readFileSync(join(root, '2026-11-02', 'n8nish.md'), 'utf8');
+  assert.equal(n8n, '# n8nish\n\nDE · greenhouse · APPLY · employer · run 2026-11-02\n\n' +
+    '- [Senior Software Engineer](https://example.test/n1) — Remote (Europe) [employer · remote:DE]\n');
+  assert.ok(readFileSync(join(root, '2026-11-02', 'zeta.md'), 'utf8').includes('\nGB · greenhouse · APPLY · run 2026-11-02\n'));
+  const summary = readFileSync(join(root, '2026-11-02', 'summary.md'), 'utf8');
+  assert.ok(summary.includes('### n8nish (DE, greenhouse) · employer — [n8nish.md](n8nish.md)'));
+  assert.ok(summary.includes('### zeta (GB, greenhouse) — [zeta.md](zeta.md)'));
+  db.close();
+});

@@ -2,7 +2,7 @@
 import type { DatabaseSync } from 'node:sqlite';
 import { pathToFileURL } from 'node:url';
 import { openDb, sha256 } from './db.ts';
-import { eligible, remoteScope, workCountry, workMode } from './location.ts';
+import { eligible, employerEligible, remoteScope, workCountry, workMode } from './location.ts';
 
 export type Route = 'apply' | 'outreach' | 'drop';
 
@@ -70,13 +70,15 @@ export function classify(title: string, body: string): { route: Route; reason: s
 // apply and outreach count signals (companies); dropped counts postings. A kept posting outside the owner's
 // work arrangements (core/location.ts) is dropped; one inside it carries its location tag: `perm · hybrid:GB`,
 // `perm · remote:US-only` when the posting restricts remote work to one country other than HR.
+// An employer's engineering postings all go to apply, a permanent one with reason `employer` (`employer · remote:HR`);
+// employerEligible() drops the ones that are not remote for the owner (`employer:not-remote`, `employer:US-only`).
 export function filterRun(db: DatabaseSync, runDate: string): { apply: number; outreach: number; dropped: number } {
   const rows = db.prepare(`
-    select p.id, p.company_id, p.title, p.location, p.body, p.raw, c.country, e.kind
+    select p.id, p.company_id, p.title, p.location, p.body, p.raw, c.country, c.kind as company_kind, e.kind
     from events e join postings p on p.id = e.posting_id join companies c on c.id = e.company_id
     where e.run_date = ? and e.kind != 'posting_gone' and c.status = 'active'`).all(runDate) as unknown as {
       id: string; company_id: string; title: string | null; location: string | null; body: string | null; raw: string | null;
-      country: string | null; kind: string;
+      country: string | null; company_kind: string; kind: string;
     }[];
 
   // A posting can carry two events in one run (edited and reposted); classify it once.
@@ -99,7 +101,9 @@ export function filterRun(db: DatabaseSync, runDate: string): { apply: number; o
         const country = workCountry(r.location, raw, r.country ?? '', mode);
         if (c.route !== 'drop') {
           const scope = mode === 'remote' ? remoteScope(r.title ?? '', r.location, r.body ?? '', country) : null;
-          const e = eligible(mode, country, r.location, scope);
+          if (r.company_kind === 'employer' && c.route === 'outreach') c = { route: 'apply', reason: 'employer' };
+          const strict = r.company_kind === 'employer' ? employerEligible(mode, country, scope) : { ok: true as const };
+          const e = strict.ok ? eligible(mode, country, r.location, scope) : strict;
           c = e.ok ? { ...c, reason: `${c.reason} · ${e.reason}` } : { route: 'drop', reason: e.reason };
         }
         setRoute.run(c.route, c.reason, mode, country, r.id);
@@ -168,10 +172,10 @@ export function report(db: DatabaseSync, runDate: string): string {
     }
   }
   const nDropped = dropped.reduce((n, d) => n + d.n, 0);
-  // location:IN and onsite:DE count under location and onsite.
+  // location:IN and onsite:DE count under location and onsite, employer:US-only under employer:XX-only.
   const byReason = new Map<string, number>();
   for (const d of dropped) {
-    const reason = d.reason.replace(/^(location|onsite):.*/, '$1');
+    const reason = d.reason.replace(/^(location|onsite):.*/, '$1').replace(/^employer:[A-Z]{2}-only$/, 'employer:XX-only');
     byReason.set(reason, (byReason.get(reason) ?? 0) + d.n);
   }
   lines.push(`dropped: ${[...byReason].map(([reason, n]) => `${n} ${reason}`).join(', ') || 'none'}`);

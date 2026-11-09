@@ -450,3 +450,25 @@ test('compose uses live titles only, and all titles when none is live', () => {
   assert.deepEqual(dead.text.split('\n').filter((l) => l.startsWith('- ')), ['- Frontend Developer', '- Platform Engineer']);
   db.close();
 });
+
+test('an employer signal says employer after the list name, an agency signal does not', () => {
+  const db = openDb(':memory:');
+  seed(db, [
+    [company('stripeish', { country: 'US', kind: 'employer' }), [
+      { ...posting('s1', 'Senior Software Engineer'), location: 'Remote (Europe)' },
+      posting('s2', 'Software Engineer'),
+    ]],
+    [company('zeta'), [posting('z1', 'Senior Software Engineer, Contract')]],
+  ]);
+  const digest = buildDigest(db, '2026-11-02');
+  assert.equal(digest[0].text, '<b>Digest 2026-11-02</b> · 2 apply · 0 outreach · 1 dropped postings');
+  assert.deepEqual(digest.slice(1).map((m) => m.text), [
+    '<b>stripeish</b> · 🇺🇸 US · greenhouse · <b>APPLY</b> · employer\n' +
+      '• <a href="https://example.test/s1">Senior Software Engineer</a> — Remote (Europe) [employer · remote:🇺🇸 US]',
+    '<b>zeta</b> · 🇬🇧 GB · greenhouse · <b>APPLY</b>\n' +
+      '• <a href="https://example.test/z1">Senior Software Engineer, Contract</a> — London [title:contract · unknown:🇬🇧 GB]',
+  ]);
+  // Apply buttons, not Compose: there is no pitch to an employer.
+  assert.equal(digest[1].buttons[0][0].text, 'Applied');
+  db.close();
+});

@@ -4,7 +4,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { DatabaseSync } from 'node:sqlite';
 import { pathToFileURL } from 'node:url';
-import { droppedCount, pendingSignals, type SignalRow } from '../bot/notify.ts';
+import { droppedCount, kindTag, pendingSignals, type SignalRow } from '../bot/notify.ts';
 import { composeBody, composeSubject } from '../bot/templates.ts';
 import { openDb } from './db.ts';
 
@@ -12,11 +12,11 @@ const postingLine = (p: SignalRow) =>
   `- [${p.title}](${p.url}) — ${p.location ?? 'no location'} [${p.route_reason}]`;
 
 export function signalFile(rows: SignalRow[]): string {
-  const { list, name, country, ats_vendor, warm, run_date } = rows[0];
+  const { list, name, country, ats_vendor, warm, run_date, kind } = rows[0];
   const lines = [
     `# ${name}`,
     '',
-    `${warm ? 'warm · ' : ''}${country} · ${ats_vendor} · ${list.toUpperCase()} · run ${run_date}`,
+    `${warm ? 'warm · ' : ''}${country} · ${ats_vendor} · ${list.toUpperCase()}${kindTag(kind)} · run ${run_date}`,
     '',
     ...rows.map(postingLine),
   ];
@@ -35,8 +35,9 @@ export function summaryFile(runDate: string, signals: SignalRow[][], dropped: nu
     lines.push('', `## ${heading}`);
     if (!group.length) lines.push('', 'none');
     for (const rows of group) {
-      const { company_id, name, country, ats_vendor, warm } = rows[0];
-      lines.push('', `### ${warm ? '🔥 ' : ''}${name} (${country}, ${ats_vendor}) — [${company_id}.md](${company_id}.md)`, '');
+      const { company_id, name, country, ats_vendor, warm, kind } = rows[0];
+      // Under the list's heading, so the employer mark follows the company.
+      lines.push('', `### ${warm ? '🔥 ' : ''}${name} (${country}, ${ats_vendor})${kindTag(kind)} — [${company_id}.md](${company_id}.md)`, '');
       lines.push(...rows.map(postingLine));
     }
   }

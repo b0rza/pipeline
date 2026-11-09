@@ -3,12 +3,12 @@ import type { DatabaseSync } from 'node:sqlite';
 import { test } from 'node:test';
 import { handleCallback } from '../bot/server.ts';
 import { composeBody, composeSubject } from '../bot/templates.ts';
-import { upsertCompanies } from '../core/companies.ts';
+import { loadCompanies, upsertCompanies } from '../core/companies.ts';
 import { openDb } from '../core/db.ts';
 import { diffRun } from '../core/diff.ts';
 import { filterRun } from '../core/filter.ts';
 import { snapshotCompany } from '../core/snapshot.ts';
-import type { Company, NormalizedPosting } from '../core/types.ts';
+import type { Company, EmployerProfile, NormalizedPosting } from '../core/types.ts';
 import { handle, runTime } from '../ui/server.ts';
 
 const company = (id: string, extra: Partial<Company> = {}): Company => ({
@@ -41,12 +41,13 @@ const standard = (db: DatabaseSync) => seed(db, [
 ]);
 
 const today = '2026-11-02';
-const get = (db: DatabaseSync) => handle(db, { method: 'GET', url: '/' }, today);
+// The Employers tab reads the companies given here; without them handle() reads universe/companies.yaml.
+const get = (db: DatabaseSync, companies: Company[] = []) => handle(db, { method: 'GET', url: '/' }, today, companies);
 const post = (db: DatabaseSync, id: string, action: string, body?: string) =>
   handle(db, { method: 'POST', url: `/signal/${id}/${action}`, body }, today);
 
 // The markup of one tab's section.
-type Tab = 'pending' | 'later' | 'history';
+type Tab = 'pending' | 'later' | 'history' | 'employers';
 const sectionHtml = (html: string, which: Tab) => {
   const start = html.search(new RegExp(`<section id="sec-${which}"[^>]*>`));
   assert.ok(start >= 0, `no ${which} section`);
@@ -62,6 +63,15 @@ const cardOf = (html: string, db: DatabaseSync, companyId: string) => {
   assert.ok(start >= 0, `no card for ${companyId}`);
   return html.slice(start, html.indexOf('</article>', start));
 };
+
+const employer = (id: string, profile: Partial<EmployerProfile> = {}, extra: Partial<Company> = {}): Company => company(id, {
+  kind: 'employer', careers_url: `https://${id}.test/careers`,
+  employer: {
+    group: 'devtools-ai', bar: 'fit', why: `Why ${id}`, engagement: 'employment',
+    remote: { europe: 'yes', says: `${id} hires remote in Europe`, source: `https://${id}.test/remote` }, ...profile,
+  },
+  ...extra,
+});
 
 const allSignals = (db: DatabaseSync) => db.prepare('select company_id, status, skip_reason, snooze_until from signals order by company_id').all();
 
@@ -207,15 +217,19 @@ test('Pending holds what waits on the owner: notified signals with buttons, unse
   db.close();
 });
 
-test('the tab bar switches by the address, and a Later or History card anchor opens its tab', () => {
+test('the tab bar switches by the address, and a Later, History or Employers card anchor opens its tab', () => {
   const db = openDb(':memory:');
   standard(db);
-  const html = get(db).body;
-  // Pending open as rendered, Later and History hidden until the script reads the address.
-  assert.match(html, /<main><nav id="tabs"><button id="tab-pending" onclick="location.hash = 'pending'">Pending \(4\)<\/button><button id="tab-later" class="secondary outline" onclick="location.hash = 'later'">Later \(0\)<\/button><button id="tab-history" class="secondary outline" onclick="location.hash = 'history'">History \(0\)<\/button><\/nav><section id="sec-pending">/);
-  assert.match(html, /<\/section><section id="sec-later" hidden><p>Nothing for later.<\/p><\/section><section id="sec-history" hidden>/);
+  const html = get(db, [employer('n8nish')]).body;
+  // Pending open as rendered, Later, History and Employers hidden until the script reads the address.
+  assert.match(html, /<main><nav id="tabs"><button id="tab-pending" onclick="location.hash = 'pending'">Pending \(4\)<\/button><button id="tab-later" class="secondary outline" onclick="location.hash = 'later'">Later \(0\)<\/button><button id="tab-history" class="secondary outline" onclick="location.hash = 'history'">History \(0\)<\/button><button id="tab-employers" class="secondary outline" onclick="location.hash = 'employers'">Employers \(1\)<\/button><\/nav><section id="sec-pending">/);
+  assert.match(html, /<\/section><section id="sec-later" hidden><p>Nothing for later.<\/p><\/section><section id="sec-history" hidden><p>No past signals.<\/p><\/section><section id="sec-employers" hidden><h3>/);
   // Inline, after the sections, so it can find them.
-  assert.match(html, /<\/section><\/main><script>[^]*\['pending', 'later', 'history'\][^]*\['later', 'history'\]\.find\(\(t\) => location\.hash === '#' \+ t \|\| target\?\.closest\('#sec-' \+ t\)\) \?\? 'pending'[^]*<\/script><\/body><\/html>$/);
+  assert.match(html, /<\/section><\/main><script>[^]*\['pending', 'later', 'history', 'employers'\][^]*\['later', 'history', 'employers'\]\.find\(\(t\) => location\.hash === '#' \+ t \|\| target\?\.closest\('#sec-' \+ t\)\) \?\? 'pending'[^]*<\/script><\/body><\/html>$/);
+  // No employers: an empty tab that says so.
+  const none = get(db).body;
+  assert.match(none, />Employers \(0\)<\/button><\/nav>/);
+  assert.match(none, /<section id="sec-employers" hidden><p>No employers on the watch list.<\/p><\/section><\/main>/);
   db.close();
 });
 
@@ -424,5 +438,107 @@ test('the card header shows the local time the run started, and only the date wh
   assert.match(cardOf(get(db).body, db, 'zeta'), new RegExp(`run 2026-11-02 ${hhmm}(<| <span)`));
   assert.equal(runTime(undefined), '');
   assert.equal(runTime('not a date'), '');
+  db.close();
+});
+
+test('an employer signal card says employer after the list name', () => {
+  const db = openDb(':memory:');
+  seed(db, [[employer('n8nish', {}, { country: 'DE' }), [{ ...posting('n1', 'Senior Software Engineer'), location: 'Remote (Europe)' }]]]);
+  const card = cardOf(get(db).body, db, 'n8nish');
+  assert.match(card, /<b>n8nish<\/b> · 🇩🇪 DE · greenhouse · <b>APPLY<\/b> · employer · run 2026-11-02/);
+  assert.match(card, /\[employer · remote:🇩🇪 DE\]/);
+  assert.match(card, /<button>Mark applied<\/button>/);
+  assert.doesNotMatch(card, /Compose/);
+  db.close();
+});
+
+// The Employers tab's group headings and card ids, in page order.
+const employerOrder = (html: string) =>
+  [...sectionHtml(html, 'employers').matchAll(/<h3>(.*?)<\/h3>|<article id="e-([^"]+)">/g)].map((m) => m[1] ?? m[2]);
+
+const employerCard = (html: string, id: string) => {
+  const start = html.indexOf(`<article id="e-${id}">`);
+  assert.ok(start >= 0, `no employer card for ${id}`);
+  return html.slice(start, html.indexOf('</article>', start) + '</article>'.length);
+};
+
+test('an employer card shows the profile from the yaml and the board line from the database', () => {
+  const db = openDb(':memory:');
+  const stripeish = employer('stripeish', {
+    group: 'payments-fintech', bar: 'reach', why: 'Payments behind the checkouts he built',
+    remote: { europe: 'partial', says: 'Remote only in named countries', source: 'https://stripeish.test/blog/remote' },
+  }, { name: 'Stripeish', country: 'US' });
+  seed(db, [[stripeish, [
+    posting('s1', 'Software Engineer'), { ...posting('s2', 'Senior Software Engineer'), location: 'Remote (Europe)' },
+    posting('s3', 'Account Executive'), posting('s4', 'Backend Engineer'),
+  ]]]);
+  // s4 leaves the board the next night: three live postings, two of them engineering, one kept.
+  seed(db, [[stripeish, [posting('s1', 'Software Engineer'), { ...posting('s2', 'Senior Software Engineer'), location: 'Remote (Europe)' },
+    posting('s3', 'Account Executive')]]], '2026-11-03');
+  const unpolled = employer('linearish', {}, { name: 'Linearish' });
+  const unread = employer('klarnaish', { remote: { europe: 'unknown', says: 'Nothing found', source: 'https://klarnaish.test/' } },
+    { name: 'Klarnaish', ats: null });
+  const html = get(db, [stripeish, unpolled, unread]).body;
+
+  assert.equal(employerCard(html, 'stripeish'),
+    '<article id="e-stripeish"><header><a href="https://stripeish.test/careers"><b>Stripeish</b></a> · 🇺🇸 US ' +
+    '<span class="badge">reach</span> <span class="badge b-muted">Europe: partial</span></header>' +
+    '<p>Payments behind the checkouts he built</p>' +
+    '<p class="meta">Remote: Remote only in named countries (<a href="https://stripeish.test/blog/remote">stripeish.test</a>)</p>' +
+    '<p class="meta">Board: greenhouse · 3 live postings, 2 engineering, 1 kept · last seen 2026-11-03</p></article>');
+  // A board the pipeline reads but has not polled yet, and one it cannot read.
+  assert.match(employerCard(html, 'linearish'), /<span class="badge b-yes">Europe: yes<\/span>/);
+  assert.match(employerCard(html, 'linearish'), /<p class="meta">Board: greenhouse · not polled yet<\/p><\/article>$/);
+  assert.match(employerCard(html, 'klarnaish'), /<span class="badge b-muted">Europe: unknown<\/span>/);
+  assert.match(employerCard(html, 'klarnaish'), /<p class="meta">Board: not read<\/p><\/article>$/);
+  // Read-only.
+  assert.doesNotMatch(sectionHtml(html, 'employers'), /<form|<button|mailto:/);
+  db.close();
+});
+
+test('the Employers tab groups in research order, then orders by bar (reach, fit, stretch) and name', () => {
+  const db = openDb(':memory:');
+  const html = get(db, [
+    employer('zed', { group: 'devtools-ai', bar: 'stretch' }),
+    employer('nate', { group: 'remote-first-europe', bar: 'fit' }),
+    employer('amy', { group: 'devtools-ai', bar: 'stretch' }),
+    employer('bob', { group: 'devtools-ai', bar: 'reach' }),
+    employer('cal', { group: 'devtools-ai', bar: 'fit' }),
+    employer('pay', { group: 'payments-fintech', bar: 'stretch' }),
+    employer('shop', { group: 'commerce-platforms', bar: 'fit' }),
+    employer('adj', { group: 'commerce-adjacent', bar: 'reach' }),
+    // An agency is not on the tab.
+    company('agencyco'),
+  ]).body;
+  assert.match(html, />Employers \(8\)<\/button>/);
+  assert.deepEqual(employerOrder(html), [
+    'Payments and fintech', 'pay', 'Commerce platforms', 'shop', 'Commerce-adjacent', 'adj',
+    'Developer tools and AI', 'bob', 'cal', 'amy', 'zed', 'Remote-first Europe', 'nate',
+  ]);
+  db.close();
+});
+
+test('an employer card escapes its text and links', () => {
+  const db = openDb(':memory:');
+  const html = get(db, [employer('ab', {
+    why: 'Builds <b>things</b> & more',
+    remote: { europe: 'yes', says: 'Remote "anywhere" <EU>', source: 'not a url <x>' },
+  }, { name: 'A&B <Co>', careers_url: 'https://ab.test/jobs?a=1&b="2"' })]).body;
+  const card = employerCard(html, 'ab');
+  assert.match(card, /<a href="https:\/\/ab.test\/jobs\?a=1&amp;b=&quot;2&quot;"><b>A&amp;B &lt;Co&gt;<\/b><\/a>/);
+  assert.match(card, /<p>Builds &lt;b&gt;things&lt;\/b&gt; &amp; more<\/p>/);
+  assert.match(card, /Remote: Remote &quot;anywhere&quot; &lt;EU&gt; \(<a href="not a url &lt;x&gt;">not a url &lt;x&gt;<\/a>\)/);
+  assert.doesNotMatch(card, /<Co>|<EU>|<x>|<b>things/);
+  db.close();
+});
+
+test('without companies given, the Employers tab lists the employers in universe/companies.yaml', () => {
+  const db = openDb(':memory:');
+  const employers = loadCompanies().filter((c) => c.kind === 'employer');
+  const html = handle(db, { method: 'GET', url: '/' }, today).body;
+  assert.match(html, new RegExp(`>Employers \\(${employers.length}\\)</button>`));
+  assert.equal(employerOrder(html).filter((x) => !/^[A-Z]/.test(x)).length, employers.length);
+  assert.match(employerCard(html, 'stripe'), /<b>Stripe<\/b><\/a> · 🇺🇸 US <span class="badge">reach<\/span>/);
+  assert.match(employerCard(html, 'stripe'), /Board: greenhouse · not polled yet/);
   db.close();
 });

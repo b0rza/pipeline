@@ -364,3 +364,17 @@ export function eligible(
   }
   return { ok: true, reason: tag(mode) };
 }
+
+// An employer (companies.kind = 'employer') is held to a stricter rule than an agency, so one with hundreds of office
+// roles abroad cannot fill a card: a posting is kept only when it is remote with no single-country scope other than HR
+// (scope is remoteScope(): null for worldwide, Europe, EMEA, several countries or none stated), or when it is in HR
+// whatever the mode. Checked before eligible(), which still applies to what this keeps (a remote posting read as
+// India drops as `location:IN`, on-site in Zagreb as `onsite:HR`).
+export function employerEligible(
+  mode: WorkMode, country: string | null, scope: string | null,
+): { ok: true } | { ok: false; reason: string } {
+  if (country === HOME) return { ok: true };
+  if (mode !== 'remote') return { ok: false, reason: 'employer:not-remote' };
+  if (scope && scope !== HOME) return { ok: false, reason: `employer:${scope}-only` };
+  return { ok: true };
+}

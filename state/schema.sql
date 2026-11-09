@@ -25,7 +25,8 @@ create table if not exists companies (
   consecutive_failures integer not null default 0,
   last_failed_run text,                    -- run_date of the last counted failure
   skip_until text,                         -- set after 3 consecutive feed failures
-  warm integer not null default 0          -- 1 = referral path in the network block
+  warm integer not null default 0,         -- 1 = referral path in the network block
+  kind text not null default 'agency'      -- agency | employer (README "Glossary"); the employer profile is in the yaml only
 );
 
 create table if not exists postings (
@@ -49,7 +50,8 @@ create table if not exists postings (
   route text,                              -- stage 3: apply | outreach | drop
   route_reason text,                       -- keyword that decided it: evergreen, non-engineering, b2b:c2c, title:contract, body:day rate, perm;
                                            -- apply postings that say payroll only add `· payroll` (title:contract · payroll);
-                                           -- kept postings add the location tag (perm · hybrid:GB), location drops are location:IN or onsite:DE
+                                           -- kept postings add the location tag (perm · hybrid:GB), location drops are location:IN or onsite:DE;
+                                           -- an employer's permanent posting is employer (employer · remote:HR), its drops employer:not-remote or employer:US-only
   work_mode text,                          -- stage 3: remote | hybrid | onsite | unknown
   work_country text                        -- stage 3: ISO 3166-1 alpha-2, null when unread
 );

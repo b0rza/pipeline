@@ -13,7 +13,12 @@ export interface SignalRow {
   id: string; run_date: string; list: 'apply' | 'outreach'; status: string; company_id: string; name: string; country: string;
   ats_vendor: string; warm: number; title: string; location: string | null; url: string; route: string; route_reason: string;
   gone: number; // 1 once the posting left the company's board (postings.gone_at set)
+  kind: string; // companies.kind: agency | employer
 }
+
+// ` · employer` after the list name for an employer's signal, so it never reads as an agency contract. Shared with
+// core/publish.ts and the UI page.
+export const kindTag = (kind: string) => (kind === 'employer' ? ' · employer' : '');
 
 // Marker after a posting that left the company's board; the UI page uses the same word.
 export const GONE = 'gone';
@@ -36,7 +41,7 @@ export const SIGNAL_ORDER = `c.warm desc, case s.list when 'apply' then 0 else 1
 // then the other contract postings.
 const rowsQuery = (where: string) => `
   select s.id, s.run_date, s.list, s.status, c.id as company_id, c.name, c.country, c.ats_vendor, c.warm,
-    p.title, p.location, p.url, p.route, p.route_reason, p.gone_at is not null as gone
+    p.title, p.location, p.url, p.route, p.route_reason, p.gone_at is not null as gone, c.kind
   from signals s join companies c on c.id = s.company_id, json_each(s.ref_ids) j join postings p on p.id = j.value
   where ${where}
   order by ${SIGNAL_ORDER}, p.gone_at is not null,
@@ -74,9 +79,9 @@ export function signalMessage(db: DatabaseSync, signalId: string): DigestMessage
 }
 
 function render(rows: SignalRow[]): DigestMessage {
-  const { id, list, name, country, ats_vendor, warm } = rows[0];
+  const { id, list, name, country, ats_vendor, warm, kind } = rows[0];
   const lines = [
-    `${warm ? '🔥 warm · ' : ''}<b>${escapeHtml(name)}</b> · ${escapeHtml(withFlag(country))} · ${escapeHtml(ats_vendor)} · <b>${list.toUpperCase()}</b>`,
+    `${warm ? '🔥 warm · ' : ''}<b>${escapeHtml(name)}</b> · ${escapeHtml(withFlag(country))} · ${escapeHtml(ats_vendor)} · <b>${list.toUpperCase()}</b>${kindTag(kind)}`,
   ];
   let length = visibleLength(lines[0]);
   for (const [i, p] of rows.entries()) {
