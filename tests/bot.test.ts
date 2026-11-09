@@ -1,8 +1,10 @@
 import assert from 'node:assert/strict';
 import type { DatabaseSync } from 'node:sqlite';
 import { test } from 'node:test';
-import { buildDigest, escapeHtml, expireGone, sendDigest, signalMessage, supersede, visibleLength } from '../bot/notify.ts';
-import { handleCallback } from '../bot/server.ts';
+import {
+  buildDigest, dashboardUrl, dashboardWarning, escapeHtml, expireGone, sendDigest, signalMessage, supersede, visibleLength,
+} from '../bot/notify.ts';
+import { handleCallback, reopen } from '../bot/server.ts';
 import { composeBody, composeMailto, composeSubject } from '../bot/templates.ts';
 import { upsertCompanies } from '../core/companies.ts';
 import { openDb } from '../core/db.ts';
@@ -99,7 +101,7 @@ test('buildDigest header counts apply and outreach signals and dropped postings'
   standard(db);
   const [header] = buildDigest(db, '2026-11-02');
   assert.deepEqual(header, {
-    signal_id: null, text: '<b>Digest 2026-11-02</b> · 1 apply · 3 outreach · 1 dropped postings', buttons: [],
+    signal_ids: [], text: '<b>Digest 2026-11-02</b> · 1 apply · 3 outreach · 0 employers · 1 dropped postings', buttons: [],
   });
   db.close();
 });
@@ -115,7 +117,7 @@ test('buildDigest buttons: Compose for outreach, Applied for apply, none on the 
   assert.match(id, /^[0-9a-f]{16}$/);
   assert.deepEqual(warm.buttons[0].map((b) => 'callback_data' in b && b.callback_data),
     [`compose:${id}`, `skip:${id}`, `snooze:${id}`, `later:${id}`]);
-  assert.equal(warm.signal_id!.slice(0, 16), id);
+  assert.deepEqual(warm.signal_ids.map((s) => s.slice(0, 16)), [id]);
   db.close();
 });
 
@@ -238,8 +240,8 @@ test('sendDigest sends the header first and marks each signal notified with its 
   assert.deepEqual(sent, digest.map((m) => m.text));
   assert.match(sent[0], /^<b>Digest 2026-11-02<\/b>/);
   for (const [i, m] of digest.entries()) {
-    if (!m.signal_id) continue;
-    assert.deepEqual({ ...db.prepare('select status, telegram_message_id, snooze_until from signals where id = ?').get(m.signal_id) }, {
+    if (!m.signal_ids.length) continue;
+    assert.deepEqual({ ...db.prepare('select status, telegram_message_id, snooze_until from signals where id = ?').get(m.signal_ids[0]) }, {
       status: 'notified', telegram_message_id: String(i + 1), snooze_until: null,
     });
   }
@@ -257,7 +259,7 @@ test('sendDigest resumes after a failed send without re-sending', async () => {
     return n;
   }), /network/);
   const statusOf = (id: string) => (db.prepare('select status from signals where id = ?').get(id) as { status: string }).status;
-  assert.deepEqual(digest.slice(1).map((m) => statusOf(m.signal_id!)), ['notified', 'new', 'new', 'new']);
+  assert.deepEqual(digest.slice(1).map((m) => statusOf(m.signal_ids[0])), ['notified', 'new', 'new', 'new']);
 
   const rest = buildDigest(db, '2026-11-02');
   const sent: string[] = [];
@@ -357,12 +359,12 @@ test('a gone posting is hidden from the digest and struck through when the signa
 
   const digest = buildDigest(db, '2026-11-03');
   assert.equal(digest.length, 2);
-  assert.equal(digest[0].text, '<b>Digest 2026-11-03</b> · 0 apply · 1 outreach · 0 dropped postings');
+  assert.equal(digest[0].text, '<b>Digest 2026-11-03</b> · 0 apply · 1 outreach · 0 employers · 0 dropped postings');
   assert.deepEqual(digest[1].text.split('\n').slice(1), [
     '• <a href="https://example.test/m1">Software Engineer</a> — London [perm · unknown:🇬🇧 GB]',
   ]);
 
-  assert.deepEqual(signalMessage(db, digest[1].signal_id!).text.split('\n').slice(1), [
+  assert.deepEqual(signalMessage(db, digest[1].signal_ids[0]).text.split('\n').slice(1), [
     '• <a href="https://example.test/m1">Software Engineer</a> — London [perm · unknown:🇬🇧 GB]',
     '• <s><a href="https://example.test/m2">Backend Engineer</a></s> — London [perm · unknown:🇬🇧 GB] · gone',
   ]);
@@ -406,8 +408,8 @@ test('the newest signal of a company with all postings gone does not hide an old
   // Dry run: nothing written, the older signal is the pending one.
   const digest = buildDigest(db, '2026-11-03');
   assert.equal(digest.length, 2);
-  assert.equal(digest[1].signal_id, signalIdOf(db, 'acme', '2026-10-26'));
-  assert.equal(digest[0].text, '<b>Digest 2026-11-03</b> · 0 apply · 1 outreach · 0 dropped postings');
+  assert.deepEqual(digest[1].signal_ids, [signalIdOf(db, 'acme', '2026-10-26')]);
+  assert.equal(digest[0].text, '<b>Digest 2026-11-03</b> · 0 apply · 1 outreach · 0 employers · 0 dropped postings');
   assert.equal(digest[1].text.split('\n')[0], '<b>acme</b> · 🇬🇧 GB · greenhouse · <b>OUTREACH</b>');
 
   // As main() runs it: expire, then supersede, then the same digest.
@@ -451,7 +453,7 @@ test('compose uses live titles only, and all titles when none is live', () => {
   db.close();
 });
 
-test('an employer signal says employer after the list name, an agency signal does not', () => {
+test('a re-rendered employer signal says employer after the list name, an agency signal does not', () => {
   const db = openDb(':memory:');
   seed(db, [
     [company('stripeish', { country: 'US', kind: 'employer' }), [
@@ -460,15 +462,207 @@ test('an employer signal says employer after the list name, an agency signal doe
     ]],
     [company('zeta'), [posting('z1', 'Senior Software Engineer, Contract')]],
   ]);
-  const digest = buildDigest(db, '2026-11-02');
-  assert.equal(digest[0].text, '<b>Digest 2026-11-02</b> · 2 apply · 0 outreach · 1 dropped postings');
-  assert.deepEqual(digest.slice(1).map((m) => m.text), [
+  // Only what the bot shows when a button on an employer message from before the overview is pressed.
+  assert.equal(signalMessage(db, signalIdOf(db, 'stripeish', '2026-11-02')).text,
     '<b>stripeish</b> · 🇺🇸 US · greenhouse · <b>APPLY</b> · employer\n' +
-      '• <a href="https://example.test/s1">Senior Software Engineer</a> — Remote (Europe) [employer · remote:europe]',
+      '• <a href="https://example.test/s1">Senior Software Engineer</a> — Remote (Europe) [employer · remote:europe]');
+  assert.equal(signalMessage(db, signalIdOf(db, 'zeta', '2026-11-02')).text,
     '<b>zeta</b> · 🇬🇧 GB · greenhouse · <b>APPLY</b>\n' +
-      '• <a href="https://example.test/z1">Senior Software Engineer, Contract</a> — London [title:contract · unknown:🇬🇧 GB]',
+      '• <a href="https://example.test/z1">Senior Software Engineer, Contract</a> — London [title:contract · unknown:🇬🇧 GB]');
+  db.close();
+});
+
+// --- Employer overview ---
+
+const employer = (id: string, extra: Partial<Company> = {}) => company(id, { country: 'US', kind: 'employer', ...extra });
+const at = (id: string, title: string, location: string, body = '') => ({ ...posting(id, title, body), location });
+
+// Croatia (remote, unknown mode, and a europe posting after them), europe, emea, global with five titles, unstated, a
+// contract and a B2B posting, a warm company, HTML in a name and a title; on 2026-11-03 fading loses one of its two
+// postings and vanished its only one.
+const employers = (db: DatabaseSync) => {
+  seed(db, [
+    [employer('zagrebco'), [
+      at('h1', 'Backend Engineer', 'Remote, Croatia'), at('h2', 'Frontend Engineer', 'Zagreb, Croatia'), at('h3', 'QA Engineer', 'Remote (Europe)'),
+    ]],
+    [employer('emeaco'), [at('m1', 'Platform Engineer', 'Remote - EMEA')]],
+    [employer('euro'), [at('e1', 'Staff Engineer', 'Remote - EMEA'), at('e2', 'Senior Software Engineer', 'Remote (Europe)')]],
+    [employer('globo'), ['Software Engineer - Auth', 'Software Engineer - Storage', 'Database Engineer', 'Backend Engineer',
+      'Site Reliability Engineer'].map((t, i) => at(`g${i}`, t, 'Remote, Global'))],
+    [employer('nowhere'), [at('u1', 'Software Engineer', 'Remote')]],
+    [employer('gigs'), [at('c1', 'Frontend Developer, Contract', 'Remote, Global')]],
+    [employer('b2bco'), [at('b1', 'Backend Developer', 'Remote, Global', 'Paid on a B2B contract.')]],
+    [employer('fading'), [at('f1', 'Data Engineer', 'Remote (Europe)'), at('f2', 'Software Engineer', 'Remote (Europe)')]],
+    [employer('vanished'), [at('v1', 'Backend Engineer', 'Remote (Europe)')]],
+    [employer('warmglobal', { warm: true, name: 'Warm & <Co>' }), [at('w1', 'Software Engineer <Core>', 'Remote, Global')]],
+    [company('zeta'), [posting('z1', 'Senior Software Engineer, Contract')]],
+    [company('alpha'), [posting('a1', 'Frontend Developer')]],
   ]);
-  // Apply buttons, not Compose: there is no pitch to an employer.
-  assert.equal(digest[1].buttons[0][0].text, 'Applied');
+  later(db, employer('fading'), [at('f2', 'Software Engineer', 'Remote (Europe)')]);
+  later(db, employer('vanished'), []);
+};
+
+const link = (id: string, title: string) => `<a href="https://example.test/${id}">${title}</a>`;
+
+const OVERVIEW = [
+  '<b>Employers 2026-11-03</b> · 9 companies · 16 roles',
+  `<b>zagrebco</b> 🇭🇷 · 3 · ${link('h1', 'Backend Engineer')}, ${link('h2', 'Frontend Engineer')}, ${link('h3', 'QA Engineer')}`,
+  `<b>euro</b> · europe · 2 · ${link('e2', 'Senior Software Engineer')}, ${link('e1', 'Staff Engineer')}`,
+  `<b>fading</b> · europe · 1 · ${link('f2', 'Software Engineer')}`,
+  `<b>emeaco</b> · emea · 1 · ${link('m1', 'Platform Engineer')}`,
+  `🔥 <b>Warm &amp; &lt;Co&gt;</b> · global · 1 · ${link('w1', 'Software Engineer &lt;Core&gt;')}`,
+  `<b>b2bco</b> · global · b2b · 1 · ${link('b1', 'Backend Developer')}`,
+  `<b>gigs</b> · global · contract · 1 · ${link('c1', 'Frontend Developer, Contract')}`,
+  `<b>globo</b> · global · 5 · ${link('g3', 'Backend Engineer')}, ${link('g2', 'Database Engineer')}, ` +
+    `${link('g4', 'Site Reliability Engineer')}, +2`,
+  `<b>nowhere</b> · unstated · 1 · ${link('u1', 'Software Engineer')}`,
+].join('\n');
+
+test('employer signals go out as one overview after the agency messages, ordered by scope, warm and name', () => {
+  const db = openDb(':memory:');
+  employers(db);
+  const digest = buildDigest(db, '2026-11-03');
+  assert.equal(digest.length, 4);
+  assert.equal(digest[0].text, '<b>Digest 2026-11-03</b> · 1 apply · 1 outreach · 9 employers · 0 dropped postings');
+  assert.deepEqual(digest.slice(1, 3).map((m) => m.text.split('\n')[0]), [
+    '<b>zeta</b> · 🇬🇧 GB · greenhouse · <b>APPLY</b>', '<b>alpha</b> · 🇬🇧 GB · greenhouse · <b>OUTREACH</b>',
+  ]);
+  const overview = digest[3];
+  assert.equal(overview.text, OVERVIEW);
+  // Every employer signal with a live posting, in line order; vanished has none left and is not in it.
+  const ids = ['zagrebco', 'euro', 'fading', 'emeaco', 'warmglobal', 'b2bco', 'gigs', 'globo', 'nowhere']
+    .map((c) => signalIdOf(db, c, '2026-11-02'));
+  assert.deepEqual(overview.signal_ids, ids);
+  assert.deepEqual(overview.buttons, []);
+  assert.ok(visibleLength(overview.text) <= 3500);
+  db.close();
+});
+
+test('agency messages are the same with and without employers on the list', () => {
+  const withEmployers = openDb(':memory:');
+  employers(withEmployers);
+  const agenciesOnly = openDb(':memory:');
+  seed(agenciesOnly, [[company('zeta'), [posting('z1', 'Senior Software Engineer, Contract')]], [company('alpha'), [posting('a1', 'Frontend Developer')]]]);
+  const agencyPart = (db: DatabaseSync, runDate: string) =>
+    buildDigest(db, runDate).slice(1).filter((m) => !m.text.startsWith('<b>Employers '));
+  assert.deepEqual(agencyPart(withEmployers, '2026-11-03'), agencyPart(agenciesOnly, '2026-11-02'));
+  assert.equal(agencyPart(agenciesOnly, '2026-11-02').length, 2);
+  // Without employer signals there is no overview message.
+  assert.equal(buildDigest(agenciesOnly, '2026-11-02').length, 3);
+  withEmployers.close();
+  agenciesOnly.close();
+});
+
+test('the Open dashboard button: only with an http(s) PIPELINE_UI_URL, under the last overview message', () => {
+  assert.equal(dashboardUrl('https://pipeline.example.ts.net'), 'https://pipeline.example.ts.net/#pending');
+  assert.equal(dashboardUrl('https://pipeline.example.ts.net/'), 'https://pipeline.example.ts.net/#pending');
+  assert.equal(dashboardUrl('http://127.0.0.1:8787'), 'http://127.0.0.1:8787/#pending');
+  for (const bad of [undefined, '', 'pipeline.example.ts.net', 'ftp://pipeline.example.ts.net', 'javascript:alert(1)']) {
+    assert.equal(dashboardUrl(bad), null, String(bad));
+  }
+  assert.equal(dashboardWarning('https://pipeline.example.ts.net'), null);
+  assert.equal(dashboardWarning(undefined),
+    'notify: WARNING: PIPELINE_UI_URL is not set, so the employer overview has no Open dashboard button');
+  assert.equal(dashboardWarning('ftp://x'),
+    'notify: WARNING: PIPELINE_UI_URL is set but is not an http(s) URL, so the employer overview has no Open dashboard button');
+
+  const db = openDb(':memory:');
+  employers(db);
+  const digest = buildDigest(db, '2026-11-03', dashboardUrl('https://pipeline.example.ts.net'));
+  assert.deepEqual(digest.at(-1)!.buttons, [[{ text: 'Open dashboard', url: 'https://pipeline.example.ts.net/#pending' }]]);
+  assert.equal(digest.at(-1)!.text, OVERVIEW);
+  // The agency messages keep their own buttons and get no dashboard button.
+  assert.deepEqual(digest.slice(1, 3).map((m) => m.buttons[0].map((b) => b.text)),
+    [['Applied', 'Skip', 'Snooze 7d', 'Later'], ['Compose', 'Skip', 'Snooze 7d', 'Later']]);
+  assert.deepEqual(buildDigest(db, '2026-11-03', dashboardUrl('ftp://x')).at(-1)!.buttons, []);
+  db.close();
+});
+
+test('sendDigest marks every employer signal of the overview notified with its message id; a re-run sends nothing', async () => {
+  const db = openDb(':memory:');
+  employers(db);
+  const digest = buildDigest(db, '2026-11-03');
+  const sent: string[] = [];
+  await sendDigest(db, digest, async (m) => sent.push(m.text));
+  assert.deepEqual(sent, digest.map((m) => m.text));
+  const byStatus = (db.prepare(`
+    select s.status, s.telegram_message_id as message_id, json_group_array(s.company_id) as companies
+    from signals s join companies c on c.id = s.company_id where c.kind = 'employer' group by 1, 2 order by 1`)
+    .all() as { status: string; message_id: string | null; companies: string }[])
+    .map((r) => ({ ...r, companies: (JSON.parse(r.companies) as string[]).sort().join(' ') }));
+  // The overview is the fourth message; vanished, with no live posting, was not in it (main() expires it as gone).
+  assert.deepEqual(byStatus, [
+    { status: 'new', message_id: null, companies: 'vanished' },
+    { status: 'notified', message_id: '4', companies: 'b2bco emeaco euro fading gigs globo nowhere warmglobal zagrebco' },
+  ]);
+  assert.deepEqual(buildDigest(db, '2026-11-03'), []);
+  await sendDigest(db, buildDigest(db, '2026-11-03'), async () => assert.fail('nothing to send'));
+  db.close();
+});
+
+test('the overview drops to one title per company when three do not fit, then splits at company boundaries', async () => {
+  const long = (n: number) => `Senior Software Engineer, Commerce Platform and Storefront Services ${n}`;
+  const build = (companies: number) => {
+    const db = openDb(':memory:');
+    seed(db, Array.from({ length: companies }, (_, i): [Company, NormalizedPosting[]] => [
+      employer(`co${String(i).padStart(2, '0')}`),
+      [0, 1, 2, 3].map((k) => at(`p${i}-${k}`, long(k), 'Remote, Global')),
+    ]));
+    return db;
+  };
+
+  // 15 companies: three titles each do not fit, one each does.
+  const mid = build(15);
+  const [, one] = buildDigest(mid, '2026-11-02');
+  assert.ok(visibleLength(one.text) <= 3500);
+  const lines = one.text.split('\n');
+  assert.equal(lines[0], '<b>Employers 2026-11-02</b> · 15 companies · 60 roles');
+  assert.equal(lines[1], `<b>co00</b> · global · 4 · ${link('p0-0', long(0))}, +3`);
+  assert.equal(lines.length, 16);
+  mid.close();
+
+  // 60 companies: split, every company once, in order, each part under the limit, the button under the last only.
+  const big = build(60);
+  const digest = buildDigest(big, '2026-11-02', 'https://pipeline.example.ts.net/#pending');
+  const parts = digest.slice(1);
+  assert.ok(parts.length > 1);
+  for (const [i, m] of parts.entries()) {
+    assert.ok(visibleLength(m.text) <= 3500, `${visibleLength(m.text)} chars`);
+    assert.equal(m.text.split('\n')[0], `<b>Employers 2026-11-02 (${i + 1}/${parts.length})</b> · 60 companies · 240 roles`);
+    assert.equal(m.text.split('\n').length - 1, m.signal_ids.length);
+    assert.deepEqual(m.buttons.length, i === parts.length - 1 ? 1 : 0);
+    // Telegram formats at most 100 entities (bold, links) per message.
+    assert.ok((m.text.match(/<(?:b|a)[ >]/g) ?? []).length <= 100, `part ${i + 1} has too many entities`);
+  }
+  const names = parts.flatMap((m) => m.text.split('\n').slice(1).map((l) => l.split('</b>')[0].slice(3)));
+  assert.deepEqual(names, Array.from({ length: 60 }, (_, i) => `co${String(i).padStart(2, '0')}`));
+  assert.equal(new Set(parts.flatMap((m) => m.signal_ids)).size, 60);
+
+  // A crash after the first part: its companies are notified with its message id, a re-run sends the rest only.
+  let n = 0;
+  await assert.rejects(sendDigest(big, digest, async () => {
+    if (++n === 3) throw new Error('network');
+    return n;
+  }), /network/);
+  const notified = big.prepare("select telegram_message_id as m, count(*) as k from signals where status = 'notified' group by 1")
+    .all().map((r) => ({ ...r }));
+  assert.deepEqual(notified, [{ m: '2', k: parts[0].signal_ids.length }]);
+  const rest = buildDigest(big, '2026-11-02');
+  assert.equal(rest.slice(1).flatMap((m) => m.signal_ids).length, 60 - parts[0].signal_ids.length);
+  await sendDigest(big, rest, async () => 99);
+  assert.deepEqual(buildDigest(big, '2026-11-02'), []);
+  big.close();
+});
+
+test('an employer signal reopened on the page is back in the next overview', async () => {
+  const db = openDb(':memory:');
+  employers(db);
+  await sendDigest(db, buildDigest(db, '2026-11-03'), async () => 7);
+  handleCallback(db, `later:${signalIdOf(db, 'nowhere', '2026-11-02').slice(0, 16)}`, '2026-11-03');
+  reopen(db, signalIdOf(db, 'nowhere', '2026-11-02'));
+  const digest = buildDigest(db, '2026-11-04');
+  assert.equal(digest[0].text, '<b>Digest 2026-11-04</b> · 0 apply · 0 outreach · 1 employers · 0 dropped postings');
+  assert.equal(digest[1].text,
+    `<b>Employers 2026-11-04</b> · 1 company · 1 role\n<b>nowhere</b> · unstated · 1 · ${link('u1', 'Software Engineer')}`);
   db.close();
 });

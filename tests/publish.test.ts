@@ -42,7 +42,7 @@ test('publishRun writes summary.md and one file per signal, same bytes on a re-r
   assert.deepEqual(readdirSync(dir).sort(), ['alpha.md', 'summary.md', 'zeta.md']);
 
   const summary = readFileSync(join(dir, 'summary.md'), 'utf8');
-  assert.ok(summary.startsWith('# Digest 2026-11-02\n\n1 apply · 1 outreach · 1 dropped postings\n'));
+  assert.ok(summary.startsWith('# Digest 2026-11-02\n\n1 apply · 1 outreach · 0 employers · 1 dropped postings\n'));
   assert.ok(summary.indexOf('## Apply') < summary.indexOf('### zeta'), 'zeta under Apply');
   assert.ok(summary.indexOf('## Outreach') < summary.indexOf('### alpha'), 'alpha under Outreach');
   assert.ok(summary.includes('[Senior Software Engineer, Contract](https://example.test/z2) — London [title:contract · unknown:GB]'));
@@ -74,7 +74,7 @@ test('publishRun leaves out a posting that left the company board', () => {
   assert.deepEqual(publishRun(db, '2026-11-03', root), { signals: 1, dir });
   assert.deepEqual(readdirSync(dir).sort(), ['summary.md', 'zeta.md']);
   const summary = readFileSync(join(dir, 'summary.md'), 'utf8');
-  assert.ok(summary.startsWith('# Digest 2026-11-03\n\n1 apply · 0 outreach · 0 dropped postings\n'));
+  assert.ok(summary.startsWith('# Digest 2026-11-03\n\n1 apply · 0 outreach · 0 employers · 0 dropped postings\n'));
   assert.ok(!summary.includes('Frontend Developer'), 'gone posting not listed');
 
   // zeta keeps one live posting, one gone: only the live one is in its file.
@@ -126,7 +126,45 @@ test('the out files say employer after the list name for an employer signal', ()
     '- [Senior Software Engineer](https://example.test/n1) — Remote (Europe) [employer · remote:europe]\n');
   assert.ok(readFileSync(join(root, '2026-11-02', 'zeta.md'), 'utf8').includes('\nGB · greenhouse · APPLY · run 2026-11-02\n'));
   const summary = readFileSync(join(root, '2026-11-02', 'summary.md'), 'utf8');
-  assert.ok(summary.includes('### n8nish (DE, greenhouse) · employer — [n8nish.md](n8nish.md)'));
+  assert.ok(summary.includes('### n8nish (DE, greenhouse) · europe — [n8nish.md](n8nish.md)'));
   assert.ok(summary.includes('### zeta (GB, greenhouse) — [zeta.md](zeta.md)'));
+  db.close();
+});
+
+test('summary.md lists employers under their own heading in the overview order, with every live posting', () => {
+  const db = openDb(':memory:');
+  const employer = (id: string, extra: Partial<Company> = {}) => company(id, { country: 'US', kind: 'employer', ...extra });
+  const at = (id: string, title: string, location: string) => ({ ...posting(id, title), location });
+  const entries: [Company, NormalizedPosting[]][] = [
+    [employer('globo'), ['Software Engineer - Auth', 'Database Engineer', 'Backend Engineer', 'Site Reliability Engineer', 'Staff Engineer']
+      .map((t, i) => at(`g${i}`, t, 'Remote, Global'))],
+    [employer('zagrebco', { warm: true }), [at('h1', 'Backend Engineer', 'Remote, Croatia'), at('h2', 'QA Engineer', 'Remote (Europe)')]],
+    [employer('gigs'), [at('c1', 'Frontend Developer, Contract', 'Remote (Europe)')]],
+    [company('zeta'), [posting('z1', 'Senior Software Engineer, Contract')]],
+  ];
+  upsertCompanies(db, entries.map(([c]) => c));
+  for (const [c, ps] of entries) snapshotCompany(db, c, ps, '2026-11-02');
+  diffRun(db, '2026-11-02');
+  filterRun(db, '2026-11-02');
+  const root = mkdtempSync(join(process.env.TMPDIR ?? tmpdir(), 'publish-'));
+  assert.equal(publishRun(db, '2026-11-02', root).signals, 4);
+  const summary = readFileSync(join(root, '2026-11-02', 'summary.md'), 'utf8');
+  assert.equal(summary.slice(summary.indexOf('\n## Outreach')), [
+    '', '## Outreach', '', 'none', '', '## Employers', '',
+    '### 🔥 zagrebco (US, greenhouse) · HR — [zagrebco.md](zagrebco.md)', '',
+    '- [Backend Engineer](https://example.test/h1) — Remote, Croatia [employer · remote:HR]',
+    '- [QA Engineer](https://example.test/h2) — Remote (Europe) [employer · remote:europe]', '',
+    '### gigs (US, greenhouse) · europe · contract — [gigs.md](gigs.md)', '',
+    '- [Frontend Developer, Contract](https://example.test/c1) — Remote (Europe) [title:contract · remote:europe]', '',
+    '### globo (US, greenhouse) · global — [globo.md](globo.md)', '',
+    '- [Backend Engineer](https://example.test/g2) — Remote, Global [employer · remote:global]',
+    '- [Database Engineer](https://example.test/g1) — Remote, Global [employer · remote:global]',
+    '- [Site Reliability Engineer](https://example.test/g3) — Remote, Global [employer · remote:global]',
+    '- [Software Engineer - Auth](https://example.test/g0) — Remote, Global [employer · remote:global]',
+    '- [Staff Engineer](https://example.test/g4) — Remote, Global [employer · remote:global]', '',
+  ].join('\n'));
+  assert.ok(summary.startsWith('# Digest 2026-11-02\n\n1 apply · 0 outreach · 3 employers · 0 dropped postings\n\n## Apply\n\n### zeta '));
+  // The per-company files stay as they were.
+  assert.ok(readFileSync(join(root, '2026-11-02', 'globo.md'), 'utf8').startsWith('# globo\n\nUS · greenhouse · APPLY · employer · run 2026-11-02\n'));
   db.close();
 });

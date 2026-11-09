@@ -1,10 +1,11 @@
-// Stage 7, file half: write out/<run_date>/ as the record of the digest. summary.md holds both lists; one file per
-// signal holds its postings and, for outreach, the Compose draft. Runs before the nightly commit, before notify.
+// Stage 7, file half: write out/<run_date>/ as the record of the digest. summary.md holds both agency lists and the
+// employers; one file per signal holds its postings and, for outreach, the Compose draft. Runs before the nightly
+// commit, before notify.
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { DatabaseSync } from 'node:sqlite';
 import { pathToFileURL } from 'node:url';
-import { droppedCount, kindTag, pendingSignals, type SignalRow } from '../bot/notify.ts';
+import { droppedCount, employerEntries, kindTag, pendingSignals, type SignalRow } from '../bot/notify.ts';
 import { composeBody, composeSubject } from '../bot/templates.ts';
 import { openDb } from './db.ts';
 
@@ -27,20 +28,32 @@ export function signalFile(rows: SignalRow[]): string {
   return lines.join('\n') + '\n';
 }
 
+// Agency signals under Apply and Outreach, employer signals under Employers in the order of the Telegram overview
+// (employerEntries in bot/notify.ts), each with its full posting list: the overview message is short, the record complete.
+// The count line matches the digest header.
 export function summaryFile(runDate: string, signals: SignalRow[][], dropped: number): string {
-  const apply = signals.filter((s) => s[0].list === 'apply');
-  const outreach = signals.filter((s) => s[0].list === 'outreach');
-  const lines = [`# Digest ${runDate}`, '', `${apply.length} apply · ${outreach.length} outreach · ${dropped} dropped postings`];
-  for (const [heading, group] of [['Apply', apply], ['Outreach', outreach]] as const) {
-    lines.push('', `## ${heading}`);
+  const agencies = signals.filter((s) => s[0].kind !== 'employer');
+  const employers = employerEntries(signals.filter((s) => s[0].kind === 'employer'));
+  const apply = agencies.filter((s) => s[0].list === 'apply');
+  const outreach = agencies.filter((s) => s[0].list === 'outreach');
+  const lines = [
+    `# Digest ${runDate}`, '',
+    `${apply.length} apply · ${outreach.length} outreach · ${employers.length} employers · ${dropped} dropped postings`,
+  ];
+  const heading = (rows: SignalRow[], after: string) => {
+    const { company_id, name, country, ats_vendor, warm } = rows[0];
+    lines.push('', `### ${warm ? '🔥 ' : ''}${name} (${country}, ${ats_vendor})${after} — [${company_id}.md](${company_id}.md)`, '');
+    lines.push(...rows.map(postingLine));
+  };
+  for (const [title, group] of [['Apply', apply], ['Outreach', outreach]] as const) {
+    lines.push('', `## ${title}`);
     if (!group.length) lines.push('', 'none');
-    for (const rows of group) {
-      const { company_id, name, country, ats_vendor, warm, kind } = rows[0];
-      // Under the list's heading, so the employer mark follows the company.
-      lines.push('', `### ${warm ? '🔥 ' : ''}${name} (${country}, ${ats_vendor})${kindTag(kind)} — [${company_id}.md](${company_id}.md)`, '');
-      lines.push(...rows.map(postingLine));
-    }
+    for (const rows of group) heading(rows, '');
   }
+  // The scope and contract words of the overview line; Croatia as its code, since the out/ files carry no flags.
+  lines.push('', '## Employers');
+  if (!employers.length) lines.push('', 'none');
+  for (const e of employers) heading(e.rows, ` · ${e.scope}${e.contract ? ` · ${e.contract}` : ''}`);
   return lines.join('\n') + '\n';
 }
 

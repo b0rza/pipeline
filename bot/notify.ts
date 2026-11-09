@@ -1,13 +1,18 @@
-// Stage 7: send the run's signals to the owner's Telegram chat, one message per signal, with action buttons.
+// Stage 7: send the run's signals to the owner's Telegram chat: a header, one message per agency signal with action
+// buttons, then one overview message for all employer signals, whose actions are on the overview page.
 import type { DatabaseSync } from 'node:sqlite';
 import { setTimeout as sleep } from 'node:timers/promises';
 import { pathToFileURL } from 'node:url';
 import { Bot, GrammyError } from 'grammy';
 import type { InlineKeyboardButton } from 'grammy/types';
 import { openDb } from '../core/db.ts';
-import { routeTag, withFlag } from '../core/flag.ts';
+import { flag, routeTag, withFlag } from '../core/flag.ts';
+import { HOME } from '../core/location.ts';
+import { stamp } from '../core/log.ts';
 
-export interface DigestMessage { signal_id: string | null; text: string; buttons: InlineKeyboardButton[][] }
+// signal_ids: the signals the message carries, marked notified once it is sent. None for the header, one for an
+// agency signal, every employer signal listed in it for the employer overview.
+export interface DigestMessage { signal_ids: string[]; text: string; buttons: InlineKeyboardButton[][] }
 
 export interface SignalRow {
   id: string; run_date: string; list: 'apply' | 'outreach'; status: string; company_id: string; name: string; country: string;
@@ -28,6 +33,10 @@ export const CALLBACK_ID_LEN = 16;
 
 // Telegram caps a message at 4096 characters after entity parsing; leave room for the status line edits add.
 const MAX_VISIBLE = 3500;
+// Telegram applies at most 100 formatting entities (bold, links) to a message and shows the rest as plain text
+// (its published limits; not tested against the API here). The employer overview is the one message that can pass it.
+const MAX_ENTITIES = 100;
+const entityCount = (html: string) => (html.match(/<(?:b|a)[ >]/g) ?? []).length;
 
 // A live posting with a B2B reason (core/filter.ts): the owner's preferred contract form, so its signal leads the apply list.
 const hasB2b = (s: string) =>
@@ -104,7 +113,128 @@ function render(rows: SignalRow[]): DigestMessage {
     first, { text: 'Skip', callback_data: `skip:${id16}` }, { text: 'Snooze 7d', callback_data: `snooze:${id16}` },
     { text: 'Later', callback_data: `later:${id16}` },
   ]];
-  return { signal_id: id, text: lines.join('\n'), buttons };
+  return { signal_ids: [id], text: lines.join('\n'), buttons };
+}
+
+// --- Employer overview -----------------------------------------------------------------------------------------------
+// All pending employer signals go out as one overview message a night, one line per company. The per-company actions
+// (applied, skip, snooze, later) are on the overview page's Pending tab, so the message has no per-signal buttons.
+
+// Where an employer posting may be worked from, from the location tag at the end of its route_reason (core/filter.ts:
+// `employer · remote:europe`, `employer · hybrid:HR`, `b2b:… · payroll · remote:global`). Croatia is any `:HR` tag and
+// `onsite:split` (the city Split); then the scopes employerRule() in core/location.ts tags; anything else last, as written.
+const SCOPES = ['remote:europe', 'remote:emea', 'remote:global', 'remote:unstated'];
+export function employerScope(reason: string): { rank: number; word: string } {
+  const tag = reason.split(' · ').at(-1) ?? '';
+  if (/:HR\b/.test(tag) || tag === 'onsite:split') return { rank: 0, word: HOME };
+  const i = SCOPES.indexOf(tag);
+  return i >= 0 ? { rank: i + 1, word: tag.slice('remote:'.length) } : { rank: SCOPES.length + 1, word: tag };
+}
+
+// `b2b` when a posting has a B2B reason, else `contract` when one has a title or body contract reason, else nothing.
+function contractWord(rows: SignalRow[]): string | null {
+  if (rows.some((r) => r.route_reason.startsWith('b2b:'))) return 'b2b';
+  return rows.some((r) => /^(title|body):/.test(r.route_reason)) ? 'contract' : null;
+}
+
+const byName = (a: string, b: string) => a.localeCompare(b, 'en', { sensitivity: 'base' });
+
+// One employer signal on the overview: its live postings ordered by scope then title, the best scope among them.
+export interface EmployerEntry { rows: SignalRow[]; rank: number; scope: string; contract: string | null }
+
+// Ordered by scope, then warm, then name. Shared with core/publish.ts, so summary.md lists employers in the same order.
+export function employerEntries(signals: SignalRow[][]): EmployerEntry[] {
+  return signals.filter((rows) => rows.length).map((rows) => {
+    const sorted = rows.map((r) => ({ r, s: employerScope(r.route_reason) }))
+      .sort((a, b) => a.s.rank - b.s.rank || byName(a.r.title, b.r.title) || (a.r.url < b.r.url ? -1 : a.r.url > b.r.url ? 1 : 0));
+    const best = sorted[0].s;
+    return { rows: sorted.map((x) => x.r), rank: best.rank, scope: best.word, contract: contractWord(rows) };
+  }).sort((a, b) => a.rank - b.rank || b.rows[0].warm - a.rows[0].warm || byName(a.rows[0].name, b.rows[0].name) ||
+    (a.rows[0].id < b.rows[0].id ? -1 : 1));
+}
+
+const count = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
+
+// `<b>n8n</b> 🇭🇷 · 2 · <a>…</a>, <a>…</a>`, `<b>Supabase</b> · global · 4 · <a>…</a>, +3`: at most maxTitles links.
+function employerLine(e: EmployerEntry, maxTitles: number): string {
+  const { name, warm } = e.rows[0];
+  const scope = e.scope === HOME ? ` ${flag(HOME)}` : ` · ${escapeHtml(e.scope)}`;
+  const links = e.rows.slice(0, maxTitles).map((p) => `<a href="${escapeHtml(p.url)}">${escapeHtml(p.title)}</a>`);
+  const rest = e.rows.length - links.length;
+  return `${warm ? '🔥 ' : ''}<b>${escapeHtml(name)}</b>${scope}${e.contract ? ` · ${e.contract}` : ''} · ${e.rows.length} · ` +
+    `${links.join(', ')}${rest ? `, +${rest}` : ''}`;
+}
+
+// `${PIPELINE_UI_URL}/#pending`, the overview page's Pending tab, when the value is an http(s) URL; otherwise null.
+export function dashboardUrl(value: string | undefined): string | null {
+  if (!value) return null;
+  let url: URL;
+  try {
+    url = new URL(value);
+  } catch {
+    return null;
+  }
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') return null;
+  url.hash = 'pending';
+  return url.href;
+}
+
+// The log line when the overview goes out without its Open dashboard button; null when the value is usable. The value
+// itself is not repeated: it is an address, but a mistyped variable could hold anything.
+export function dashboardWarning(value: string | undefined): string | null {
+  if (dashboardUrl(value)) return null;
+  const why = value ? 'is set but is not an http(s) URL' : 'is not set';
+  return `notify: WARNING: PIPELINE_UI_URL ${why}, so the employer overview has no Open dashboard button`;
+}
+
+// The overview, one message when it fits under MAX_VISIBLE with three titles per company, else with one; if one title
+// per company is still too long, several messages split at company boundaries, each headed `(i/n)`. The Open dashboard
+// button goes under the last one, only with a dashboard URL. Empty without employer signals.
+export function employerOverview(entries: EmployerEntry[], runDate: string, dashboard: string | null): DigestMessage[] {
+  if (!entries.length) return [];
+  const roles = entries.reduce((n, e) => n + e.rows.length, 0);
+  const head = (part: string) =>
+    `<b>Employers ${escapeHtml(runDate)}${part}</b> · ${count(entries.length, 'company', 'companies')} · ${count(roles, 'role', 'roles')}`;
+
+  let parts: { lines: string[]; ids: string[] }[] | undefined;
+  for (const max of [3, 1]) {
+    const lines = entries.map((e) => employerLine(e, max));
+    const text = [head(''), ...lines].join('\n');
+    if (visibleLength(text) <= MAX_VISIBLE && entityCount(text) <= MAX_ENTITIES) {
+      parts = [{ lines, ids: entries.map((e) => e.rows[0].id) }];
+      break;
+    }
+  }
+  if (!parts) {
+    // Room for the widest part label: there are never more parts than companies.
+    const reserved = visibleLength(head(` (${entries.length}/${entries.length})`));
+    const headEntities = entityCount(head(''));
+    parts = [];
+    let length = 0;
+    let entities = 0;
+    for (const e of entries) {
+      const line = employerLine(e, 1);
+      const add = 1 + visibleLength(line);
+      const last = parts.at(-1);
+      if (last && length + add <= MAX_VISIBLE && entities + entityCount(line) <= MAX_ENTITIES) {
+        last.lines.push(line);
+        last.ids.push(e.rows[0].id);
+        length += add;
+        entities += entityCount(line);
+      } else {
+        parts.push({ lines: [line], ids: [e.rows[0].id] });
+        length = reserved + add;
+        entities = headEntities + entityCount(line);
+      }
+    }
+  }
+
+  const n = parts.length;
+  return parts.map((p, i) => ({
+    signal_ids: p.ids,
+    text: [head(n > 1 ? ` (${i + 1}/${n})` : ''), ...p.lines].join('\n'),
+    buttons: i === n - 1 && dashboard ? [[{ text: 'Open dashboard', url: dashboard }]] : [],
+  }));
 }
 
 // Titles for a Compose draft: live postings only, all of them when none is live, each once, at most ten
@@ -134,15 +264,22 @@ export function droppedCount(db: DatabaseSync, runDate: string): number {
 }
 
 // Pure: the output matches before and after expireGone() and supersede(). Empty when there is nothing to send.
-export function buildDigest(db: DatabaseSync, runDate: string): DigestMessage[] {
+// The header, the agency signals one message each, then the employer overview. The header counts agency apply and
+// outreach signals and employer signals apart. dashboard: dashboardUrl() of PIPELINE_UI_URL.
+export function buildDigest(db: DatabaseSync, runDate: string, dashboard: string | null = null): DigestMessage[] {
   const bySignal = pendingSignals(db, runDate);
   if (!bySignal.size) return [];
 
   const dropped = droppedCount(db, runDate);
-  const signals = [...bySignal.values()].map(render);
-  const apply = [...bySignal.values()].filter((ps) => ps[0].list === 'apply').length;
-  const header = `<b>Digest ${escapeHtml(runDate)}</b> · ${apply} apply · ${signals.length - apply} outreach · ${dropped} dropped postings`;
-  return [{ signal_id: null, text: header, buttons: [] }, ...signals];
+  const all = [...bySignal.values()];
+  const agencies = all.filter((ps) => ps[0].kind !== 'employer');
+  const employers = employerEntries(all.filter((ps) => ps[0].kind === 'employer'));
+  const apply = agencies.filter((ps) => ps[0].list === 'apply').length;
+  const header = `<b>Digest ${escapeHtml(runDate)}</b> · ${apply} apply · ${agencies.length - apply} outreach · ` +
+    `${employers.length} employers · ${dropped} dropped postings`;
+  return [
+    { signal_ids: [], text: header, buttons: [] }, ...agencies.map(render), ...employerOverview(employers, runDate, dashboard),
+  ];
 }
 
 // Pending signals whose postings have all left the company's board. Runs before supersede().
@@ -159,14 +296,24 @@ export function supersede(db: DatabaseSync, runDate: string): number {
     where ${pending('signals')} and ${newerPending('signals')}`).run({ run_date: runDate }).changes);
 }
 
-// Marks each signal notified right after its send, so a crash mid-run resumes without re-sending.
+// Marks the signals of each message notified with its message id right after its send, all of one message in one
+// transaction, so a crash mid-run resumes without re-sending. The employer overview shares one message id among all
+// the signals it lists; nothing reads the id back to edit the message (the bot edits the message a button was pressed on).
 export async function sendDigest(db: DatabaseSync, messages: DigestMessage[], send: (m: DigestMessage) => Promise<number>): Promise<void> {
   const markNotified = db.prepare(`
     update signals set status = 'notified', telegram_message_id = :message_id, snooze_until = null, updated_at = datetime('now')
     where id = :id`);
   for (const m of messages) {
     const messageId = await send(m);
-    if (m.signal_id) markNotified.run({ id: m.signal_id, message_id: String(messageId) });
+    if (!m.signal_ids.length) continue;
+    db.exec('begin');
+    try {
+      for (const id of m.signal_ids) markNotified.run({ id, message_id: String(messageId) });
+      db.exec('commit');
+    } catch (err) {
+      db.exec('rollback');
+      throw err;
+    }
   }
 }
 
@@ -180,12 +327,16 @@ async function main() {
       expireGone(db, runDate);
       supersede(db, runDate);
     }
-    const messages = buildDigest(db, runDate);
-    const n = messages.filter((m) => m.signal_id).length;
+    // Stamped here unless the nightly script, which stamps every line itself, runs us.
+    const warning = dashboardWarning(process.env.PIPELINE_UI_URL);
+    if (warning) console.warn(process.env.PIPELINE_LOG_STAMPED ? warning : `${stamp()} ${warning}`);
+    const messages = buildDigest(db, runDate, dashboardUrl(process.env.PIPELINE_UI_URL));
+    const n = messages.reduce((k, m) => k + m.signal_ids.length, 0);
     if (process.env.TELEGRAM_DRY_RUN) {
       for (const m of messages) {
         console.log(m.text);
-        if (m.buttons.length) console.log(`buttons: ${m.buttons.flat().map((b) => b.text).join(' | ')}`);
+        const label = (b: InlineKeyboardButton) => ('url' in b ? `${b.text} (${b.url})` : b.text);
+        if (m.buttons.length) console.log(`buttons: ${m.buttons.flat().map(label).join(' | ')}`);
         console.log('');
       }
       console.log(`notify ${runDate}: ${n} signals (dry run, nothing sent)`);
@@ -209,9 +360,15 @@ async function main() {
       try {
         sent = await bot.api.sendMessage(chatId, m.text, options);
       } catch (err) {
-        if (!(err instanceof GrammyError && err.error_code === 429)) throw err;
-        await sleep((err.parameters.retry_after ?? 1) * 1000);
-        sent = await bot.api.sendMessage(chatId, m.text, options);
+        if (err instanceof GrammyError && err.error_code === 429) {
+          await sleep((err.parameters.retry_after ?? 1) * 1000);
+          sent = await bot.api.sendMessage(chatId, m.text, options);
+        } else if (err instanceof GrammyError && err.error_code === 400 && m.buttons.flat().some((b) => 'url' in b)) {
+          // Telegram refuses some addresses in a URL button. The overview matters more than its button: send it without,
+          // or the employer signals would stay unsent and fail the same way every night.
+          console.error(`notify: WARNING: Telegram refused the Open dashboard button (${err.description}); sent without it`);
+          sent = await bot.api.sendMessage(chatId, m.text, { ...options, reply_markup: undefined });
+        } else throw err;
       }
       return sent.message_id;
     });
