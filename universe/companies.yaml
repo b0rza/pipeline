@@ -2578,7 +2578,7 @@
     why: "Cross-border payments infrastructure with a large product engineering org; payments domain knowledge carries over, and Wise Platform sells to banks and merchants"
     remote: { europe: no, says: "Most teams do not support permanent virtual working; new joiners live within commuting distance and are in office most days for six months, then up to 90 days a year elsewhere", source: "https://wise.jobs/flexible-working" }
     engagement: employment
-  notes: "427 postings on 2026-11-07; Engineering on page 1 in London, Tallinn, Budapest, Singapore, Austin, Hyderabad; 0 remote flags on page 1. Polling costs one detail request per posting (~428 requests a run). Budapest is the nearest office. Kept polled (owner, 2026-11-09): about 7 minutes a run at 1 request per second"
+  notes: "427 postings on 2026-11-07; Engineering on page 1 in London, Tallinn, Budapest, Singapore, Austin, Hyderabad; 0 remote flags on page 1. Polling costs one detail request per posting (~428 requests a run). Budapest is the nearest office. Kept polled (owner, 2026-11-09): about 122 requests and 2 minutes on a first night, 5 requests after that, since stored postings are reused and details the title rules out are skipped (measured 2026-11-09)"
 
 - id: shopify
   name: Shopify
