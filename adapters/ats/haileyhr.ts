@@ -96,6 +96,7 @@ export const haileyhr: AtsAdapter = {
     });
   },
   detail: {
+    sets: ['body'],
     url: (posting) => posting.url,
     parse(html, _contentType, posting) {
       const stream = flight(html);

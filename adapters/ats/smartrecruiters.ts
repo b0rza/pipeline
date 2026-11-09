@@ -73,6 +73,7 @@ export const smartrecruiters: AtsAdapter = {
     return u.href;
   },
   detail: {
+    sets: ['url', 'body'],
     url: (posting, slug) => `${api}/${encodeURIComponent(slug)}/postings/${posting.external_id}`,
     parse(text, contentType, posting) {
       const job = json<Detail>(text, contentType, 'detail');

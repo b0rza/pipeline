@@ -60,6 +60,7 @@ export const rippling: AtsAdapter = {
     }));
   },
   detail: {
+    sets: ['location', 'body', 'posted_at', 'raw'],
     url: (posting, slug) => `${api}/${encodeURIComponent(slug)}/jobs/${posting.external_id}`,
     parse(text, contentType, posting) {
       const job = json<Job>(text, contentType, 'detail');

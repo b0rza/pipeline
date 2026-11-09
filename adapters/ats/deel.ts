@@ -73,6 +73,8 @@ export const deel: AtsAdapter = {
     });
   },
   detail: {
+    // The list has only the URL, so everything but the id comes from the job page (or, once stored, from the row).
+    sets: ['title', 'url', 'location', 'body', 'posted_at', 'raw'],
     url: (posting) => posting.url,
     parse(text, contentType, posting) {
       const page = html(text, contentType, 'job page');

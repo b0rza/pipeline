@@ -67,6 +67,7 @@ export const remoteAts: AtsAdapter = {
     }));
   },
   detail: {
+    sets: ['body'],
     url: (posting, slug) => `https://${slug}/api/public/jobs/${posting.external_id}`,
     parse(text, contentType, posting) {
       const { job } = json<{ job?: Job }>(text, contentType, 'detail');

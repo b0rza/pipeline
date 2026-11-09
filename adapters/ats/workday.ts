@@ -104,6 +104,10 @@ export const workday: AtsAdapter = {
     return { ...req, body: JSON.stringify({ ...JSON.parse(req.body!), offset: offset + limit }) };
   },
   detail: {
+    sets: ['external_id', 'title', 'url', 'location', 'body', 'posted_at', 'raw'],
+    // parse() replaces external_id with the posting's own id, so a listed posting is matched to its stored row by
+    // the path, which the list gives as external_id and raw.external_path and parse() keeps in raw.
+    key: (posting) => (posting.raw as { external_path?: string } | null)?.external_path ?? posting.external_id,
     url: (posting, slug) => `${api(slugParts(slug))}${(posting.raw as { external_path: string }).external_path}`,
     parse(text, contentType, posting) {
       const d = json<Detail>(text, contentType, 'detail');
