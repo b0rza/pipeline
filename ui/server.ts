@@ -149,12 +149,12 @@ export function runTime(startedAt: string | undefined): string {
 // A Later or History card (past given) also shows status, skip reason and snooze date; skip_reason and snooze_until are not in SignalRow.
 // A pending card only marks what the digest has not sent yet: the owner can act on it here before it reaches Telegram.
 function card(rows: SignalRow[], runs: Map<string, string>, past?: Past): string {
-  const { id, run_date, list, status, name, country, ats_vendor, warm, kind } = rows[0];
+  const { id, run_date, list, status, name, country, warm, kind } = rows[0];
   const isPast = past !== undefined;
   const { skip_reason, snooze_until } = past ?? { skip_reason: null, snooze_until: null };
   const badge = isPast ? ` <span class="badge b-${escapeHtml(status)}">${escapeHtml(status)}</span>`
     : ['new', 'snoozed'].includes(status) ? ' <span class="badge b-unsent">not sent yet</span>' : '';
-  const head = `${warm ? '🔥 warm · ' : ''}<b>${escapeHtml(name)}</b> · ${escapeHtml(withFlag(country))} · ${escapeHtml(ats_vendor)}` +
+  const head = `${warm ? '🔥 warm · ' : ''}<b>${escapeHtml(name)}</b> · ${escapeHtml(withFlag(country))}` +
     ` · <b>${list.toUpperCase()}</b>${kindTag(kind)} · run ${escapeHtml(run_date)}${runTime(runs.get(run_date))}${badge}`;
   const meta = [skip_reason && `skipped: ${escapeHtml(skip_reason)}`, snooze_until && `snoozed until ${escapeHtml(snooze_until)}`]
     .filter(Boolean);
@@ -183,12 +183,11 @@ interface Board { live: number; engineering: number; kept: number; last_seen: st
 
 // What the board says today, from postings: live ones, the engineering ones among them (the filter's title rule), and
 // the ones the filter kept. The gap between engineering and kept is what the employer rule dropped; it is shown, not hidden.
+// The board's vendor is not shown anywhere the owner reads: he does not care which software a company hires through.
 function boardLine(c: Company, board: Board | undefined): string {
-  const vendor = c.ats ? escapeHtml(c.ats.vendor) : 'not read';
-  if (!board) return c.ats ? `${vendor} · not polled yet` : vendor;
+  if (!board) return c.ats ? 'not polled yet' : 'not read';
   const n = (k: number, one: string, many = `${one}s`) => `${k} ${k === 1 ? one : many}`;
-  return `${vendor} · ${n(board.live, 'live posting')}, ${board.engineering} engineering, ${board.kept} kept · ` +
-    `last seen ${escapeHtml(board.last_seen)}`;
+  return `${n(board.live, 'live posting')}, ${board.engineering} engineering, ${board.kept} kept · last seen ${escapeHtml(board.last_seen)}`;
 }
 
 // The link text of a source: its host, or the whole value when it is not a URL.

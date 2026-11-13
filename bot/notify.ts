@@ -88,9 +88,9 @@ export function signalMessage(db: DatabaseSync, signalId: string): DigestMessage
 }
 
 function render(rows: SignalRow[]): DigestMessage {
-  const { id, list, name, country, ats_vendor, warm, kind } = rows[0];
+  const { id, list, name, country, warm, kind } = rows[0];
   const lines = [
-    `${warm ? '🔥 warm · ' : ''}<b>${escapeHtml(name)}</b> · ${escapeHtml(withFlag(country))} · ${escapeHtml(ats_vendor)} · <b>${list.toUpperCase()}</b>${kindTag(kind)}`,
+    `${warm ? '🔥 warm · ' : ''}<b>${escapeHtml(name)}</b> · ${escapeHtml(withFlag(country))} · <b>${list.toUpperCase()}</b>${kindTag(kind)}`,
   ];
   let length = visibleLength(lines[0]);
   for (const [i, p] of rows.entries()) {

@@ -49,10 +49,10 @@ test('buildDigest orders warm, then apply, then outreach, contract postings firs
   const digest = buildDigest(db, '2026-11-02');
   assert.equal(digest.length, 5);
   assert.deepEqual(digest.slice(1).map((m) => m.text.split('\n')[0]), [
-    '🔥 warm · <b>warmco</b> · 🇬🇧 GB · greenhouse · <b>OUTREACH</b>',
-    '<b>zeta</b> · 🇬🇧 GB · greenhouse · <b>APPLY</b>',
-    '<b>alpha</b> · 🇬🇧 GB · greenhouse · <b>OUTREACH</b>',
-    '<b>beta</b> · 🇬🇧 GB · greenhouse · <b>OUTREACH</b>',
+    '🔥 warm · <b>warmco</b> · 🇬🇧 GB · <b>OUTREACH</b>',
+    '<b>zeta</b> · 🇬🇧 GB · <b>APPLY</b>',
+    '<b>alpha</b> · 🇬🇧 GB · <b>OUTREACH</b>',
+    '<b>beta</b> · 🇬🇧 GB · <b>OUTREACH</b>',
   ]);
   assert.deepEqual(digest[2].text.split('\n').slice(1), [
     '• <a href="https://example.test/z2">Senior Software Engineer, Contract</a> — London [title:contract · unknown:🇬🇧 GB]',
@@ -183,7 +183,7 @@ test('a later signal is never sent, retired or superseded by the nightly, and La
   // Only the newer acme signal goes out.
   const digest = buildDigest(db, '2026-11-02');
   assert.equal(digest.length, 2);
-  assert.equal(digest[1].text.split('\n')[0], '<b>acme</b> · 🇬🇧 GB · greenhouse · <b>APPLY</b>');
+  assert.equal(digest[1].text.split('\n')[0], '<b>acme</b> · 🇬🇧 GB · <b>APPLY</b>');
   assert.match(digest[1].text, /^[^\n]*\n• <a href="https:\/\/example.test\/3">[^\n]*$/);
   db.close();
 });
@@ -208,7 +208,7 @@ test('supersede keeps only the newest pending signal of a company', () => {
   seed(db, [[company('acme'), [perm, posting('2', 'Software Engineer, Contract')]]]);
   const digest = buildDigest(db, '2026-11-02');
   assert.equal(digest.length, 2);
-  assert.equal(digest[1].text.split('\n')[0], '<b>acme</b> · 🇬🇧 GB · greenhouse · <b>APPLY</b>');
+  assert.equal(digest[1].text.split('\n')[0], '<b>acme</b> · 🇬🇧 GB · <b>APPLY</b>');
 
   assert.equal(supersede(db, '2026-11-02'), 1);
   const byRun = (runDate: string) => ({ ...db.prepare('select status, skip_reason from signals where run_date = ?').get(runDate) });
@@ -223,8 +223,8 @@ test('buildDigest sends a new signal from a night notify did not run', () => {
   seed(db, [[company('acme'), [posting('1', 'Software Engineer')]]], '2026-11-01');
   seed(db, [[company('other'), [posting('2', 'Backend Engineer')]]]);
   assert.deepEqual(buildDigest(db, '2026-11-02').slice(1).map((m) => m.text.split('\n')[0]), [
-    '<b>acme</b> · 🇬🇧 GB · greenhouse · <b>OUTREACH</b>',
-    '<b>other</b> · 🇬🇧 GB · greenhouse · <b>OUTREACH</b>',
+    '<b>acme</b> · 🇬🇧 GB · <b>OUTREACH</b>',
+    '<b>other</b> · 🇬🇧 GB · <b>OUTREACH</b>',
   ]);
   db.close();
 });
@@ -379,7 +379,7 @@ test('a signal whose postings are all gone is left out, expired as gone once, an
   const id = signalIdOf(db, 'dead', '2026-11-02');
 
   const digest = buildDigest(db, '2026-11-03');
-  assert.deepEqual(digest.slice(1).map((m) => m.text.split('\n')[0]), ['<b>alive</b> · 🇬🇧 GB · greenhouse · <b>OUTREACH</b>']);
+  assert.deepEqual(digest.slice(1).map((m) => m.text.split('\n')[0]), ['<b>alive</b> · 🇬🇧 GB · <b>OUTREACH</b>']);
   assert.match(digest[0].text, / · 0 apply · 1 outreach · /);
 
   assert.equal(expireGone(db, '2026-11-03'), 1);
@@ -389,7 +389,7 @@ test('a signal whose postings are all gone is left out, expired as gone once, an
   assert.deepEqual(buildDigest(db, '2026-11-03'), digest);
 
   assert.deepEqual(signalMessage(db, id).text.split('\n'), [
-    '<b>dead</b> · 🇬🇧 GB · greenhouse · <b>OUTREACH</b>',
+    '<b>dead</b> · 🇬🇧 GB · <b>OUTREACH</b>',
     '• <s><a href="https://example.test/d1">Software Engineer</a></s> — London [perm · unknown:🇬🇧 GB] · gone',
   ]);
   const skipped = handleCallback(db, `skip:${id.slice(0, 16)}`, '2026-11-03');
@@ -410,7 +410,7 @@ test('the newest signal of a company with all postings gone does not hide an old
   assert.equal(digest.length, 2);
   assert.deepEqual(digest[1].signal_ids, [signalIdOf(db, 'acme', '2026-10-26')]);
   assert.equal(digest[0].text, '<b>Digest 2026-11-03</b> · 0 apply · 1 outreach · 0 employers · 0 dropped postings');
-  assert.equal(digest[1].text.split('\n')[0], '<b>acme</b> · 🇬🇧 GB · greenhouse · <b>OUTREACH</b>');
+  assert.equal(digest[1].text.split('\n')[0], '<b>acme</b> · 🇬🇧 GB · <b>OUTREACH</b>');
 
   // As main() runs it: expire, then supersede, then the same digest.
   assert.equal(expireGone(db, '2026-11-03'), 1);
@@ -464,10 +464,10 @@ test('a re-rendered employer signal says employer after the list name, an agency
   ]);
   // Only what the bot shows when a button on an employer message from before the overview is pressed.
   assert.equal(signalMessage(db, signalIdOf(db, 'stripeish', '2026-11-02')).text,
-    '<b>stripeish</b> · 🇺🇸 US · greenhouse · <b>APPLY</b> · employer\n' +
+    '<b>stripeish</b> · 🇺🇸 US · <b>APPLY</b> · employer\n' +
       '• <a href="https://example.test/s1">Senior Software Engineer</a> — Remote (Europe) [employer · remote:europe]');
   assert.equal(signalMessage(db, signalIdOf(db, 'zeta', '2026-11-02')).text,
-    '<b>zeta</b> · 🇬🇧 GB · greenhouse · <b>APPLY</b>\n' +
+    '<b>zeta</b> · 🇬🇧 GB · <b>APPLY</b>\n' +
       '• <a href="https://example.test/z1">Senior Software Engineer, Contract</a> — London [title:contract · unknown:🇬🇧 GB]');
   db.close();
 });
@@ -525,7 +525,7 @@ test('employer signals go out as one overview after the agency messages, ordered
   assert.equal(digest.length, 4);
   assert.equal(digest[0].text, '<b>Digest 2026-11-03</b> · 1 apply · 1 outreach · 9 employers · 0 dropped postings');
   assert.deepEqual(digest.slice(1, 3).map((m) => m.text.split('\n')[0]), [
-    '<b>zeta</b> · 🇬🇧 GB · greenhouse · <b>APPLY</b>', '<b>alpha</b> · 🇬🇧 GB · greenhouse · <b>OUTREACH</b>',
+    '<b>zeta</b> · 🇬🇧 GB · <b>APPLY</b>', '<b>alpha</b> · 🇬🇧 GB · <b>OUTREACH</b>',
   ]);
   const overview = digest[3];
   assert.equal(overview.text, OVERVIEW);

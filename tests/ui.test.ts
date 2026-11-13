@@ -90,7 +90,7 @@ test('GET / shows the pending header and each company once, in digest order', ()
   // The theme script before the body so a stored choice applies without a flash; its switch ends the tab bar.
   assert.match(res.body, /<script>[^]*localStorage\.getItem\('theme'\)[^]*<\/script><\/head><body><header><h1>/);
   assert.match(res.body, />Employers <small>0<\/small><\/button><button id="theme" class="secondary outline" onclick="toggleTheme\(\)" aria-label="Light or dark theme" title="Light or dark theme">◐<\/button><\/nav>/);
-  assert.match(cardOf(res.body, db, 'zeta'), /<b>zeta<\/b> · 🇬🇧 GB · greenhouse · <b>APPLY<\/b> · run 2026-11-02/);
+  assert.match(cardOf(res.body, db, 'zeta'), /<b>zeta<\/b> · 🇬🇧 GB · <b>APPLY<\/b> · run 2026-11-02/);
   // Contract posting first, with its route tag.
   assert.match(cardOf(res.body, db, 'zeta'),
     /<li><a href="https:\/\/example.test\/z2">Senior Software Engineer, Contract<\/a> — London <small>\[title:contract · unknown:🇬🇧 GB\]<\/small><\/li><li><a href="https:\/\/example.test\/z1">/);
@@ -480,7 +480,7 @@ test('an employer signal card says employer after the list name', () => {
   const db = openDb(':memory:');
   seed(db, [[employer('n8nish', {}, { country: 'DE' }), [{ ...posting('n1', 'Senior Software Engineer'), location: 'Remote (Europe)' }]]]);
   const card = cardOf(get(db).body, db, 'n8nish');
-  assert.match(card, /<b>n8nish<\/b> · 🇩🇪 DE · greenhouse · <b>APPLY<\/b> · employer · run 2026-11-02/);
+  assert.match(card, /<b>n8nish<\/b> · 🇩🇪 DE · <b>APPLY<\/b> · employer · run 2026-11-02/);
   // The scope, not the company's country (core/location.ts employerRule).
   assert.match(card, /\[employer · remote:europe\]/);
   assert.match(card, /<button>Mark applied<\/button>/);
@@ -521,10 +521,10 @@ test('an employer card shows the profile from the yaml and the board line from t
     '<span class="badge">reach</span> <span class="badge b-muted">Europe: partial</span></header>' +
     '<p>Payments behind the checkouts he built</p>' +
     '<p class="meta">Remote: Remote only in named countries (<a href="https://stripeish.test/blog/remote">stripeish.test</a>)</p>' +
-    '<p class="meta">Board: greenhouse · 3 live postings, 2 engineering, 1 kept · last seen 2026-11-03</p></article>');
+    '<p class="meta">Board: 3 live postings, 2 engineering, 1 kept · last seen 2026-11-03</p></article>');
   // A board the pipeline reads but has not polled yet, and one it cannot read.
   assert.match(employerCard(html, 'linearish'), /<span class="badge b-yes">Europe: yes<\/span>/);
-  assert.match(employerCard(html, 'linearish'), /<p class="meta">Board: greenhouse · not polled yet<\/p><\/article>$/);
+  assert.match(employerCard(html, 'linearish'), /<p class="meta">Board: not polled yet<\/p><\/article>$/);
   assert.match(employerCard(html, 'klarnaish'), /<span class="badge b-muted">Europe: unknown<\/span>/);
   assert.match(employerCard(html, 'klarnaish'), /<p class="meta">Board: not read<\/p><\/article>$/);
   // Read-only.
@@ -575,6 +575,6 @@ test('without companies given, the Employers tab lists the employers in universe
   assert.match(html, new RegExp(`>Employers <small>${employers.length}</small></button>`));
   assert.equal(employerOrder(html).filter((x) => !/^[A-Z]/.test(x)).length, employers.length);
   assert.match(employerCard(html, 'stripe'), /<b>Stripe<\/b><\/a> · 🇺🇸 US <span class="badge">reach<\/span>/);
-  assert.match(employerCard(html, 'stripe'), /Board: greenhouse · not polled yet/);
+  assert.match(employerCard(html, 'stripe'), /Board: not polled yet/);
   db.close();
 });
