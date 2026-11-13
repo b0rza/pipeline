@@ -39,8 +39,10 @@ const MAX_ENTITIES = 100;
 const entityCount = (html: string) => (html.match(/<(?:b|a)[ >]/g) ?? []).length;
 
 // A live posting with a B2B reason (core/filter.ts): the owner's preferred contract form, so its signal leads the apply list.
+// `cross join` fixes the loop order: json_each outside, postings looked up by id. Left to itself SQLite scans every live
+// posting and re-parses ref_ids for each, which cost 5 ms per signal per evaluation (11 s page loads on 4,500 postings).
 const hasB2b = (s: string) =>
-  `exists (select 1 from json_each(${s}.ref_ids) bj join postings bp on bp.id = bj.value where bp.gone_at is null and bp.route_reason like 'b2b:%')`;
+  `exists (select 1 from json_each(${s}.ref_ids) bj cross join postings bp on bp.id = bj.value where bp.gone_at is null and bp.route_reason like 'b2b:%')`;
 
 // Signal order of the digest, shared with the UI page (aliases s and c): warm first, then apply before outreach,
 // apply signals with a B2B posting first, then by name.
@@ -62,7 +64,7 @@ const pending = (s: string) =>
 
 // At least one of the signal's postings is still on the company's board.
 const hasLive = (s: string) =>
-  `exists (select 1 from json_each(${s}.ref_ids) lj join postings lp on lp.id = lj.value where lp.gone_at is null)`;
+  `exists (select 1 from json_each(${s}.ref_ids) lj cross join postings lp on lp.id = lj.value where lp.gone_at is null)`;
 
 // A newer pending signal only counts while it has a live posting, so an emptied newer signal never hides an older live one.
 const newerPending = (s: string) =>
