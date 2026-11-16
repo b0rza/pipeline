@@ -4,6 +4,7 @@ import { pathToFileURL } from 'node:url';
 import { adapters, type BoardCounts, fetchBoard, type StoredPosting } from '../adapters/ats/index.ts';
 import { loadCompanies, upsertCompanies } from './companies.ts';
 import { openDb, sha256 } from './db.ts';
+import { startRun } from './runs.ts';
 import type { Company, NormalizedPosting } from './types.ts';
 
 const FAILURES_BEFORE_SKIP = 3;
@@ -96,69 +97,95 @@ export function recordFailure(db: DatabaseSync, companyId: string, runDate: stri
   return row.consecutive_failures;
 }
 
+// A failed board on the run's row: company id and the error's first line, capped, for the overview page's last-run line.
+export interface FailedBoard { id: string; reason: string }
+const REASON_MAX = 200;
+
+export interface SnapshotTotals {
+  polled: number; ok: number; failed: number; skipped: number; postings: number; new: number; edited: number; gone: number;
+  details: { fetched: number; reused: number; skipped: number };
+  unsupported: Map<string, number>;
+  failedBoards: FailedBoard[];
+}
+
+// Stage 1 over the watch list: poll each board, snapshot it, count. Writes companies_polled, boards_ok, boards_failed
+// and failed_boards to the run's row at the end (main() starts the row first, core/runs.ts startRun). fetch is
+// injectable for the tests.
+export async function snapshotRun(
+  db: DatabaseSync, companies: Company[], runDate: string, fetch: typeof fetchCompany = fetchCompany,
+  log: (line: string) => void = console.log,
+): Promise<SnapshotTotals> {
+  const unsupported = new Map<string, number>();
+  const totals = { polled: 0, ok: 0, failed: 0, skipped: 0, postings: 0, new: 0, edited: 0, gone: 0 };
+  const details = { fetched: 0, reused: 0, skipped: 0 };
+  const failedBoards: FailedBoard[] = [];
+  const state = db.prepare('select skip_until from companies where id = ?');
+
+  for (const c of companies) {
+    if (c.status === 'paused' || !c.ats) { totals.skipped++; continue; }
+    if (!adapters[c.ats.vendor]) {
+      unsupported.set(c.ats.vendor, (unsupported.get(c.ats.vendor) ?? 0) + 1);
+      totals.skipped++;
+      continue;
+    }
+    const { skip_until } = state.get(c.id) as { skip_until: string | null };
+    if (skip_until && skip_until > new Date().toISOString()) {
+      log(`skip ${c.id}: failing feed, retry after ${skip_until}`);
+      totals.skipped++;
+      continue;
+    }
+    totals.polled++;
+    let postings: NormalizedPosting[];
+    let board: BoardCounts;
+    try {
+      ({ postings, counts: board } = await fetch(db, c));
+    } catch (err) {
+      const n = recordFailure(db, c.id, runDate);
+      const message = (err as Error).message;
+      log(`fail ${c.id} (${c.ats.vendor}/${c.ats.slug}): ${message} [${n} in a row]`);
+      failedBoards.push({ id: c.id, reason: (message.split('\n')[0] ?? '').slice(0, REASON_MAX) });
+      totals.failed++;
+      continue;
+    }
+    const counts = snapshotCompany(db, c, postings, runDate);
+    // Boards with a detail page only: the one request per posting is what makes a board slow.
+    if (adapters[c.ats.vendor].detail) {
+      log(
+        `board ${c.id} (${c.ats.vendor}/${c.ats.slug}): ${board.listed} listed, ${board.fetched} details fetched, ` +
+        `${board.reused} reused, ${board.skipped} skipped by title; ${counts.new} new, ${counts.edited} edited, ${counts.gone} gone`,
+      );
+      details.fetched += board.fetched;
+      details.reused += board.reused;
+      details.skipped += board.skipped;
+    }
+    totals.ok++;
+    totals.postings += counts.seen;
+    totals.new += counts.new;
+    totals.edited += counts.edited;
+    totals.gone += counts.gone;
+  }
+
+  db.prepare(`
+    update runs set companies_polled = :polled, boards_ok = :ok, boards_failed = :failed, failed_boards = :failed_boards
+    where run_date = :run_date`)
+    .run({ polled: totals.polled, ok: totals.ok, failed: totals.failed, failed_boards: JSON.stringify(failedBoards), run_date: runDate });
+  return { ...totals, details, unsupported, failedBoards };
+}
+
 async function main() {
   const runDate = process.env.RUN_DATE ?? new Date().toISOString().slice(0, 10);
-  const companies = loadCompanies();
   const db = openDb();
   try {
+    // The row first, so a companies file that does not load fails this run's row, not the previous run's counts.
+    startRun(db, runDate);
+    const companies = loadCompanies();
     upsertCompanies(db, companies);
-    db.prepare(`
-      insert into runs (run_date, started_at) values (?, ?)
-      on conflict(run_date) do nothing`).run(runDate, new Date().toISOString());
-
-    const unsupported = new Map<string, number>();
-    const totals = { polled: 0, ok: 0, failed: 0, skipped: 0, postings: 0, new: 0, edited: 0, gone: 0 };
-    const details = { fetched: 0, reused: 0, skipped: 0 };
-    const state = db.prepare('select skip_until from companies where id = ?');
-
-    for (const c of companies) {
-      if (c.status === 'paused' || !c.ats) { totals.skipped++; continue; }
-      if (!adapters[c.ats.vendor]) {
-        unsupported.set(c.ats.vendor, (unsupported.get(c.ats.vendor) ?? 0) + 1);
-        totals.skipped++;
-        continue;
-      }
-      const { skip_until } = state.get(c.id) as { skip_until: string | null };
-      if (skip_until && skip_until > new Date().toISOString()) {
-        console.log(`skip ${c.id}: failing feed, retry after ${skip_until}`);
-        totals.skipped++;
-        continue;
-      }
-      totals.polled++;
-      let postings: NormalizedPosting[];
-      let board: BoardCounts;
-      try {
-        ({ postings, counts: board } = await fetchCompany(db, c));
-      } catch (err) {
-        const n = recordFailure(db, c.id, runDate);
-        console.log(`fail ${c.id} (${c.ats.vendor}/${c.ats.slug}): ${(err as Error).message} [${n} in a row]`);
-        totals.failed++;
-        continue;
-      }
-      const counts = snapshotCompany(db, c, postings, runDate);
-      // Boards with a detail page only: the one request per posting is what makes a board slow.
-      if (adapters[c.ats.vendor].detail) {
-        console.log(
-          `board ${c.id} (${c.ats.vendor}/${c.ats.slug}): ${board.listed} listed, ${board.fetched} details fetched, ` +
-          `${board.reused} reused, ${board.skipped} skipped by title; ${counts.new} new, ${counts.edited} edited, ${counts.gone} gone`,
-        );
-        details.fetched += board.fetched;
-        details.reused += board.reused;
-        details.skipped += board.skipped;
-      }
-      totals.ok++;
-      totals.postings += counts.seen;
-      totals.new += counts.new;
-      totals.edited += counts.edited;
-      totals.gone += counts.gone;
-    }
-
-    for (const [vendor, n] of unsupported) console.log(`unsupported vendor: ${vendor} (${n} ${n === 1 ? 'company' : 'companies'})`);
-    db.prepare('update runs set companies_polled = ? where run_date = ?').run(totals.polled, runDate);
+    const t = await snapshotRun(db, companies, runDate);
+    for (const [vendor, n] of t.unsupported) console.log(`unsupported vendor: ${vendor} (${n} ${n === 1 ? 'company' : 'companies'})`);
     console.log(
-      `snapshot ${runDate}: polled ${totals.polled} (ok ${totals.ok}, failed ${totals.failed}), skipped ${totals.skipped}; ` +
-      `${totals.postings} postings seen, ${totals.new} new, ${totals.edited} edited, ${totals.gone} gone; ` +
-      `details ${details.fetched} fetched, ${details.reused} reused, ${details.skipped} skipped by title`,
+      `snapshot ${runDate}: polled ${t.polled} (ok ${t.ok}, failed ${t.failed}), skipped ${t.skipped}; ` +
+      `${t.postings} postings seen, ${t.new} new, ${t.edited} edited, ${t.gone} gone; ` +
+      `details ${t.details.fetched} fetched, ${t.details.reused} reused, ${t.details.skipped} skipped by title`,
     );
   } finally {
     db.close();

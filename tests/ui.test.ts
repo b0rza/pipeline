@@ -81,7 +81,7 @@ test('GET / shows the pending header and each company once, in digest order', ()
   const res = get(db);
   assert.equal(res.status, 200);
   assert.equal(res.headers['content-type'], 'text/html; charset=utf-8');
-  assert.match(res.body, /<\/h1><p>1 apply · 3 outreach waiting · 1 dropped postings today<\/p><\/header>/);
+  assert.match(res.body, /<\/h1><p>1 apply · 3 outreach waiting · 1 dropped postings today<\/p><p class="meta[^"]*" id="last-run">/);
   // Warm first, then apply before outreach, then by name, as the Telegram digest sends them.
   assert.deepEqual(section(res.body, 'pending'), ['warmco', 'zeta', 'alpha', 'beta']);
   assert.deepEqual(section(res.body, 'history'), []);
@@ -148,7 +148,7 @@ test('POST applied, skip, snooze and later change the rows as handleCallback doe
   assert.deepEqual(status(web, 'warmco'), { status: 'later', skip_reason: null, snooze_until: null });
 
   const html = get(web).body;
-  assert.match(html, /<\/h1><p>0 apply · 0 outreach waiting · 1 dropped postings today<\/p><\/header>/);
+  assert.match(html, /<\/h1><p>0 apply · 0 outreach waiting · 1 dropped postings today<\/p><p class="meta[^"]*" id="last-run">/);
   assert.match(html, /<button id="tab-pending" onclick="location.hash = 'pending'">Pending <small>0<\/small><\/button><button id="tab-later" class="secondary outline" onclick="location.hash = 'later'">Later <small>1<\/small><\/button><button id="tab-history" class="secondary outline" onclick="location.hash = 'history'">History <small>3<\/small><\/button>/);
   assert.deepEqual(section(html, 'pending'), []);
   assert.deepEqual(section(html, 'later'), ['warmco']);
@@ -194,7 +194,7 @@ test('Pending holds what waits on the owner: notified signals with buttons, unse
   standard(db);
   db.prepare("update signals set status = 'notified' where company_id in ('warmco', 'zeta')").run();
   const html = get(db).body;
-  assert.match(html, /<\/h1><p>1 apply · 3 outreach waiting · 1 dropped postings today<\/p><\/header>/);
+  assert.match(html, /<\/h1><p>1 apply · 3 outreach waiting · 1 dropped postings today<\/p><p class="meta[^"]*" id="last-run">/);
   assert.deepEqual(section(html, 'pending'), ['warmco', 'zeta', 'alpha', 'beta']);
   assert.deepEqual(section(html, 'history'), []);
   assert.match(html, />Pending <small>4<\/small><\/button>.*>History <small>0<\/small><\/button>/);
@@ -244,7 +244,7 @@ test('a later card waits in the Later tab with its buttons plus Reopen, and leav
   standard(db);
   for (const companyId of ['zeta', 'alpha', 'beta']) post(db, signalId(db, companyId), 'later');
   const html = get(db).body;
-  assert.match(html, /<\/h1><p>0 apply · 1 outreach waiting · 1 dropped postings today<\/p><\/header>/);
+  assert.match(html, /<\/h1><p>0 apply · 1 outreach waiting · 1 dropped postings today<\/p><p class="meta[^"]*" id="last-run">/);
   assert.match(html, />Pending <small>1<\/small><\/button><button id="tab-later"[^>]*>Later <small>3<\/small><\/button>[^]*>History <small>0<\/small><\/button>/);
   // Digest order, as everywhere.
   assert.deepEqual(section(html, 'later'), ['zeta', 'alpha', 'beta']);
@@ -425,7 +425,7 @@ test('a gone posting is hidden on an unsent card and struck through on a notifie
   const html = handle(db, { method: 'GET', url: '/' }, '2026-11-03').body;
 
   assert.deepEqual(section(html, 'pending'), ['mix', 'old']);
-  assert.match(html, /<\/h1><p>0 apply · 2 outreach waiting · 0 dropped postings today<\/p><\/header>/);
+  assert.match(html, /<\/h1><p>0 apply · 2 outreach waiting · 0 dropped postings today<\/p><p class="meta[^"]*" id="last-run">/);
   const mix = cardOf(html, db, 'mix');
   assert.match(mix, /<li><a href="https:\/\/example.test\/m1">Software Engineer<\/a>/);
   assert.doesNotMatch(mix, /Backend Engineer|<s>|gone/);
@@ -576,5 +576,84 @@ test('without companies given, the Employers tab lists the employers in universe
   assert.equal(employerOrder(html).filter((x) => !/^[A-Z]/.test(x)).length, employers.length);
   assert.match(employerCard(html, 'stripe'), /<b>Stripe<\/b><\/a> · 🇺🇸 US <span class="badge">reach<\/span>/);
   assert.match(employerCard(html, 'stripe'), /Board: not polled yet/);
+  db.close();
+});
+
+// --- Last-run line ---------------------------------------------------------------------------------------------------
+
+const START = '2026-11-16T05:00:00.000Z';
+const at = (iso: string) => () => new Date(iso);
+const lastRun = (db: DatabaseSync, now: () => Date) => {
+  const html = handle(db, { method: 'GET', url: '/' }, '2026-11-16', [], now).body;
+  const m = html.match(/<\/p>(<p class="meta( late)?" id="last-run">(.*?)<\/p>)<\/header>/);
+  assert.ok(m, 'no last-run line under the counts line');
+  return { late: m[2] !== undefined, text: m[3] };
+};
+const addRun = (db: DatabaseSync, fields: Record<string, string | number | null>) => {
+  const cols = Object.keys(fields);
+  db.prepare(`insert into runs (${cols.join(', ')}) values (${cols.map((c) => `:${c}`).join(', ')})`).run(fields);
+};
+const finished = {
+  run_date: '2026-11-16', started_at: START, finished_at: '2026-11-16T05:01:00.000Z', companies_polled: 163, boards_ok: 160,
+  boards_failed: 3, postings_new: 8, postings_gone: 21, signals: 0, messages_sent: 0,
+  failed_boards: JSON.stringify([
+    { id: 'synolia', reason: 'HTTP 404 https://synolia.recruitee.com/api/offers/' },
+    { id: 'bigcommerce', reason: 'HTTP 429 https://api.greenhouse.io/v1/boards/bigcommerce/jobs?content=true' },
+    { id: 'infobip', reason: 'HTTP 429' },
+  ]),
+};
+const t = (iso: string) => runTime(iso).trim();
+
+test('the last-run line of a finished run: boards, failures cut short, postings, signals, messages', () => {
+  const db = openDb(':memory:');
+  addRun(db, finished);
+  const line = lastRun(db, at('2026-11-16T09:00:00.000Z'));
+  assert.equal(line.late, false);
+  assert.equal(line.text, `Last run 2026-11-16 ${t(START)} → ${t(finished.finished_at)} · 160 of 163 boards read, 3 failed: ` +
+    'synolia (HTTP 404), bigcommerce (HTTP 429), infobip (HTTP 429) · 8 new, 21 gone · 0 signals · 0 messages');
+  db.close();
+});
+
+test('the last-run line of a clean dry run says the digest was not sent', () => {
+  const db = openDb(':memory:');
+  addRun(db, { ...finished, boards_ok: 163, boards_failed: 0, failed_boards: '[]', signals: 1, messages_sent: null });
+  assert.deepEqual(lastRun(db, at('2026-11-16T09:00:00.000Z')), {
+    late: false,
+    text: `Last run 2026-11-16 ${t(START)} → ${t(finished.finished_at)} · 163 of 163 boards read · 8 new, 21 gone · 1 signal · digest not sent`,
+  });
+  db.close();
+});
+
+test('the last-run line of a failed run is red and names the stage', () => {
+  const db = openDb(':memory:');
+  addRun(db, { ...finished, error: 'stage 1-2: Error: ENOENT: no such file <companies.yaml>' });
+  assert.deepEqual(lastRun(db, at('2026-11-16T09:00:00.000Z')), {
+    late: true, text: `Last run 2026-11-16 ${t(START)} failed at stage 1-2: Error: ENOENT: no such file &lt;companies.yaml&gt;`,
+  });
+  db.close();
+});
+
+test('an unfinished run is in progress for two hours, then did not finish, in red', () => {
+  const db = openDb(':memory:');
+  addRun(db, { run_date: '2026-11-16', started_at: START, companies_polled: 163 });
+  assert.deepEqual(lastRun(db, at('2026-11-16T07:00:00.000Z')), { late: false, text: `Run 2026-11-16 ${t(START)} in progress` });
+  assert.deepEqual(lastRun(db, at('2026-11-16T07:00:01.000Z')), { late: true, text: `Last run 2026-11-16 ${t(START)} did not finish` });
+  db.close();
+});
+
+test('no run at all is red', () => {
+  const db = openDb(':memory:');
+  assert.deepEqual(lastRun(db, at('2026-11-16T09:00:00.000Z')), { late: true, text: 'No run yet' });
+  db.close();
+});
+
+test('a newest run older than 36 hours is red and prefixed No run since, and the newest run date is the one shown', () => {
+  const db = openDb(':memory:');
+  addRun(db, { ...finished, run_date: '2026-11-15', started_at: '2026-11-15T05:00:00.000Z', finished_at: '2026-11-15T05:01:00.000Z' });
+  addRun(db, finished);
+  assert.equal(lastRun(db, at('2026-11-17T17:00:00.000Z')).late, false, 'exactly 36 hours is not stale yet');
+  const line = lastRun(db, at('2026-11-17T17:00:01.000Z'));
+  assert.equal(line.late, true);
+  assert.ok(line.text.startsWith(`No run since 2026-11-16 ${t(START)} · Last run 2026-11-16 ${t(START)} → `), line.text);
   db.close();
 });

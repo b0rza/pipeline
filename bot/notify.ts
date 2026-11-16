@@ -350,30 +350,38 @@ async function main() {
     if (!token || !chatId) throw new Error('TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID are required in the environment');
     const bot = new Bot(token);
     let first = true;
-    await sendDigest(db, messages, async (m) => {
-      // Telegram allows about one message per second per chat.
-      if (!first) await sleep(1000);
-      first = false;
-      const options = {
-        parse_mode: 'HTML', link_preview_options: { is_disabled: true },
-        reply_markup: m.buttons.length ? { inline_keyboard: m.buttons } : undefined,
-      } as const;
-      let sent;
-      try {
-        sent = await bot.api.sendMessage(chatId, m.text, options);
-      } catch (err) {
-        if (err instanceof GrammyError && err.error_code === 429) {
-          await sleep((err.parameters.retry_after ?? 1) * 1000);
+    // Messages Telegram accepted, header and overview included, for the run's row (the overview page's last-run line).
+    // Written also when a send fails part way, so the row says how far it got.
+    let delivered = 0;
+    try {
+      await sendDigest(db, messages, async (m) => {
+        // Telegram allows about one message per second per chat.
+        if (!first) await sleep(1000);
+        first = false;
+        const options = {
+          parse_mode: 'HTML', link_preview_options: { is_disabled: true },
+          reply_markup: m.buttons.length ? { inline_keyboard: m.buttons } : undefined,
+        } as const;
+        let sent;
+        try {
           sent = await bot.api.sendMessage(chatId, m.text, options);
-        } else if (err instanceof GrammyError && err.error_code === 400 && m.buttons.flat().some((b) => 'url' in b)) {
-          // Telegram refuses some addresses in a URL button. The overview matters more than its button: send it without,
-          // or the employer signals would stay unsent and fail the same way every night.
-          console.error(`notify: WARNING: Telegram refused the Open dashboard button (${err.description}); sent without it`);
-          sent = await bot.api.sendMessage(chatId, m.text, { ...options, reply_markup: undefined });
-        } else throw err;
-      }
-      return sent.message_id;
-    });
+        } catch (err) {
+          if (err instanceof GrammyError && err.error_code === 429) {
+            await sleep((err.parameters.retry_after ?? 1) * 1000);
+            sent = await bot.api.sendMessage(chatId, m.text, options);
+          } else if (err instanceof GrammyError && err.error_code === 400 && m.buttons.flat().some((b) => 'url' in b)) {
+            // Telegram refuses some addresses in a URL button. The overview matters more than its button: send it without,
+            // or the employer signals would stay unsent and fail the same way every night.
+            console.error(`notify: WARNING: Telegram refused the Open dashboard button (${err.description}); sent without it`);
+            sent = await bot.api.sendMessage(chatId, m.text, { ...options, reply_markup: undefined });
+          } else throw err;
+        }
+        delivered++;
+        return sent.message_id;
+      });
+    } finally {
+      db.prepare('update runs set messages_sent = ? where run_date = ?').run(delivered, runDate);
+    }
     console.log(`notify ${runDate}: ${n} signals sent`);
   } finally {
     db.close();

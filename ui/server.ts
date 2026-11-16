@@ -36,6 +36,7 @@ const STYLE = `
   body > header, body > main { max-width: 860px; }
   article ul { margin-bottom: 0; } article li { overflow-wrap: anywhere; }
   article li small, .meta { color: var(--pico-muted-color); } .meta { font-size: .875em; }
+  .meta.late { color: var(--pico-del-color, #b91c1c); }
   article > footer { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
   article > footer :is(form, select, button, [role=button]) { width: auto; margin: 0; }
   #tabs button, article > footer :is(select, button, [role=button]) { --pico-form-element-spacing-vertical: .3rem; --pico-form-element-spacing-horizontal: .75rem; font-size: .875rem; white-space: nowrap; }
@@ -146,6 +147,68 @@ export function runTime(startedAt: string | undefined): string {
   return ` ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
 }
 
+interface RunRow {
+  run_date: string; started_at: string; finished_at: string | null; companies_polled: number | null;
+  boards_ok: number | null; boards_failed: number | null; failed_boards: string | null; postings_new: number | null;
+  postings_gone: number | null; signals: number | null; messages_sent: number | null; error: string | null;
+}
+
+// A run not finished this long after it started did not finish; no run started for longer than STALE_MS is red too.
+const UNFINISHED_MS = 2 * 60 * 60 * 1000;
+const STALE_MS = 36 * 60 * 60 * 1000;
+// Failed boards named on the line, and the length a failure reason is cut to.
+const SHOWN_FAILURES = 10;
+const REASON_CHARS = 40;
+
+const cut = (s: string, n: number) => (s.length > n ? `${s.slice(0, n - 1).trimEnd()}…` : s);
+// A count, `?` when the stage that writes it did not run.
+const num = (n: number | null, one: string, many = one) => (n === null ? `? ${many}` : `${n} ${n === 1 ? one : many}`);
+
+// The header's last-run line, from the newest row of runs (core/runs.ts and the stages fill it). Red when the run failed,
+// did not finish, or started more than 36 hours before now; then prefixed `No run since <date time>`.
+export function lastRunLine(db: DatabaseSync, now: Date): string {
+  const r = db.prepare('select * from runs order by run_date desc limit 1').get() as RunRow | undefined;
+  const p = (late: boolean, html: string) => `<p class="meta${late ? ' late' : ''}" id="last-run">${html}</p>`;
+  if (!r) return p(true, 'No run yet');
+
+  const started = `${escapeHtml(r.run_date)}${runTime(r.started_at)}`;
+  const age = now.getTime() - new Date(r.started_at).getTime();
+  let late = false;
+  let line: string;
+  if (r.error) {
+    late = true;
+    line = `Last run ${started} failed at ${escapeHtml(r.error)}`;
+  } else if (!r.finished_at) {
+    late = !(age <= UNFINISHED_MS);
+    line = late ? `Last run ${started} did not finish` : `Run ${started} in progress`;
+  } else {
+    const failed = (() => {
+      try {
+        const list = JSON.parse(r.failed_boards ?? '[]') as { id: string; reason: string }[];
+        return Array.isArray(list) ? list : [];
+      } catch {
+        return [];
+      }
+    })();
+    const named = failed.slice(0, SHOWN_FAILURES)
+      // The URL in a fetch error is noise here: the status alone says what happened, the log has the rest.
+      .map((f) => `${escapeHtml(f.id)} (${escapeHtml(cut(String(f.reason ?? '').replace(/\s*https?:\/\/\S+/g, '').trim(), REASON_CHARS))})`);
+    const more = failed.length > SHOWN_FAILURES ? `, ${failed.length - SHOWN_FAILURES} more` : '';
+    const polled = r.companies_polled;
+    const boards = `${r.boards_ok ?? '?'} of ${num(polled, 'board', 'boards')} read` +
+      (r.boards_failed ? `, ${r.boards_failed} failed${named.length ? `: ${named.join(', ')}${more}` : ''}` : '');
+    const messages = r.messages_sent === null ? 'digest not sent' : num(r.messages_sent, 'message', 'messages');
+    line = `Last run ${started} →${runTime(r.finished_at)} · ${boards} · ${num(r.postings_new, 'new')}, ` +
+      `${num(r.postings_gone, 'gone')} · ${num(r.signals, 'signal', 'signals')} · ${messages}`;
+  }
+  // NaN age (an odd started_at) counts as stale: the row cannot say when it ran.
+  if (!(age <= STALE_MS)) {
+    late = true;
+    line = `No run since ${started} · ${line}`;
+  }
+  return p(late, line);
+}
+
 // A Later or History card (past given) also shows status, skip reason and snooze date; skip_reason and snooze_until are not in SignalRow.
 // A pending card only marks what the digest has not sent yet: the owner can act on it here before it reaches Telegram.
 function card(rows: SignalRow[], runs: Map<string, string>, past?: Past): string {
@@ -234,7 +297,7 @@ function employersSection(db: DatabaseSync, companies: Company[]): { html: strin
 // Pending is what waits on the owner: what the digest will send (pendingSignals, shared with bot/notify.ts, so left as
 // it is) plus what it sent that has no answer yet (notified). Later is what the owner tabled (status later, never pending,
 // so the nightly leaves it alone). History is everything else.
-function page(db: DatabaseSync, today: string, companies: Company[]): string {
+function page(db: DatabaseSync, today: string, companies: Company[], now: Date): string {
   const bySignal = pendingSignals(db, today);
   const employers = employersSection(db, companies);
 
@@ -265,7 +328,7 @@ function page(db: DatabaseSync, today: string, companies: Company[]): string {
     `<button id="tab-${name}"${active ? '' : ' class="secondary outline"'} onclick="location.hash = '${name}'">${label} <small>${count}</small></button>`;
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">` +
     `<title>Pipeline ${escapeHtml(today)}</title><link rel="stylesheet" href="/pico.css"><style>${STYLE}</style><script>${THEME_SCRIPT}</script></head><body>` +
-    `<header><h1>Pipeline ${escapeHtml(today)}</h1><p>${header}</p></header><main>` +
+    `<header><h1>Pipeline ${escapeHtml(today)}</h1><p>${header}</p>${lastRunLine(db, now)}</header><main>` +
     `<nav id="tabs">${tab('pending', 'Pending', waiting.length, true)}${tab('later', 'Later', later.length, false)}` +
     `${tab('history', 'History', others.length, false)}${tab('employers', 'Employers', employers.count, false)}` +
     '<button id="theme" class="secondary outline" onclick="toggleTheme()" aria-label="Light or dark theme" title="Light or dark theme">◐</button></nav>' +
@@ -301,14 +364,15 @@ export function crossSite(headers: Req['headers'] = {}): boolean {
 }
 
 // companies: the watch list for the Employers tab, read from universe/companies.yaml on each page load unless given
-// (the tests pass their own).
+// (the tests pass their own). now: the clock the last-run line measures a run's age by (the tests pass a fixed one).
 export function handle(
   db: DatabaseSync, req: Req, today = new Date().toISOString().slice(0, 10), companies?: Company[],
+  now: () => Date = () => new Date(),
 ): Res {
   const path = new URL(req.url, 'http://127.0.0.1').pathname;
   if (req.method === 'POST' && crossSite(req.headers)) return text(403, 'cross-site request refused');
   if (req.method === 'GET' && path === '/') {
-    return { status: 200, headers: { 'content-type': 'text/html; charset=utf-8' }, body: page(db, today, companies ?? loadCompanies()) };
+    return { status: 200, headers: { 'content-type': 'text/html; charset=utf-8' }, body: page(db, today, companies ?? loadCompanies(), now()) };
   }
   if (req.method === 'GET' && path === '/pico.css') {
     return { status: 200, headers: { 'content-type': 'text/css', 'cache-control': 'max-age=86400' }, body: PICO };

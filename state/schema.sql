@@ -106,12 +106,20 @@ create table if not exists signals (
 create index if not exists signals_status on signals(status);
 create index if not exists signals_run on signals(run_date);
 
+-- One row per run date. Each stage fills its counts; a re-run the same day starts the row afresh (core/snapshot.ts).
 create table if not exists runs (
   run_date text primary key,
-  started_at text not null,
-  finished_at text,
-  companies_polled integer,
-  postings_new integer,
-  signals_drafted integer,
-  notes text
+  started_at text not null,                -- UTC ISO, set by stage 1 (stage 2 when it runs alone)
+  finished_at text,                        -- UTC ISO, set by core/runs.ts at the end of the nightly or when it fails
+  companies_polled integer,                -- stage 1: boards requested (not paused, adapter known, not in a 24h skip)
+  postings_new integer,                    -- stage 2: posting_new + posting_reposted events
+  signals_drafted integer,                 -- stages 4-6, deferred: stays null
+  notes text,
+  boards_ok integer,                       -- stage 1: boards read
+  boards_failed integer,                   -- stage 1: boards whose request failed
+  failed_boards text,                      -- stage 1: json [{id, reason}], reason the error's first line
+  postings_gone integer,                   -- stage 2: posting_gone events
+  signals integer,                         -- stage 3: apply + outreach signals
+  messages_sent integer,                   -- stage 7: Telegram messages sent; null in a dry run
+  error text                               -- `stage 1-2: <last error line>` when the nightly failed (core/runs.ts)
 );

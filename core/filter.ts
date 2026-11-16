@@ -139,6 +139,8 @@ export function filterRun(db: DatabaseSync, runDate: string): { apply: number; o
     db.prepare(`
       delete from signals where run_date = ? and status = 'new' and company_id not in (select value from json_each(?))`)
       .run(runDate, JSON.stringify([...signals.keys()]));
+    // The run's row (core/snapshot.ts) counts the run's signals, both lists; no row when the filter runs alone.
+    db.prepare('update runs set signals = ? where run_date = ?').run(signals.size, runDate);
     db.exec('commit');
   } catch (err) {
     db.exec('rollback');

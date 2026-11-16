@@ -9,6 +9,7 @@
     "filter": "node --import tsx core/filter.ts",
     "publish": "node --import tsx core/publish.ts",
     "checkpoint": "node --import tsx core/checkpoint.ts",
+    "runs": "node --import tsx core/runs.ts",
     "notify": "node --import tsx bot/notify.ts",
     "bot": "node --import tsx bot/server.ts",
     "ui": "node --import tsx ui/server.ts",

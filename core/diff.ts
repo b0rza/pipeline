@@ -51,9 +51,11 @@ export function diffRun(db: DatabaseSync, runDate: string): Record<Kind, number>
     for (const { row, kind } of events) insert.run(sha256(row.id + runDate + kind), runDate, row.company_id, row.id, kind);
 
     const firstSeen = events.filter((e) => e.kind === 'posting_new' || e.kind === 'posting_reposted').length;
+    const gone = events.filter((e) => e.kind === 'posting_gone').length;
     db.prepare(`
-      insert into runs (run_date, started_at, postings_new) values (?, ?, ?)
-      on conflict(run_date) do update set postings_new = excluded.postings_new`).run(runDate, new Date().toISOString(), firstSeen);
+      insert into runs (run_date, started_at, postings_new, postings_gone) values (?, ?, ?, ?)
+      on conflict(run_date) do update set postings_new = excluded.postings_new, postings_gone = excluded.postings_gone`)
+      .run(runDate, new Date().toISOString(), firstSeen, gone);
     db.exec('commit');
   } catch (err) {
     db.exec('rollback');
