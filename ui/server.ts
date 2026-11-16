@@ -3,10 +3,14 @@
 // the watch list.
 // Unauthenticated by design: it is the owner's desk view. It listens on loopback unless PIPELINE_UI_HOST names another
 // address (a private network only, never the open internet), and refuses button presses another website sends.
-import { readFileSync } from 'node:fs';
-import { createServer } from 'node:http';
+// GET /db downloads a consistent copy of the whole database, fetched by hand when current data is needed.
+import { createReadStream, mkdtempSync, readFileSync, rmSync, statSync } from 'node:fs';
+import { createServer, type ServerResponse } from 'node:http';
 import type { AddressInfo } from 'node:net';
-import type { DatabaseSync } from 'node:sqlite';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { backup, DatabaseSync } from 'node:sqlite';
+import { pipeline } from 'node:stream';
 import { pathToFileURL } from 'node:url';
 import {
   composeTitles, droppedCount, escapeHtml, GONE, kindTag, pendingSignals, SIGNAL_ORDER, signalRows, type SignalRow,
@@ -20,7 +24,9 @@ import { type Company, EMPLOYER_BARS, EMPLOYER_GROUPS } from '../core/types.ts';
 
 // headers: lower-case names, as node:http gives them; absent when a caller (the tests) drives handle() directly.
 export interface Req { method: string; url: string; body?: string; headers?: Record<string, string | undefined> }
-export interface Res { status: number; headers: Record<string, string>; body: string }
+// snapshot: startUi() sends a copy of the database as the body (GET /db). handle() is synchronous and a backup is not,
+// so handle() only says so and gives the headers.
+export interface Res { status: number; headers: Record<string, string>; body: string; snapshot?: true }
 
 const SIGNAL_ACTION = /^\/signal\/([0-9a-f]{64})\/([a-z]+)$/;
 
@@ -374,6 +380,22 @@ export function handle(
   if (req.method === 'GET' && path === '/') {
     return { status: 200, headers: { 'content-type': 'text/html; charset=utf-8' }, body: page(db, today, companies ?? loadCompanies(), now()) };
   }
+  // The whole database as a download, fetched by hand when someone needs current data (README, "Overview page").
+  // Safe to expose on this page: the page is reachable only from the owner's tailnet (README, "The overview page over
+  // Tailscale"), it already shows these rows to whoever reaches it, and the database holds no secret: the tokens live
+  // in the environment (AGENTS.md rule 8), and the database was committed to git until the server took over.
+  if (req.method === 'GET' && path === '/db') {
+    return {
+      status: 200,
+      headers: {
+        'content-type': 'application/vnd.sqlite3',
+        'content-disposition': `attachment; filename="pipeline-${today}.sqlite"`,
+        'cache-control': 'no-store',
+      },
+      body: '',
+      snapshot: true,
+    };
+  }
   if (req.method === 'GET' && path === '/pico.css') {
     return { status: 200, headers: { 'content-type': 'text/css', 'cache-control': 'max-age=86400' }, body: PICO };
   }
@@ -408,6 +430,61 @@ export function handle(
   return { status: 303, headers: { location: '/' }, body: '' };
 }
 
+// Pages backup() copies per step: all of them, in one step. One step reads one consistent state of the database while
+// the other connections go on (in WAL mode a reader blocks no writer); with smaller steps, a write by another
+// connection (the bot, the nightly) between two steps starts the copy over. 2^31 - 1 because rate must be a positive
+// 32-bit integer. A 40 MB database takes well under a second, off the main thread.
+const ALL_PAGES = 2 ** 31 - 1;
+
+// A consistent copy of the database, rows still in the -wal file included, in a new directory under the system temp
+// directory. The caller removes dir when done. The copy is switched from WAL to the default rollback journal, so it is
+// one self-contained file: backup() copies the source's WAL mark in the file header, and a WAL database opened
+// elsewhere makes -wal and -shm files next to it, or fails where it may not write them.
+export async function snapshotDb(db: DatabaseSync): Promise<{ dir: string; file: string }> {
+  const dir = mkdtempSync(join(tmpdir(), 'pipeline-db-'));
+  const file = join(dir, 'pipeline.sqlite');
+  try {
+    await backup(db, file, { rate: ALL_PAGES });
+    const copy = new DatabaseSync(file);
+    try {
+      copy.exec('pragma journal_mode = delete');
+    } finally {
+      copy.close();
+    }
+    return { dir, file };
+  } catch (err) {
+    rmSync(dir, { recursive: true, force: true });
+    throw err;
+  }
+}
+
+// Answers GET /db with the snapshot and deletes it afterwards, also when the backup, the read or the client fails. A
+// failed backup is a 500 before any byte is sent. A failure while streaming cuts the response short, which the client
+// sees, since content-length promised more; a client that leaves only stops the stream.
+async function sendSnapshot(db: DatabaseSync, out: Res, res: ServerResponse): Promise<void> {
+  let dir: string | undefined;
+  try {
+    const snap = await snapshotDb(db);
+    dir = snap.dir;
+    if (res.destroyed) throw new Error('ui: /db client left during the backup');
+    res.writeHead(out.status, { ...out.headers, 'content-length': String(statSync(snap.file).size) });
+    // From here the pipeline's callback removes the directory.
+    const owned = dir;
+    dir = undefined;
+    pipeline(createReadStream(snap.file), res, (err) => {
+      rmSync(owned, { recursive: true, force: true });
+      if (err) console.error(`ui: /db not sent in full: ${err.message}`);
+    });
+  } catch (err) {
+    if (dir) rmSync(dir, { recursive: true, force: true });
+    console.error(err);
+    if (!res.headersSent) {
+      const fail = text(500, 'internal error');
+      res.writeHead(fail.status, fail.headers).end(fail.body);
+    } else res.destroy();
+  }
+}
+
 export interface Running {
   // Settles when the service ends: resolves after stop(), rejects if it fails on its own.
   done: Promise<void>;
@@ -415,11 +492,12 @@ export interface Running {
   stop(): Promise<void>;
 }
 
-// Resolves once listening; rejects (database closed) if the address cannot be bound.
-export function startUi(env: NodeJS.ProcessEnv = process.env): Promise<Running> {
+// Resolves once listening, with the port bound (PIPELINE_UI_PORT=0 picks a free one, as the tests do); rejects
+// (database closed) if the address cannot be bound. The database is PIPELINE_DB from env, else openDb()'s default.
+export function startUi(env: NodeJS.ProcessEnv = process.env): Promise<Running & { port: number }> {
   const port = Number(env.PIPELINE_UI_PORT ?? 8787);
   const host = env.PIPELINE_UI_HOST || '127.0.0.1';
-  const db = openDb();
+  const db = openDb(env.PIPELINE_DB);
   const server = createServer((req, res) => {
     let body = '';
     req.setEncoding('utf8');
@@ -432,6 +510,7 @@ export function startUi(env: NodeJS.ProcessEnv = process.env): Promise<Running> 
         console.error(err);
         out = text(500, 'internal error');
       }
+      if (out.snapshot) return void sendSnapshot(db, out, res).catch((err) => console.error(err));
       res.writeHead(out.status, out.headers).end(out.body);
     });
   });
@@ -466,7 +545,7 @@ export function startUi(env: NodeJS.ProcessEnv = process.env): Promise<Running> 
         server.off('error', failed);
         const { address, family, port: bound } = server.address() as AddressInfo;
         console.log(`ui: http://${family === 'IPv6' ? `[${address}]` : address}:${bound}/`);
-        resolve({ done, stop });
+        resolve({ done, stop, port: bound });
       });
     } catch (err) {
       failed(err as Error);

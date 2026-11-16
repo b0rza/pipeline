@@ -1,5 +1,9 @@
 import assert from 'node:assert/strict';
-import type { DatabaseSync } from 'node:sqlite';
+import { mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { request } from 'node:http';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { DatabaseSync } from 'node:sqlite';
 import { test } from 'node:test';
 import { handleCallback } from '../bot/server.ts';
 import { composeBody, composeSubject } from '../bot/templates.ts';
@@ -9,7 +13,7 @@ import { diffRun } from '../core/diff.ts';
 import { filterRun } from '../core/filter.ts';
 import { snapshotCompany } from '../core/snapshot.ts';
 import type { Company, EmployerProfile, NormalizedPosting } from '../core/types.ts';
-import { handle, runTime } from '../ui/server.ts';
+import { handle, runTime, snapshotDb, startUi } from '../ui/server.ts';
 
 const company = (id: string, extra: Partial<Company> = {}): Company => ({
   id, name: id, domain: `${id}.test`, country: 'GB', phases: ['p1'],
@@ -656,4 +660,107 @@ test('a newest run older than 36 hours is red and prefixed No run since, and the
   assert.equal(line.late, true);
   assert.ok(line.text.startsWith(`No run since 2026-11-16 ${t(START)} · Last run 2026-11-16 ${t(START)} → `), line.text);
   db.close();
+});
+
+test('GET /db names a dated SQLite download, and POST /db is not found', () => {
+  const db = openDb(':memory:');
+  const res = handle(db, { method: 'GET', url: '/db' }, today);
+  assert.equal(res.status, 200);
+  assert.equal(res.snapshot, true);
+  assert.equal(res.headers['content-type'], 'application/vnd.sqlite3');
+  assert.equal(res.headers['content-disposition'], 'attachment; filename="pipeline-2026-11-02.sqlite"');
+  assert.equal(handle(db, { method: 'POST', url: '/db' }, today).status, 404);
+  db.close();
+});
+
+// One request to the running page; the body as bytes.
+const call = (port: number, method: string, path: string) =>
+  new Promise<{ status: number; headers: Record<string, unknown>; body: Buffer }>((resolve, reject) => {
+    const req = request({ host: '127.0.0.1', port, method, path }, (res) => {
+      const chunks: Buffer[] = [];
+      res.on('data', (c: Buffer) => chunks.push(c));
+      res.on('end', () => resolve({ status: res.statusCode ?? 0, headers: res.headers, body: Buffer.concat(chunks) }));
+      res.on('error', reject);
+    });
+    req.on('error', reject);
+    req.end();
+  });
+
+const snapshotDirs = () => readdirSync(tmpdir()).filter((f) => f.startsWith('pipeline-db-'));
+
+test('snapshotDb copies the rows still in the WAL into one rollback-journal file, and removes its directory when it fails', async () => {
+  const work = mkdtempSync(join(tmpdir(), 'ui-db-test-'));
+  const path = join(work, 'pipeline.sqlite');
+  const writer = openDb(path);
+  // A second connection open, as the bot's is on the server, so closing neither checkpoints the WAL.
+  const reader = openDb(path);
+  standard(writer);
+  const before = snapshotDirs();
+  try {
+    const { dir, file } = await snapshotDb(reader);
+    const copy = new DatabaseSync(file, { readOnly: true });
+    assert.equal((copy.prepare('select count(*) as n from signals').get() as { n: number }).n,
+      (writer.prepare('select count(*) as n from signals').get() as { n: number }).n);
+    assert.equal((copy.prepare('pragma journal_mode').get() as { journal_mode: string }).journal_mode, 'delete');
+    copy.close();
+    rmSync(dir, { recursive: true });
+
+    const closed = openDb(join(work, 'closed.sqlite'));
+    closed.close();
+    await assert.rejects(snapshotDb(closed));
+    assert.deepEqual(snapshotDirs(), before);
+  } finally {
+    writer.close();
+    reader.close();
+    rmSync(work, { recursive: true, force: true });
+  }
+});
+
+// Skipped where binding a local port is not allowed (Claude Code's sandbox answers listen with EPERM).
+test('GET /db from the running page downloads a copy with the rows still in the WAL, and leaves no temp file', async (t) => {
+  const work = mkdtempSync(join(tmpdir(), 'ui-db-test-'));
+  const path = join(work, 'pipeline.sqlite');
+  // Kept open through the download, so its rows stay in the -wal file and the copy must read them from there.
+  const db = openDb(path);
+  standard(db);
+  const signals = (db.prepare('select count(*) as n from signals').get() as { n: number }).n;
+  assert.ok(signals > 0);
+  const before = snapshotDirs();
+  let ui: Awaited<ReturnType<typeof startUi>>;
+  try {
+    ui = await startUi({ PIPELINE_DB: path, PIPELINE_UI_PORT: '0' });
+  } catch (err) {
+    db.close();
+    rmSync(work, { recursive: true, force: true });
+    if ((err as NodeJS.ErrnoException).code === 'EPERM') return t.skip('binding a local port is not permitted here');
+    throw err;
+  }
+  try {
+    const res = await call(ui.port, 'GET', '/db');
+    assert.equal(res.status, 200);
+    assert.equal(res.headers['content-type'], 'application/vnd.sqlite3');
+    assert.match(String(res.headers['content-disposition']), /^attachment; filename="pipeline-\d{4}-\d{2}-\d{2}\.sqlite"$/);
+    assert.equal(Number(res.headers['content-length']), res.body.length);
+    // A rollback-journal file, not WAL (header bytes 18 and 19 are 1, not 2): it opens on its own.
+    assert.deepEqual([res.body[18], res.body[19]], [1, 1]);
+
+    const copyPath = join(work, 'copy.sqlite');
+    writeFileSync(copyPath, res.body);
+    const copy = new DatabaseSync(copyPath, { readOnly: true });
+    assert.equal((copy.prepare('select count(*) as n from signals').get() as { n: number }).n, signals);
+    assert.equal((copy.prepare('pragma integrity_check').get() as { integrity_check: string }).integrity_check, 'ok');
+    copy.close();
+
+    // The temp copy goes once the response is sent; the server's callback may run just after the client has the body.
+    for (let i = 0; i < 50 && snapshotDirs().length > before.length; i++) await new Promise((r) => setTimeout(r, 20));
+    assert.deepEqual(snapshotDirs(), before);
+
+    const refused = await call(ui.port, 'POST', '/db');
+    assert.equal(refused.status, 404);
+    assert.equal(readFileSync(path).subarray(0, 15).toString(), 'SQLite format 3');
+  } finally {
+    await ui.stop();
+    db.close();
+    rmSync(work, { recursive: true, force: true });
+  }
 });
