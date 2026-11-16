@@ -12,7 +12,8 @@
 #   automated access; forbidden = robots.txt or the terms disallow it (clause quoted); login-only = no listing visible without an
 #   account; unknown = could not be settled (reason given).
 # fit: strong = stack, level, remote-from-Croatia and B2B all line up; possible = one of those is uncertain or costs something
-#   (language, DACH, rate); poor = at least one is clearly against him.
+#   (language, DACH); poor = at least one is clearly against him. Rates are recorded, never used to rule a broker out: the
+#   owner's EUR 55/h is a ballpark and he judges rates himself (2026-11-16).
 # Not checked: any listing behind a login (Malt, Lemon.io, Proxify, emagine portal, Verama, Gun.io app, Braintrust app, JobServe
 #   saved-search RSS); whether German- or Swedish-language assignments on freelancermap and Cinode accept an English-speaking
 #   contractor; what each broker actually pays a Croatian company (no broker publishes its margin except where noted); Hays, Etengo,
@@ -424,8 +425,8 @@
     verdict: login-only
     source: https://lemon.io/robots.txt
   fit:
-    level: poor
-    why: "Its own data puts senior Croatia contracts at about USD 44/h, below his EUR 55/h current rate"
+    level: possible
+    why: "Vetted remote network for senior developers; its own data puts senior Croatia contracts at about USD 44/h (the owner judges rates himself); no public listings, so a profile the owner makes, not a pipeline source"
   sources:
     - https://lemon.io/rate-calculator/croatia/
     - https://lemon.io/robots.txt
@@ -458,8 +459,8 @@
     verdict: login-only
     source: https://proxify.io/robots.txt
   fit:
-    level: poor
-    why: "Client price band already near his current rate before Proxify's margin; nothing to read"
+    level: possible
+    why: "Vetted remote network; its own client price band is USD 40-65/h before its margin (the owner judges rates himself); no public listings, so a profile the owner makes, not a pipeline source"
   sources:
     - https://proxify.io/knowledge-base/business-finance/how-does-proxify-pricing-work-and-whats-included
     - https://proxify.io/robots.txt
