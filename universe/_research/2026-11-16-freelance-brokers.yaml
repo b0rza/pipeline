@@ -1,0 +1,773 @@
+# Slice: freelance brokers and assignment marketplaces that publish open contract assignments. Date: 2026-11-16.
+# Question: which of them list assignments the owner could take (senior full-stack/lead, commerce, Vue/Nuxt/React/TS/Node,
+#   remote from Split through his own company, B2B), and could the pipeline read those listings as one more source.
+#   Additive frame (PLAN.md): a broker source sits beside the agency and employer lists and the current contract; nothing is replaced.
+# Method: 23 candidates from the brief plus own knowledge (emagine, Ework/Verama, freelance.de, Proxify, Etengo's and Hays' own
+#   portals). robots.txt for every host was fetched once through core/http.ts fetchText (1 req/s per host, the pipeline's own
+#   User-Agent) in a scratchpad script; listing pages were fetched the same way only where robots.txt allows the path. Help pages,
+#   terms and news were read with WebFetch/WebSearch. LinkedIn, Indeed and Glassdoor were not opened, searched, cited or relied on
+#   (AGENTS.md rule 3); search results that pointed at them were discarded. No account was created and nothing was logged in to.
+# Counts are one snapshot on 2026-11-16 and come from the site's own filter counts where it has them.
+# readable.verdict: feed = RSS/API exists; page-ok = robots.txt allows the listing path and the terms read have no clause against
+#   automated access; forbidden = robots.txt or the terms disallow it (clause quoted); login-only = no listing visible without an
+#   account; unknown = could not be settled (reason given).
+# fit: strong = stack, level, remote-from-Croatia and B2B all line up; possible = one of those is uncertain or costs something
+#   (language, DACH, rate); poor = at least one is clearly against him.
+# Not checked: any listing behind a login (Malt, Lemon.io, Proxify, emagine portal, Verama, Gun.io app, Braintrust app, JobServe
+#   saved-search RSS); whether German- or Swedish-language assignments on freelancermap and Cinode accept an English-speaking
+#   contractor; what each broker actually pays a Croatian company (no broker publishes its margin except where noted); Hays, Etengo,
+#   GULP and Striive terms of use (not found or not reachable); Malt's country list (help.malt.com refused WebFetch with 403);
+#   SOLCOM's portal (403 to both the pipeline's User-Agent and WebFetch). Claims marked "unverified" come from search snippets only.
+# Left out on purpose: Upwork, Fiverr and Freelancer.com (general marketplaces, not brokers; Upwork's robots.txt also disallows
+#   /jobs/ for every agent); general job boards; anything built on LinkedIn, Indeed or Glassdoor.
+
+# --- possible fits that are readable ---
+
+- id: freelancermap
+  name: freelancermap
+  domain: freelancermap.de
+  country: DE
+  kind: marketplace
+  listings:
+    public: yes
+    volume: "Query 'frontend', Germany filter: 446 projects (314 contracting, 108 Arbeitnehmerueberlassung, 24 permanent). With 100% remote: 194 (164 contracting). Same query on freelancermap.com, which excludes DACH: 17, of them 11 remote"
+    remote: "194 of 446 tagged remote (remoteInPercent 100); 237 hybrid, 15 on-site"
+    posters: "Mostly German brokers and staffing firms: SOLCOM, Westhouse, Computer Futures/SThree, Randstad Digital, Etengo, emagine GmbH, FERCHAU. Only 7 of 446 flagged end customer"
+    samples:
+      - { title: "Lead React Developer / Senior Fullstack Developer (m/w/d), Node.js, TypeScript", location: "Remote, occasional on-site dates in Germany", rate: none shown, note: "international retailer, 12 months from January 2027, project language German" }
+      - { title: "Vue.js Developer mit UI-UX/TypeScript-Erfahrung (m/w/d) - 100% Remote - Start: 01.01.2027", location: "100% remote, end client in Frankfurt", rate: none shown, note: "12 months, project language German" }
+      - { title: "Senior Fullstack Engineer (Frontend Focus) | React, TypeScript & AWS", location: "Croatia, 100% remote, contracting (freelancermap.com)", rate: none shown }
+    source: https://www.freelancermap.de/projekte/frontend
+  croatia:
+    status: likely
+    says: "Terms open the platform to any business user: 'stehen lediglich Unternehmern im Sinne des § 14 BGB, also juristischen Personen, Gewerbetreibenden sowie Selbständigen und Freiberuflern zu'. No residence rule. A search snippet claiming DACH residence was the rules of a survey raffle, not of the platform. Individual projects often say 'vereinzelt Termine vor Ort in Deutschland' and 'Projektsprache: Deutsch'"
+    source: https://www.freelancermap.de/allgemeine-geschaeftsbedingungen.html
+  contract:
+    with: "The poster, usually a broker (freelancermap is not a party)"
+    b2b: "Per posting: projectContractType is contracting (freiberuflich, B2B), employee_leasing (ANUe, payroll) or permanent_position; the field is in the data"
+    fee: "No placement fee: 'Vermittlungsgebuehren gibt es auf freelancermap nicht.' Free basic account applies to up to 10 projects a month; Premium from EUR 13.99"
+    source: https://www.freelancermap.de/hilfe.html
+  rates: "Not shown on any of the 22 sampled projects (budget field empty). Brokers' rates are not published"
+  readable:
+    method: "Listing HTML embeds the full result set as JSON (React-on-Rails component ProjectSearch): id, title, full description, country, locations, remoteInPercent, contract type, poster company, created date, ~22 per page with pagenr= paging. Detail pages carry schema.org JobPosting JSON-LD. The RSS link in the page head (/feeds/projekte/int-international.xml) returns 404"
+    robots: "User-agent: * Disallow: (empty); only named SEO and archive bots are blocked. Same file on freelancermap.com"
+    terms: "No clause on crawling or automated access. Closest: §4.1a users must not overload the network infrastructure ('nicht durch uebermaessige Inanspruchnahme ueberlastet werden'); §4.5 use the information 'nur innerhalb seines Vertrages und fuer eigene Zwecke'"
+    verdict: page-ok
+    source: https://www.freelancermap.de/robots.txt
+  fit:
+    level: possible
+    why: "Largest open list of German broker assignments with his stack (TypeScript 45, React 39, Vue 10 in the facet counts) and 100%-remote ones among them; against it: DACH is his last preference, most postings expect German, and ANUe/payroll postings sit in the same list (filter on contracting)"
+  sources:
+    - https://www.freelancermap.de/projekte/frontend
+    - https://www.freelancermap.de/projekte?query=frontend&remoteInPercent%5B0%5D=100&sort=1
+    - https://www.freelancermap.com/projects?query=frontend&remoteInPercent%5B0%5D=100
+    - https://www.freelancermap.de/projekt/lead-react-developer-senior-fullstack-developer-m-w-d-node-js-typescript
+    - https://www.freelancermap.de/allgemeine-geschaeftsbedingungen.html
+    - https://www.freelancermap.de/hilfe.html
+
+- id: jobserve
+  name: JobServe
+  domain: jobserve.com
+  country: GB
+  kind: marketplace
+  listings:
+    public: yes
+    volume: "unknown. The real search is an ASP.NET postback form (JobSearch.aspx with __VIEWSTATE); the public SEO landing page for React Developer in the UK showed 4 jobs, none contract, which says nothing about the full board"
+    remote: "The search form has a remote-working checkbox (chkRemoteWorking); counts not read"
+    samples:
+      - { title: "Senior React Developer - Equities - Vice President", location: "City of Westminster, London", rate: none shown, note: "permanent-looking bank role on the landing page; not a contract sample" }
+    source: https://www.jobserve.com/gb/en/React-Developer-jobs-in-United-Kingdom/
+  croatia:
+    status: unknown
+    says: "Nothing on contractor residence. JobServe is a board; eligibility is set per advert by the recruiter (UK contracts often state inside/outside IR35, which assumes a UK limited company)"
+    source: https://www.jobserve.com/gb/en/content/help/faqs/candidate.htm
+  contract:
+    with: "The advertising recruiter or end client; JobServe is not a party"
+    b2b: "Per advert"
+    fee: "'all job seeker features on JobServe are completely free'"
+    source: https://www.jobserve.com/gb/en/content/help/faqs/candidate.htm
+  rates: "Not read. For a UK reference band see PLAN.md (ITJobsWatch Nuxt contract median GBP 545/day), which is not JobServe data"
+  readable:
+    method: "RSS per saved search: 'When you save a search you can also create various types of alerts, these include daily and instant email alerts, RSS feeds and notifications.' Saving a search is a signed-in feature (unverified that RSS needs the login). Public pages: SEO landing pages and job detail pages at /gb/en/JobSearch.aspx?jobid="
+    robots: "User-agent: * disallows /Job-Search.aspx, /JobApplication, /Redirect/, /JobShare/, /JobSavedSearch/, *.jsap, *.jsrs; /gb/en/JobSearch.aspx and the landing pages are not disallowed"
+    terms: "8.2 'You may download information from this Website for your own personal use only. Except as otherwise expressly permitted under copyright law, no copyright, redistribution, retransmission, publication or commercial exploitation of downloaded material will be permitted without our express permission.' No clause names robots or scraping. The owner reading his own feed fits 'personal use'; republishing does not"
+    verdict: feed
+    source: https://www.jobserve.com/hr/en/content/about/terms-and-conditions.htm
+  fit:
+    level: possible
+    why: "UK is his second preference and JobServe is the UK IT contract board recruiters post to; unknown how many UK contract adverts accept a non-UK company and fully remote work"
+  sources:
+    - https://www.jobserve.com/robots.txt
+    - https://www.jobserve.com/gb/en/content/help/faqs/candidate.htm
+    - https://www.jobserve.com/hr/en/content/about/terms-and-conditions.htm
+    - https://www.jobserve.com/gb/en/React-Developer-jobs-in-United-Kingdom/
+
+# --- possible fits that are not readable (forbidden, login-only or unknown) ---
+
+- id: braintrust
+  name: Braintrust
+  domain: usebraintrust.com
+  country: US
+  kind: marketplace
+  listings:
+    public: partial
+    volume: "Marketing page shows 24 sample role cards with hourly ranges; the full list at app.usebraintrust.com/jobs/ is a JavaScript app (no jobs in the HTML)"
+    remote: unknown
+    samples:
+      - { title: "Senior Full-Stack Engineer", location: not shown, rate: "USD 150-200/h" }
+    source: https://www.usebraintrust.com/jobs
+  croatia:
+    status: unknown
+    says: "Talent Terms do not address country eligibility; main Terms mention a restricted-territory list (unverified, snippet only)"
+    source: https://www.usebraintrust.com/talent-terms
+  contract:
+    with: "Client. Talent Terms 1(e): paid 'at such times and amounts as agreed with a Client for a given Project'"
+    b2b: unknown
+    fee: "0% to talent per Braintrust's FAQ; 15% to the client (unverified, snippets; older material says 10%)"
+    source: https://usebraintrust.com/frequently-asked-questions
+  rates: "Sample card: Senior Full-Stack Engineer USD 150-200/h"
+  readable:
+    method: "No feed or public API found; app page is client-rendered"
+    robots: "www: Allow: / except /api/. app: disallows only query-string variants (?page=, ?utm_*, ?key=)"
+    terms: "Not settled: the main Terms page was not read in full and no automated-access clause was found in what was read"
+    verdict: unknown
+    source: https://app.usebraintrust.com/robots.txt
+  fit:
+    level: possible
+    why: "Highest sample rates seen (USD 150-200/h senior full-stack), contract-based; Croatia eligibility and how many roles are open to Europe unknown"
+  sources:
+    - https://www.usebraintrust.com/jobs
+    - https://www.usebraintrust.com/talent-terms
+    - https://www.usebraintrust.com/robots.txt
+
+- id: toptal
+  name: Toptal
+  domain: toptal.com
+  country: US
+  kind: vetted-network
+  listings:
+    public: partial
+    volume: "'Real-Time Jobs on Our Network' block on /freelance-jobs shows 3 with Load more; no total"
+    remote: "most fully remote per the page; one sample limited to US/Canada/UK talent"
+    samples:
+      - { title: "Full-stack Developer - US Identification Company", location: not stated, rate: none shown, note: "Java, React" }
+    source: https://www.toptal.com/freelance-jobs
+  croatia:
+    status: likely
+    says: "unverified: search snippets show Toptal's own developer resume pages for network members located in Pula and Zagreb, Croatia (URLs not kept here because they name individuals)"
+    source: https://www.toptal.com/developers
+  contract:
+    with: "Toptal (network member is engaged through Toptal)"
+    b2b: unknown
+    fee: "not published; members set their own hourly rate per the /freelance-jobs FAQ"
+    source: https://www.toptal.com/freelance-jobs
+  rates: "Not shown"
+  readable:
+    method: "HTML listing block, no feed"
+    robots: "/freelance-jobs not disallowed; /api/ is"
+    terms: "'You may not use any \"page-scraper,\" \"deep-link,\" \"spider,\" or \"robot\" or other automatic program, device, algorithm or methodology ... to access, copy, acquire, or monitor any portion of the Site or any Content'"
+    verdict: forbidden
+    source: https://www.toptal.com/tos
+  fit:
+    level: possible
+    why: "Senior remote work for US clients from Croatia is the network's model; screening is long and the pipeline cannot read it, so it is a profile to apply to once, not a source"
+  sources:
+    - https://www.toptal.com/freelance-jobs
+    - https://www.toptal.com/tos
+    - https://www.toptal.com/robots.txt
+
+- id: arc
+  name: Arc
+  domain: arc.dev
+  country: US
+  kind: vetted-network
+  listings:
+    public: yes
+    volume: "Freelance filter page showed 6 listings; site header says 7,900+ jobs across all types"
+    remote: "each listing names a region: 'Remote anywhere', 'Europe and North America', 'United States'"
+    samples:
+      - { title: "Python Developer (Website Completion) (PT)", location: "Remote anywhere", rate: "hourly, amount not shown" }
+      - { title: "Experienced UX/UI Designer (PT)", location: "Remote, Europe and North America", rate: "hourly, amount not shown" }
+    source: https://arc.dev/remote-jobs/freelance
+  croatia:
+    status: likely
+    says: "Terms exclude only sanctioned territories and restricted-party lists (7.2(g), 7.2(h)); listings that say Europe or anywhere would cover Croatia"
+    source: https://arc.dev/terms
+  contract:
+    with: "Arc. 5.3.1: Statement of Work 'to be entered into between you and Arc when you take on a Freelance Job'"
+    b2b: unknown
+    fee: "in a separate Freelancer Sourcing Agreement, not published"
+    source: https://arc.dev/terms
+  rates: "Not shown on freelance listings"
+  readable:
+    method: "Server-rendered listing pages"
+    robots: "Allow: / for all agents"
+    terms: "7.7(k) no 'software, devices, scripts, robots, or other means to access, scrape, crawl, or spider the Platform'; also no repeated access 'for monitoring purposes'"
+    verdict: forbidden
+    source: https://arc.dev/terms
+  fit:
+    level: possible
+    why: "Region-tagged remote freelance roles and Arc contracts the freelancer itself; very few freelance listings at a time and the terms forbid reading them automatically"
+  sources:
+    - https://arc.dev/remote-jobs/freelance
+    - https://arc.dev/terms
+    - https://arc.dev/robots.txt
+
+- id: gun-io
+  name: Gun.io
+  domain: gun.io
+  country: US
+  kind: vetted-network
+  listings:
+    public: partial
+    volume: "/jobs/ shows 4 anonymised roles; 'See All Jobs' goes to app.gun.io/sign-up/"
+    remote: unknown
+    samples:
+      - { title: "Senior React / TypeScript engineer", location: not stated, rate: none shown, note: "B2B SaaS for enterprise health and security teams" }
+      - { title: "Full-stack engineer", location: not stated, rate: none shown, note: "React, Python, PostgreSQL, TypeScript" }
+    source: https://gun.io/jobs/
+  croatia:
+    status: unknown
+    says: "Site says the network spans '100+ Nations'; no country rule found"
+    source: https://gun.io/jobs/
+  contract:
+    with: "Gun.io bills the client and guarantees payment; developers keep the rate they set"
+    b2b: unknown
+    fee: "paid by the client"
+    source: https://gun.io/find-work/
+  rates: "Not shown"
+  readable:
+    method: "Teaser page only; full list behind sign-up"
+    robots: "Allow all (Yoast block), feeds disallowed"
+    terms: "§5: 'you will not access (or attempt to access) the Site through any robot, spider, or other automated means'; 'you will not \"screen scrape\", \"monitor\", \"mine\", \"copy\", or \"mirror\" the Site'"
+    verdict: forbidden
+    source: https://gun.io/terms-of-use/
+  fit:
+    level: possible
+    why: "Senior React/TypeScript and full-stack roles at US SaaS; country eligibility unknown and listings are behind sign-up and terms"
+  sources:
+    - https://gun.io/jobs/
+    - https://gun.io/find-work/
+    - https://gun.io/terms-of-use/
+
+- id: emagine
+  name: emagine
+  domain: emagine.org
+  country: DK
+  kind: broker
+  listings:
+    public: no
+    volume: "Current site has no public assignment list; old /consultants/freelance-jobs/ URLs return 404; consultants are sent to portal.emagine.org/auth/sign-up. emagine GmbH also posts German projects on freelancermap"
+    remote: unknown
+    samples:
+      - { title: "Full Stack Developer (Node.js, Next.js, Angular, React, Google Cloud) remote within Europe", location: "remote within Europe", rate: "max EUR 450 (per day, unverified)", note: "unverified: search snippet of the old listing, URL now 404" }
+    source: https://emagine.org/consultant-hub
+  croatia:
+    status: unknown
+    says: "Old listing titles said 'remote within Europe' (unverified); no residence rule found"
+    source: https://emagine.org/consultant-hub
+  contract:
+    with: "emagine (broker contracts the consultant); not verified on a current page"
+    b2b: unknown
+    fee: unknown
+    source: https://emagine.org/consultant-hub
+  rates: "unverified: EUR 450 max on one old remote-Europe full-stack listing"
+  readable:
+    method: none public
+    robots: "Allow: / for all agents"
+    terms: not read
+    verdict: login-only
+    source: https://www.emagine.org/robots.txt
+  fit:
+    level: possible
+    why: "European broker (Nordics, Benelux, DE, PL, after buying Allgeier Experts) that has posted remote-within-Europe full-stack work; nothing public to read now"
+  sources:
+    - https://emagine.org/consultant-hub
+    - https://emagine.org/sitemap.xml
+    - https://www.emagine.org/robots.txt
+
+- id: ework-verama
+  name: Ework (Verama)
+  domain: eworkgroup.com
+  country: SE
+  kind: broker
+  listings:
+    public: unknown
+    volume: "unknown. app.verama.com/en/job-requests is a JavaScript app (HTML has no listings); www.verama.com now redirects to eworkgroup.com/find-assignments, which asks consultants to join"
+    remote: "Verama's help page lists a filter for 'On Site/Hybrid' and 'Fully Remote'"
+    samples: []
+    source: https://support.verama.com/support/solutions/articles/76000084003-search-and-filter-on-jobs
+  croatia:
+    status: unknown
+    says: "User access agreement §2: an Authorized User is 'Service Provider's employees or freelancers registered to use and accessing Verama'; no country rule"
+    source: https://www.eworkgroup.com/verama-user-access-agreement
+  contract:
+    with: "not stated in the agreement; §9 'Authorized User may use Verama to find contract jobs at Clients'"
+    b2b: unknown
+    fee: unknown
+    source: https://www.eworkgroup.com/verama-user-access-agreement
+  rates: unknown
+  readable:
+    method: "JS app; API not located"
+    robots: "app.verama.com/robots.txt 404 (no rules); eworkgroup.com disallows only the eworkplus portal and sample pages"
+    terms: "No automated-access clause; §4.1 'not use programming codes or commands when communicating in Verama'"
+    verdict: unknown
+    source: https://www.eworkgroup.com/robots.txt
+  fit:
+    level: possible
+    why: "Large Nordic and Polish broker with a remote filter; whether the job list shows without login and whether it takes a Croatian company is unknown"
+  sources:
+    - https://www.eworkgroup.com/find-assignments
+    - https://support.verama.com/support/solutions/articles/76000084003-search-and-filter-on-jobs
+    - https://www.eworkgroup.com/verama-user-access-agreement
+
+- id: malt
+  name: Malt
+  domain: malt.com
+  country: FR
+  kind: marketplace
+  listings:
+    public: unknown
+    volume: "not seen: malt.com, malt.de and help.malt.com return 403 to both the pipeline's User-Agent and WebFetch"
+    remote: unknown
+    samples: []
+    source: https://www.malt.com/robots.txt
+  croatia:
+    status: unknown
+    says: "Help centre sorts countries into open (sole traders and companies accepted) and blocked; the table was not reachable and Croatia was not seen in snippets (unverified)"
+    source: https://help.malt.com/hc/en-150/articles/29511599491090-I-am-a-freelancer-registered-abroad-For-which-countries-does-Malt-authorize-registration-in-this-situation
+  contract:
+    with: "Client, through Malt"
+    b2b: yes
+    fee: "unverified: freelancer service fee '5% (excl. tax)' per a help-centre snippet; third-party sources say 5-10% and none in UK/NL"
+    source: https://help.malt.com/hc/en-150/articles/29539691425938-How-does-the-Malt-commission-work-for-freelancers
+  rates: unknown
+  readable:
+    method: unknown
+    robots: "403 on robots.txt itself"
+    terms: "not reachable (403)"
+    verdict: unknown
+    source: https://www.malt.com/robots.txt
+  fit:
+    level: possible
+    why: "Malt is the main European freelance marketplace (FR, DE, NL, BE, ES, UK) and B2B by design; it blocks automated clients outright, so at most a profile, not a source"
+  sources:
+    - https://help.malt.com/hc/en-150/articles/29511599491090-I-am-a-freelancer-registered-abroad-For-which-countries-does-Malt-authorize-registration-in-this-situation
+    - https://help.malt.com/hc/en-150/articles/29539691425938-How-does-the-Malt-commission-work-for-freelancers
+
+# --- poor fits ---
+
+- id: cinode-market
+  name: Cinode Market
+  domain: cinode.com
+  country: SE
+  kind: marketplace
+  listings:
+    public: yes
+    volume: "20 per page with Load more; the first page (16 Nov) had 2 of 20 at 100% remote"
+    remote: "each card states a remote share, e.g. 'Linkoeping (100% remote)', 'Stockholm (40% remote)'"
+    posters: "Swedish brokers and consultancies: Nexer Group, Castra, Aqilea, Forefront, Onsiter Right People Group"
+    samples:
+      - { title: "Senior utvecklare - Microsoft Fabric", location: "Stockholm (40% remote)", rate: "SEK 1100/hour" }
+      - { title: "Integrationsutvecklare", location: "Linkoeping (100% remote)", rate: none shown }
+    source: https://cinode.com/market/
+  croatia:
+    status: unknown
+    says: "No country rule on the Market support page; titles and texts are in Swedish and most cards name a Swedish city with partial remote"
+    source: https://support.cinode.com/en/articles/608072-cinode-market
+  contract:
+    with: "The posting broker or consultancy"
+    b2b: "per posting"
+    fee: "Market is free to browse; responding needs a Cinode Free account"
+    source: https://support.cinode.com/en/articles/608072-cinode-market
+  rates: "Shown on some cards: SEK 800-1100/hour"
+  readable:
+    method: "Server-rendered HTML cards; detail pages /market/requests/{id}; no feed (subscriptions need an account)"
+    robots: "Allow: / except /login, /org, /signup, /resumes/, /dashboard/"
+    terms: "Acceptable Use Policy 3.3(f): 'Use robots or other automated means to access and collect data or content from the Service;' The policy does not say whether the public Market counts as 'the Service'; read conservatively"
+    verdict: forbidden
+    source: https://cinode.com/en/terms/acceptable-use-policy/
+  fit:
+    level: poor
+    why: "Shows rates and remote share openly, but the assignments are Swedish-language and mostly hybrid in Swedish cities, and the use policy reads against automated collection"
+  sources:
+    - https://cinode.com/market/
+    - https://support.cinode.com/en/articles/608072-cinode-market
+    - https://cinode.com/en/terms/acceptable-use-policy/
+    - https://cinode.com/robots.txt
+
+- id: lemon-io
+  name: Lemon.io
+  domain: lemon.io
+  country: US
+  kind: vetted-network
+  listings:
+    public: no
+    volume: "No assignment list; developers are matched after vetting"
+    remote: all remote
+    samples: []
+    source: https://lemon.io/rate-calculator/croatia/
+  croatia:
+    status: likely
+    says: "Lemon.io publishes Croatia rate data from 130 active contracts in its network (Q3 2026). An older third-party listing said Lemon.io could not accept applicants from Croatia (unverified, snippet only)"
+    source: https://lemon.io/rate-calculator/croatia/
+  contract:
+    with: "Lemon.io"
+    b2b: unknown
+    fee: "not published"
+    source: https://lemon.io/rate-calculator/croatia/
+  rates: "Croatia, Q3 2026, rates on active contracts: senior median USD 44/h (middle 50% 40-45), strong senior (8+ yrs) median USD 43/h (41-47)"
+  readable:
+    method: none
+    robots: "Disallows /users/, /wp-json/, /search/, feeds"
+    terms: not read
+    verdict: login-only
+    source: https://lemon.io/robots.txt
+  fit:
+    level: poor
+    why: "Its own data puts senior Croatia contracts at about USD 44/h, below his EUR 55/h current rate"
+  sources:
+    - https://lemon.io/rate-calculator/croatia/
+    - https://lemon.io/robots.txt
+
+- id: proxify
+  name: Proxify
+  domain: proxify.io
+  country: SE
+  kind: vetted-network
+  listings:
+    public: no
+    volume: "No assignment list"
+    remote: all remote
+    samples: []
+    source: https://proxify.io/knowledge-base/business-finance/how-does-proxify-pricing-work-and-whats-included
+  croatia:
+    status: unknown
+    says: "Nothing found on accepted developer countries"
+    source: https://knowledge.proxify.io/
+  contract:
+    with: "Proxify; payments processed through Deel (unverified, snippet of a help page that now redirects)"
+    b2b: unknown
+    fee: "Clients pay a bundled monthly rate; Proxify's own comparison gives an estimated client hourly rate of USD 40-65, so the developer's share is lower"
+    source: https://proxify.io/knowledge-base/business-finance/how-does-proxify-pricing-work-and-whats-included
+  rates: "Client-side USD 40-65/h estimate; developer pay not published"
+  readable:
+    method: none
+    robots: "Disallows only /cdn-cgi/l/email-protection"
+    terms: not read
+    verdict: login-only
+    source: https://proxify.io/robots.txt
+  fit:
+    level: poor
+    why: "Client price band already near his current rate before Proxify's margin; nothing to read"
+  sources:
+    - https://proxify.io/knowledge-base/business-finance/how-does-proxify-pricing-work-and-whats-included
+    - https://proxify.io/robots.txt
+
+- id: contra
+  name: Contra
+  domain: contra.com
+  country: US
+  kind: marketplace
+  listings:
+    public: unknown
+    volume: "contra.com/jobs returned no listings to WebFetch (client-rendered)"
+    remote: unknown
+    samples: []
+    source: https://contra.com/jobs
+  croatia:
+    status: likely
+    says: "Terms: 'You may use the Platform only if you are a legal entity'; no country list, only 'not otherwise barred ... under applicable law'"
+    source: https://contra.com/terms
+  contract:
+    with: "Client: 'All agreements and transactions related to the sale of services are made directly between Independent and Client.' Contra acts as payment collection agent"
+    b2b: yes
+    fee: "Terms point to fees 'listed on our website'; homepage says commission-free (marketing)"
+    source: https://contra.com/terms
+  rates: unknown
+  readable:
+    method: unknown
+    robots: "Disallows /@internal and redirect/reply query strings; Content-Signal ai-train=no"
+    terms: "Users may not 'Attempt to access or search the Platform or download content from the Platform' through any tool other than Contra's own or generally available search engines or browsers '(including spiders, robots, crawlers, data mining tools or the like)'"
+    verdict: forbidden
+    source: https://contra.com/terms
+  fit:
+    level: poor
+    why: "Portfolio-led project marketplace, strongest in design and small fixed-scope work; terms forbid automated reading"
+  sources:
+    - https://contra.com/terms
+    - https://contra.com/robots.txt
+
+- id: striive
+  name: Striive (Headfirst Group)
+  domain: striive.com
+  country: NL
+  kind: marketplace
+  listings:
+    public: yes
+    volume: "unknown: the assignments page is over 10 MB and timed out at 20 s through fetchText; a category page showed Dutch government assignments"
+    remote: unknown
+    samples:
+      - { title: "Java Ontwikkelaar", location: "Rijkswaterstaat, Rotterdam", rate: none shown }
+      - { title: "Senior Software Engineer (2x)", location: "Kadaster, Apeldoorn", rate: none shown }
+    source: https://striive.com/en/freelance/freelance-jobs/it/software-development/java-developer
+  croatia:
+    status: unknown
+    says: "Registration asks for 'the name of your company and/or Chamber of Commerce number'; nothing on foreign companies"
+    source: https://striive.com/en/professionals/faq
+  contract:
+    with: "not stated on the FAQ"
+    b2b: yes
+    fee: "'creating an account and answering assignments is free'"
+    source: https://striive.com/en/professionals/faq
+  rates: "not shown on the sampled cards"
+  readable:
+    method: "HTML listing at /en/assignments (very large page); sitemap lists category pages"
+    robots: "User-agent: * Disallow: (empty)"
+    terms: "not found (terms URLs tried returned 404)"
+    verdict: unknown
+    source: https://striive.com/robots.txt
+  fit:
+    level: poor
+    why: "Mostly Dutch public-sector assignments named after an office city, which usually means on-site and Dutch-speaking"
+  sources:
+    - https://striive.com/en/professionals/faq
+    - https://striive.com/en/freelance/freelance-jobs/it/software-development/java-developer
+    - https://striive.com/sitemap.xml
+
+- id: etengo
+  name: Etengo
+  domain: etengo.de
+  country: DE
+  kind: broker
+  listings:
+    public: yes
+    volume: "12 on the first page with 'weitere Projekte laden'; first page was SAP, mainframe, shipbuilding and construction, no frontend"
+    remote: "detail pages state remote days per week (unverified, snippets)"
+    samples:
+      - { title: "Senior Splunk Engineer / Consultant (w/m/d)", location: "DE 6XXXX", rate: none shown, note: "32 months" }
+    source: https://www.etengo.de/it-projektsuche/
+  croatia:
+    status: unknown
+    says: "Location given as German postcode region only"
+    source: https://www.etengo.de/it-projektsuche/
+  contract:
+    with: "Etengo (broker contracts the expert; not verified on a page this session)"
+    b2b: yes
+    fee: unknown
+    source: https://www.etengo.de/it-projektsuche/
+  rates: "not shown"
+  readable:
+    method: "Server-rendered list (first 12) and detail pages /it-projektsuche/{id}; e-mail Projekt-Alert, no feed"
+    robots: "Disallows /suche/*, /admin/, /cpresources/; /it-projektsuche/ allowed"
+    terms: not read
+    verdict: page-ok
+    source: https://www.etengo.de/robots.txt
+  fit:
+    level: poor
+    why: "German regional projects outside his stack on the sample; its projects also appear on freelancermap, which covers it"
+  sources:
+    - https://www.etengo.de/it-projektsuche/
+    - https://www.etengo.de/robots.txt
+
+- id: hays-de
+  name: Hays (Germany, contracting)
+  domain: hays.de
+  country: DE
+  kind: broker
+  listings:
+    public: yes
+    volume: "Projektsuche (joblevel=3) for 'frontend': 16 results, 11 Germany and 5 Switzerland"
+    remote: "not shown on cards"
+    samples:
+      - { title: "Applikations-Entwickler Java / Fullstack (m/w/d)", location: "Bern", rate: none shown, note: "Freiberuflich/in temporaerer Festanstellung" }
+    source: https://www.hays.de/jobsuche/stellenangebote-jobs?page=1&mrew=1&joblevel=3&q=frontend&e=false
+  croatia:
+    status: unknown
+    says: "Cards name a German or Swiss region"
+    source: https://www.hays.de/jobsuche/stellenangebote-jobs?page=1&mrew=1&joblevel=3&q=frontend&e=false
+  contract:
+    with: "Hays (broker)"
+    b2b: "Freiberuflich or temporary employment, stated per card"
+    fee: unknown
+    source: https://www.hays.de/jobsuche/stellenangebote-jobs?page=1&mrew=1&joblevel=3&q=frontend&e=false
+  rates: "not shown"
+  readable:
+    method: "Server-rendered search results"
+    robots: "Disallows /en-GB/, /web/, /meinhays/, /login/; a second User-agent * group sets Crawl-delay: 10"
+    terms: not read
+    verdict: page-ok
+    source: https://www.hays.de/robots.txt
+  fit:
+    level: poor
+    why: "Few frontend contracts, German-language, regional Germany/Switzerland; would need a 10 s crawl delay"
+  sources:
+    - https://www.hays.de/jobsuche/stellenangebote-jobs?page=1&mrew=1&joblevel=3&q=frontend&e=false
+    - https://www.hays.de/robots.txt
+
+- id: gulp
+  name: GULP (Randstad)
+  domain: gulp.de
+  country: DE
+  kind: broker
+  listings:
+    public: unknown
+    volume: "unknown: /gulp2/g/projekte is an Angular app with no listings in the HTML; its API was not located"
+    remote: unknown
+    samples: []
+    source: https://www.gulp.de/gulp2/g/projekte
+  croatia:
+    status: unknown
+    says: "nothing found"
+    source: https://www.gulp.de/gulp2/g/projekte
+  contract:
+    with: "GULP (broker)"
+    b2b: unknown
+    fee: unknown
+    source: https://www.gulp.de/gulp2/g/projekte
+  rates: unknown
+  readable:
+    method: "JS app; no feed found"
+    robots: "Disallows /gulp2/g/*region, /search/, /cgi-gulp*/ and a list of /projekte/{company}.html pages"
+    terms: "not found (only staffing AGB PDFs turned up)"
+    verdict: unknown
+    source: https://www.gulp.de/robots.txt
+  fit:
+    level: poor
+    why: "German broker, DACH last; Randstad Digital already posts on freelancermap"
+  sources:
+    - https://www.gulp.de/robots.txt
+
+- id: solcom
+  name: SOLCOM
+  domain: solcom.de
+  country: DE
+  kind: broker
+  listings:
+    public: unknown
+    volume: "Projektportal returns 403 to the pipeline's User-Agent and to WebFetch; SOLCOM projects appear on freelancermap"
+    remote: unknown
+    samples:
+      - { title: "Experte SAP Berechtigungen / SAP Fiori / IAS/IPS (m/w/d)", location: "Germany, 0% remote (on freelancermap)", rate: none shown }
+    source: https://www.freelancermap.de/projekte/frontend
+  croatia:
+    status: unknown
+    says: "nothing found"
+    source: https://www.solcom.de/robots.txt
+  contract:
+    with: "SOLCOM (broker)"
+    b2b: unknown
+    fee: unknown
+    source: https://www.solcom.de/robots.txt
+  rates: unknown
+  readable:
+    method: none reachable
+    robots: "Drupal default; /de/projektportal not disallowed"
+    terms: not reachable
+    verdict: unknown
+    source: https://www.solcom.de/robots.txt
+  fit:
+    level: poor
+    why: "German broker blocking automated clients at the server; reachable through freelancermap instead"
+  sources:
+    - https://www.solcom.de/robots.txt
+
+- id: freelance-de
+  name: freelance.de
+  domain: freelance.de
+  country: DE
+  kind: marketplace
+  listings:
+    public: unknown
+    volume: not fetched (robots.txt forbids)
+    remote: unknown
+    samples: []
+    source: https://www.freelance.de/robots.txt
+  croatia:
+    status: unknown
+    says: not checked
+    source: https://www.freelance.de/robots.txt
+  contract:
+    with: "Client"
+    b2b: unknown
+    fee: "unverified: at least 10% service fee once a project is awarded (third-party snippet)"
+    source: https://www.betterteam.com/de/freelance-de
+  rates: unknown
+  readable:
+    method: not fetched
+    robots: "Comment: 'Die Verwendung von Robotern, Crawlern oder anderen automatisierten Systemen zum Zugriff auf freelance.de ohne die ausdrueckliche schriftliche Genehmigung von freelance.de ist strengstens untersagt.' ... 'Jede andere Form des Crawling ist nur nach vorheriger Genehmigung gestattet.'"
+    terms: "see robots.txt comment; crawling guideline at /pages/crawling-guideline.html not read"
+    verdict: forbidden
+    source: https://www.freelance.de/robots.txt
+  fit:
+    level: poor
+    why: "German marketplace overlapping freelancermap, and it forbids crawling without written permission"
+  sources:
+    - https://www.freelance.de/robots.txt
+
+- id: freelance-nl
+  name: Freelance.nl
+  domain: freelance.nl
+  country: NL
+  kind: marketplace
+  listings:
+    public: unknown
+    volume: not fetched (robots.txt forbids)
+    remote: unknown
+    samples: []
+    source: https://www.freelance.nl/robots.txt
+  croatia:
+    status: unknown
+    says: not checked
+    source: https://www.freelance.nl/robots.txt
+  contract:
+    with: unknown
+    b2b: unknown
+    fee: unknown
+    source: https://www.freelance.nl/robots.txt
+  rates: unknown
+  readable:
+    method: not fetched
+    robots: "Named search and AI bots get Allow: /; the final 'User-agent: * Disallow: /' covers every other agent, the pipeline's included"
+    terms: not read
+    verdict: forbidden
+    source: https://www.freelance.nl/robots.txt
+  fit:
+    level: poor
+    why: "robots.txt shuts out every agent not on its named list"
+  sources:
+    - https://www.freelance.nl/robots.txt
+
+- id: kvadrat
+  name: Kvadrat
+  domain: kvadrat.se
+  country: SE
+  kind: broker
+  listings:
+    public: no
+    volume: "Home page shows no assignment list (client-facing 'Hitta konsult' and 'Uppdragsfoerfragan'); /uppdrag returns 404"
+    remote: unknown
+    samples: []
+    source: https://www.kvadrat.se/
+  croatia:
+    status: unknown
+    says: "Describes itself as 'Sveriges stoersta naetverk av egenfoeretagare'; no residence rule on the page"
+    source: https://www.kvadrat.se/
+  contract:
+    with: "Kvadrat framework agreement ('Ramavtal hos Kvadrat'); terms not read"
+    b2b: unknown
+    fee: unknown
+    source: https://www.kvadrat.se/
+  rates: unknown
+  readable:
+    method: none
+    robots: "Allow: /"
+    terms: not read
+    verdict: login-only
+    source: https://www.kvadrat.se/robots.txt
+  fit:
+    level: poor
+    why: "A network of Swedish sole traders with no public assignment list"
+  sources:
+    - https://www.kvadrat.se/
+    - https://www.kvadrat.se/robots.txt
