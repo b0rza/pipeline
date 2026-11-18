@@ -9,7 +9,8 @@ import { CALLBACK_ID_LEN, composeTitles, escapeHtml, signalMessage, signalRows, 
 import { composeBody, composeMailto, composeSubject } from './templates.ts';
 
 export const SKIP_REASONS: readonly (readonly [code: string, label: string])[] = [
-  ['fit', 'bad fit'], ['geo', 'wrong geography'], ['noneng', 'not engineering'], ['contacted', 'already contacted'], ['other', 'other'],
+  ['fit', 'bad fit'], ['geo', 'wrong geography'], ['stack', 'wrong stack'], ['level', 'low skill level'],
+  ['pay', 'low salary'], ['noneng', 'not engineering'], ['contacted', 'already contacted'], ['other', 'other'],
 ];
 
 const CALLBACK = new RegExp(`^([a-z]+):([0-9a-f]{${CALLBACK_ID_LEN}})(?::([a-z]+))?$`);
@@ -66,7 +67,9 @@ export function handleCallback(db: DatabaseSync, data: string, today = new Date(
     case 'skip': {
       if (!code) {
         const reasons = SKIP_REASONS.map(([c, label]) => ({ text: label, callback_data: `skip:${id16}:${c}` }));
-        return { kind: 'edit', text: signalMessage(db, id).text, buttons: [reasons.slice(0, 3), reasons.slice(3)] };
+        // Three to a row, so the keyboard stays readable on a phone.
+        const rows = Array.from({ length: Math.ceil(reasons.length / 3) }, (_, i) => reasons.slice(i * 3, i * 3 + 3));
+        return { kind: 'edit', text: signalMessage(db, id).text, buttons: rows };
       }
       const label = SKIP_REASONS.find(([c]) => c === code)?.[1];
       if (!label) return null;

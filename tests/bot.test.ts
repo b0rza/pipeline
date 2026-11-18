@@ -283,8 +283,10 @@ test('handleCallback applies, skips with a reason, snoozes and composes', () => 
 
   const pick = handleCallback(db, `skip:${id16(db, 'alpha')}`, today);
   assert.ok(pick?.kind === 'edit');
-  assert.deepEqual(pick.buttons.map((row) => row.length), [3, 2]);
-  assert.deepEqual(pick.buttons.flat().map((b) => b.text), ['bad fit', 'wrong geography', 'not engineering', 'already contacted', 'other']);
+  assert.deepEqual(pick.buttons.map((row) => row.length), [3, 3, 2]);
+  assert.deepEqual(pick.buttons.map((row) => row.map((b) => b.text)), [
+    ['bad fit', 'wrong geography', 'wrong stack'], ['low skill level', 'low salary', 'not engineering'], ['already contacted', 'other'],
+  ]);
   assert.equal(pick.text, signalMessage(db, db.prepare("select id from signals where company_id = 'alpha'").get()!.id as string).text);
   assert.equal(status(db, 'alpha').status, 'new');
 
